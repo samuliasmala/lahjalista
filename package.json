@@ -2,6 +2,11 @@
   "name": "lahjalista",
   "version": "0.1.0",
   "private": true,
+  "files": [],
+  "engines": {
+    "node": "^16",
+    "npm": ">=7"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
