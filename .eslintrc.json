@@ -29,7 +29,7 @@
     "no-unused-vars": "warn",
     "prefer-const": "warn",
     "no-debugger": "warn",
-    "no-console": "warn"
+    "no-console": "off"
   },
   "overrides": [
     {
@@ -53,6 +53,14 @@
 
         // Handled by import/typescript
         "node/no-missing-import": "off",
+
+        // Disable some rules which are difficult for beginners
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-return": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
 
         // Use warn instead of error for some rules
         "@typescript-eslint/restrict-plus-operands": "warn",
