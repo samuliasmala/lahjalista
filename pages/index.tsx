@@ -5,9 +5,8 @@ import { twMerge } from 'tailwind-merge';
 const inter = Inter({ subsets: ['latin'] });
 
 function setLocalStorage(key: string, values: string) {
-  if (isWindow()) {
-    localStorage.setItem(key, values);
-  }
+  isWindow();
+  localStorage.setItem(key, values);
 }
 
 /**
@@ -15,22 +14,22 @@ function setLocalStorage(key: string, values: string) {
  * @returns a string that contains individual ID for key in React component.
  */
 function generateKeyID(): string {
-  if (isWindow()) return crypto.randomUUID();
+  isWindow();
+  return crypto.randomUUID();
 }
 
 function getFullLocalStorage() {
+  isWindow()
+  
   let array: any = [];
-
-  if (isWindow()) {
-    for (let [key, values] of Object.entries(localStorage)) {
-      if (key.startsWith('gift_')) {
-        values = JSON.parse(values);
-        array = array.concat({
-          name: values['name'],
-          gift: values['gift'],
-          keyID: values['keyID'],
-        });
-      }
+  for (let [key, values] of Object.entries(localStorage)) {
+    if (key.startsWith('gift_')) {
+      values = JSON.parse(values);
+      array = array.concat({
+        name: values['name'],
+        gift: values['gift'],
+        keyID: values['keyID'],
+      });
     }
   }
   return array;
@@ -45,17 +44,8 @@ function getFullLocalStorage() {
  * return example: gift_150cd819-1502-4717-9c96-f7ca7b42d8bd
  */
 function generateID(): string {
-  let generatedID: string | undefined;
-  if (typeof window !== 'undefined') {
-    generatedID = `gift_${crypto.randomUUID()}`;
-  }
-
-  if (!generatedID)
-    throw new Error(
-      'Window was defined as undefined. LocalStorage could not be read.',
-    ); // if generatedID is 0, throw an error
-
-  return generatedID;
+  isWindow();
+  return `gift_${crypto.randomUUID()}`;
 }
 
 /**
