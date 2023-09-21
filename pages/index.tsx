@@ -1,22 +1,12 @@
 import { Inter } from 'next/font/google';
 import { ReactNode, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { FullLocalStorage } from '../types/types';
+import { generateKeyID } from '../utils/generateKeyID';
+import { isWindow } from '../utils/isWindow';
+import { setLocalStorage } from '../utils/setLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
-
-function setLocalStorage(key: string, values: string) {
-  isWindow();
-  localStorage.setItem(key, values);
-}
-
-/**
- *
- * @returns a string that contains individual ID for key in React component.
- */
-function generateKeyID(): string {
-  isWindow();
-  return crypto.randomUUID();
-}
 
 function getFullLocalStorage() {
   isWindow()
@@ -48,25 +38,6 @@ function generateID(): string {
   return `gift_${crypto.randomUUID()}`;
 }
 
-/**
- *
- * @returns if Window is undefined, throws an error
- */
-
-function isWindow() {
-  if (typeof window === 'undefined')
-    throw new Error(
-      'Window was defined as undefined. LocalStorage could not be read.',
-    );
-  return true;
-}
-
-type FullLocalStorage = {
-  name?: string;
-  gift?: string;
-  keyID?: string;
-};
-
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   useEffect(() => {
@@ -74,7 +45,7 @@ export default function Home() {
 
     console.log('effect');
     const fullLocalStorage = getFullLocalStorage();
-    setGiftData((previousValue) => previousValue.concat(fullLocalStorage));
+    setGiftData(fullLocalStorage);
   }, []);
 
   function handleSubmit() {
@@ -143,9 +114,9 @@ export default function Home() {
             Lahjaideat
           </div>
           <div id="giftData">
-            {giftData.map((value) => (
-              <p key={value.keyID}>
-                {value.name} - {value.gift}
+            {giftData.map(giftData => (
+              <p key={giftData.keyID}>
+                {giftData.name} - {giftData.gift}
               </p>
             ))}
           </div>
