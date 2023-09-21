@@ -5,25 +5,10 @@ import { FullLocalStorage } from '../types/types';
 import { generateKeyID } from '../utils/generateKeyID';
 import { isWindow } from '../utils/isWindow';
 import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
+import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
 
-function getFullLocalStorage() {
-  isWindow()
-  
-  let array: any = [];
-  for (let [key, values] of Object.entries(localStorage)) {
-    if (key.startsWith('gift_')) {
-      values = JSON.parse(values);
-      array = array.concat({
-        name: values['name'],
-        gift: values['gift'],
-        keyID: values['keyID'],
-      });
-    }
-  }
-  return array;
-}
 
 /**
  *
@@ -44,7 +29,7 @@ export default function Home() {
     isWindow(); // checks if Window is not undefined, else throws an error
 
     console.log('effect');
-    const fullLocalStorage = getFullLocalStorage();
+    const fullLocalStorage = getFullGiftsLocalStorage();
     setGiftData(fullLocalStorage);
   }, []);
 
