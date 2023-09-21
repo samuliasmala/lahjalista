@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { FullLocalStorage } from '../types/types';
 import { generateKeyID } from '../utils/generateKeyID';
 import { isWindow } from '../utils/isWindow';
-import { setLocalStorage } from '../utils/setLocalStorage';
+import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
 
