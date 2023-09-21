@@ -2,11 +2,11 @@ import { Inter } from 'next/font/google';
 import { ReactNode, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { FullLocalStorage } from '../types/types';
-import { generateKeyID } from '../utils/generateKeyID';
+import { generateKeyID } from '../utils/generateID/generateKeyID';
 import { isWindow } from '../utils/isWindow';
 import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
-import { generateGiftID } from '../utils/generateGiftID';
+import { generateGiftID } from '../utils/generateID/generateGiftID';
 
 const inter = Inter({ subsets: ['latin'] });
 

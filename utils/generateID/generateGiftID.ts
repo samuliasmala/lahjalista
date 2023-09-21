@@ -1,4 +1,4 @@
-import { isWindow } from './isWindow';
+import { isWindow } from '../isWindow';
 
 /**
  *
