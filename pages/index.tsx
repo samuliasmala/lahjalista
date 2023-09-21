@@ -6,22 +6,10 @@ import { generateKeyID } from '../utils/generateKeyID';
 import { isWindow } from '../utils/isWindow';
 import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
+import { generateGiftID } from '../utils/generateGiftID';
 
 const inter = Inter({ subsets: ['latin'] });
 
-
-/**
- *
- * @returns an individual ID with randomUUID. The individual ID looks like: gift_number-array*
- *
- * number-array* = crypto.randomUUID()
- *
- * return example: gift_150cd819-1502-4717-9c96-f7ca7b42d8bd
- */
-function generateID(): string {
-  isWindow();
-  return `gift_${crypto.randomUUID()}`;
-}
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
@@ -52,7 +40,7 @@ export default function Home() {
       keyID: generateKeyID(),
     };
 
-    setLocalStorage(generateID(), JSON.stringify(JSON_Object));
+    setLocalStorage(generateGiftID(), JSON.stringify(JSON_Object));
     setGiftData((previousValue) => previousValue.concat(JSON_Object));
   }
 
