@@ -10,7 +10,7 @@ import { Button } from '~/components/Button';
 
 const inter = Inter({ subsets: ['latin'] });
 
-
+   
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function Home() {
           </div>
           <div id="giftData">
             {giftData.map(giftData => (
-              <p key={giftData.keyID}>
+              <p>
                 {giftData.name} - {giftData.gift}
               </p>
             ))}
