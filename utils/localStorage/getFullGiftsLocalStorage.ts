@@ -14,7 +14,7 @@ export function getFullGiftsLocalStorage() {
       array = array.concat({
         name: values['name'],
         gift: values['gift'],
-        keyID: values['keyID'],
+        id: values['id'],
       });
     }
   }

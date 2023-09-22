@@ -34,10 +34,10 @@ export default function Home() {
     if (typeof receiverName !== 'string' || receiverName.length === 0)
       throw new Error("Invalid receiver's name!");
 
-    const JSON_Object: { name: string; gift: string; keyID: string } = {
+    const JSON_Object: { name: string; gift: string; id: string } = {
       name: receiverName,
       gift: giftName,
-      keyID: generateKeyID(),
+      id: generateKeyID(),
     };
 
     setLocalStorage(generateGiftID(), JSON.stringify(JSON_Object));
@@ -89,7 +89,7 @@ export default function Home() {
           </div>
           <div id="giftData">
             {giftData.map(giftData => (
-              <p>
+              <p key={giftData.id}>
                 {giftData.name} - {giftData.gift}
               </p>
             ))}
