@@ -1,12 +1,12 @@
 import { Inter } from 'next/font/google';
-import { ReactNode, useEffect, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { useEffect, useState } from 'react';
 import { FullLocalStorage } from '../types/types';
 import { generateKeyID } from '../utils/generateID/generateKeyID';
 import { isWindow } from '../utils/isWindow';
 import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
 import { generateGiftID } from '../utils/generateID/generateGiftID';
+import { Button } from '~/components/Button';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -57,6 +57,7 @@ export default function Home() {
               <label htmlFor="giftName">Lahja</label>
               <input
                 id="giftName"
+                autoComplete='off'
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
@@ -66,6 +67,7 @@ export default function Home() {
             <div id="giftReceiverContainer" className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <input
+                autoComplete='off'
                 id="giftReceiver"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
@@ -73,13 +75,12 @@ export default function Home() {
                 name="receiver"
               />
             </div>
-            <button
-              className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500"
-              type="button"
-              onClick={handleSubmit}
+            <Button
+            id='submitButton'
+            handleSubmit={handleSubmit} 
             >
               Lisää
-            </button>
+            </Button>
           </form>
         </div>
         <div id="receiverListContainer" className="mt-3">
@@ -98,3 +99,5 @@ export default function Home() {
     </main>
   );
 }
+
+

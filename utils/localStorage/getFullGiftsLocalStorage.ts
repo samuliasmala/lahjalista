@@ -18,6 +18,5 @@ export function getFullGiftsLocalStorage() {
       });
     }
   }
-  console.log(array);
   return array;
 }
