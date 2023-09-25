@@ -1,9 +1,8 @@
 import { ReactNode } from 'react';
 
-export function Container({
-  id,
-  className,
-  children,
+
+export function SmallContainer({
+  id, className, children,
 }: {
   id?: string;
   className?: string;
@@ -15,12 +14,3 @@ export function Container({
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
