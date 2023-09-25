@@ -15,6 +15,7 @@ export function getFullGiftsLocalStorage() {
         name: values['name'],
         gift: values['gift'],
         id: values['id'],
+        localStorageKeyID: values['localStorageKeyID']
       });
     }
   }

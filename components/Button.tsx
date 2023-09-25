@@ -1,30 +1,29 @@
-import { ReactNode } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { MouseEventHandler, ReactNode } from 'react';
 
 export function Button({
   id,
-  handleSubmit,
+  handleClick,
   children,
   className,
-  isDisabled,
-  handleSubmitData,
+  onMouseOver,
+  onMouseOut
 }: {
-  id: string;
-  handleSubmit: () => void;
-  children: ReactNode;
+  id?: string;
+  handleClick?: (event?: any) => void;
+  children?: ReactNode;
   className?: string;
   isDisabled?: boolean;
-  handleSubmitData?: () => void;
+  onMouseOver?: MouseEventHandler<HTMLButtonElement>;
+  onMouseOut?: MouseEventHandler<HTMLButtonElement>
 }) {
   return (
     <button
       id={id}
-      className={twMerge(
-        'w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500',
-        className,
-      )}
+      className={className}
       type="button"
-      onClick={handleSubmit}
+      onClick={handleClick}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
     >
       {children}
     </button>

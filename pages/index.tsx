@@ -1,11 +1,10 @@
 import { Inter } from 'next/font/google';
 import { useEffect, useState } from 'react';
 import { FullLocalStorage } from '../types/types';
-import { generateKeyID } from '../utils/generateID/generateKeyID';
+import { generateUUID } from '../utils/generateID/generateUUID';
 import { isWindow } from '../utils/isWindow';
 import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
-import { generateGiftID } from '../utils/generateID/generateGiftID';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
@@ -14,6 +13,7 @@ import { Form } from '~/components/Form';
 import { Label } from '../components/Label';
 import { Input } from '../components/Input';
 import { Main } from '~/components/Main';
+import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -40,14 +40,28 @@ export default function Home() {
     if (typeof receiverName !== 'string' || receiverName.length === 0)
       throw new Error("Invalid receiver's name!");
 
-    const JSON_Object: { name: string; gift: string; id: string } = {
+    const generatedUUID = generateUUID()
+    const localStorageKeyID = generateLocalStorageID("gift", generatedUUID)
+    const JSON_Object: {
+      name: string;
+      gift: string;
+      id: string;
+      localStorageKeyID: string;
+    } = {
       name: receiverName,
       gift: giftName,
-      id: generateKeyID(),
+      id: generatedUUID,
+      localStorageKeyID: localStorageKeyID,
     };
 
-    setLocalStorage(generateGiftID(), JSON.stringify(JSON_Object));
+    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object));
     setGiftData((previousValue) => previousValue.concat(JSON_Object));
+  }
+
+  function handleDeletion(event: React.MouseEvent<HTMLElement>) {
+    const parentElementID = event.currentTarget.parentElement?.id;
+    console.log(parentElementID);
+    console.log(window.localStorage.getItem(`gift_${parentElementID}`));
   }
 
   return (
@@ -80,7 +94,11 @@ export default function Home() {
                 name="receiver"
               />
             </Container>
-            <Button id="submitButton" handleSubmit={handleSubmit}>
+            <Button
+              id="submitButton"
+              handleClick={handleSubmit}
+              className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
+            >
               Lisää
             </Button>
           </Form>
@@ -91,9 +109,36 @@ export default function Home() {
           </TitleText>
           <SmallContainer id="giftData">
             {giftData.map((giftItem) => (
-              <li key={giftItem.id}>
-                {giftItem.name} - {giftItem.gift}
-              </li>
+              <div key={`${giftItem.id}_divbutton`}>
+                <li key={giftItem.id} id={giftItem.id}>
+                  {giftItem.name} - {giftItem.gift}{' '}
+                  
+                  <Button
+                    key={`${giftItem.id}_deletebutton`}
+                    id="deletionButton"
+                    onMouseOver={() => {
+                      let idOfElementToHide = giftItem.id as string;
+                      const element =
+                        document.getElementById(idOfElementToHide);
+                      if (!element) return;
+                      element.className = 'line-through';
+                    }}
+                    onMouseOut={() => {
+                      let idOfElementToHide = giftItem.id as string;
+                      const element =
+                        document.getElementById(idOfElementToHide);
+                      if (!element) return;
+                      element.className = '';
+                    }}
+                    className="border bg-black text-white ms-5 w-16 h-8 hover:text-red-600 "
+                    handleClick={(event: React.MouseEvent<HTMLElement>) =>
+                      handleDeletion(event)
+                    }
+                  >
+                    Poista
+                  </Button>
+                </li>
+              </div>
             ))}
           </SmallContainer>
         </Container>
@@ -101,3 +146,5 @@ export default function Home() {
     </Main>
   );
 }
+
+
