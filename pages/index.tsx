@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FullLocalStorage } from '../types/types';
 import { generateKeyID } from '../utils/generateID/generateKeyID';
 import { isWindow } from '../utils/isWindow';
@@ -13,6 +13,7 @@ import { SmallContainer } from '~/components/SmallContainer';
 import { Form } from '~/components/Form';
 import { Label } from '../components/Label';
 import { Input } from '../components/Input';
+import { Main } from '~/components/Main';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -50,25 +51,27 @@ export default function Home() {
   }
 
   return (
-    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <div id="fullScreenContainer" className="justify-center grid h-5">
-        <div id="formContainer" className="mt-5">
+    <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+      <Container id="fullScreenContainer" className="justify-center grid h-5">
+        <Container id="formContainer" className="mt-5">
           <Form id="giftForm" action="/api/create">
-            <TitleText id='formTitle' className='text-2xl pt-4'>Lahjalistaidea</TitleText>
-            <Container id='giftNameContainer' className='pt-4 grid'>
-              <Label htmlFor='giftName'>Lahja</Label>
+            <TitleText id="formTitle" className="text-2xl pt-4">
+              Lahjalistaidea
+            </TitleText>
+            <Container id="giftNameContainer" className="pt-4 grid">
+              <Label htmlFor="giftName">Lahja</Label>
               <Input
-              id='giftName'
-              autoComplete='off'
-              type='text'
-              className='ps-1 pt-3 pb-3 border hover:bg-gray-100'
-              placeholder="Kortti"
-              name='giftName'
+                id="giftName"
+                autoComplete="off"
+                type="text"
+                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
+                placeholder="Kortti"
+                name="giftName"
               />
             </Container>
-            <div id="giftReceiverContainer" className="pt-4 grid">
-              <label htmlFor="receiver">Saaja</label>
-              <input
+            <Container id="giftReceiverContainer" className="pt-4 grid">
+              <Label htmlFor="receiver">Saaja</Label>
+              <Input
                 autoComplete="off"
                 id="giftReceiver"
                 type="text"
@@ -76,27 +79,25 @@ export default function Home() {
                 placeholder="Aku Ankka"
                 name="receiver"
               />
-            </div>
+            </Container>
             <Button id="submitButton" handleSubmit={handleSubmit}>
               Lisää
             </Button>
           </Form>
-        </div>
+        </Container>
         <Container id="receiverListContainer" className="mt-3">
           <TitleText id="receiverTitle" className="text-2xl pt-4">
             Lahjaideat
           </TitleText>
-          <SmallContainer id='giftData'>
-              {giftData.map(gift => (
-                <li key={gift.id}>
-                  {gift.name} - {gift.gift}
-                </li>
-              ))}
+          <SmallContainer id="giftData">
+            {giftData.map((giftItem) => (
+              <li key={giftItem.id}>
+                {giftItem.name} - {giftItem.gift}
+              </li>
+            ))}
           </SmallContainer>
         </Container>
-      </div>
-    </main>
+      </Container>
+    </Main>
   );
 }
-
-
