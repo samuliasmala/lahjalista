@@ -24,9 +24,9 @@ export default function Home() {
   useEffect(() => {
     isWindow(); // checks if Window is not undefined, else throws an error
 
-    console.log('effect');
-    const fullLocalStorage = getFullGiftsLocalStorage();
-    setGiftData(fullLocalStorage);
+    console.log('effect'); // print for knowing useEffect is working
+    const fullLocalStorage = getFullGiftsLocalStorage(); // fetches an array of objects that contains all of the gifts
+    setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
   }, []);
 
   function handleSubmit() {
@@ -68,7 +68,7 @@ export default function Home() {
       console.error("localStorageItem was not a string!") // if for some reason data gotten from localStorage is not a string prints an error
       return; // returns due to an error
     }
-    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem) // parses string to Object. localStorageData has been set to FullLocalStorage for TS to see Object's methods.
+    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem) // parses string to object. localStorageData has been set to FullLocalStorage for TS to see object's methods.
 
     const confirmationForDeleting = confirm(`Deleting ${localStorageData.name} - ${localStorageData.gift}`) // confirmation window that determites if should be deleted or not
 
