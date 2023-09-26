@@ -1,3 +1,4 @@
+import { FullLocalStorage } from '~/types/types';
 import { isWindow } from '../isWindow';
 
 /**
@@ -7,7 +8,7 @@ import { isWindow } from '../isWindow';
 export function getFullGiftsLocalStorage() {
   isWindow();
 
-  let array: any = [];
+  let array: FullLocalStorage[] = [];
   for (let [key, values] of Object.entries(localStorage)) {
     if (key.startsWith('gift_')) {
       values = JSON.parse(values);
@@ -15,7 +16,8 @@ export function getFullGiftsLocalStorage() {
         name: values['name'],
         gift: values['gift'],
         id: values['id'],
-        localStorageKeyID: values['localStorageKeyID']
+        localStorageKeyID: values['localStorageKeyID'],
+        createdDate: values['createdDate']
       });
     }
   }

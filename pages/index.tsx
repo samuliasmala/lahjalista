@@ -25,9 +25,28 @@ export default function Home() {
     isWindow(); // checks if Window is not undefined, else throws an error
 
     console.log('effect'); // print for knowing useEffect is working
-    const fullLocalStorage = getFullGiftsLocalStorage(); // fetches an array of objects that contains all of the gifts
+    const fullLocalStorage = findTheRightOrder(getFullGiftsLocalStorage()) // fetches an array of objects that contains all of the gifts
     setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
   }, []);
+
+  function findTheRightOrder(wrongOrderArray: any[]){
+    const numbersArray: any[] = []
+    const correctOrderArray: any[] = []
+    wrongOrderArray.forEach(gift => {
+      numbersArray.push(gift.createdDate)
+    })
+
+    numbersArray.sort((a, b) => a - b)
+    numbersArray.forEach(creationDate => {
+      wrongOrderArray.forEach(gift => {
+        if(gift.createdDate === creationDate){
+          correctOrderArray.push(gift)
+        }
+      })
+    })
+    return correctOrderArray
+  }
+
 
   function handleSubmit() {
     // handles the event when clicking the submit button
@@ -127,7 +146,7 @@ export default function Home() {
             {giftData.map((giftItem) => (
               <div key={`${giftItem.id}_divbutton`}>
                 <li key={giftItem.id} id={giftItem.id}>
-                  {giftItem.name} - {giftItem.gift}{' '}
+                  {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
                     id="deletionButton"
