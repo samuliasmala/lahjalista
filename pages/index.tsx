@@ -60,20 +60,20 @@ export default function Home() {
     setGiftData((previousValue) => previousValue.concat(JSON_Object));
   }
 
-  function handleDeletion(event: React.MouseEvent<HTMLElement>) {
-    const parentElementID = event.currentTarget.parentElement?.id;
+  function handleDeletion(event: React.MouseEvent<HTMLElement>) { // handles the event when delete button is pressed
+    const parentElementID = event.currentTarget.parentElement?.id; // sets variable to have delete button's <li> element's ID
 
-    let localStorageItem = getLocalStorage(`gift_${parentElementID}`)
-    if(typeof localStorageItem !== "string"){
-      console.error("localStorageItem was not a string!")
-      return;
+    let localStorageItem = getLocalStorage(`gift_${parentElementID}`) // gets data from localStorage as a string
+    if(typeof localStorageItem !== "string"){ // checks if it is string for TypeScript knowing that it can be only string, not string | null
+      console.error("localStorageItem was not a string!") // if for some reason data gotten from localStorage is not a string prints an error
+      return; // returns due to an error
     }
-    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem)
+    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem) // parses string to Object. localStorageData has been set to FullLocalStorage for TS to see Object's methods.
 
-    const confirmationForDeleting = confirm(`Deleting ${localStorageData.name} - ${localStorageData.gift}`)
+    const confirmationForDeleting = confirm(`Deleting ${localStorageData.name} - ${localStorageData.gift}`) // confirmation window that determites if should be deleted or not
 
     if(confirmationForDeleting){ // if confirmation is true
-      removeLocalStorage(`gift_${parentElementID}`)
+      removeLocalStorage(`gift_${parentElementID}`) // removes the gift from localStorage
     }
   }
 
