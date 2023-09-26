@@ -15,6 +15,7 @@ import { Input } from '../components/Input';
 import { Main } from '~/components/Main';
 import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
 import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
+import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -69,10 +70,10 @@ export default function Home() {
     }
     const localStorageData: FullLocalStorage = JSON.parse(localStorageItem)
 
-    const alertForDeleting = confirm(`Deleting ${localStorageData.name} - ${localStorageData.gift}`)
+    const confirmationForDeleting = confirm(`Deleting ${localStorageData.name} - ${localStorageData.gift}`)
 
-    if(alertForDeleting){
-      
+    if(confirmationForDeleting){ // if confirmation is true
+      removeLocalStorage(`gift_${parentElementID}`)
     }
   }
 
