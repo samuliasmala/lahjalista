@@ -153,7 +153,7 @@ export default function Home() {
                       if (!element) return;
                       element.className = '';
                     }}
-                    className="border bg-black text-white ms-5 w-16 h-8 hover:text-red-600 "
+                    className="border bg-black text-white ms-5 mb-3 w-16 h-8 hover:text-red-600"
                     handleClick={(event: React.MouseEvent<HTMLElement>) =>
                       handleDeletion(event)
                     }
