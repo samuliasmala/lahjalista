@@ -32,24 +32,28 @@ export default function Home() {
 
 
 
-  function handleSubmit() {
-    // handles the event when clicking the submit button
-    const giftName: string = // gift name from the input
-    (document.getElementById('giftName') as HTMLInputElement).value;
-    const receiverName: string = // receiver name from the input
-    (document.getElementById('giftReceiver') as HTMLInputElement).value;
+  function handleSubmit() { // handles the event when clicking the submit button
+    function clearInputs() { // clears the inputs 
+      giftNameInput.value = ""
+      giftReceiverInput.value = ""
+    }
+
+    const giftNameInput = document.getElementById("giftName") as HTMLInputElement // giftName input element
+    const giftReceiverInput = document.getElementById("giftReceiver") as HTMLInputElement // giftReceiver input element
+    const giftName: string = giftNameInput.value // gift's name from the input
+    const giftReceiver: string = giftReceiverInput.value // receiver name from the input
 
     if (typeof giftName !== 'string' || giftName.length === 0)
       // if giftName is for example numeral or has 0 letters, throws an error
       throw new Error("Invalid gift's name!");
-    if (typeof receiverName !== 'string' || receiverName.length === 0)
+    if (typeof giftReceiver !== 'string' || giftReceiver.length === 0)
       // if receiverName is for example numeral or has 0 letters, throws an error
       throw new Error("Invalid receiver's name!");
 
     const generatedUUID = generateUUID(); // generates an UUID. For example: 0a776b46-ec73-440c-a34d-79a2b23cada0
     const localStorageKeyID = generateLocalStorageID('gift', generatedUUID); // generates a gift UUID. For example: gift_0a776b46-ec73-440c-a34d-79a2b23cada0
     const JSON_Object: FullLocalStorage = {
-      name: receiverName,
+      name: giftReceiver,
       gift: giftName,
       id: generatedUUID,
       localStorageKeyID: localStorageKeyID,
@@ -58,6 +62,7 @@ export default function Home() {
 
     setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object)); // sets the data to localStorage
     setGiftData((previousValue) => previousValue.concat(JSON_Object)); // combines two arrays without mutating them
+    clearInputs() // clears giftName and giftReceiver inputs
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
