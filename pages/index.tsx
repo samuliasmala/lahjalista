@@ -26,22 +26,26 @@ export default function Home() {
     isWindow(); // checks if Window is not undefined, else throws an error
 
     console.log('effect'); // print for knowing useEffect is working
-    const fullLocalStorage = sortGiftsCorrectOrder(getFullGiftsLocalStorage()) // fetches an array of objects that contains all of the gifts
+    const fullLocalStorage = sortGiftsCorrectOrder(getFullGiftsLocalStorage()); // fetches an array of objects that contains all of the gifts
     setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
   }, []);
 
-
-
-  function handleSubmit() { // handles the event when clicking the submit button
-    function clearInputs() { // clears the inputs 
-      giftNameInput.value = ""
-      giftReceiverInput.value = ""
+  function handleSubmit() {
+    // handles the event when clicking the submit button
+    function clearInputs() {
+      // clears the inputs
+      giftNameInput.value = '';
+      giftReceiverInput.value = '';
     }
 
-    const giftNameInput = document.getElementById("giftName") as HTMLInputElement // giftName input element
-    const giftReceiverInput = document.getElementById("giftReceiver") as HTMLInputElement // giftReceiver input element
-    const giftName: string = giftNameInput.value // gift's name from the input
-    const giftReceiver: string = giftReceiverInput.value // receiver name from the input
+    const giftNameInput = document.getElementById(
+      'giftName',
+    ) as HTMLInputElement; // giftName input element
+    const giftReceiverInput = document.getElementById(
+      'giftReceiver',
+    ) as HTMLInputElement; // giftReceiver input element
+    const giftName: string = giftNameInput.value; // gift's name from the input
+    const giftReceiver: string = giftReceiverInput.value; // receiver name from the input
 
     if (typeof giftName !== 'string' || giftName.length === 0)
       // if giftName is for example numeral or has 0 letters, throws an error
@@ -57,12 +61,12 @@ export default function Home() {
       gift: giftName,
       id: generatedUUID,
       localStorageKeyID: localStorageKeyID,
-      createdDate: new Date().getTime()
+      createdDate: new Date().getTime(),
     };
 
     setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object)); // sets the data to localStorage
     setGiftData((previousValue) => previousValue.concat(JSON_Object)); // combines two arrays without mutating them
-    clearInputs() // clears giftName and giftReceiver inputs
+    clearInputs(); // clears giftName and giftReceiver inputs
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
@@ -84,7 +88,13 @@ export default function Home() {
     if (confirmationForDeleting) {
       // if confirmation is true
       removeLocalStorage(`gift_${parentElementID}`); // removes the gift from localStorage
+      refreshGiftList()
     }
+  }
+
+  function refreshGiftList(){ // this is run when the gift list is wanted to be refreshed
+    const fullLocalStorage = sortGiftsCorrectOrder(getFullGiftsLocalStorage()) // sorts the array of objects to have a correct order
+    setGiftData(prevValue => prevValue.filter(value => value.createdDate === 100).concat(fullLocalStorage)) // firstly clears the array and then combines it with the new array. Both actions are made without mutating the old one.
   }
 
   return (
