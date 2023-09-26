@@ -16,6 +16,7 @@ import { Main } from '~/components/Main';
 import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
 import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
 import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
+import { sortGiftsCorrectOrder } from '~/utils/sortGiftsCorrectOrder';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,27 +26,10 @@ export default function Home() {
     isWindow(); // checks if Window is not undefined, else throws an error
 
     console.log('effect'); // print for knowing useEffect is working
-    const fullLocalStorage = findTheRightOrder(getFullGiftsLocalStorage()) // fetches an array of objects that contains all of the gifts
+    const fullLocalStorage = sortGiftsCorrectOrder(getFullGiftsLocalStorage()) // fetches an array of objects that contains all of the gifts
     setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
   }, []);
 
-  function findTheRightOrder(wrongOrderArray: any[]){
-    const numbersArray: any[] = []
-    const correctOrderArray: any[] = []
-    wrongOrderArray.forEach(gift => {
-      numbersArray.push(gift.createdDate)
-    })
-
-    numbersArray.sort((a, b) => a - b)
-    numbersArray.forEach(creationDate => {
-      wrongOrderArray.forEach(gift => {
-        if(gift.createdDate === creationDate){
-          correctOrderArray.push(gift)
-        }
-      })
-    })
-    return correctOrderArray
-  }
 
 
   function handleSubmit() {
