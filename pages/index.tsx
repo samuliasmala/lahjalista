@@ -101,7 +101,7 @@ export default function Home() {
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container id="fullScreenContainer" className="justify-center grid h-5">
         <Container id="formContainer" className="mt-5">
-          <Form id="giftForm" action="/api/create">
+          <Form id="giftForm">
             <TitleText id="formTitle" className="text-2xl pt-4">
               Lahjalistaidea
             </TitleText>
@@ -130,7 +130,7 @@ export default function Home() {
             <Button
               id="submitButton"
               handleClick={handleSubmit}
-              type="button"
+              type="submit"
               className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
             >
               Lisää
