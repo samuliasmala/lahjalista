@@ -3,4 +3,5 @@ export type FullLocalStorage = {
   gift?: string;
   id?: string;
   localStorageKeyID?: string;
+  createdDate: number;
 };
