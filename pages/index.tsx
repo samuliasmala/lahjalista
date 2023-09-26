@@ -14,6 +14,7 @@ import { Label } from '../components/Label';
 import { Input } from '../components/Input';
 import { Main } from '~/components/Main';
 import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
+import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -60,17 +61,18 @@ export default function Home() {
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
     const parentElementID = event.currentTarget.parentElement?.id;
-    //console.log(parentElementID);
-    console.log(window.localStorage.getItem(`gift_${parentElementID}`));
-    let localStorageItem = window.localStorage.getItem(`gift_${parentElementID}`)
+
+    let localStorageItem = getLocalStorage(`gift_${parentElementID}`)
     if(typeof localStorageItem !== "string"){
       console.error("localStorageItem was not a string!")
       return;
     }
     const localStorageData: FullLocalStorage = JSON.parse(localStorageItem)
+
     const alertForDeleting = confirm(`Deleting ${localStorageData.name} - ${localStorageData.gift}`)
 
     if(alertForDeleting){
+      
     }
   }
 
