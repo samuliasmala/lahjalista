@@ -29,22 +29,22 @@ export default function Home() {
     setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
   }, []);
 
-  function handleSubmit() {
-    const giftName: string = (
+  function handleSubmit() { // handles the event when clicking the submit button
+    const giftName: string = ( // gift name from the input
       document.getElementById('giftName') as HTMLInputElement
     ).value;
-    const receiverName: string = (
+    const receiverName: string = ( // receiver name from the input
       document.getElementById('giftReceiver') as HTMLInputElement
     ).value;
 
-    if (typeof giftName !== 'string' || giftName.length === 0)
+    if (typeof giftName !== 'string' || giftName.length === 0) // if giftName is for example numeral or has 0 letters, throws an error
       throw new Error("Invalid gift's name!");
-    if (typeof receiverName !== 'string' || receiverName.length === 0)
+    if (typeof receiverName !== 'string' || receiverName.length === 0) // if receiverName is for example numeral or has 0 letters, throws an error
       throw new Error("Invalid receiver's name!");
 
-    const generatedUUID = generateUUID()
-    const localStorageKeyID = generateLocalStorageID("gift", generatedUUID)
-    const JSON_Object: {
+    const generatedUUID = generateUUID() // generates an UUID. For example: 0a776b46-ec73-440c-a34d-79a2b23cada0
+    const localStorageKeyID = generateLocalStorageID("gift", generatedUUID) // generates a gift UUID. For example: gift_0a776b46-ec73-440c-a34d-79a2b23cada0
+    const JSON_Object: { // creates an object
       name: string;
       gift: string;
       id: string;
@@ -56,8 +56,8 @@ export default function Home() {
       localStorageKeyID: localStorageKeyID,
     };
 
-    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object));
-    setGiftData((previousValue) => previousValue.concat(JSON_Object));
+    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object)); // sets the data to localStorage
+    setGiftData((previousValue) => previousValue.concat(JSON_Object)); // combines two arrays without mutating them
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) { // handles the event when delete button is pressed
