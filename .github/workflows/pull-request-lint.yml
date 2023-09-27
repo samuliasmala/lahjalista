@@ -6,7 +6,12 @@ name: Lint
 on: [pull_request]
 
 env:
-    NODE_VERSION: '18.x'
+  NODE_VERSION: '18.x'
+
+# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+permissions:
+  checks: write
+  contents: write
 
 jobs:
   run-linters:
@@ -31,4 +36,4 @@ jobs:
           eslint: true
           eslint_extensions: js,ts,tsx
           tsc: true
-          tsc_args: "--noemit"
+          tsc_args: '--noemit'
