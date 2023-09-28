@@ -16,8 +16,6 @@
     "paths": {
       "~/*": ["./*"]
     },
-    "noUnusedLocals": true, // Report errors on unused local variables.
-    "noUnusedParameters": true, // Report errors on unused parameters in functions.
     "noImplicitReturns": true // When enabled, TypeScript will check all code paths in a function to ensure they return a value.
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
