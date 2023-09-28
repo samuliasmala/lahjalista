@@ -9,15 +9,15 @@ export function getFullGiftsLocalStorage() {
   isWindow();
 
   let array: FullLocalStorage[] = [];
-  for (let [key, values] of Object.entries(localStorage)) {
+  for (const [key, values] of Object.entries(localStorage)) {
     if (key.startsWith('gift_')) {
-      values = JSON.parse(values);
+      const JSON_Values = JSON.parse(values);
       array = array.concat({
-        name: values['name'],
-        gift: values['gift'],
-        id: values['id'],
-        localStorageKeyID: values['localStorageKeyID'],
-        createdDate: values['createdDate']
+        name: JSON_Values['name'],
+        gift: JSON_Values['gift'],
+        id: JSON_Values['id'],
+        localStorageKeyID: JSON_Values['localStorageKeyID'],
+        createdDate: JSON_Values['createdDate'],
       });
     }
   }
