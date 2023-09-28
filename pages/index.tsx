@@ -73,7 +73,7 @@ export default function Home() {
     // handles the event when delete button is pressed
     const parentElementID = event.currentTarget.parentElement?.id; // sets variable to have delete button's <li> element's ID
 
-    let localStorageItem = getLocalStorage(`gift_${parentElementID}`); // gets data from localStorage as a string
+    const localStorageItem = getLocalStorage(`gift_${parentElementID}`); // gets data from localStorage as a string
     if (typeof localStorageItem !== 'string') {
       // checks if it is string for TypeScript knowing that it can be only string, not string | null
       console.error('localStorageItem was not a string!'); // if for some reason data gotten from localStorage is not a string prints an error
@@ -155,14 +155,14 @@ export default function Home() {
                     key={`${giftItem.id}_deletebutton`}
                     id="deletionButton"
                     onMouseOver={() => {
-                      let idOfElementToHide = giftItem.id as string;
+                      const idOfElementToHide = giftItem.id as string;
                       const element =
                         document.getElementById(idOfElementToHide);
                       if (!element) return;
                       element.className = 'line-through';
                     }}
                     onMouseOut={() => {
-                      let idOfElementToHide = giftItem.id as string;
+                      const idOfElementToHide = giftItem.id as string;
                       const element =
                         document.getElementById(idOfElementToHide);
                       if (!element) return;
