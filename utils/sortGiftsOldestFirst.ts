@@ -6,7 +6,7 @@ import { FullLocalStorage } from "~/types/types"
  */
 
 
-export function sortGiftsCorrectOrder(wrongOrderArray: FullLocalStorage[]){
+export function sortGiftsOldestFirst(wrongOrderArray: FullLocalStorage[]){
     const numbersArray: any[] = []
     const correctOrderArray: FullLocalStorage[] = []
     wrongOrderArray.forEach(gift => {

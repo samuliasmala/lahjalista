@@ -16,7 +16,7 @@ import { Main } from '~/components/Main';
 import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
 import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
 import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
-import { sortGiftsCorrectOrder } from '~/utils/sortGiftsCorrectOrder';
+import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,7 +26,7 @@ export default function Home() {
     isWindow(); // checks if Window is not undefined, else throws an error
 
     console.log('effect'); // print for knowing useEffect is working
-    const fullLocalStorage = sortGiftsCorrectOrder(getFullGiftsLocalStorage()); // fetches an array of objects that contains all of the gifts
+    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // fetches an array of objects that contains all of the gifts
     setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
   }, []);
 
@@ -73,7 +73,7 @@ export default function Home() {
     // handles the event when delete button is pressed
     const parentElementID = event.currentTarget.parentElement?.id; // sets variable to have delete button's <li> element's ID
 
-    const localStorageItem = getLocalStorage(`gift_${parentElementID}`); // gets data from localStorage as a string
+    let localStorageItem = getLocalStorage(`gift_${parentElementID}`); // gets data from localStorage as a string
     if (typeof localStorageItem !== 'string') {
       // checks if it is string for TypeScript knowing that it can be only string, not string | null
       console.error('localStorageItem was not a string!'); // if for some reason data gotten from localStorage is not a string prints an error
@@ -94,7 +94,7 @@ export default function Home() {
 
   function refreshGiftList() {
     // this is run when the gift list is wanted to be refreshed
-    const fullLocalStorage = sortGiftsCorrectOrder(getFullGiftsLocalStorage()); // sorts the array of objects to have a correct order
+    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // sorts the array of objects to have a correct order
     setGiftData((prevValue) =>
       prevValue
         .filter((value) => value.createdDate === 100)
@@ -155,14 +155,14 @@ export default function Home() {
                     key={`${giftItem.id}_deletebutton`}
                     id="deletionButton"
                     onMouseOver={() => {
-                      const idOfElementToHide = giftItem.id as string;
+                      let idOfElementToHide = giftItem.id as string;
                       const element =
                         document.getElementById(idOfElementToHide);
                       if (!element) return;
                       element.className = 'line-through';
                     }}
                     onMouseOut={() => {
-                      const idOfElementToHide = giftItem.id as string;
+                      let idOfElementToHide = giftItem.id as string;
                       const element =
                         document.getElementById(idOfElementToHide);
                       if (!element) return;
