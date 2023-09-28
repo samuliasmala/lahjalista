@@ -1,6 +1,13 @@
-
-
-export function Input({ id, className, autoComplete, type, placeholder, name, minLength, maxLength }: {
+export function Input({
+  id,
+  className,
+  autoComplete,
+  type,
+  placeholder,
+  name,
+  minLength,
+  maxLength,
+}: {
   id?: string;
   className?: string;
   autoComplete?: string;
@@ -19,6 +26,7 @@ export function Input({ id, className, autoComplete, type, placeholder, name, mi
       placeholder={placeholder}
       name={name}
       minLength={minLength}
-      maxLength={maxLength} />
+      maxLength={maxLength}
+    />
   );
 }

@@ -7,16 +7,16 @@ export function Button({
   children,
   className,
   onMouseOver,
-  onMouseOut
+  onMouseOut,
 }: {
   id?: string;
   handleClick?: (event?: any) => void;
   children?: ReactNode;
-  type: "button" | "submit" | "reset" | undefined;
+  type: 'button' | 'submit' | 'reset' | undefined;
   className?: string;
   isDisabled?: boolean;
   onMouseOver?: MouseEventHandler<HTMLButtonElement>;
-  onMouseOut?: MouseEventHandler<HTMLButtonElement>
+  onMouseOut?: MouseEventHandler<HTMLButtonElement>;
 }) {
   return (
     <button

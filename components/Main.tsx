@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
-
-
-
 export function Main({
-  id, className, children
+  id,
+  className,
+  children,
 }: {
   id?: string;
   className?: string;
