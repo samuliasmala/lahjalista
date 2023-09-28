@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 
-
 export function Label({
   id,
   htmlFor,
