@@ -17,6 +17,7 @@ import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageI
 import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
 import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
+import fetchFunctions from '~/utils/json-server/fetchFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +25,9 @@ export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   useEffect(() => {
     isWindow(); // checks if Window is not undefined, else throws an error
+
+    const jsonServerData = fetchFunctions.getAll().then((data) => data);
+    jsonServerData.then(value => console.log(value))
 
     console.log('effect'); // print for knowing useEffect is working
     const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // fetches an array of objects that contains all of the gifts
