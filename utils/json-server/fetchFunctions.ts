@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL: string = "http://localhost:3001/1";
+const baseURL: string = "http://localhost:3001/gifts";
 
 
 async function getAll(){

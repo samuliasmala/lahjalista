@@ -110,7 +110,7 @@ export default function Home() {
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container id="fullScreenContainer" className="justify-center grid h-5">
         <Container id="formContainer" className="mt-5">
-          <Form id="giftForm">
+          <Form id="giftForm" action='/api/json-server/createGift'>
             <TitleText id="formTitle" className="text-2xl pt-4">
               Lahjalistaidea
             </TitleText>
