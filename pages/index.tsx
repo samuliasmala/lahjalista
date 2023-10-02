@@ -22,6 +22,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
+
   useEffect(() => {
     isWindow(); // checks if Window is not undefined, else throws an error
 
@@ -95,11 +96,7 @@ export default function Home() {
   function refreshGiftList() {
     // this is run when the gift list is wanted to be refreshed
     const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // sorts the array of objects to have a correct order
-    setGiftData((prevValue) =>
-      prevValue
-        .filter((value) => value.createdDate === 100)
-        .concat(fullLocalStorage),
-    ); // firstly clears the array and then combines it with the new array. Both actions are made without mutating the old one.
+    setGiftData(fullLocalStorage);
   }
 
   return (
