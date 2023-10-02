@@ -32,10 +32,6 @@ export default function Home() {
   }, []);
 
   function handleSubmit() {
-    function clearInputs() {
-      giftNameInput.value = '';
-      giftReceiverInput.value = '';
-    }
 
     const giftNameInput = document.getElementById(
       'giftName',
@@ -63,7 +59,8 @@ export default function Home() {
 
     setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object));
     setGiftData((previousValue) => previousValue.concat(JSON_Object));
-    clearInputs(); // clears giftName and giftReceiver inputs
+    giftNameInput.value = '';
+    giftReceiverInput.value = '';
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
