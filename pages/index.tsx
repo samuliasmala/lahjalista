@@ -50,9 +50,9 @@ export default function Home() {
     const giftReceiver: string = giftReceiverInput.value;
 
     if (typeof giftName !== 'string' || giftName.length === 0)
-      throw new Error("Invalid gift's name!");
+      setReceiverError(true)
     if (typeof giftReceiver !== 'string' || giftReceiver.length === 0)
-      throw new Error("Invalid receiver's name!");
+      setReceiverError(true)
 
     const generatedUUID = generateUUID();
     const localStorageKeyID = generateLocalStorageID('gift', generatedUUID);
@@ -113,6 +113,7 @@ export default function Home() {
                 placeholder="Kortti"
                 name="giftName"
               />
+              {receiverError && <div className='text-red-500'>Lahja on pakollinen</div>}
             </Container>
             <Container id="giftReceiverContainer" className="pt-4 grid">
               <Label htmlFor="receiver">Saaja</Label>
