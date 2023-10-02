@@ -29,6 +29,7 @@ export type FullLocalStorage = {
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
+  const [receiverError, setReceiverError] = useState<boolean>(false)
 
   useEffect(() => {
 
