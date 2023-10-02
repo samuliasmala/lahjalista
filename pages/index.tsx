@@ -29,18 +29,19 @@ export type FullLocalStorage = {
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
-  const [receiverError, setReceiverError] = useState<boolean>(false)
-  const [giftNameError, setGiftNameError] = useState<boolean>(false)
-
+  const [receiverError, setReceiverError] = useState<boolean>(false);
+  const [giftNameError, setGiftNameError] = useState<boolean>(false);
 
   useEffect(() => {
-
     console.log('effect');
     const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage());
     setGiftData(fullLocalStorage);
   }, []);
 
   function handleSubmit() {
+    setReceiverError(false)
+    setGiftNameError(false)
+    let errorFound: boolean = false;
 
     const giftNameInput = document.getElementById(
       'giftName',
@@ -51,10 +52,17 @@ export default function Home() {
     const giftName: string = giftNameInput.value;
     const giftReceiver: string = giftReceiverInput.value;
 
-    if (typeof giftName !== 'string' || giftName.length === 0)
-      setReceiverError(true)
-    if (typeof giftReceiver !== 'string' || giftReceiver.length === 0)
-      setGiftNameError(true)
+    if (typeof giftName !== 'string' || giftName.length === 0) {
+      setReceiverError(true);
+      errorFound = true;
+    }
+    if (typeof giftReceiver !== 'string' || giftReceiver.length === 0) {
+      setGiftNameError(true);
+      errorFound = true;
+    }
+    if (errorFound) {
+      return;
+    }
 
     const generatedUUID = generateUUID();
     const localStorageKeyID = generateLocalStorageID('gift', generatedUUID);
@@ -70,6 +78,8 @@ export default function Home() {
     setGiftData((previousValue) => previousValue.concat(JSON_Object));
     giftNameInput.value = '';
     giftReceiverInput.value = '';
+    setReceiverError(false);
+    setGiftNameError(false);
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
@@ -110,28 +120,36 @@ export default function Home() {
               <Input
                 id="giftName"
                 required={true}
-                onInvalid={event => (event.target as HTMLInputElement).setCustomValidity(' ')}
+                onInvalid={(event) =>
+                  (event.target as HTMLInputElement).setCustomValidity(' ')
+                }
                 autoComplete="off"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
                 name="giftName"
               />
-              {receiverError && <div className='text-red-500'>Lahja on pakollinen</div>}
+              {receiverError && (
+                <div className="text-red-500">Lahja on pakollinen</div>
+              )}
             </Container>
             <Container id="giftReceiverContainer" className="pt-4 grid">
               <Label htmlFor="receiver">Saaja</Label>
               <Input
                 id="giftReceiver"
                 required={true}
-                onInvalid={event => (event.target as HTMLInputElement).setCustomValidity(' ')}
+                onInvalid={(event) =>
+                  (event.target as HTMLInputElement).setCustomValidity(' ')
+                }
                 autoComplete="off"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
               />
-              {giftNameError && <div className='text-red-500'>Lahjansaaja on pakollinen</div>}
+              {giftNameError && (
+                <div className="text-red-500">Lahjansaaja on pakollinen</div>
+              )}
             </Container>
             <Button
               id="submitButton"
@@ -186,4 +204,3 @@ export default function Home() {
     </Main>
   );
 }
-
