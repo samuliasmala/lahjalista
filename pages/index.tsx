@@ -30,6 +30,8 @@ export type FullLocalStorage = {
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   const [receiverError, setReceiverError] = useState<boolean>(false)
+  const [giftNameError, setGiftNameError] = useState<boolean>(false)
+
 
   useEffect(() => {
 
@@ -52,7 +54,7 @@ export default function Home() {
     if (typeof giftName !== 'string' || giftName.length === 0)
       setReceiverError(true)
     if (typeof giftReceiver !== 'string' || giftReceiver.length === 0)
-      setReceiverError(true)
+      setGiftNameError(true)
 
     const generatedUUID = generateUUID();
     const localStorageKeyID = generateLocalStorageID('gift', generatedUUID);
@@ -107,6 +109,8 @@ export default function Home() {
               <Label htmlFor="giftName">Lahja</Label>
               <Input
                 id="giftName"
+                required={true}
+                onInvalid={event => (event.target as HTMLInputElement).setCustomValidity(' ')}
                 autoComplete="off"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
@@ -118,13 +122,16 @@ export default function Home() {
             <Container id="giftReceiverContainer" className="pt-4 grid">
               <Label htmlFor="receiver">Saaja</Label>
               <Input
-                autoComplete="off"
                 id="giftReceiver"
+                required={true}
+                onInvalid={event => (event.target as HTMLInputElement).setCustomValidity(' ')}
+                autoComplete="off"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
               />
+              {giftNameError && <div className='text-red-500'>Lahjansaaja on pakollinen</div>}
             </Container>
             <Button
               id="submitButton"
