@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google';
 import { useEffect, useState } from 'react';
-import { FullLocalStorage } from '../types/types';
 import { generateUUID } from '../utils/generateID/generateUUID';
 import { isWindow } from '../utils/isWindow';
 import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
@@ -20,11 +19,18 @@ import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 
 const inter = Inter({ subsets: ['latin'] });
 
+export type FullLocalStorage = {
+  name: string;
+  gift: string;
+  id?: string;
+  localStorageKeyID?: string;
+  createdDate: number;
+};
+
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
 
   useEffect(() => {
-    isWindow();
 
     console.log('effect');
     const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage());
@@ -120,7 +126,7 @@ export default function Home() {
             </Container>
             <Button
               id="submitButton"
-              handleClick={handleSubmit}
+              onClick={handleSubmit}
               type="submit"
               className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
             >
@@ -155,7 +161,7 @@ export default function Home() {
                       element.className = '';
                     }}
                     className="border bg-black text-white ms-5 mb-3 w-16 h-8 hover:text-red-600"
-                    handleClick={(event: React.MouseEvent<HTMLElement>) =>
+                    onClick={(event: React.MouseEvent<HTMLElement>) =>
                       handleDeletion(event)
                     }
                     type="button"
@@ -171,3 +177,4 @@ export default function Home() {
     </Main>
   );
 }
+

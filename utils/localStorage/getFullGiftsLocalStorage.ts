@@ -1,4 +1,4 @@
-import { FullLocalStorage } from '~/types/types';
+import { FullLocalStorage } from "~/pages";
 import { isWindow } from '../isWindow';
 
 /**
