@@ -24,39 +24,35 @@ export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
 
   useEffect(() => {
-    isWindow(); // checks if Window is not undefined, else throws an error
+    isWindow();
 
-    console.log('effect'); // print for knowing useEffect is working
-    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // fetches an array of objects that contains all of the gifts
-    setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
+    console.log('effect');
+    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage());
+    setGiftData(fullLocalStorage);
   }, []);
 
   function handleSubmit() {
-    // handles the event when clicking the submit button
     function clearInputs() {
-      // clears the inputs
       giftNameInput.value = '';
       giftReceiverInput.value = '';
     }
 
     const giftNameInput = document.getElementById(
       'giftName',
-    ) as HTMLInputElement; // giftName input element
+    ) as HTMLInputElement;
     const giftReceiverInput = document.getElementById(
       'giftReceiver',
-    ) as HTMLInputElement; // giftReceiver input element
-    const giftName: string = giftNameInput.value; // gift's name from the input
-    const giftReceiver: string = giftReceiverInput.value; // receiver name from the input
+    ) as HTMLInputElement;
+    const giftName: string = giftNameInput.value;
+    const giftReceiver: string = giftReceiverInput.value;
 
     if (typeof giftName !== 'string' || giftName.length === 0)
-      // if giftName is for example numeral or has 0 letters, throws an error
       throw new Error("Invalid gift's name!");
     if (typeof giftReceiver !== 'string' || giftReceiver.length === 0)
-      // if receiverName is for example numeral or has 0 letters, throws an error
       throw new Error("Invalid receiver's name!");
 
-    const generatedUUID = generateUUID(); // generates an UUID. For example: 0a776b46-ec73-440c-a34d-79a2b23cada0
-    const localStorageKeyID = generateLocalStorageID('gift', generatedUUID); // generates a gift UUID. For example: gift_0a776b46-ec73-440c-a34d-79a2b23cada0
+    const generatedUUID = generateUUID();
+    const localStorageKeyID = generateLocalStorageID('gift', generatedUUID);
     const JSON_Object: FullLocalStorage = {
       name: giftReceiver,
       gift: giftName,
@@ -65,37 +61,33 @@ export default function Home() {
       createdDate: new Date().getTime(),
     };
 
-    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object)); // sets the data to localStorage
-    setGiftData((previousValue) => previousValue.concat(JSON_Object)); // combines two arrays without mutating them
+    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object));
+    setGiftData((previousValue) => previousValue.concat(JSON_Object));
     clearInputs(); // clears giftName and giftReceiver inputs
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
-    // handles the event when delete button is pressed
     const parentElementID = event.currentTarget.parentElement?.id; // sets variable to have delete button's <li> element's ID
 
-    const localStorageItem = getLocalStorage(`gift_${parentElementID}`); // gets data from localStorage as a string
+    const localStorageItem = getLocalStorage(`gift_${parentElementID}`);
     if (typeof localStorageItem !== 'string') {
-      // checks if it is string for TypeScript knowing that it can be only string, not string | null
-      console.error('localStorageItem was not a string!'); // if for some reason data gotten from localStorage is not a string prints an error
-      return; // returns due to an error
+      console.error('localStorageItem was not a string!');
+      return;
     }
-    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem); // parses string to object. localStorageData has been set to FullLocalStorage for TS to see object's methods.
+    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem);
 
     const confirmationForDeleting = confirm(
       `Deleting ${localStorageData.name} - ${localStorageData.gift}`,
-    ); // confirmation window that determites if should be deleted or not
+    );
 
     if (confirmationForDeleting) {
-      // if confirmation is true
-      removeLocalStorage(`gift_${parentElementID}`); // removes the gift from localStorage
+      removeLocalStorage(`gift_${parentElementID}`);
       refreshGiftList();
     }
   }
 
   function refreshGiftList() {
-    // this is run when the gift list is wanted to be refreshed
-    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // sorts the array of objects to have a correct order
+    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage());
     setGiftData(fullLocalStorage);
   }
 
