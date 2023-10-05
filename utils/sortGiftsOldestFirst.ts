@@ -6,5 +6,5 @@ import { FullLocalStorage } from '~/pages';
  */
 
 export function sortGiftsOldestFirst(wrongOrderArray: FullLocalStorage[]) {
-  return wrongOrderArray.sort((a, b) => a.createdDate - b.createdDate);
+  return [...wrongOrderArray].sort((a, b) => a.createdDate - b.createdDate);
 }

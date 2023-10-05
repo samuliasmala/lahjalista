@@ -1,19 +1,8 @@
-import { ReactNode } from 'react';
+import { LabelHTMLAttributes } from 'react';
 
 export function Label({
-  id,
-  htmlFor,
-  className,
   children,
-}: {
-  id?: string;
-  htmlFor?: string;
-  className?: string;
-  children?: ReactNode;
-}) {
-  return (
-    <label id={id} htmlFor={htmlFor} className={className}>
-      {children}
-    </label>
-  );
+  ...rest
+}: LabelHTMLAttributes<HTMLLabelElement>) {
+  return <label {...rest}>{children}</label>;
 }

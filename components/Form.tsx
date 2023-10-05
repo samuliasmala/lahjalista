@@ -1,19 +1,8 @@
-import { ReactNode } from 'react';
+import { FormHTMLAttributes } from 'react';
 
 export function Form({
-  id,
-  className,
   children,
-  action,
-}: {
-  id?: string;
-  className?: string;
-  children?: ReactNode;
-  action?: string;
-}) {
-  return (
-    <form id={id} className={className} action={action}>
-      {children}
-    </form>
-  );
+  ...rest
+}: FormHTMLAttributes<HTMLFormElement>) {
+  return <form {...rest}>{children}</form>;
 }
