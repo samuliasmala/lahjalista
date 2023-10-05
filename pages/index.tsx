@@ -89,30 +89,19 @@ export default function Home() {
     giftReceiverInput.value = '';
   }
 
-  function handleDeletion(event: React.MouseEvent<HTMLElement>) {
-    // sets variable to have delete button's <li> element's ID
-    const parentElementID = event.currentTarget.parentElement?.id; 
-
-    const localStorageItem = getLocalStorage(`gift_${parentElementID}`);
-    if (typeof localStorageItem !== 'string') {
-      console.error('localStorageItem was not a string!');
-      return;
-    }
-    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem);
-
-    const confirmationForDeleting = confirm(
-      `Deleting ${localStorageData.name} - ${localStorageData.gift}`,
-    );
-
-    if (confirmationForDeleting) {
-      removeLocalStorage(`gift_${parentElementID}`);
-      refreshGiftList();
+  function handleDeletion(gift: FullLocalStorage) {
+    const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
+    if (confirmDeletion) {
+      let localStorageGifts: FullLocalStorage[] = JSON.parse(getLocalStorage('giftData'));
+      localStorageGifts = localStorageGifts.filter(localStorageGift => localStorageGift.id !== gift.id)
+      setLocalStorage("giftData", JSON.stringify(localStorageGifts))
+      refreshGiftList()
     }
   }
 
   function refreshGiftList() {
-    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage());
-    setGiftData(fullLocalStorage);
+    const sortedGifts = sortGiftsOldestFirst(JSON.parse(getLocalStorage("giftData")));
+    setGiftData(sortedGifts);
   }
 
   return (
@@ -193,9 +182,7 @@ export default function Home() {
                       element.className = '';
                     }}
                     className="border bg-black text-white ms-5 mb-3 w-16 h-8 hover:text-red-600"
-                    onClick={(event: React.MouseEvent<HTMLElement>) =>
-                      handleDeletion(event)
-                    }
+                    onClick={() => handleDeletion(giftItem)}
                     type="button"
                   >
                     Poista
