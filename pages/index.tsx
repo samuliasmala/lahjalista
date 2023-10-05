@@ -31,6 +31,8 @@ export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   const [receiverError, setReceiverError] = useState<boolean>(false);
   const [giftNameError, setGiftNameError] = useState<boolean>(false);
+  const [newGift, setnewGift] = useState<string>('');
+  const [newReceiver, setNewReceiver] = useState<string>('');
 
   useEffect(() => {
     console.log('effect');
@@ -92,15 +94,21 @@ export default function Home() {
   function handleDeletion(gift: FullLocalStorage) {
     const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
     if (confirmDeletion) {
-      let localStorageGifts: FullLocalStorage[] = JSON.parse(getLocalStorage('giftData'));
-      localStorageGifts = localStorageGifts.filter(localStorageGift => localStorageGift.id !== gift.id)
-      setLocalStorage("giftData", JSON.stringify(localStorageGifts))
-      refreshGiftList()
+      let localStorageGifts: FullLocalStorage[] = JSON.parse(
+        getLocalStorage('giftData'),
+      );
+      localStorageGifts = localStorageGifts.filter(
+        (localStorageGift) => localStorageGift.id !== gift.id,
+      );
+      setLocalStorage('giftData', JSON.stringify(localStorageGifts));
+      refreshGiftList();
     }
   }
 
   function refreshGiftList() {
-    const sortedGifts = sortGiftsOldestFirst(JSON.parse(getLocalStorage("giftData")));
+    const sortedGifts = sortGiftsOldestFirst(
+      JSON.parse(getLocalStorage('giftData')),
+    );
     setGiftData(sortedGifts);
   }
 
