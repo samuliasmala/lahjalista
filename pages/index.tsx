@@ -34,10 +34,10 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    let parsedGiftData: [] = JSON.parse(getLocalStorage("giftData"))
-    if(parsedGiftData === null){
-      parsedGiftData = []
-      setLocalStorage("giftData", JSON.stringify(parsedGiftData))
+    let parsedGiftData: [] = JSON.parse(getLocalStorage('giftData'));
+    if (parsedGiftData === null) {
+      parsedGiftData = [];
+      setLocalStorage('giftData', JSON.stringify(parsedGiftData));
     }
     const gifts = sortGiftsOldestFirst(parsedGiftData);
     setGiftData(gifts);
@@ -78,18 +78,20 @@ export default function Home() {
         createdDate: new Date().getTime(),
       },
     ];
-    let localStorageGiftData: FullLocalStorage[] = JSON.parse(getLocalStorage("giftData") as string)
-    localStorageGiftData = localStorageGiftData.concat(JSON_Object)
-    
+    let localStorageGiftData: FullLocalStorage[] = JSON.parse(
+      getLocalStorage('giftData') as string,
+    );
+    localStorageGiftData = localStorageGiftData.concat(JSON_Object);
 
     setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
-    setGiftData((previousValue) => previousValue.concat(localStorageGiftData));
+    setGiftData(localStorageGiftData);
     giftNameInput.value = '';
     giftReceiverInput.value = '';
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
-    const parentElementID = event.currentTarget.parentElement?.id; // sets variable to have delete button's <li> element's ID
+    // sets variable to have delete button's <li> element's ID
+    const parentElementID = event.currentTarget.parentElement?.id; 
 
     const localStorageItem = getLocalStorage(`gift_${parentElementID}`);
     if (typeof localStorageItem !== 'string') {
@@ -117,7 +119,7 @@ export default function Home() {
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
-          <Form onSubmit={e => e.preventDefault()}>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
               <Label htmlFor="giftName">Lahja</Label>
