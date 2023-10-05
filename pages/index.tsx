@@ -34,8 +34,13 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage());
-    setGiftData(fullLocalStorage);
+    let parsedGiftData: [] = JSON.parse(getLocalStorage("giftData"))
+    if(parsedGiftData === null){
+      parsedGiftData = []
+      setLocalStorage("giftData", JSON.stringify(parsedGiftData))
+    }
+    const gifts = sortGiftsOldestFirst(parsedGiftData);
+    setGiftData(gifts);
   }, []);
 
   function handleSubmit() {
@@ -65,17 +70,20 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const localStorageKeyID = generateLocalStorageID('gift', generatedUUID);
-    const JSON_Object: FullLocalStorage = {
-      name: giftReceiver,
-      gift: giftName,
-      id: generatedUUID,
-      localStorageKeyID: localStorageKeyID,
-      createdDate: new Date().getTime(),
-    };
+    const JSON_Object: FullLocalStorage[] = [
+      {
+        name: giftReceiver,
+        gift: giftName,
+        id: generatedUUID,
+        createdDate: new Date().getTime(),
+      },
+    ];
+    let localStorageGiftData: FullLocalStorage[] = JSON.parse(getLocalStorage("giftData") as string)
+    localStorageGiftData = localStorageGiftData.concat(JSON_Object)
+    
 
-    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object));
-    setGiftData((previousValue) => previousValue.concat(JSON_Object));
+    setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
+    setGiftData((previousValue) => previousValue.concat(localStorageGiftData));
     giftNameInput.value = '';
     giftReceiverInput.value = '';
   }
@@ -109,10 +117,8 @@ export default function Home() {
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
-          <Form>
-            <TitleText className="text-2xl pt-4">
-              Lahjalistaidea
-            </TitleText>
+          <Form onSubmit={e => e.preventDefault()}>
+            <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
               <Label htmlFor="giftName">Lahja</Label>
               <Input
@@ -150,7 +156,6 @@ export default function Home() {
               )}
             </Container>
             <Button
-              id="submitButton"
               onClick={handleSubmit}
               type="submit"
               className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
