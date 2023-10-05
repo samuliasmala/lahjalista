@@ -1,13 +1,9 @@
-import { FullLocalStorage } from "~/pages";
-import { isWindow } from '../isWindow';
-
+import { FullLocalStorage } from '~/pages';
 /**
  *
  * @returns an array of objects that had key starting as gift_
  */
 export function getFullGiftsLocalStorage() {
-  isWindow();
-
   let array: FullLocalStorage[] = [];
   for (const [key, values] of Object.entries(localStorage)) {
     if (key.startsWith('gift_')) {

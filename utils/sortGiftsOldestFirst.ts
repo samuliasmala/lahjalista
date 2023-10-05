@@ -1,4 +1,4 @@
-import { FullLocalStorage } from "~/pages";
+import { FullLocalStorage } from '~/pages';
 /**
  *
  * @param wrongOrderArray an array of objects
@@ -6,5 +6,5 @@ import { FullLocalStorage } from "~/pages";
  */
 
 export function sortGiftsOldestFirst(wrongOrderArray: FullLocalStorage[]) {
-  return wrongOrderArray.sort((a,b) => a.createdDate - b.createdDate)
+  return wrongOrderArray.sort((a, b) => a.createdDate - b.createdDate);
 }

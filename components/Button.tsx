@@ -6,4 +6,3 @@ export function Button({
 }: ButtonHTMLAttributes<HTMLButtonElement>) {
   return <button {...rest}>{children}</button>;
 }
-

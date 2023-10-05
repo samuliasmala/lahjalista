@@ -1,21 +1,19 @@
 import { Inter } from 'next/font/google';
 import { useEffect, useState } from 'react';
-import { generateUUID } from '../utils/generateID/generateUUID';
-import { isWindow } from '../utils/isWindow';
-import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
-import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { TitleText } from '~/components/TitleText';
-import { SmallContainer } from '~/components/SmallContainer';
 import { Form } from '~/components/Form';
-import { Label } from '../components/Label';
-import { Input } from '../components/Input';
 import { Main } from '~/components/Main';
+import { SmallContainer } from '~/components/SmallContainer';
+import { TitleText } from '~/components/TitleText';
 import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
 import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
 import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
+import { Input } from '../components/Input';
+import { Label } from '../components/Label';
+import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
+import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,8 +37,8 @@ export default function Home() {
   }, []);
 
   function handleSubmit() {
-    setReceiverError(false)
-    setGiftNameError(false)
+    setReceiverError(false);
+    setGiftNameError(false);
     let errorFound: boolean = false;
 
     const giftNameInput = document.getElementById(
@@ -64,7 +62,7 @@ export default function Home() {
       return;
     }
 
-    const generatedUUID = generateUUID();
+    const generatedUUID = crypto.randomUUID();
     const localStorageKeyID = generateLocalStorageID('gift', generatedUUID);
     const JSON_Object: FullLocalStorage = {
       name: giftReceiver,
@@ -78,8 +76,6 @@ export default function Home() {
     setGiftData((previousValue) => previousValue.concat(JSON_Object));
     giftNameInput.value = '';
     giftReceiverInput.value = '';
-    setReceiverError(false);
-    setGiftNameError(false);
   }
 
   function handleDeletion(event: React.MouseEvent<HTMLElement>) {
