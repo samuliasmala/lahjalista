@@ -7,13 +7,15 @@ import { Main } from '~/components/Main';
 import { SmallContainer } from '~/components/SmallContainer';
 import { TitleText } from '~/components/TitleText';
 import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
-import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
-import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
+import {
+  getLocalStorage,
+  removeLocalStorage,
+  getFullGiftsLocalStorage,
+  setLocalStorage,
+} from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
 import { Label } from '../components/Label';
-import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
-import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
 
 const inter = Inter({ subsets: ['latin'] });
 
