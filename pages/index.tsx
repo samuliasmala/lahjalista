@@ -107,13 +107,13 @@ export default function Home() {
 
   return (
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <Container id="fullScreenContainer" className="justify-center grid h-5">
-        <Container id="formContainer" className="mt-5">
-          <Form id="giftForm">
-            <TitleText id="formTitle" className="text-2xl pt-4">
+      <Container className="justify-center grid h-5">
+        <Container className="mt-5">
+          <Form>
+            <TitleText className="text-2xl pt-4">
               Lahjalistaidea
             </TitleText>
-            <Container id="giftNameContainer" className="pt-4 grid">
+            <Container className="pt-4 grid">
               <Label htmlFor="giftName">Lahja</Label>
               <Input
                 id="giftName"
@@ -131,7 +131,7 @@ export default function Home() {
                 <div className="text-red-500">Lahja on pakollinen</div>
               )}
             </Container>
-            <Container id="giftReceiverContainer" className="pt-4 grid">
+            <Container className="pt-4 grid">
               <Label htmlFor="receiver">Saaja</Label>
               <Input
                 id="giftReceiver"
