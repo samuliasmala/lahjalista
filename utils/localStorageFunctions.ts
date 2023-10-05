@@ -25,19 +25,17 @@ export function getFullGiftsLocalStorage() {
  *
  * @param key keyID in localStorage
  *
- * @returns a string that contains the data of specific keyID in localStorage
+ * @returns a string that contains the data of specific keyID in localStorage or if not found returns a null
  */
 export function getLocalStorage(key: string) {
-  return window.localStorage.getItem(key);
+  return window.localStorage.getItem(key) as string;
 }
 /**
  *
  * @param key a string that contains the keyID that is wanted to be deleted
- *
- * @returns nothing
  */
 export function removeLocalStorage(key: string) {
-  return window.localStorage.removeItem(key);
+  window.localStorage.removeItem(key);
 }
 
 /**
