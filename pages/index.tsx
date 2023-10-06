@@ -26,8 +26,8 @@ export type FullLocalStorage = {
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
-  const [receiverError, setReceiverError] = useState<boolean>(false);
   const [giftNameError, setGiftNameError] = useState<boolean>(false);
+  const [receiverError, setReceiverError] = useState<boolean>(false);
   const [newReceiver, setNewReceiver] = useState<string>('');
   const [newGiftName, setNewGiftName] = useState<string>('');
 
@@ -51,9 +51,11 @@ export default function Home() {
   }
 
   function handleSubmit() {
-    setReceiverError(false);
     setGiftNameError(false);
+    setReceiverError(false);
     let errorFound: boolean = false;
+    console.log(newGiftName);
+    console.log(typeof newGiftName, newGiftName.length);
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
       setGiftNameError(true);
@@ -130,7 +132,7 @@ export default function Home() {
                 name="giftName"
                 value={newGiftName}
               />
-              {receiverError && (
+              {giftNameError && (
                 <div className="text-red-500">Lahja on pakollinen</div>
               )}
             </Container>
@@ -150,7 +152,7 @@ export default function Home() {
                 name="receiver"
                 value={newReceiver}
               />
-              {giftNameError && (
+              {receiverError && (
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
             </Container>
