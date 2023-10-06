@@ -6,11 +6,8 @@ import { Form } from '~/components/Form';
 import { Main } from '~/components/Main';
 import { SmallContainer } from '~/components/SmallContainer';
 import { TitleText } from '~/components/TitleText';
-import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
 import {
   getLocalStorage,
-  removeLocalStorage,
-  getFullGiftsLocalStorage,
   setLocalStorage,
 } from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
@@ -80,7 +77,7 @@ export default function Home() {
       },
     ];
     let localStorageGiftData: FullLocalStorage[] = JSON.parse(
-      getLocalStorage('giftData') as string,
+      getLocalStorage('giftData'),
     );
     localStorageGiftData = localStorageGiftData.concat(JSON_Object);
 
