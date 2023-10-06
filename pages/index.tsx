@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Form } from '~/components/Form';
@@ -31,8 +31,8 @@ export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   const [receiverError, setReceiverError] = useState<boolean>(false);
   const [giftNameError, setGiftNameError] = useState<boolean>(false);
-  const [newGift, setnewGift] = useState<string>('');
   const [newReceiver, setNewReceiver] = useState<string>('');
+  const [newGiftName, setNewGiftName] = useState<string>('');
 
   useEffect(() => {
     console.log('effect');
@@ -45,26 +45,25 @@ export default function Home() {
     setGiftData(gifts);
   }, []);
 
+  function handleReceiverChange(event: ChangeEvent<HTMLInputElement>) {
+    setNewReceiver(event.target.value);
+  }
+
+  function handleGiftNameChange(event: ChangeEvent<HTMLInputElement>) {
+    setNewGiftName(event.target.value);
+  }
+
   function handleSubmit() {
     setReceiverError(false);
     setGiftNameError(false);
     let errorFound: boolean = false;
 
-    const giftNameInput = document.getElementById(
-      'giftName',
-    ) as HTMLInputElement;
-    const giftReceiverInput = document.getElementById(
-      'giftReceiver',
-    ) as HTMLInputElement;
-    const giftName: string = giftNameInput.value;
-    const giftReceiver: string = giftReceiverInput.value;
-
-    if (typeof giftName !== 'string' || giftName.length === 0) {
-      setReceiverError(true);
+    if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
+      setGiftNameError(true);
       errorFound = true;
     }
-    if (typeof giftReceiver !== 'string' || giftReceiver.length === 0) {
-      setGiftNameError(true);
+    if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
+      setReceiverError(true);
       errorFound = true;
     }
     if (errorFound) {
@@ -74,8 +73,8 @@ export default function Home() {
     const generatedUUID = crypto.randomUUID();
     const JSON_Object: FullLocalStorage[] = [
       {
-        name: giftReceiver,
-        gift: giftName,
+        name: newReceiver,
+        gift: newGiftName,
         id: generatedUUID,
         createdDate: new Date().getTime(),
       },
@@ -87,8 +86,8 @@ export default function Home() {
 
     setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
     setGiftData(localStorageGiftData);
-    giftNameInput.value = '';
-    giftReceiverInput.value = '';
+    setNewGiftName('');
+    setNewReceiver('');
   }
 
   function handleDeletion(gift: FullLocalStorage) {
@@ -123,6 +122,7 @@ export default function Home() {
               <Input
                 id="giftName"
                 required={true}
+                onChange={(event) => handleGiftNameChange(event)}
                 onInvalid={(event) =>
                   (event.target as HTMLInputElement).setCustomValidity(' ')
                 }
@@ -131,6 +131,7 @@ export default function Home() {
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
                 name="giftName"
+                value={newGiftName}
               />
               {receiverError && (
                 <div className="text-red-500">Lahja on pakollinen</div>
@@ -141,6 +142,7 @@ export default function Home() {
               <Input
                 id="giftReceiver"
                 required={true}
+                onChange={(event) => handleReceiverChange(event)}
                 onInvalid={(event) =>
                   (event.target as HTMLInputElement).setCustomValidity(' ')
                 }
@@ -149,6 +151,7 @@ export default function Home() {
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
+                value={newReceiver}
               />
               {giftNameError && (
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
