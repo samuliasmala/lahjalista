@@ -54,8 +54,6 @@ export default function Home() {
     setGiftNameError(false);
     setReceiverError(false);
     let errorFound: boolean = false;
-    console.log(newGiftName);
-    console.log(typeof newGiftName, newGiftName.length);
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
       setGiftNameError(true);
