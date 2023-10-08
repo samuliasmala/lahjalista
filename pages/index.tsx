@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Form } from '~/components/Form';
@@ -50,7 +50,8 @@ export default function Home() {
     setNewGiftName(event.target.value);
   }
 
-  function handleSubmit() {
+  function handleSubmit(e: FormEvent<HTMLElement>) {
+    e.preventDefault();
     setGiftNameError(false);
     setReceiverError(false);
     let errorFound: boolean = false;
@@ -112,12 +113,11 @@ export default function Home() {
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
-          <Form onSubmit={(e) => e.preventDefault()}>
+          <Form onSubmit={(e) => handleSubmit(e)}>
             <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
               <Label htmlFor="giftName">Lahja</Label>
               <Input
-                id="giftName"
                 required={true}
                 onChange={(event) => handleGiftNameChange(event)}
                 onInvalid={(event) =>
@@ -137,7 +137,6 @@ export default function Home() {
             <Container className="pt-4 grid">
               <Label htmlFor="receiver">Saaja</Label>
               <Input
-                id="giftReceiver"
                 required={true}
                 onChange={(event) => handleReceiverChange(event)}
                 onInvalid={(event) =>
@@ -155,7 +154,6 @@ export default function Home() {
               )}
             </Container>
             <Button
-              onClick={handleSubmit}
               type="submit"
               className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
             >
