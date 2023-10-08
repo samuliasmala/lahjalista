@@ -68,7 +68,7 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const JSON_Object: FullLocalStorage[] = [
+    const jsonObject: FullLocalStorage[] = [
       {
         name: newReceiver,
         gift: newGiftName,
@@ -79,7 +79,7 @@ export default function Home() {
     let localStorageGiftData: FullLocalStorage[] = JSON.parse(
       getLocalStorage('giftData'),
     );
-    localStorageGiftData = localStorageGiftData.concat(JSON_Object);
+    localStorageGiftData = localStorageGiftData.concat(jsonObject);
 
     setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
     setGiftData(localStorageGiftData);
