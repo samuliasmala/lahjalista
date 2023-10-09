@@ -10,7 +10,6 @@ export function generateGiftID(): string {
   return `gift_${crypto.randomUUID()}`;
 }
 
-
 /**
  *
  * @param frontID a string that is wanted to be before UUID.
@@ -21,8 +20,7 @@ export function generateGiftID(): string {
  * Example return without frontID: 0a776b46-ec73-440c-a34d-79a2b23cada0
  */
 export function generateLocalStorageID(frontID: string, UUID?: string) {
-    if (typeof UUID !== 'undefined') return `${frontID}_${UUID}`;
+  if (typeof UUID !== 'undefined') return `${frontID}_${UUID}`;
 
-    return `${frontID}_${crypto.randomUUID()}`;
+  return `${frontID}_${crypto.randomUUID()}`;
 }
-

@@ -5,7 +5,9 @@
  * @returns a string that contains the data of specific keyID in localStorage or if not found returns a null
  */
 export function getLocalStorage(key: string) {
-  return window.localStorage.getItem(key) as string;
+  const item = window.localStorage.getItem(key);
+  if (typeof item !== 'string') return '[]';
+  return item;
 }
 /**
  *

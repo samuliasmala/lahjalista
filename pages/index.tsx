@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Form } from '~/components/Form';
@@ -33,28 +33,16 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    let parsedGiftData: [] = JSON.parse(getLocalStorage('giftData'));
-    if (parsedGiftData === null) {
-      parsedGiftData = [];
-      setLocalStorage('giftData', JSON.stringify(parsedGiftData));
-    }
+    const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
     const gifts = sortGiftsOldestFirst(parsedGiftData);
     setGiftData(gifts);
   }, []);
-
-  function handleReceiverChange(event: ChangeEvent<HTMLInputElement>) {
-    setNewReceiver(event.target.value);
-  }
-
-  function handleGiftNameChange(event: ChangeEvent<HTMLInputElement>) {
-    setNewGiftName(event.target.value);
-  }
 
   function handleSubmit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     setGiftNameError(false);
     setReceiverError(false);
-    let errorFound: boolean = false;
+    let errorFound = false;
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
       setGiftNameError(true);
@@ -119,7 +107,7 @@ export default function Home() {
               <Label htmlFor="giftName">Lahja</Label>
               <Input
                 required={true}
-                onChange={(event) => handleGiftNameChange(event)}
+                onChange={(event) => setNewGiftName(event.target.value)}
                 onInvalid={(event) =>
                   (event.target as HTMLInputElement).setCustomValidity(' ')
                 }
@@ -138,7 +126,7 @@ export default function Home() {
               <Label htmlFor="receiver">Saaja</Label>
               <Input
                 required={true}
-                onChange={(event) => handleReceiverChange(event)}
+                onChange={(event) => setNewReceiver(event.target.value)}
                 onInvalid={(event) =>
                   (event.target as HTMLInputElement).setCustomValidity(' ')
                 }
@@ -165,7 +153,7 @@ export default function Home() {
           <TitleText id="receiverTitle" className="text-2xl pt-4">
             Lahjaideat
           </TitleText>
-          <SmallContainer id="giftData">
+          <SmallContainer>
             {giftData.map((giftItem) => (
               <div key={`${giftItem.id}_divbutton`}>
                 <li key={giftItem.id} id={giftItem.id}>
