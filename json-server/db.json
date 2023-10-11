@@ -1,5 +1,16 @@
 {
-    "gifts": [
-        
-    ]
+  "gifts": [
+    {
+      "id": 1,
+      "greeting": "Hello!"
+    },
+    {
+      "id": 2,
+      "greeting": "Hi!"
+    },
+    {
+      "id": 3,
+      "greeting": "Moi!"
+    }
+  ]
 }

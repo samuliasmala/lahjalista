@@ -34,9 +34,13 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
-    const gifts = sortGiftsOldestFirst(parsedGiftData);
-    setGiftData(gifts);
+    fetchFunctions.getAll().then((gifts) => {
+
+      console.log(gifts)
+      //const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
+      //const gifts = sortGiftsOldestFirst(parsedGiftData);
+      //setGiftData(gifts);
+    }).catch(error => console.log(error))
   }, []);
 
   function handleSubmit(e: FormEvent<HTMLElement>) {
@@ -157,7 +161,7 @@ export default function Home() {
           <SmallContainer>
             {giftData.map((giftItem) => (
               <div key={`${giftItem.id}_divbutton`} className="parent-div">
-                <li key={giftItem.id} id={giftItem.id}>
+                <li key={giftItem.id} id={giftItem.id} className='animate-highlight'>
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
