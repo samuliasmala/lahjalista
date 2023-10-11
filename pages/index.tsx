@@ -1,144 +1,148 @@
 import { Inter } from 'next/font/google';
-import { useEffect, useState } from 'react';
-import { FullLocalStorage } from '../types/types';
-import { generateUUID } from '../utils/generateID/generateUUID';
-import { isWindow } from '../utils/isWindow';
-import { setLocalStorage } from '../utils/localStorage/setLocalStorage';
-import { getFullGiftsLocalStorage } from '../utils/localStorage/getFullGiftsLocalStorage';
+import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { TitleText } from '~/components/TitleText';
-import { SmallContainer } from '~/components/SmallContainer';
 import { Form } from '~/components/Form';
-import { Label } from '../components/Label';
-import { Input } from '../components/Input';
 import { Main } from '~/components/Main';
-import { generateLocalStorageID } from '~/utils/generateID/generateLocalStorageID';
-import { getLocalStorage } from '~/utils/localStorage/getLocalStorage';
-import { removeLocalStorage } from '~/utils/localStorage/removeLocalStorage';
+import { SmallContainer } from '~/components/SmallContainer';
+import { TitleText } from '~/components/TitleText';
+import {
+  getLocalStorage,
+  setLocalStorage,
+} from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
+import { Input } from '../components/Input';
+import { Label } from '../components/Label';
 import fetchFunctions from '~/utils/json-server/fetchFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
+export type FullLocalStorage = {
+  name: string;
+  gift: string;
+  id?: string;
+  localStorageKeyID?: string;
+  createdDate: number;
+};
+
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
+  const [giftNameError, setGiftNameError] = useState<boolean>(false);
+  const [receiverError, setReceiverError] = useState<boolean>(false);
+  const [newReceiver, setNewReceiver] = useState<string>('');
+  const [newGiftName, setNewGiftName] = useState<string>('');
+
   useEffect(() => {
-    isWindow(); // checks if Window is not undefined, else throws an error
-
-    const jsonServerData = fetchFunctions.getAll().then((data) => data);
-    jsonServerData.then(value => console.log(value))
-
-    console.log('effect'); // print for knowing useEffect is working
-    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // fetches an array of objects that contains all of the gifts
-    setGiftData(fullLocalStorage); // sets useState to have the fetched gifts
+    console.log('effect');
+    const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
+    const gifts = sortGiftsOldestFirst(parsedGiftData);
+    setGiftData(gifts);
   }, []);
 
-  function handleSubmit() {
-    // handles the event when clicking the submit button
-    function clearInputs() {
-      // clears the inputs
-      giftNameInput.value = '';
-      giftReceiverInput.value = '';
+  function handleSubmit(e: FormEvent<HTMLElement>) {
+    e.preventDefault();
+    setGiftNameError(false);
+    setReceiverError(false);
+    let errorFound = false;
+
+    if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
+      setGiftNameError(true);
+      errorFound = true;
+    }
+    if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
+      setReceiverError(true);
+      errorFound = true;
+    }
+    if (errorFound) {
+      return;
     }
 
-    const giftNameInput = document.getElementById(
-      'giftName',
-    ) as HTMLInputElement; // giftName input element
-    const giftReceiverInput = document.getElementById(
-      'giftReceiver',
-    ) as HTMLInputElement; // giftReceiver input element
-    const giftName: string = giftNameInput.value; // gift's name from the input
-    const giftReceiver: string = giftReceiverInput.value; // receiver name from the input
+    const generatedUUID = crypto.randomUUID();
+    const jsonObject: FullLocalStorage[] = [
+      {
+        name: newReceiver,
+        gift: newGiftName,
+        id: generatedUUID,
+        createdDate: new Date().getTime(),
+      },
+    ];
+    let localStorageGiftData: FullLocalStorage[] = JSON.parse(
+      getLocalStorage('giftData'),
+    );
+    localStorageGiftData = localStorageGiftData.concat(jsonObject);
 
-    if (typeof giftName !== 'string' || giftName.length === 0)
-      // if giftName is for example numeral or has 0 letters, throws an error
-      throw new Error("Invalid gift's name!");
-    if (typeof giftReceiver !== 'string' || giftReceiver.length === 0)
-      // if receiverName is for example numeral or has 0 letters, throws an error
-      throw new Error("Invalid receiver's name!");
-
-    const generatedUUID = generateUUID(); // generates an UUID. For example: 0a776b46-ec73-440c-a34d-79a2b23cada0
-    const localStorageKeyID = generateLocalStorageID('gift', generatedUUID); // generates a gift UUID. For example: gift_0a776b46-ec73-440c-a34d-79a2b23cada0
-    const JSON_Object: FullLocalStorage = {
-      name: giftReceiver,
-      gift: giftName,
-      id: generatedUUID,
-      localStorageKeyID: localStorageKeyID,
-      createdDate: new Date().getTime(),
-    };
-
-    setLocalStorage(localStorageKeyID, JSON.stringify(JSON_Object)); // sets the data to localStorage
-    setGiftData((previousValue) => previousValue.concat(JSON_Object)); // combines two arrays without mutating them
-    clearInputs(); // clears giftName and giftReceiver inputs
+    setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
+    setGiftData(localStorageGiftData);
+    setNewGiftName('');
+    setNewReceiver('');
   }
 
-  function handleDeletion(event: React.MouseEvent<HTMLElement>) {
-    // handles the event when delete button is pressed
-    const parentElementID = event.currentTarget.parentElement?.id; // sets variable to have delete button's <li> element's ID
-
-    const localStorageItem = getLocalStorage(`gift_${parentElementID}`); // gets data from localStorage as a string
-    if (typeof localStorageItem !== 'string') {
-      // checks if it is string for TypeScript knowing that it can be only string, not string | null
-      console.error('localStorageItem was not a string!'); // if for some reason data gotten from localStorage is not a string prints an error
-      return; // returns due to an error
-    }
-    const localStorageData: FullLocalStorage = JSON.parse(localStorageItem); // parses string to object. localStorageData has been set to FullLocalStorage for TS to see object's methods.
-
-    const confirmationForDeleting = confirm(
-      `Deleting ${localStorageData.name} - ${localStorageData.gift}`,
-    ); // confirmation window that determites if should be deleted or not
-
-    if (confirmationForDeleting) {
-      // if confirmation is true
-      removeLocalStorage(`gift_${parentElementID}`); // removes the gift from localStorage
+  function handleDeletion(gift: FullLocalStorage) {
+    const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
+    if (confirmDeletion) {
+      let localStorageGifts: FullLocalStorage[] = JSON.parse(
+        getLocalStorage('giftData'),
+      );
+      localStorageGifts = localStorageGifts.filter(
+        (localStorageGift) => localStorageGift.id !== gift.id,
+      );
+      setLocalStorage('giftData', JSON.stringify(localStorageGifts));
       refreshGiftList();
     }
   }
 
   function refreshGiftList() {
-    // this is run when the gift list is wanted to be refreshed
-    const fullLocalStorage = sortGiftsOldestFirst(getFullGiftsLocalStorage()); // sorts the array of objects to have a correct order
-    setGiftData((prevValue) =>
-      prevValue
-        .filter((value) => value.createdDate === 100)
-        .concat(fullLocalStorage),
-    ); // firstly clears the array and then combines it with the new array. Both actions are made without mutating the old one.
+    const sortedGifts = sortGiftsOldestFirst(
+      JSON.parse(getLocalStorage('giftData')),
+    );
+    setGiftData(sortedGifts);
   }
 
   return (
     <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <Container id="fullScreenContainer" className="justify-center grid h-5">
-        <Container id="formContainer" className="mt-5">
-          <Form id="giftForm" action='/api/json-server/createGift'>
-            <TitleText id="formTitle" className="text-2xl pt-4">
-              Lahjalistaidea
-            </TitleText>
-            <Container id="giftNameContainer" className="pt-4 grid">
+      <Container className="justify-center grid h-5">
+        <Container className="mt-5">
+          <Form onSubmit={(e) => handleSubmit(e)}>
+            <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
+            <Container className="pt-4 grid">
               <Label htmlFor="giftName">Lahja</Label>
               <Input
-                id="giftName"
+                required={true}
+                onChange={(event) => setNewGiftName(event.target.value)}
+                onInvalid={(event) =>
+                  (event.target as HTMLInputElement).setCustomValidity(' ')
+                }
                 autoComplete="off"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
                 name="giftName"
+                value={newGiftName}
               />
+              {giftNameError && (
+                <div className="text-red-500">Lahja on pakollinen</div>
+              )}
             </Container>
-            <Container id="giftReceiverContainer" className="pt-4 grid">
+            <Container className="pt-4 grid">
               <Label htmlFor="receiver">Saaja</Label>
               <Input
+                required={true}
+                onChange={(event) => setNewReceiver(event.target.value)}
+                onInvalid={(event) =>
+                  (event.target as HTMLInputElement).setCustomValidity(' ')
+                }
                 autoComplete="off"
-                id="giftReceiver"
                 type="text"
                 className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
+                value={newReceiver}
               />
+              {receiverError && (
+                <div className="text-red-500">Lahjansaaja on pakollinen</div>
+              )}
             </Container>
             <Button
-              id="submitButton"
-              handleClick={handleSubmit}
               type="submit"
               className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
             >
@@ -150,9 +154,9 @@ export default function Home() {
           <TitleText id="receiverTitle" className="text-2xl pt-4">
             Lahjaideat
           </TitleText>
-          <SmallContainer id="giftData">
+          <SmallContainer>
             {giftData.map((giftItem) => (
-              <div key={`${giftItem.id}_divbutton`}>
+              <div key={`${giftItem.id}_divbutton`} className="parent-div">
                 <li key={giftItem.id} id={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
@@ -173,9 +177,7 @@ export default function Home() {
                       element.className = '';
                     }}
                     className="border bg-black text-white ms-5 mb-3 w-16 h-8 hover:text-red-600"
-                    handleClick={(event: React.MouseEvent<HTMLElement>) =>
-                      handleDeletion(event)
-                    }
+                    onClick={() => handleDeletion(giftItem)}
                     type="button"
                   >
                     Poista

@@ -1,17 +1,5 @@
-import { ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
-export function Main({
-  id,
-  className,
-  children,
-}: {
-  id?: string;
-  className?: string;
-  children?: ReactNode;
-}) {
-  return (
-    <main id={id} className={className}>
-      {children}
-    </main>
-  );
+export function Main({ children, ...rest }: HTMLAttributes<HTMLElement>) {
+  return <main {...rest}>{children}</main>;
 }
