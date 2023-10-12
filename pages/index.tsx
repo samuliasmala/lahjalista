@@ -2,7 +2,6 @@ import { Inter } from 'next/font/google';
 import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { SmallContainer } from '~/components/SmallContainer';
 import { TitleText } from '~/components/TitleText';
 import {
   getLocalStorage,
@@ -103,11 +102,7 @@ export default function Home() {
             <Container className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
               <Input
-                required={true}
                 onChange={(event) => setNewGiftName(event.target.value)}
-                onInvalid={(event) =>
-                  (event.target as HTMLInputElement).setCustomValidity(' ')
-                }
                 autoComplete="off"
                 type="text"
                 placeholder="Kortti"
@@ -121,11 +116,7 @@ export default function Home() {
             <Container className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
-                required={true}
                 onChange={(event) => setNewReceiver(event.target.value)}
-                onInvalid={(event) =>
-                  (event.target as HTMLInputElement).setCustomValidity(' ')
-                }
                 autoComplete="off"
                 type="text"
                 placeholder="Aku Ankka"
