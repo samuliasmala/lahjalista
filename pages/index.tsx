@@ -3,7 +3,6 @@ import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Form } from '~/components/Form';
-import { Main } from '~/components/Main';
 import { SmallContainer } from '~/components/SmallContainer';
 import { TitleText } from '~/components/TitleText';
 import {
@@ -97,13 +96,13 @@ export default function Home() {
   }
 
   return (
-    <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
           <Form onSubmit={(e) => handleSubmit(e)}>
             <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
-              <label htmlFor='giftName'>Lahja</label>
+              <label htmlFor="giftName">Lahja</label>
               <Input
                 required={true}
                 onChange={(event) => setNewGiftName(event.target.value)}
@@ -179,6 +178,6 @@ export default function Home() {
           </SmallContainer>
         </Container>
       </Container>
-    </Main>
+    </main>
   );
 }
