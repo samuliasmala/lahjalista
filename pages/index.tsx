@@ -155,7 +155,7 @@ export default function Home() {
           </TitleText>
           <SmallContainer>
             {giftData.map((giftItem) => (
-              <div key={`${giftItem.id}_divbutton`} className="parent-div">
+              <div key={`${giftItem.id}_divbutton`}>
                 <li key={giftItem.id} id={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
