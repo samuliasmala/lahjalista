@@ -149,14 +149,14 @@ export default function Home() {
             </Button>
           </Form>
         </Container>
-        <Container id="receiverListContainer" className="mt-3">
-          <TitleText id="receiverTitle" className="text-2xl pt-4">
+        <Container className="mt-3">
+          <TitleText className="text-2xl pt-4">
             Lahjaideat
           </TitleText>
           <SmallContainer>
             {giftData.map((giftItem) => (
               <div key={`${giftItem.id}_divbutton`}>
-                <li key={giftItem.id} id={giftItem.id}>
+                <li key={giftItem.id} id={giftItem.id} className='animate-width whitespace-nowrap overflow-hidden'>
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
