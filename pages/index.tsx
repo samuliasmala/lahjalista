@@ -99,7 +99,7 @@ export default function Home() {
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
           <form onSubmit={(e) => handleSubmit(e)}>
-            <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
+            <TitleText>Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
               <Input
@@ -140,7 +140,7 @@ export default function Home() {
           </form>
         </Container>
         <Container className="mt-3">
-          <TitleText className="text-2xl pt-4">Lahjaideat</TitleText>
+          <TitleText>Lahjaideat</TitleText>
           <SmallContainer>
             {giftData.map((giftItem) => (
               <div
