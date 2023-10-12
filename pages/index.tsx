@@ -151,19 +151,13 @@ export default function Home() {
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
-                    onMouseOver={() => {
-                      const idOfElementToHide = giftItem.id as string;
-                      const element =
-                        document.getElementById(idOfElementToHide);
-                      if (!element) return;
-                      element.className = 'line-through';
+                    onMouseOver={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className = "line-through";
                     }}
-                    onMouseOut={() => {
-                      const idOfElementToHide = giftItem.id as string;
-                      const element =
-                        document.getElementById(idOfElementToHide);
-                      if (!element) return;
-                      element.className = '';
+                    onMouseOut={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className = "";
                     }}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600"
                     onClick={() => handleDeletion(giftItem)}
