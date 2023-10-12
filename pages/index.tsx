@@ -12,7 +12,6 @@ import {
 } from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
-import { Label } from '../components/Label';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -104,7 +103,7 @@ export default function Home() {
           <Form onSubmit={(e) => handleSubmit(e)}>
             <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
-              <Label htmlFor="giftName">Lahja</Label>
+              <label htmlFor='giftName'>Lahja</label>
               <Input
                 required={true}
                 onChange={(event) => setNewGiftName(event.target.value)}
@@ -122,7 +121,7 @@ export default function Home() {
               )}
             </Container>
             <Container className="pt-4 grid">
-              <Label htmlFor="receiver">Saaja</Label>
+              <label htmlFor="receiver">Saaja</label>
               <Input
                 required={true}
                 onChange={(event) => setNewReceiver(event.target.value)}
