@@ -113,7 +113,6 @@ export default function Home() {
                 }
                 autoComplete="off"
                 type="text"
-                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
                 name="giftName"
                 value={newGiftName}
@@ -132,7 +131,6 @@ export default function Home() {
                 }
                 autoComplete="off"
                 type="text"
-                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
                 value={newReceiver}
@@ -141,26 +139,21 @@ export default function Home() {
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
             </Container>
-            <Button
-              type="submit"
-              className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
-            >
-              Lisää
-            </Button>
+            <Button type="submit">Lisää</Button>
           </Form>
         </Container>
         <Container className="mt-3">
-          <TitleText className="text-2xl pt-4">
-            Lahjaideat
-          </TitleText>
+          <TitleText className="text-2xl pt-4">Lahjaideat</TitleText>
           <SmallContainer>
             {giftData.map((giftItem) => (
-              <div key={`${giftItem.id}_divbutton`}>
-                <li key={giftItem.id} id={giftItem.id} className='animate-width whitespace-nowrap overflow-hidden'>
+              <div
+                key={`${giftItem.id}_divbutton`}
+                className="animate-width whitespace-nowrap overflow-hidden"
+              >
+                <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
-                    id="deletionButton"
                     onMouseOver={() => {
                       const idOfElementToHide = giftItem.id as string;
                       const element =
@@ -175,7 +168,7 @@ export default function Home() {
                       if (!element) return;
                       element.className = '';
                     }}
-                    className="border bg-black text-white ms-5 mb-3 w-16 h-8 hover:text-red-600"
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
                     onClick={() => handleDeletion(giftItem)}
                     type="button"
                   >
