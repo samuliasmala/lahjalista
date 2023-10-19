@@ -9,6 +9,8 @@ import {
 } from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
+import { Modal } from '~/components/Modal';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -158,7 +160,9 @@ export default function Home() {
                   >
                     Poista
                   </Button>
+                  
                 </li>
+                <Modal gift={giftItem}>Testi</Modal>
               </div>
             ))}
           </div>
