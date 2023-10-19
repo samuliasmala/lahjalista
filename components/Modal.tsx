@@ -13,7 +13,12 @@ type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   giftListRefreshFunction?: () => void;
 };
 
-export function Modal({ gift, giftListRefreshFunction: giftListRefresh, children, ...rest }: ModalType) {
+export function Modal({
+  gift,
+  giftListRefreshFunction: giftListRefresh,
+  children,
+  ...rest
+}: ModalType) {
   const [openWindow, setOpenWindow] = useState(false);
   if (typeof gift === 'undefined') return null;
 
@@ -25,9 +30,8 @@ export function Modal({ gift, giftListRefreshFunction: giftListRefresh, children
       (localStorageGift) => localStorageGift.id !== gift.id,
     );
     setLocalStorage('giftData', JSON.stringify(localStorageGifts));
-    setOpenWindow(false)
-    if(typeof giftListRefresh !== "undefined") giftListRefresh()
-    
+    setOpenWindow(false);
+    if (typeof giftListRefresh !== 'undefined') giftListRefresh();
   }
 
   return (
@@ -63,9 +67,15 @@ export function Modal({ gift, giftListRefreshFunction: giftListRefresh, children
               height="64"
               viewBox="0 0 32 32"
               className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-5 sm:left-5"
-              onClick={() => handleDeletion()}
             >
               <path
+                onClick={() => handleDeletion()}
+                onMouseOver={(e) =>
+                  e.currentTarget.setAttribute('fill', '#60946e')
+                }
+                onMouseOut={(e) =>
+                  e.currentTarget.setAttribute('fill', 'currentColor')
+                }
                 fill="currentColor"
                 d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2Zm-2 19.59l-5-5L10.59 15L14 18.41L21.41 11l1.596 1.586Z"
               />
@@ -80,9 +90,15 @@ export function Modal({ gift, giftListRefreshFunction: giftListRefresh, children
               height="64"
               viewBox="0 0 24 24"
               className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-32 sm:left-28"
-              onClick={() => setOpenWindow(false)}
             >
               <path
+                onClick={() => setOpenWindow(false)}
+                onMouseOver={(e) =>
+                  e.currentTarget.setAttribute('fill', '#60946e')
+                }
+                onMouseOut={(e) =>
+                  e.currentTarget.setAttribute('fill', 'currentColor')
+                }
                 fill="currentColor"
                 d="m8.4 17l3.6-3.6l3.6 3.6l1.4-1.4l-3.6-3.6L17 8.4L15.6 7L12 10.6L8.4 7L7 8.4l3.6 3.6L7 15.6L8.4 17Zm3.6 5q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22Z"
               />

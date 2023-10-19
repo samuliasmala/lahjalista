@@ -73,20 +73,6 @@ export default function Home() {
     setNewReceiver('');
   }
 
-  function handleDeletion(gift: FullLocalStorage) {
-    const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
-    if (confirmDeletion) {
-      let localStorageGifts: FullLocalStorage[] = JSON.parse(
-        getLocalStorage('giftData'),
-      );
-      localStorageGifts = localStorageGifts.filter(
-        (localStorageGift) => localStorageGift.id !== gift.id,
-      );
-      setLocalStorage('giftData', JSON.stringify(localStorageGifts));
-      refreshGiftList();
-    }
-  }
-
   function refreshGiftList() {
     const sortedGifts = sortGiftsOldestFirst(
       JSON.parse(getLocalStorage('giftData')),
@@ -141,7 +127,12 @@ export default function Home() {
               >
                 <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
-                  <Modal gift={giftItem} giftListRefreshFunction={refreshGiftList}>Poista</Modal>
+                  <Modal
+                    gift={giftItem}
+                    giftListRefreshFunction={refreshGiftList}
+                  >
+                    Poista
+                  </Modal>
                 </li>
               </div>
             ))}
