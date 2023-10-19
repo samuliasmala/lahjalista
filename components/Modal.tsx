@@ -3,6 +3,10 @@ import { FullLocalStorage } from '~/pages';
 import { Button } from './Button';
 import { Container } from './Container';
 import { TitleText } from './TitleText';
+import {
+  getLocalStorage,
+  setLocalStorage,
+} from '~/utils/localStorageFunctions';
 
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift: FullLocalStorage;
@@ -11,6 +15,18 @@ type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
 export function Modal({ gift, children, ...rest }: ModalType) {
   const [openWindow, setOpenWindow] = useState(false);
   if (typeof gift === 'undefined') return null;
+
+  function handleDeletion() {
+    let localStorageGifts: FullLocalStorage[] = JSON.parse(
+      getLocalStorage('giftData'),
+    );
+    localStorageGifts = localStorageGifts.filter(
+      (localStorageGift) => localStorageGift.id !== gift.id,
+    );
+    setLocalStorage('giftData', JSON.stringify(localStorageGifts));
+    setOpenWindow(false)
+  }
+
   return (
     <>
       <Button
@@ -31,7 +47,6 @@ export function Modal({ gift, children, ...rest }: ModalType) {
       >
         {children}
       </Button>
-
       {openWindow ? (
         <Container className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
           <Container className="grid w-96 sm:w-96 border border-yellow-300 bg-gray-200">
@@ -45,6 +60,7 @@ export function Modal({ gift, children, ...rest }: ModalType) {
               height="64"
               viewBox="0 0 32 32"
               className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-5 sm:left-5"
+              onClick={() => handleDeletion()}
             >
               <path
                 fill="currentColor"
@@ -61,6 +77,7 @@ export function Modal({ gift, children, ...rest }: ModalType) {
               height="64"
               viewBox="0 0 24 24"
               className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-32 sm:left-28"
+              onClick={() => setOpenWindow(false)}
             >
               <path
                 fill="currentColor"
