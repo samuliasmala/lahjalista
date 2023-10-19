@@ -141,7 +141,7 @@ export default function Home() {
               >
                 <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
-                  <Modal gift={giftItem}>Poista</Modal>
+                  <Modal gift={giftItem} giftListRefreshFunction={refreshGiftList}>Poista</Modal>
                 </li>
               </div>
             ))}

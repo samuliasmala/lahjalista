@@ -10,9 +10,10 @@ import {
 
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift: FullLocalStorage;
+  giftListRefreshFunction?: () => void;
 };
 
-export function Modal({ gift, children, ...rest }: ModalType) {
+export function Modal({ gift, giftListRefreshFunction: giftListRefresh, children, ...rest }: ModalType) {
   const [openWindow, setOpenWindow] = useState(false);
   if (typeof gift === 'undefined') return null;
 
@@ -25,6 +26,8 @@ export function Modal({ gift, children, ...rest }: ModalType) {
     );
     setLocalStorage('giftData', JSON.stringify(localStorageGifts));
     setOpenWindow(false)
+    if(typeof giftListRefresh !== "undefined") giftListRefresh()
+    
   }
 
   return (
