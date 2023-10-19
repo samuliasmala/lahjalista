@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss';
 
-
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -11,12 +10,12 @@ const config: Config = {
     extend: {
       keyframes: {
         width: {
-          "0%": {
-            width: "0px"
+          '0%': {
+            width: '0px',
           },
-          "100%":{
-            width: "100%"
-          }
+          '100%': {
+            width: '100%',
+          },
         },
         highlight: {
           '0%, 50%': {
@@ -28,17 +27,17 @@ const config: Config = {
         },
         background: {
           '0%': {
-            backgroundColor: "yellow"
+            backgroundColor: 'yellow',
           },
           '100%': {
-            backgroundColor: "blue"
-          }
-        }
+            backgroundColor: 'blue',
+          },
+        },
       },
       animation: {
         highlight: 'highlight 1200ms ease-in-out',
         background: 'background 1200ms ease-in-out',
-        width : 'width 1200ms'
+        width: 'width 1200ms',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

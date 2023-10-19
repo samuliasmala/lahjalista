@@ -144,11 +144,13 @@ export default function Home() {
                     key={`${giftItem.id}_deletebutton`}
                     onMouseOver={(e) => {
                       // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className = "line-through";
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        'line-through';
                     }}
                     onMouseOut={(e) => {
                       // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className = "";
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        '';
                     }}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600"
                     onClick={() => handleDeletion(giftItem)}
