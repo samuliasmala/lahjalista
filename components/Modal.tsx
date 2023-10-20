@@ -7,6 +7,8 @@ import {
   getLocalStorage,
   setLocalStorage,
 } from '~/utils/localStorageFunctions';
+import Image from 'next/image';
+import AcceptButtonSVG from '../public/images/icons/accept_button.svg';
 
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift: FullLocalStorage;
@@ -33,6 +35,32 @@ export function Modal({
     setOpenWindow(false);
     if (typeof giftListRefresh !== 'undefined') giftListRefresh();
   }
+
+  /*
+<svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              viewBox="0 0 32 32"
+              className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-5 sm:left-5"
+            >
+              <path
+                onClick={() => handleDeletion()}
+                onMouseOver={(e) =>
+                  e.currentTarget.setAttribute('fill', '#60946e')
+                }
+                onMouseOut={(e) =>
+                  e.currentTarget.setAttribute('fill', 'currentColor')
+                }
+                fill="currentColor"
+                d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2Zm-2 19.59l-5-5L10.59 15L14 18.41L21.41 11l1.596 1.586Z"
+              />
+              <path
+                fill="none"
+                d="m14 21.591l-5-5L10.591 15L14 18.409L21.41 11l1.595 1.585L14 21.591z"
+              />
+            </svg>
+*/
 
   return (
     <>
@@ -61,29 +89,19 @@ export function Modal({
               Deleting:
             </TitleText>
             <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">{`${gift.gift} - ${gift.name}`}</p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="64"
-              height="64"
-              viewBox="0 0 32 32"
+            <AcceptButtonSVG
+              alt="acceptButton"
+              width={64}
+              height={64}
               className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-5 sm:left-5"
-            >
-              <path
-                onClick={() => handleDeletion()}
-                onMouseOver={(e) =>
-                  e.currentTarget.setAttribute('fill', '#60946e')
-                }
-                onMouseOut={(e) =>
-                  e.currentTarget.setAttribute('fill', 'currentColor')
-                }
-                fill="currentColor"
-                d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2Zm-2 19.59l-5-5L10.59 15L14 18.41L21.41 11l1.596 1.586Z"
-              />
-              <path
-                fill="none"
-                d="m14 21.591l-5-5L10.591 15L14 18.409L21.41 11l1.595 1.585L14 21.591z"
-              />
-            </svg>
+              onClick={() => handleDeletion()}
+              onMouseOver={(e: React.MouseEvent<SVGPathElement, MouseEvent>) =>
+                e.currentTarget.setAttribute('fill', '#60946e')
+              }
+              onMouseOut={(e: React.MouseEvent<SVGPathElement, MouseEvent>) =>
+                e.currentTarget.setAttribute('fill', 'currentColor')
+              }
+            />
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="64"
