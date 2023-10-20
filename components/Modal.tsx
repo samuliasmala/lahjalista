@@ -60,6 +60,7 @@ export function Modal({
                 d="m14 21.591l-5-5L10.591 15L14 18.409L21.41 11l1.595 1.585L14 21.591z"
               />
             </svg>
+            <TestIcon className='[&_:nth-child(1)]:fill-yellow-400'/>
 */
 
   return (
@@ -95,11 +96,11 @@ export function Modal({
               height={64}
               className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-5 sm:left-5"
               onClick={() => handleDeletion()}
-              onMouseOver={(e: React.MouseEvent<SVGPathElement, MouseEvent>) =>
-                e.currentTarget.setAttribute('fill', '#60946e')
+              onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
+                e.currentTarget.classList.add("[&_:nth-child(1)]:fill-yellow-400")
               }
-              onMouseOut={(e: React.MouseEvent<SVGPathElement, MouseEvent>) =>
-                e.currentTarget.setAttribute('fill', 'currentColor')
+              onMouseOut={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
+                e.currentTarget.classList.remove("[&_:nth-child(1)]:fill-yellow-400")
               }
             />
             <svg
