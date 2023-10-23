@@ -6,6 +6,7 @@
 .pnp.js
 
 # testing
+commitText.txt
 /coverage
 
 # next.js
@@ -33,3 +34,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+

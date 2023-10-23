@@ -63,6 +63,7 @@
         "@typescript-eslint/no-unsafe-call": "off",
 
         // Use warn instead of error for some rules
+        "prefer-const": "warn",
         "@typescript-eslint/restrict-plus-operands": "warn",
         "@typescript-eslint/no-unused-vars": "warn",
         "@typescript-eslint/require-await": "warn"

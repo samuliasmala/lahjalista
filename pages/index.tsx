@@ -1,156 +1,169 @@
 import { Inter } from 'next/font/google';
-import { ReactNode, useEffect, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { FormEvent, useEffect, useState } from 'react';
+import { Button } from '~/components/Button';
+import { Container } from '~/components/Container';
+import { TitleText } from '~/components/TitleText';
+import {
+  getLocalStorage,
+  setLocalStorage,
+} from '~/utils/localStorageFunctions';
+import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
+import { Input } from '../components/Input';
 
 const inter = Inter({ subsets: ['latin'] });
 
-function setLocalStorage(key: string, values: string) {
-  isWindow();
-  localStorage.setItem(key, values);
-}
-
-/**
- *
- * @returns a string that contains individual ID for key in React component.
- */
-function generateKeyID(): string {
-  isWindow();
-  return crypto.randomUUID();
-}
-
-function getFullLocalStorage() {
-  isWindow()
-  
-  let array: any = [];
-  for (let [key, values] of Object.entries(localStorage)) {
-    if (key.startsWith('gift_')) {
-      values = JSON.parse(values);
-      array = array.concat({
-        name: values['name'],
-        gift: values['gift'],
-        keyID: values['keyID'],
-      });
-    }
-  }
-  return array;
-}
-
-/**
- *
- * @returns an individual ID with randomUUID. The individual ID looks like: gift_number-array*
- *
- * number-array* = crypto.randomUUID()
- *
- * return example: gift_150cd819-1502-4717-9c96-f7ca7b42d8bd
- */
-function generateID(): string {
-  isWindow();
-  return `gift_${crypto.randomUUID()}`;
-}
-
-/**
- *
- * @returns if Window is undefined, throws an error
- */
-
-function isWindow() {
-  if (typeof window === 'undefined')
-    throw new Error(
-      'Window was defined as undefined. LocalStorage could not be read.',
-    );
-  return true;
-}
-
-type FullLocalStorage = {
-  name?: string;
-  gift?: string;
-  keyID?: string;
+export type FullLocalStorage = {
+  name: string;
+  gift: string;
+  id?: string;
+  localStorageKeyID?: string;
+  createdDate: number;
 };
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
-  useEffect(() => {
-    isWindow(); // checks if Window is not undefined, else throws an error
+  const [giftNameError, setGiftNameError] = useState<boolean>(false);
+  const [receiverError, setReceiverError] = useState<boolean>(false);
+  const [newReceiver, setNewReceiver] = useState<string>('');
+  const [newGiftName, setNewGiftName] = useState<string>('');
 
+  useEffect(() => {
     console.log('effect');
-    const fullLocalStorage = getFullLocalStorage();
-    setGiftData((previousValue) => previousValue.concat(fullLocalStorage));
+    const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
+    const gifts = sortGiftsOldestFirst(parsedGiftData);
+    setGiftData(gifts);
   }, []);
 
-  function handleSubmit() {
-    const giftName: string = (
-      document.getElementById('giftName') as HTMLInputElement
-    ).value;
-    const receiverName: string = (
-      document.getElementById('giftReceiver') as HTMLInputElement
-    ).value;
+  function handleSubmit(e: FormEvent<HTMLElement>) {
+    e.preventDefault();
+    setGiftNameError(false);
+    setReceiverError(false);
+    let errorFound = false;
 
-    if (typeof giftName !== 'string' || giftName.length === 0)
-      throw new Error("Invalid gift's name!");
-    if (typeof receiverName !== 'string' || receiverName.length === 0)
-      throw new Error("Invalid receiver's name!");
+    if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
+      setGiftNameError(true);
+      errorFound = true;
+    }
+    if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
+      setReceiverError(true);
+      errorFound = true;
+    }
+    if (errorFound) {
+      return;
+    }
 
-    const JSON_Object: { name: string; gift: string; keyID: string } = {
-      name: receiverName,
-      gift: giftName,
-      keyID: generateKeyID(),
-    };
+    const generatedUUID = crypto.randomUUID();
+    const jsonObject: FullLocalStorage[] = [
+      {
+        name: newReceiver,
+        gift: newGiftName,
+        id: generatedUUID,
+        createdDate: new Date().getTime(),
+      },
+    ];
+    let localStorageGiftData: FullLocalStorage[] = JSON.parse(
+      getLocalStorage('giftData'),
+    );
+    localStorageGiftData = localStorageGiftData.concat(jsonObject);
 
-    setLocalStorage(generateID(), JSON.stringify(JSON_Object));
-    setGiftData((previousValue) => previousValue.concat(JSON_Object));
+    setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
+    setGiftData(localStorageGiftData);
+    setNewGiftName('');
+    setNewReceiver('');
+  }
+
+  function handleDeletion(gift: FullLocalStorage) {
+    const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
+    if (confirmDeletion) {
+      let localStorageGifts: FullLocalStorage[] = JSON.parse(
+        getLocalStorage('giftData'),
+      );
+      localStorageGifts = localStorageGifts.filter(
+        (localStorageGift) => localStorageGift.id !== gift.id,
+      );
+      setLocalStorage('giftData', JSON.stringify(localStorageGifts));
+      refreshGiftList();
+    }
+  }
+
+  function refreshGiftList() {
+    const sortedGifts = sortGiftsOldestFirst(
+      JSON.parse(getLocalStorage('giftData')),
+    );
+    setGiftData(sortedGifts);
   }
 
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <div id="fullScreenContainer" className="justify-center grid h-5">
-        <div id="formContainer" className="mt-5">
-          <form id="giftForm" className="" action={'/api/create'}>
-            <div id="formTitle" className="text-2xl pt-4">
-              Lahjalistaidea
-            </div>
-
-            <div id="giftNameContainer" className="pt-4 grid">
+      <Container className="justify-center grid h-5">
+        <Container className="mt-5">
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <TitleText>Lahjalistaidea</TitleText>
+            <Container className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
-              <input
-                id="giftName"
+              <Input
+                onChange={(event) => setNewGiftName(event.target.value)}
+                autoComplete="off"
                 type="text"
-                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
                 name="giftName"
+                value={newGiftName}
               />
-            </div>
-            <div id="giftReceiverContainer" className="pt-4 grid">
+              {giftNameError && (
+                <div className="text-red-500">Lahja on pakollinen</div>
+              )}
+            </Container>
+            <Container className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
-              <input
-                id="giftReceiver"
+              <Input
+                onChange={(event) => setNewReceiver(event.target.value)}
+                autoComplete="off"
                 type="text"
-                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
+                value={newReceiver}
               />
-            </div>
-            <button
-              className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500"
-              type="button"
-              onClick={handleSubmit}
-            >
-              Lisää
-            </button>
+              {receiverError && (
+                <div className="text-red-500">Lahjansaaja on pakollinen</div>
+              )}
+            </Container>
+            <Button type="submit">Lisää</Button>
           </form>
-        </div>
-        <div id="receiverListContainer" className="mt-3">
-          <div id="receiverTitle" className="text-2xl pt-4">
-            Lahjaideat
-          </div>
-          <div id="giftData">
-            {giftData.map((value) => (
-              <p key={value.keyID}>
-                {value.name} - {value.gift}
-              </p>
+        </Container>
+        <Container className="mt-3">
+          <TitleText>Lahjaideat</TitleText>
+          <div>
+            {giftData.map((giftItem) => (
+              <div
+                key={`${giftItem.id}_divbutton`}
+                className="animate-width whitespace-nowrap overflow-hidden"
+              >
+                <li key={giftItem.id}>
+                  {giftItem.name} - {giftItem.gift}
+                  <Button
+                    key={`${giftItem.id}_deletebutton`}
+                    onMouseOver={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        'line-through';
+                    }}
+                    onMouseOut={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        '';
+                    }}
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
+                    onClick={() => handleDeletion(giftItem)}
+                    type="button"
+                  >
+                    Poista
+                  </Button>
+                </li>
+              </div>
             ))}
           </div>
-        </div>
-      </div>
+        </Container>
+      </Container>
     </main>
   );
 }
