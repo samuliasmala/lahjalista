@@ -66,24 +66,6 @@ export function Modal({
 
   return (
     <>
-      <Button
-        key={`${gift.id}_deletebutton`}
-        onMouseOver={(e) => {
-          // can use statement *as* here due to the button being inside of the li parentElement
-          (e.currentTarget.parentElement as HTMLElement).className =
-            'line-through';
-        }}
-        onMouseOut={(e) => {
-          // can use statement *as* here due to the button being inside of the li parentElement
-          (e.currentTarget.parentElement as HTMLElement).className = '';
-        }}
-        className="ms-5 p-0 w-16 h-8 hover:text-red-600"
-        onClick={() => setOpenWindow(true)}
-        type="button"
-        {...rest}
-      >
-        {children}
-      </Button>
       {openWindow ? (
         <Container className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
           <Container className="grid w-96 sm:w-96 border border-yellow-300 bg-gray-200">

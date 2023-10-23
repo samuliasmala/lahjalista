@@ -127,12 +127,27 @@ export default function Home() {
               >
                 <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
+                  <Button
+                    key={`${giftItem.id}_deletebutton`}
+                    onMouseOver={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        'line-through';
+                    }}
+                    onMouseOut={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        '';
+                    }}
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
+                    type="button"
+                  >
+                    Testi
+                  </Button>
                   <Modal
                     gift={giftItem}
                     giftListRefreshFunction={refreshGiftList}
-                  >
-                    Poista
-                  </Modal>
+                  ></Modal>
                 </li>
               </div>
             ))}
