@@ -27,6 +27,7 @@ export default function Home() {
   const [receiverError, setReceiverError] = useState<boolean>(false);
   const [newReceiver, setNewReceiver] = useState<string>('');
   const [newGiftName, setNewGiftName] = useState<string>('');
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     console.log('effect');
@@ -140,14 +141,14 @@ export default function Home() {
                         '';
                     }}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600"
+                    onClick={() => setOpenModal(true)}
                     type="button"
                   >
-                    Testi
+                    Poista
                   </Button>
-                  <Modal
-                    gift={giftItem}
-                    giftListRefreshFunction={refreshGiftList}
-                  ></Modal>
+                  {openModal ? <Modal openWindow={true}>
+                    Test text
+                  </Modal> : null}
                 </li>
               </div>
             ))}
