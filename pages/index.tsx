@@ -10,6 +10,7 @@ import {
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
 import { Modal } from '~/components/Modal';
+import { DeleteModal } from '~/components/DeleteModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,7 @@ export default function Home() {
   const [newReceiver, setNewReceiver] = useState<string>('');
   const [newGiftName, setNewGiftName] = useState<string>('');
   const [openModal, setOpenModal] = useState(false);
+  const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
 
   useEffect(() => {
     console.log('effect');
@@ -141,17 +143,18 @@ export default function Home() {
                         '';
                     }}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600"
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => {
+                      setModalGiftData(giftItem)
+                      setOpenModal(true)
+                    }}
                     type="button"
                   >
                     Poista
                   </Button>
-                  {openModal ? <Modal openWindow={true}>
-                    Test text
-                  </Modal> : null}
                 </li>
               </div>
             ))}
+            {openModal ? <DeleteModal gift={modalGiftData}/> : null}
           </div>
         </Container>
       </Container>

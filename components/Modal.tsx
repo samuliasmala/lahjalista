@@ -1,4 +1,4 @@
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes } from 'react';
 import { Container } from './Container';
 
 export function Modal({ children, ...rest }: HTMLAttributes<HTMLDivElement>) {
