@@ -13,7 +13,8 @@
     "start": "next start",
     "check-types": "tsc --noemit",
     "lint": "(next lint || true) && npm run check-types",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "svgr": "svgr --out-dir icons --typescript --jsx-runtime automatic --no-dimensions --silent --filename-case snake -- public/images/icons"
   },
   "dependencies": {
     "@types/node": "20.6.0",
@@ -33,6 +34,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
+    "@svgr/cli": "8.1.0",
     "@svgr/webpack": "8.1.0",
     "@typescript-eslint/eslint-plugin": "6.7.0",
     "eslint-config-prettier": "9.0.0",
