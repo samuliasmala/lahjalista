@@ -18,6 +18,6 @@
     },
     "noImplicitReturns": true // When enabled, TypeScript will check all code paths in a function to ensure they return a value.
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./public/images/icons/*.svg"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "custom.d.ts"],
   "exclude": ["node_modules"]
 }
