@@ -24,10 +24,10 @@ export type FullLocalStorage = {
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
-  const [giftNameError, setGiftNameError] = useState<boolean>(false);
-  const [receiverError, setReceiverError] = useState<boolean>(false);
-  const [newReceiver, setNewReceiver] = useState<string>('');
-  const [newGiftName, setNewGiftName] = useState<string>('');
+  const [giftNameError, setGiftNameError] = useState(false);
+  const [receiverError, setReceiverError] = useState(false);
+  const [newReceiver, setNewReceiver] = useState('');
+  const [newGiftName, setNewGiftName] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
 
@@ -154,7 +154,7 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            {openModal ? <DeleteModal gift={modalGiftData}/> : null}
+            {openModal ? <DeleteModal gift={modalGiftData} closeModalUseState={setOpenModal} giftListRefreshFunction={refreshGiftList}/> : null}
           </div>
         </Container>
       </Container>

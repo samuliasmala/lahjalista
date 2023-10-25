@@ -1,9 +1,8 @@
 import { TitleText } from './TitleText';
 import AcceptButtonSVG from '../public/images/icons/accept_button.svg';
 import DeclineButtonSVG from '../public/images/icons/decline_button.svg';
-import React, { ButtonHTMLAttributes } from 'react';
+import React, { ButtonHTMLAttributes, Dispatch, SetStateAction } from 'react';
 import { FullLocalStorage } from '~/pages';
-import { Container } from './Container';
 import {
   getLocalStorage,
   setLocalStorage,
@@ -13,21 +12,26 @@ import { Modal } from './Modal';
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift?: FullLocalStorage;
   giftListRefreshFunction?: () => void;
-  acceptButtonFunction?: () => void;
-  declineButtonFunction?: () => void;
+  closeModalUseState: Dispatch<SetStateAction<boolean>>;
 };
 
 export function DeleteModal({
   gift,
   giftListRefreshFunction,
-  acceptButtonFunction,
+  closeModalUseState,
   children,
   ...rest
 }: ModalType) {
+
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
   let dataToDeleteInfo = `${gift?.name} - ${gift?.gift}`;
   if (typeof gift === 'undefined') dataToDeleteInfo = 'No data was given';
+  if (typeof closeModalUseState === 'undefined') return;
+  
   function handleDeletion() {
+    if (typeof giftListRefreshFunction === 'undefined') return;
+
+    
     let localStorageGifts: FullLocalStorage[] = JSON.parse(
       getLocalStorage('giftData'),
     );
@@ -35,8 +39,8 @@ export function DeleteModal({
       (localStorageGift) => localStorageGift.id !== gift?.id,
     );
     setLocalStorage('giftData', JSON.stringify(localStorageGifts));
-    //setOpenWindow(false);
-    //if (typeof giftListRefresh !== 'undefined') giftListRefresh();
+    giftListRefreshFunction();
+    closeModalUseState(false)
   }
 
   return (
@@ -52,7 +56,7 @@ export function DeleteModal({
         width={64}
         height={64}
         className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-5 sm:left-5"
-        onClick={() => console.log('test accept')}
+        onClick={() => handleDeletion()}
         onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
           e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
         }
@@ -65,7 +69,7 @@ export function DeleteModal({
         width={64}
         height={64}
         className="relative mt-3 row-start-3 row-end-3 col-start-1 col-end-1 left-32 sm:left-28"
-        onClick={() => console.log('Test decline')}
+        onClick={() => closeModalUseState(false)}
         onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
           e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
         }
