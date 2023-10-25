@@ -19,19 +19,15 @@ export function DeleteModal({
   gift,
   giftListRefreshFunction,
   closeModalUseState,
-  children,
-  ...rest
 }: ModalType) {
-
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
   let dataToDeleteInfo = `${gift?.name} - ${gift?.gift}`;
   if (typeof gift === 'undefined') dataToDeleteInfo = 'No data was given';
   if (typeof closeModalUseState === 'undefined') return;
-  
+
   function handleDeletion() {
     if (typeof giftListRefreshFunction === 'undefined') return;
 
-    
     let localStorageGifts: FullLocalStorage[] = JSON.parse(
       getLocalStorage('giftData'),
     );
@@ -40,7 +36,7 @@ export function DeleteModal({
     );
     setLocalStorage('giftData', JSON.stringify(localStorageGifts));
     giftListRefreshFunction();
-    closeModalUseState(false)
+    closeModalUseState(false);
   }
 
   return (

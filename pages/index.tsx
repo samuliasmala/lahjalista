@@ -9,7 +9,6 @@ import {
 } from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
-import { Modal } from '~/components/Modal';
 import { DeleteModal } from '~/components/DeleteModal';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -144,8 +143,8 @@ export default function Home() {
                     }}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600"
                     onClick={() => {
-                      setModalGiftData(giftItem)
-                      setOpenModal(true)
+                      setModalGiftData(giftItem);
+                      setOpenModal(true);
                     }}
                     type="button"
                   >
@@ -154,7 +153,13 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            {openModal ? <DeleteModal gift={modalGiftData} closeModalUseState={setOpenModal} giftListRefreshFunction={refreshGiftList}/> : null}
+            {openModal ? (
+              <DeleteModal
+                gift={modalGiftData}
+                closeModalUseState={setOpenModal}
+                giftListRefreshFunction={refreshGiftList}
+              />
+            ) : null}
           </div>
         </Container>
       </Container>
