@@ -10,7 +10,7 @@ import {
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-import fetchFunctions from '~/utils/json-server/fetchFunctions';
+import jsonServerFunctions from '~/utils/jsonServerFunctions'
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,7 +33,8 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    fetchFunctions.getAll().then((gifts) => {
+    
+    jsonServerFunctions.getAll().then((gifts) => {
 
       console.log(gifts)
       //const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
