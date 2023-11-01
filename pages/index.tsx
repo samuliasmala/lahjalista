@@ -33,14 +33,19 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    
+    async function fetchData(){
+      const gifts = await jsonServerFunctions.getAll()
+      setGiftData(gifts.data)
+    }
+    fetchData()
+    /*
     jsonServerFunctions.getAll().then((gifts) => {
-
-      console.log(gifts)
+      console.log(gifts.data)
       //const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
       //const gifts = sortGiftsOldestFirst(parsedGiftData);
       //setGiftData(gifts);
     }).catch(error => console.log(error))
+    */
   }, []);
 
   function handleSubmit(e: FormEvent<HTMLElement>) {
