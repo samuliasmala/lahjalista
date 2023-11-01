@@ -2,9 +2,6 @@ import { Inter } from 'next/font/google';
 import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
-import { Form } from '~/components/Form';
-import { Main } from '~/components/Main';
-import { SmallContainer } from '~/components/SmallContainer';
 import { TitleText } from '~/components/TitleText';
 import {
   getLocalStorage,
@@ -12,7 +9,7 @@ import {
 } from '~/utils/localStorageFunctions';
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
-import { Label } from '../components/Label';
+import { DeleteModal } from '~/components/DeleteModal';
 import fetchFunctions from '~/utils/json-server/fetchFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -27,10 +24,12 @@ export type FullLocalStorage = {
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
-  const [giftNameError, setGiftNameError] = useState<boolean>(false);
-  const [receiverError, setReceiverError] = useState<boolean>(false);
-  const [newReceiver, setNewReceiver] = useState<string>('');
-  const [newGiftName, setNewGiftName] = useState<string>('');
+  const [giftNameError, setGiftNameError] = useState(false);
+  const [receiverError, setReceiverError] = useState(false);
+  const [newReceiver, setNewReceiver] = useState('');
+  const [newGiftName, setNewGiftName] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
 
   useEffect(() => {
     console.log('effect');
@@ -81,20 +80,6 @@ export default function Home() {
     setNewReceiver('');
   }
 
-  function handleDeletion(gift: FullLocalStorage) {
-    const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
-    if (confirmDeletion) {
-      let localStorageGifts: FullLocalStorage[] = JSON.parse(
-        getLocalStorage('giftData'),
-      );
-      localStorageGifts = localStorageGifts.filter(
-        (localStorageGift) => localStorageGift.id !== gift.id,
-      );
-      setLocalStorage('giftData', JSON.stringify(localStorageGifts));
-      refreshGiftList();
-    }
-  }
-
   function refreshGiftList() {
     const sortedGifts = sortGiftsOldestFirst(
       JSON.parse(getLocalStorage('giftData')),
@@ -103,22 +88,17 @@ export default function Home() {
   }
 
   return (
-    <Main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
-          <Form onSubmit={(e) => handleSubmit(e)}>
-            <TitleText className="text-2xl pt-4">Lahjalistaidea</TitleText>
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <TitleText>Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
-              <Label htmlFor="giftName">Lahja</Label>
+              <label htmlFor="giftName">Lahja</label>
               <Input
-                required={true}
                 onChange={(event) => setNewGiftName(event.target.value)}
-                onInvalid={(event) =>
-                  (event.target as HTMLInputElement).setCustomValidity(' ')
-                }
                 autoComplete="off"
                 type="text"
-                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Kortti"
                 name="giftName"
                 value={newGiftName}
@@ -128,16 +108,11 @@ export default function Home() {
               )}
             </Container>
             <Container className="pt-4 grid">
-              <Label htmlFor="receiver">Saaja</Label>
+              <label htmlFor="receiver">Saaja</label>
               <Input
-                required={true}
                 onChange={(event) => setNewReceiver(event.target.value)}
-                onInvalid={(event) =>
-                  (event.target as HTMLInputElement).setCustomValidity(' ')
-                }
                 autoComplete="off"
                 type="text"
-                className="ps-1 pt-3 pb-3 border hover:bg-gray-100"
                 placeholder="Aku Ankka"
                 name="receiver"
                 value={newReceiver}
@@ -146,42 +121,36 @@ export default function Home() {
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
             </Container>
-            <Button
-              type="submit"
-              className="w-full text-s mt-6 p-2 text-white border bg-black hover:text-gray-500 "
-            >
-              Lisää
-            </Button>
-          </Form>
+            <Button type="submit">Lisää</Button>
+          </form>
         </Container>
-        <Container id="receiverListContainer" className="mt-3">
-          <TitleText id="receiverTitle" className="text-2xl pt-4">
-            Lahjaideat
-          </TitleText>
-          <SmallContainer>
+        <Container className="mt-3">
+          <TitleText>Lahjaideat</TitleText>
+          <div>
             {giftData.map((giftItem) => (
-              <div key={`${giftItem.id}_divbutton`} className="parent-div">
-                <li key={giftItem.id} id={giftItem.id} className='animate-highlight'>
+              <div
+                key={`${giftItem.id}_divbutton`}
+                className="animate-width whitespace-nowrap overflow-hidden"
+              >
+                <li key={giftItem.id} className='animate-highlight'>
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
-                    id="deletionButton"
-                    onMouseOver={() => {
-                      const idOfElementToHide = giftItem.id as string;
-                      const element =
-                        document.getElementById(idOfElementToHide);
-                      if (!element) return;
-                      element.className = 'line-through';
+                    onMouseOver={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        'line-through';
                     }}
-                    onMouseOut={() => {
-                      const idOfElementToHide = giftItem.id as string;
-                      const element =
-                        document.getElementById(idOfElementToHide);
-                      if (!element) return;
-                      element.className = '';
+                    onMouseOut={(e) => {
+                      // can use statement *as* here due to the button being inside of the li parentElement
+                      (e.currentTarget.parentElement as HTMLElement).className =
+                        '';
                     }}
-                    className="border bg-black text-white ms-5 mb-3 w-16 h-8 hover:text-red-600"
-                    onClick={() => handleDeletion(giftItem)}
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
+                    onClick={() => {
+                      setModalGiftData(giftItem);
+                      setOpenModal(true);
+                    }}
                     type="button"
                   >
                     Poista
@@ -189,9 +158,16 @@ export default function Home() {
                 </li>
               </div>
             ))}
-          </SmallContainer>
+            {openModal ? (
+              <DeleteModal
+                gift={modalGiftData}
+                closeModalUseState={setOpenModal}
+                giftListRefreshFunction={refreshGiftList}
+              />
+            ) : null}
+          </div>
         </Container>
       </Container>
-    </Main>
+    </main>
   );
 }
