@@ -8,10 +8,11 @@ import {
 import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
+import jsonServerFunctions from '~/utils/jsonServerFunctions'
 
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
-  gift?: FullLocalStorage;
-  giftListRefreshFunction?: () => void;
+  gift: FullLocalStorage;
+  giftListRefreshFunction: () => void;
   closeModalUseState: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -21,20 +22,27 @@ export function DeleteModal({
   closeModalUseState,
 }: ModalType) {
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
-  let dataToDeleteInfo = `${gift?.name} - ${gift?.gift}`;
-  if (typeof gift === 'undefined') dataToDeleteInfo = 'No data was given';
-  if (typeof closeModalUseState === 'undefined') return;
+  let dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
+  // not optional anymore so not needed to check type
+  //if (typeof gift === 'undefined') dataToDeleteInfo = 'No data was given'; 
+  // not optional anymore so not needed to check type
+  //if (typeof closeModalUseState === 'undefined') return;
 
-  function handleDeletion() {
-    if (typeof giftListRefreshFunction === 'undefined') return;
-
-    let localStorageGifts: FullLocalStorage[] = JSON.parse(
-      getLocalStorage('giftData'),
-    );
-    localStorageGifts = localStorageGifts.filter(
-      (localStorageGift) => localStorageGift.id !== gift?.id,
-    );
-    setLocalStorage('giftData', JSON.stringify(localStorageGifts));
+  async function handleDeletion() {
+    // not optional anymore so not needed to check type
+    //if (typeof giftListRefreshFunction === 'undefined') return;
+    
+    // let localStorageGifts: FullLocalStorage[] = JSON.parse(
+    //   getLocalStorage('giftData'),
+    // );
+    // localStorageGifts = localStorageGifts.filter(
+    //   (localStorageGift) => localStorageGift.id !== gift?.id,
+    // );
+    //setLocalStorage('giftData', JSON.stringify(localStorageGifts));
+    
+    //let giftList: FullLocalStorage[] = await (await jsonServerFunctions.getAll()).data
+    //giftList = giftList.filter(giftItem => giftItem.id !== gift.id)
+    
     giftListRefreshFunction();
     closeModalUseState(false);
   }

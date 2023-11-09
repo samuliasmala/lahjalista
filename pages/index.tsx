@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
@@ -10,7 +10,7 @@ import {
 import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-import jsonServerFunctions from '~/utils/jsonServerFunctions'
+import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,11 +33,11 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    async function fetchData(){
-      const gifts = await jsonServerFunctions.getAll()
-      setGiftData(gifts.data)
+    async function fetchData() {
+      const gifts = await (await jsonServerFunctions.getAll()).data;
+      setGiftData(gifts);
     }
-    fetchData()
+    fetchData();
     /*
     jsonServerFunctions.getAll().then((gifts) => {
       console.log(gifts.data)
@@ -48,7 +48,7 @@ export default function Home() {
     */
   }, []);
 
-  function handleSubmit(e: FormEvent<HTMLElement>) {
+  async function handleSubmit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     setGiftNameError(false);
     setReceiverError(false);
@@ -67,30 +67,24 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const jsonObject: FullLocalStorage[] = [
-      {
-        name: newReceiver,
-        gift: newGiftName,
-        id: generatedUUID,
-        createdDate: new Date().getTime(),
-      },
-    ];
-    let localStorageGiftData: FullLocalStorage[] = JSON.parse(
-      getLocalStorage('giftData'),
-    );
-    localStorageGiftData = localStorageGiftData.concat(jsonObject);
+    const jsonObject: FullLocalStorage = {
+      name: newReceiver,
+      gift: newGiftName,
+      id: generatedUUID,
+      createdDate: new Date().getTime(),
+    };
+    
+    const currentGiftList: FullLocalStorage[] = (await jsonServerFunctions.getAll()).data;
+    const newGiftList = currentGiftList.concat(jsonObject)
 
-    setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
-    setGiftData(localStorageGiftData);
+    jsonServerFunctions.create(jsonObject);
+    setGiftData(newGiftList);
     setNewGiftName('');
     setNewReceiver('');
   }
 
-  function refreshGiftList() {
-    const sortedGifts = sortGiftsOldestFirst(
-      JSON.parse(getLocalStorage('giftData')),
-    );
-    setGiftData(sortedGifts);
+  async function refreshGiftList() {
+    setGiftData(await (await jsonServerFunctions.getAll()).data);
   }
 
   return (
@@ -138,7 +132,7 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li key={giftItem.id} className='animate-highlight'>
+                <li key={giftItem.id} className="animate-highlight">
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
@@ -166,7 +160,7 @@ export default function Home() {
             ))}
             {openModal ? (
               <DeleteModal
-                gift={modalGiftData}
+                gift={modalGiftData!}
                 closeModalUseState={setOpenModal}
                 giftListRefreshFunction={refreshGiftList}
               />
