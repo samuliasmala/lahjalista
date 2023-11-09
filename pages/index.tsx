@@ -1,13 +1,8 @@
 import { Inter } from 'next/font/google';
-import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
-import {
-  getLocalStorage,
-  setLocalStorage,
-} from '~/utils/localStorageFunctions';
-import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
@@ -90,7 +85,6 @@ export default function Home() {
   }
 
   return (
-    
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
@@ -169,7 +163,6 @@ export default function Home() {
               />
             ) : null}
           </div>
-        
         </Container>
       </Container>
     </main>

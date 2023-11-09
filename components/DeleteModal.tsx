@@ -1,10 +1,6 @@
 import { TitleText } from './TitleText';
 import React, { ButtonHTMLAttributes, Dispatch, SetStateAction } from 'react';
 import { FullLocalStorage } from '~/pages';
-import {
-  getLocalStorage,
-  setLocalStorage,
-} from '~/utils/localStorageFunctions';
 import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
@@ -22,7 +18,7 @@ export function DeleteModal({
   closeModalUseState,
 }: ModalType) {
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
-  let dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
+  const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
 
   async function handleDeletion() {
     await jsonServerFunctions.remove(`${gift.id}`);

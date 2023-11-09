@@ -11,29 +11,29 @@ const config: Config = {
       keyframes: {
         rainbowBackGroundColor: {
           '0%': {
-            backgroundColor: 'red'
+            backgroundColor: 'red',
           },
           '10%': {
-            backgroundColor: 'orange'
+            backgroundColor: 'orange',
           },
           '20%': {
-            backgroundColor: 'yellow'
+            backgroundColor: 'yellow',
           },
           '30%': {
-            backgroundColor: 'green'
+            backgroundColor: 'green',
           },
           '40%': {
-            backgroundColor: 'blue'
+            backgroundColor: 'blue',
           },
           '50%': {
-            backgroundColor: 'indigo'
+            backgroundColor: 'indigo',
           },
           '60%': {
-            backgroundColor: 'violet'
+            backgroundColor: 'violet',
           },
           '70%': {
-            backgroundColor: 'black'
-          }
+            backgroundColor: 'black',
+          },
         },
         width: {
           '0%': {
@@ -43,14 +43,14 @@ const config: Config = {
             width: '100%',
           },
         },
-        // highlight: {
-        //   '0%, 50%': {
-        //     filter: 'drop-shadow(0 0px 10px rgb(0 80 190 / 0.05))',
-        //   },
-        //   '25%, 75%': {
-        //     filter: 'drop-shadow(0px 0px 15px #269EEF)',
-        //   },
-        // },
+        highlight: {
+          '0%, 50%': {
+            filter: 'drop-shadow(0 0px 10px rgb(0 80 190 / 0.05))',
+          },
+          '25%, 75%': {
+            filter: 'drop-shadow(0px 0px 15px #269EEF)',
+          },
+        },
         background: {
           '0%': {
             backgroundColor: 'yellow',
@@ -61,10 +61,10 @@ const config: Config = {
         },
       },
       animation: {
-        //highlight: 'highlight 1200ms ease-in-out',
+        highlight: 'highlight 1200ms ease-in-out',
         rainbowBackGroundColor: 'rainbowBackGroundColor 1000ms',
         background: 'background 1200ms ease-in-out',
-        width: 'width 1200ms'
+        width: 'width 1200ms',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
