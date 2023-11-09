@@ -43,6 +43,7 @@ export function DeleteModal({
     //let giftList: FullLocalStorage[] = await (await jsonServerFunctions.getAll()).data
     //giftList = giftList.filter(giftItem => giftItem.id !== gift.id)
     
+    await jsonServerFunctions.remove(`${gift.id}`)
     giftListRefreshFunction();
     closeModalUseState(false);
   }

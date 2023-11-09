@@ -17,7 +17,7 @@ const inter = Inter({ subsets: ['latin'] });
 export type FullLocalStorage = {
   name: string;
   gift: string;
-  id?: string;
+  id: string;
   localStorageKeyID?: string;
   createdDate: number;
 };

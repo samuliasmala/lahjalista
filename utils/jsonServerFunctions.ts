@@ -31,7 +31,16 @@ async function update(searchParamteres: string, newObject: object) {
     return (await axios.put(`${baseURL}?${searchParamteres}`, newObject)).data
 }
 
+/**
+ * 
+ * @param id should be given a string that contains search paramteres as query strings. 
+ * @example name=Foo&gift=Bar
+ * @returns 
+ */
+async function remove(id: string){
+    return (await axios.delete(`${baseURL}/${id}`)).data
+}
 
-const exportableModules = { getAll, getOne, create, update }
+const exportableModules = { getAll, getOne, create, update, remove }
 
 export default exportableModules
