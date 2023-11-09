@@ -73,9 +73,11 @@ export default function Home() {
       id: generatedUUID,
       createdDate: new Date().getTime(),
     };
-    
-    const currentGiftList: FullLocalStorage[] = (await jsonServerFunctions.getAll()).data;
-    const newGiftList = currentGiftList.concat(jsonObject)
+
+    const currentGiftList: FullLocalStorage[] = (
+      await jsonServerFunctions.getAll()
+    ).data;
+    const newGiftList = currentGiftList.concat(jsonObject);
 
     jsonServerFunctions.create(jsonObject);
     setGiftData(newGiftList);
@@ -88,6 +90,7 @@ export default function Home() {
   }
 
   return (
+    
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
@@ -132,7 +135,7 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li key={giftItem.id} className="animate-highlight">
+                <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
@@ -166,6 +169,7 @@ export default function Home() {
               />
             ) : null}
           </div>
+        
         </Container>
       </Container>
     </main>
