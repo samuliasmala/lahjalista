@@ -8,7 +8,7 @@ import {
 import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
-import jsonServerFunctions from '~/utils/jsonServerFunctions'
+import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift: FullLocalStorage;
@@ -23,27 +23,9 @@ export function DeleteModal({
 }: ModalType) {
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
   let dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
-  // not optional anymore so not needed to check type
-  //if (typeof gift === 'undefined') dataToDeleteInfo = 'No data was given'; 
-  // not optional anymore so not needed to check type
-  //if (typeof closeModalUseState === 'undefined') return;
 
   async function handleDeletion() {
-    // not optional anymore so not needed to check type
-    //if (typeof giftListRefreshFunction === 'undefined') return;
-    
-    // let localStorageGifts: FullLocalStorage[] = JSON.parse(
-    //   getLocalStorage('giftData'),
-    // );
-    // localStorageGifts = localStorageGifts.filter(
-    //   (localStorageGift) => localStorageGift.id !== gift?.id,
-    // );
-    //setLocalStorage('giftData', JSON.stringify(localStorageGifts));
-    
-    //let giftList: FullLocalStorage[] = await (await jsonServerFunctions.getAll()).data
-    //giftList = giftList.filter(giftItem => giftItem.id !== gift.id)
-    
-    await jsonServerFunctions.remove(`${gift.id}`)
+    await jsonServerFunctions.remove(`${gift.id}`);
     giftListRefreshFunction();
     closeModalUseState(false);
   }

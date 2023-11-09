@@ -33,11 +33,10 @@ async function update(searchParamteres: string, newObject: object) {
 
 /**
  * 
- * @param id should be given a string that contains search paramteres as query strings. 
- * @example name=Foo&gift=Bar
+ * @param id should be given the id that is wanted to be removed 
  * @returns 
  */
-async function remove(id: string){
+async function remove(id: string) {
     return (await axios.delete(`${baseURL}/${id}`)).data
 }
 
