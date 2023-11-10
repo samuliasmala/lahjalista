@@ -8,7 +8,7 @@ import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift: FullLocalStorage;
-  giftListRefreshFunction: () => void;
+  giftListRefreshFunction: () => any;
   closeModalUseState: Dispatch<SetStateAction<boolean>>;
 };
 

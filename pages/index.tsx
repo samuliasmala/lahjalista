@@ -32,21 +32,17 @@ export default function Home() {
       const gifts = await (await jsonServerFunctions.getAll()).data;
       setGiftData(gifts);
     }
-    fetchData();
-    /*
-    jsonServerFunctions.getAll().then((gifts) => {
-      console.log(gifts.data)
-      //const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
-      //const gifts = sortGiftsOldestFirst(parsedGiftData);
-      //setGiftData(gifts);
-    }).catch(error => console.log(error))
-    */
+    fetchData().catch((e) => {
+      throw new Error(e);
+    });
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     setGiftNameError(false);
     setReceiverError(false);
+    // this variable is used for checking both inputs
+    // could use return statement instead of errorFound, but it would not give an error message to all invalid input. Only the first invalid input.
     let errorFound = false;
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
@@ -74,7 +70,7 @@ export default function Home() {
     ).data;
     const newGiftList = currentGiftList.concat(jsonObject);
 
-    jsonServerFunctions.create(jsonObject);
+    await jsonServerFunctions.create(jsonObject);
     setGiftData(newGiftList);
     setNewGiftName('');
     setNewReceiver('');
@@ -88,7 +84,7 @@ export default function Home() {
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
         <Container className="mt-5">
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <Container className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
