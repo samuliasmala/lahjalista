@@ -1,27 +1,35 @@
 import { TitleText } from './TitleText';
-import React, { ButtonHTMLAttributes, Dispatch, SetStateAction } from 'react';
+import React, {
+  ButtonHTMLAttributes,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { FullLocalStorage } from '~/pages';
 import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
+
 type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
   gift: FullLocalStorage;
   giftListRefreshFunction: () => any;
   closeModalUseState: Dispatch<SetStateAction<boolean>>;
+  isGiftDeletedAlreadyUseState: Dispatch<SetStateAction<boolean>>;
 };
 
 export function DeleteModal({
   gift,
   giftListRefreshFunction,
   closeModalUseState,
+  isGiftDeletedAlreadyUseState
 }: ModalType) {
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
   const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
-
   async function handleDeletion() {
-    await jsonServerFunctions.remove(`${gift.id}`);
+    await jsonServerFunctions
+      .remove(`${gift.id}`)
+      .catch(() => isGiftDeletedAlreadyUseState(true));
     giftListRefreshFunction();
     closeModalUseState(false);
   }
@@ -36,6 +44,7 @@ export function DeleteModal({
       </p>
       <button
         className="border border-yellow-500 mt-3 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
+        onClick={() => handleDeletion()}
         onMouseOver={(e) => {
           e.currentTarget.classList.remove('bg-gray-300');
           e.currentTarget.classList.add('bg-gray-600');
@@ -48,7 +57,6 @@ export function DeleteModal({
         <SvgAcceptButtonIcon
           width={64}
           height={64}
-          onClick={() => handleDeletion()}
           onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
             e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
           }
@@ -61,6 +69,7 @@ export function DeleteModal({
       </button>
       <button
         className="border border-yellow-500 relative mt-3 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
+        onClick={() => closeModalUseState(false)}
         onMouseOver={(e) => {
           e.currentTarget.classList.remove('bg-gray-300');
           e.currentTarget.classList.add('bg-gray-600');
@@ -73,7 +82,6 @@ export function DeleteModal({
         <SvgDeclineButtonIcon
           width={64}
           height={64}
-          onClick={() => closeModalUseState(false)}
           onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
             e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
           }

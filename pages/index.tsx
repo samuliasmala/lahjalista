@@ -6,6 +6,7 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
+import { InfoModal } from '~/components/InfoModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,6 +26,7 @@ export default function Home() {
   const [newGiftName, setNewGiftName] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
+  const [isGiftDeletedAlready, setIsGiftDeletedAlready] = useState(false);
 
   useEffect(() => {
     console.log('effect');
@@ -36,6 +38,16 @@ export default function Home() {
       throw new Error(e);
     });
   }, []);
+
+  useEffect(() => {
+    let timeout
+    if (isGiftDeletedAlready) {
+      timeout = setTimeout(() => {
+        setIsGiftDeletedAlready(false);
+      }, 2000);
+    }
+  else clearTimeout(timeout);
+  }, [isGiftDeletedAlready]);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
@@ -156,8 +168,10 @@ export default function Home() {
                 gift={modalGiftData!}
                 closeModalUseState={setOpenModal}
                 giftListRefreshFunction={refreshGiftList}
+                isGiftDeletedAlreadyUseState={setIsGiftDeletedAlready}
               />
             ) : null}
+            {isGiftDeletedAlready ? <InfoModal title="a" info="b" /> : null}
           </div>
         </Container>
       </Container>
