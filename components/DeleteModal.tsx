@@ -1,41 +1,36 @@
 import { TitleText } from './TitleText';
-import React, {
-  ButtonHTMLAttributes,
-  Dispatch,
-  SetStateAction,
-} from 'react';
-import { FullLocalStorage } from '~/pages';
-import { Modal } from './Modal';
-import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
-import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
+import React, { ButtonHTMLAttributes, Dispatch, SetStateAction } from 'react';
+import { FullLocalStorage, isGiftDeletedAlreadyType } from '~/pages';
+import { Modal, ModalType } from './Modal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
+import { AcceptButtonIcon, DeclineButtonIcon } from '~/icons';
 
+type DeleteModalType = ButtonHTMLAttributes<HTMLButtonElement> &
+  ModalType & {
+    gift: FullLocalStorage;
+    giftListRefreshFunction: () => any;
+    closeModalUseState: Dispatch<SetStateAction<boolean>>;
+  };
 
-type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
-  gift: FullLocalStorage;
-  giftListRefreshFunction: () => any;
-  closeModalUseState: Dispatch<SetStateAction<boolean>>;
-  isGiftDeletedAlreadyUseState: Dispatch<SetStateAction<boolean>>;
-};
-
-export function DeleteModal({
-  gift,
-  giftListRefreshFunction,
-  closeModalUseState,
-  isGiftDeletedAlreadyUseState
-}: ModalType) {
+export function DeleteModal(props: DeleteModalType) {
+  const {
+    gift,
+    giftListRefreshFunction,
+    closeModalUseState,
+    ...rest
+  } = props;
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
   const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
   async function handleDeletion() {
     await jsonServerFunctions
       .remove(`${gift.id}`)
-      .catch(() => isGiftDeletedAlreadyUseState(true));
+      .catch(() => giftListRefreshFunction());
     giftListRefreshFunction();
     closeModalUseState(false);
   }
 
   return (
-    <Modal>
+    <Modal {...rest}>
       <TitleText className="row-start-1 row-end-1 ps-5 font-bold">
         Deleting:
       </TitleText>
@@ -54,7 +49,7 @@ export function DeleteModal({
           e.currentTarget.classList.add('bg-gray-300');
         }}
       >
-        <SvgAcceptButtonIcon
+        <AcceptButtonIcon
           width={64}
           height={64}
           onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
@@ -68,7 +63,7 @@ export function DeleteModal({
         />
       </button>
       <button
-        className="border border-yellow-500 relative mt-3 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
+        className="border border-yellow-500 mt-3 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
         onClick={() => closeModalUseState(false)}
         onMouseOver={(e) => {
           e.currentTarget.classList.remove('bg-gray-300');
@@ -79,7 +74,7 @@ export function DeleteModal({
           e.currentTarget.classList.add('bg-gray-300');
         }}
       >
-        <SvgDeclineButtonIcon
+        <DeclineButtonIcon
           width={64}
           height={64}
           onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>

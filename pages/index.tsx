@@ -18,6 +18,12 @@ export type FullLocalStorage = {
   createdDate: number;
 };
 
+export type isGiftDeletedAlreadyType = {
+  showModal: boolean;
+  giftName: string;
+  giftReceiver: string;
+};
+
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
@@ -26,7 +32,6 @@ export default function Home() {
   const [newGiftName, setNewGiftName] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
-  const [isGiftDeletedAlready, setIsGiftDeletedAlready] = useState(false);
 
   useEffect(() => {
     console.log('effect');
@@ -38,16 +43,6 @@ export default function Home() {
       throw new Error(e);
     });
   }, []);
-
-  useEffect(() => {
-    let timeout
-    if (isGiftDeletedAlready) {
-      timeout = setTimeout(() => {
-        setIsGiftDeletedAlready(false);
-      }, 2000);
-    }
-  else clearTimeout(timeout);
-  }, [isGiftDeletedAlready]);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
@@ -165,13 +160,12 @@ export default function Home() {
             ))}
             {openModal ? (
               <DeleteModal
+                onClose={() => setOpenModal(false)}
                 gift={modalGiftData!}
                 closeModalUseState={setOpenModal}
                 giftListRefreshFunction={refreshGiftList}
-                isGiftDeletedAlreadyUseState={setIsGiftDeletedAlready}
               />
             ) : null}
-            {isGiftDeletedAlready ? <InfoModal title="a" info="b" /> : null}
           </div>
         </Container>
       </Container>
