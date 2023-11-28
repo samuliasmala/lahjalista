@@ -22,9 +22,12 @@ export function DeleteModal(props: DeleteModalType) {
   // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
   const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
   async function handleDeletion() {
-    await jsonServerFunctions
-      .remove(`${gift.id}`)
-      .catch(() => giftListRefreshFunction());
+    const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(`id=${gift.id}`)
+    if(giftToBeDeleted.length != 0){
+      await jsonServerFunctions
+        .remove(`${gift.id}`)
+        .catch(() => giftListRefreshFunction());
+    }
     giftListRefreshFunction();
     closeModalUseState(false);
   }
