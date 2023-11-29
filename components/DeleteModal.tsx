@@ -9,9 +9,9 @@ import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
 
-type ModalType = ButtonHTMLAttributes<HTMLButtonElement> & {
-  gift?: FullLocalStorage;
-  giftListRefreshFunction?: () => void;
+type ModalType = {
+  gift: FullLocalStorage;
+  giftListRefreshFunction: () => void;
   closeModalUseState: Dispatch<SetStateAction<boolean>>;
 };
 
