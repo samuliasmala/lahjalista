@@ -82,6 +82,19 @@ export default function Home() {
     setGiftData(sortedGifts);
   }
 
+  function DeleteModalConditionalRendering() {
+    if (openModal === true && modalGiftData !== undefined) {
+      return (
+        <DeleteModal
+          gift={modalGiftData}
+          giftListRefreshFunction={refreshGiftList}
+          closeModalUseState={setOpenModal}
+        />
+      );
+    }
+    return null;
+  }
+
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <Container className="justify-center grid h-5">
@@ -153,13 +166,7 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            {openModal ? (
-              <DeleteModal
-                gift={modalGiftData}
-                closeModalUseState={setOpenModal}
-                giftListRefreshFunction={refreshGiftList}
-              />
-            ) : null}
+            <DeleteModalConditionalRendering/>
           </div>
         </Container>
       </Container>
