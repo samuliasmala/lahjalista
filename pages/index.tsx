@@ -27,7 +27,7 @@ export default function Home() {
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-  const [openModal, setOpenModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
 
   useEffect(() => {
@@ -83,12 +83,12 @@ export default function Home() {
   }
 
   function DeleteModalConditionalRendering() {
-    if (openModal === true && modalGiftData !== undefined) {
+    if (isModalOpen === true && modalGiftData !== undefined) {
       return (
         <DeleteModal
           gift={modalGiftData}
           giftListRefreshFunction={refreshGiftList}
-          closeModalUseState={setOpenModal}
+          isModalOpen={setIsModalOpen}
         />
       );
     }
@@ -157,7 +157,7 @@ export default function Home() {
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600"
                     onClick={() => {
                       setModalGiftData(giftItem);
-                      setOpenModal(true);
+                      setIsModalOpen(true);
                     }}
                     type="button"
                   >
