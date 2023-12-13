@@ -88,11 +88,11 @@ export default function Home() {
         <DeleteModal
           gift={modalGiftData}
           giftListRefreshFunction={refreshGiftList}
-          isModalOpen={setIsModalOpen}
+          setIsModalOpen={setIsModalOpen}
         />
       );
     }
-    return null;
+    return null; 
   }
 
   return (

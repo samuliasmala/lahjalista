@@ -12,13 +12,13 @@ import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
 type ModalType = {
   gift: FullLocalStorage;
   giftListRefreshFunction: () => void;
-  isModalOpen: Dispatch<SetStateAction<boolean>>;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export function DeleteModal({
   gift,
   giftListRefreshFunction,
-  isModalOpen,
+  setIsModalOpen,
 }: ModalType) {
   let dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
 
@@ -31,7 +31,7 @@ export function DeleteModal({
     );
     setLocalStorage('giftData', JSON.stringify(localStorageGifts));
     giftListRefreshFunction();
-    isModalOpen(false);
+    setIsModalOpen(false);
   }
 
   return (
@@ -81,7 +81,7 @@ export function DeleteModal({
         <SvgDeclineButtonIcon
           width={64}
           height={64}
-          onClick={() => isModalOpen(false)}
+          onClick={() => setIsModalOpen(false)}
           onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
             e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
           }
