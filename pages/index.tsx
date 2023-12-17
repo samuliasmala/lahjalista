@@ -27,17 +27,19 @@ export type FullLocalStorage = {
   createdDate: number;
 };
 
+type DeleteModalConditionalRendering_Type = {
+  isModalOpen: boolean;
+  modalGiftData: FullLocalStorage | undefined;
+  refreshGiftList: () => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+};
+
 function DeleteModalConditionalRendering({
   isModalOpen,
   modalGiftData,
   refreshGiftList,
   setIsModalOpen,
-}: {
-  isModalOpen: boolean;
-  modalGiftData: FullLocalStorage | undefined;
-  refreshGiftList: () => void;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+}: DeleteModalConditionalRendering_Type) {
   if (isModalOpen === true && modalGiftData !== undefined) {
     return (
       <DeleteModal
