@@ -20,7 +20,7 @@ export function DeleteModal({
   giftListRefreshFunction,
   setIsModalOpen,
 }: ModalType) {
-  let dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
+  const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
 
   function handleDeletion() {
     let localStorageGifts: FullLocalStorage[] = JSON.parse(
