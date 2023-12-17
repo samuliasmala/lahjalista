@@ -1,5 +1,11 @@
 import { Inter } from 'next/font/google';
-import { FormEvent, useEffect, useState } from 'react';
+import {
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+  Dispatch,
+} from 'react';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
@@ -20,6 +26,29 @@ export type FullLocalStorage = {
   localStorageKeyID?: string;
   createdDate: number;
 };
+
+function DeleteModalConditionalRendering({
+  isModalOpen,
+  modalGiftData,
+  refreshGiftList,
+  setIsModalOpen,
+}: {
+  isModalOpen: boolean;
+  modalGiftData: FullLocalStorage | undefined;
+  refreshGiftList: () => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+}) {
+  if (isModalOpen === true && modalGiftData !== undefined) {
+    return (
+      <DeleteModal
+        gift={modalGiftData}
+        giftListRefreshFunction={refreshGiftList}
+        setIsModalOpen={setIsModalOpen}
+      />
+    );
+  }
+  return null;
+}
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
@@ -80,19 +109,6 @@ export default function Home() {
       JSON.parse(getLocalStorage('giftData')),
     );
     setGiftData(sortedGifts);
-  }
-
-  function DeleteModalConditionalRendering() {
-    if (isModalOpen === true && modalGiftData !== undefined) {
-      return (
-        <DeleteModal
-          gift={modalGiftData}
-          giftListRefreshFunction={refreshGiftList}
-          setIsModalOpen={setIsModalOpen}
-        />
-      );
-    }
-    return null; 
   }
 
   return (
@@ -166,7 +182,13 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            <DeleteModalConditionalRendering/>
+            <DeleteModalConditionalRendering
+              isModalOpen={isModalOpen}
+              modalGiftData={modalGiftData}
+              refreshGiftList={refreshGiftList}
+              setIsModalOpen={setIsModalOpen}
+              key={modalGiftData?.id}
+            />
           </div>
         </Container>
       </Container>
