@@ -1,27 +1,30 @@
 import { TitleText } from './TitleText';
-import React, { ButtonHTMLAttributes, Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { FullLocalStorage, isGiftDeletedAlreadyType } from '~/pages';
-import { Modal, ModalType } from './Modal';
+import { Modal } from './Modal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
 import { AcceptButtonIcon, DeclineButtonIcon } from '~/icons';
+import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
+import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
+import { Button } from './Button';
 
-type DeleteModalType = ButtonHTMLAttributes<HTMLButtonElement> &
-  ModalType & {
-    gift: FullLocalStorage;
-    giftListRefreshFunction: () => any;
-    closeModalUseState: Dispatch<SetStateAction<boolean>>;
-  };
+type ModalType = {
+  gift: FullLocalStorage;
+  giftListRefreshFunction: () => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+};
 
-export function DeleteModal(props: DeleteModalType) {
-  const {
-    gift,
-    giftListRefreshFunction,
-    closeModalUseState,
-    ...rest
-  } = props;
-  // olisiko mikä parempi nimi dataToDeleteInfo-variablelle?
-  const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
+export function DeleteModal({
+  gift,
+  giftListRefreshFunction,
+  setIsModalOpen,
+}: ModalType) {
+  if (typeof gift === 'undefined') return null;
+  if (typeof setIsModalOpen === 'undefined') return null;
+
   async function handleDeletion() {
+    if (typeof giftListRefreshFunction === 'undefined') return;
+
     const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(`id=${gift.id}`)
     if(giftToBeDeleted.length != 0){
       await jsonServerFunctions
@@ -29,67 +32,31 @@ export function DeleteModal(props: DeleteModalType) {
         .catch(() => giftListRefreshFunction());
     }
     giftListRefreshFunction();
-    closeModalUseState(false);
+    setIsModalOpen(false);
   }
 
   return (
-    <Modal {...rest}>
+    <Modal>
       <TitleText className="row-start-1 row-end-1 ps-5 font-bold">
         Deleting:
       </TitleText>
       <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
-        {dataToDeleteInfo}
+        {gift.name} - {gift.gift}
       </p>
-      <button
-        className="border border-yellow-500 mt-3 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
-        onClick={() => handleDeletion()}
-        onMouseOver={(e) => {
-          e.currentTarget.classList.remove('bg-gray-300');
-          e.currentTarget.classList.add('bg-gray-600');
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.classList.remove('bg-gray-600');
-          e.currentTarget.classList.add('bg-gray-300');
-        }}
-      >
-        <AcceptButtonIcon
+      <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400"      >
+        <SvgAcceptButtonIcon
           width={64}
           height={64}
-          onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
-          }
-          onMouseOut={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.remove(
-              '[&_:nth-child(1)]:fill-yellow-400',
-            )
-          }
+          onClick={() => handleDeletion()}
         />
-      </button>
-      <button
-        className="border border-yellow-500 mt-3 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
-        onClick={() => closeModalUseState(false)}
-        onMouseOver={(e) => {
-          e.currentTarget.classList.remove('bg-gray-300');
-          e.currentTarget.classList.add('bg-gray-600');
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.classList.remove('bg-gray-600');
-          e.currentTarget.classList.add('bg-gray-300');
-        }}
-      >
-        <DeclineButtonIcon
+      </Button>
+      <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
+        <SvgDeclineButtonIcon
           width={64}
           height={64}
-          onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
-          }
-          onMouseOut={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.remove(
-              '[&_:nth-child(1)]:fill-yellow-400',
-            )
-          }
+          onClick={() => setIsModalOpen(false)}
         />
-      </button>
+      </Button>
     </Modal>
   );
 }

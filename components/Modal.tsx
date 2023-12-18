@@ -1,36 +1,16 @@
-import { HTMLAttributes } from 'react';
-import { Container } from './Container';
-import { twMerge } from 'tailwind-merge';
+import { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 
-export type ModalType = HTMLAttributes<HTMLDivElement> & {
-  firstContainerClassName?: string;
-  secondContainerClassName?: string;
-  onClose?: () => void;
-};
-
-export function Modal({
-  children,
-  firstContainerClassName,
-  secondContainerClassName,
-  onClose,
-}: ModalType) {
-  return (
+export function Modal({ children }: { children: ReactNode }) {
+  return createPortal(
     <>
-      <Container
-        onClick={onClose}
-        className={twMerge(
-          'fixed top-0 left-0 w-full h-full z-10 bg-black opacity-20',
-          firstContainerClassName,
-        )}
-      ></Container>
-      <Container
-        className={twMerge(
-          'z-20 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-96 bg-white',
-          secondContainerClassName,
-        )}
-      >
-        {children}
-      </Container>
-    </>
+      <div className="fixed left-0 top-0 z-[98] h-full w-full bg-black opacity-20" />
+      <div className="absolute z-[99] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+        <div className="grid w-96 sm:w-96 border border-yellow-300 bg-gray-200">
+          {children}
+        </div>
+      </div>
+    </>,
+    document.body,
   );
 }

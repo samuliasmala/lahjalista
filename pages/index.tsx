@@ -1,12 +1,11 @@
 import { Inter } from 'next/font/google';
 import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
-import { InfoModal } from '~/components/InfoModal';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,7 +29,7 @@ export default function Home() {
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-  const [openModal, setOpenModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
 
   useEffect(() => {
@@ -89,11 +88,11 @@ export default function Home() {
 
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <Container className="justify-center grid h-5">
-        <Container className="mt-5">
+      <div className="justify-center grid h-5">
+        <div className="mt-5">
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
-            <Container className="pt-4 grid">
+            <div className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
               <Input
                 onChange={(event) => setNewGiftName(event.target.value)}
@@ -106,8 +105,8 @@ export default function Home() {
               {giftNameError && (
                 <div className="text-red-500">Lahja on pakollinen</div>
               )}
-            </Container>
-            <Container className="pt-4 grid">
+            </div>
+            <div className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
@@ -120,11 +119,11 @@ export default function Home() {
               {receiverError && (
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
-            </Container>
+            </div>
             <Button type="submit">Lisää</Button>
           </form>
-        </Container>
-        <Container className="mt-3">
+        </div>
+        <div className="mt-3">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
@@ -132,24 +131,17 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li key={giftItem.id}>
+                <li
+                  key={giftItem.id}
+                  className="hover:line-through pointer-events-none"
+                >
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
-                    onMouseOver={(e) => {
-                      // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className =
-                        'line-through';
-                    }}
-                    onMouseOut={(e) => {
-                      // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className =
-                        '';
-                    }}
-                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
                     onClick={() => {
                       setModalGiftData(giftItem);
-                      setOpenModal(true);
+                      setIsModalOpen(true);
                     }}
                     type="button"
                   >
@@ -158,17 +150,16 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            {openModal ? (
+            {isModalOpen && modalGiftData && (
               <DeleteModal
-                onClose={() => setOpenModal(false)}
-                gift={modalGiftData!}
-                closeModalUseState={setOpenModal}
+                gift={modalGiftData}
                 giftListRefreshFunction={refreshGiftList}
+                setIsModalOpen={setIsModalOpen}
               />
-            ) : null}
+            )}
           </div>
-        </Container>
-      </Container>
+        </div>
+      </div>
     </main>
   );
 }
