@@ -1,13 +1,6 @@
 import { Inter } from 'next/font/google';
-import {
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-  Dispatch,
-} from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
 import {
   getLocalStorage,
@@ -26,31 +19,6 @@ export type FullLocalStorage = {
   localStorageKeyID?: string;
   createdDate: number;
 };
-
-type DeleteModalConditionalRendering_Type = {
-  isModalOpen: boolean;
-  modalGiftData: FullLocalStorage | undefined;
-  refreshGiftList: () => void;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-function DeleteModalConditionalRendering({
-  isModalOpen,
-  modalGiftData,
-  refreshGiftList,
-  setIsModalOpen,
-}: DeleteModalConditionalRendering_Type) {
-  if (isModalOpen === true && modalGiftData !== undefined) {
-    return (
-      <DeleteModal
-        gift={modalGiftData}
-        giftListRefreshFunction={refreshGiftList}
-        setIsModalOpen={setIsModalOpen}
-      />
-    );
-  }
-  return null;
-}
 
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
@@ -115,11 +83,11 @@ export default function Home() {
 
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <Container className="justify-center grid h-5">
-        <Container className="mt-5">
+      <div className="justify-center grid h-5">
+        <div className="mt-5">
           <form onSubmit={(e) => handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
-            <Container className="pt-4 grid">
+            <div className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
               <Input
                 onChange={(event) => setNewGiftName(event.target.value)}
@@ -132,8 +100,8 @@ export default function Home() {
               {giftNameError && (
                 <div className="text-red-500">Lahja on pakollinen</div>
               )}
-            </Container>
-            <Container className="pt-4 grid">
+            </div>
+            <div className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
@@ -146,11 +114,11 @@ export default function Home() {
               {receiverError && (
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
-            </Container>
+            </div>
             <Button type="submit">Lisää</Button>
           </form>
-        </Container>
-        <Container className="mt-3">
+        </div>
+        <div className="mt-3">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
@@ -158,21 +126,14 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li key={giftItem.id}>
+                <li
+                  key={giftItem.id}
+                  className="hover:line-through pointer-events-none"
+                >
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
-                    onMouseOver={(e) => {
-                      // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className =
-                        'line-through';
-                    }}
-                    onMouseOut={(e) => {
-                      // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className =
-                        '';
-                    }}
-                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
                     onClick={() => {
                       setModalGiftData(giftItem);
                       setIsModalOpen(true);
@@ -184,16 +145,16 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            <DeleteModalConditionalRendering
-              isModalOpen={isModalOpen}
-              modalGiftData={modalGiftData}
-              refreshGiftList={refreshGiftList}
-              setIsModalOpen={setIsModalOpen}
-              key={modalGiftData?.id}
-            />
+            {isModalOpen && modalGiftData && (
+              <DeleteModal
+                gift={modalGiftData}
+                giftListRefreshFunction={refreshGiftList}
+                setIsModalOpen={setIsModalOpen}
+              />
+            )}
           </div>
-        </Container>
-      </Container>
+        </div>
+      </div>
     </main>
   );
 }
