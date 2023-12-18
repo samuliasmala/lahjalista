@@ -6,7 +6,6 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
-
 const inter = Inter({ subsets: ['latin'] });
 
 export type FullLocalStorage = {
@@ -153,7 +152,7 @@ export default function Home() {
             {isModalOpen && modalGiftData && (
               <DeleteModal
                 gift={modalGiftData}
-                giftListRefreshFunction={refreshGiftList}
+                giftListRefreshFunction={() => refreshGiftList}
                 setIsModalOpen={setIsModalOpen}
               />
             )}

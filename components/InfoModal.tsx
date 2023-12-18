@@ -15,8 +15,8 @@ export function InfoModal({ title, info }: InfoModalType) {
           {title}
         </TitleText>
         <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
-        {info}
-      </p>
+          {info}
+        </p>
       </Modal>
     </Container>
   );
