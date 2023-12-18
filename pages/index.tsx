@@ -63,7 +63,7 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const jsonObject: FullLocalStorage = {
+    const JSON_OBJECT: FullLocalStorage = {
       name: newReceiver,
       gift: newGiftName,
       id: generatedUUID,
@@ -73,10 +73,10 @@ export default function Home() {
     const currentGiftList: FullLocalStorage[] = (
       await jsonServerFunctions.getAll()
     ).data;
-    const newGiftList = currentGiftList.concat(jsonObject);
+    const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
 
-    await jsonServerFunctions.create(jsonObject);
-    setGiftData(newGiftList);
+    await jsonServerFunctions.create(JSON_OBJECT);
+    setGiftData(updatedGiftList);
     setNewGiftName('');
     setNewReceiver('');
   }
@@ -152,7 +152,7 @@ export default function Home() {
             {isModalOpen && modalGiftData && (
               <DeleteModal
                 gift={modalGiftData}
-                giftListRefreshFunction={() => refreshGiftList}
+                giftListRefreshFunction={() => void refreshGiftList()}
                 setIsModalOpen={setIsModalOpen}
               />
             )}

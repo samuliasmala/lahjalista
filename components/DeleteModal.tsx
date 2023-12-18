@@ -43,7 +43,7 @@ export function DeleteModal({
         <SvgAcceptButtonIcon
           width={64}
           height={64}
-          onClick={() => handleDeletion}
+          onClick={() => void handleDeletion()}
         />
       </Button>
       <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
