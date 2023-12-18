@@ -8,6 +8,7 @@ import {
 import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
+import { Button } from './Button';
 
 type ModalType = {
   gift: FullLocalStorage;
@@ -20,8 +21,6 @@ export function DeleteModal({
   giftListRefreshFunction,
   setIsModalOpen,
 }: ModalType) {
-  const dataToDeleteInfo = `${gift.name} - ${gift.gift}`;
-
   function handleDeletion() {
     let localStorageGifts: FullLocalStorage[] = JSON.parse(
       getLocalStorage('giftData'),
@@ -40,58 +39,22 @@ export function DeleteModal({
         Deleting:
       </TitleText>
       <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
-        {dataToDeleteInfo}
+        {gift.name} - {gift.gift}
       </p>
-      <button
-        className="border border-yellow-500 mt-3 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
-        onMouseOver={(e) => {
-          e.currentTarget.classList.remove('bg-gray-300');
-          e.currentTarget.classList.add('bg-gray-600');
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.classList.remove('bg-gray-600');
-          e.currentTarget.classList.add('bg-gray-300');
-        }}
-      >
+      <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
         <SvgAcceptButtonIcon
           width={64}
           height={64}
           onClick={() => handleDeletion()}
-          onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
-          }
-          onMouseOut={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.remove(
-              '[&_:nth-child(1)]:fill-yellow-400',
-            )
-          }
         />
-      </button>
-      <button
-        className="border border-yellow-500 relative mt-3 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300"
-        onMouseOver={(e) => {
-          e.currentTarget.classList.remove('bg-gray-300');
-          e.currentTarget.classList.add('bg-gray-600');
-        }}
-        onMouseOut={(e) => {
-          e.currentTarget.classList.remove('bg-gray-600');
-          e.currentTarget.classList.add('bg-gray-300');
-        }}
-      >
+      </Button>
+      <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
         <SvgDeclineButtonIcon
           width={64}
           height={64}
           onClick={() => setIsModalOpen(false)}
-          onMouseOver={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.add('[&_:nth-child(1)]:fill-yellow-400')
-          }
-          onMouseOut={(e: React.MouseEvent<SVGElement, MouseEvent>) =>
-            e.currentTarget.classList.remove(
-              '[&_:nth-child(1)]:fill-yellow-400',
-            )
-          }
         />
-      </button>
+      </Button>
     </Modal>
   );
 }
