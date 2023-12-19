@@ -5,6 +5,7 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import jsonServerFunctions from '~/utils/jsonServerFunctions';
+import { ModifyModal } from '~/components/ModifyModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,8 +29,12 @@ export default function Home() {
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteModalGiftData, setDeleteModalGiftData] =
+    useState<FullLocalStorage>();
+  const [isModifyModalOpen, setIsModifyModalOpen] = useState(false);
+  const [modifyModalGiftData, setModifyModalGiftData] =
+    useState<FullLocalStorage>();
 
   useEffect(() => {
     console.log('effect');
@@ -130,30 +135,51 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li
-                  key={giftItem.id}
-                  className="hover:line-through pointer-events-none"
-                >
+                <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
+                    onMouseOver={(e) =>
+                      e.currentTarget.parentElement?.setAttribute(
+                        'class',
+                        'line-through',
+                      )
+                    }
+                    onMouseOut={(e) =>
+                      e.currentTarget.parentElement?.removeAttribute('class')
+                    }
                     key={`${giftItem.id}_deletebutton`}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
                     onClick={() => {
-                      setModalGiftData(giftItem);
-                      setIsModalOpen(true);
+                      setDeleteModalGiftData(giftItem);
+                      setIsDeleteModalOpen(true);
                     }}
                     type="button"
                   >
                     Poista
                   </Button>
+                  <Button
+                    key={`${giftItem.id}_modifybutton`}
+                    className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
+                    type="button"
+                  >
+                    Muokkaa
+                  </Button>
                 </li>
               </div>
             ))}
-            {isModalOpen && modalGiftData && (
+            {isModifyModalOpen && modifyModalGiftData && (
+              <ModifyModal
+                gift={modifyModalGiftData}
+                giftListRefreshFunction={refreshGiftList}
+                setIsModalOpen={setIsModifyModalOpen}
+              />
+            )}
+
+            {isDeleteModalOpen && deleteModalGiftData && (
               <DeleteModal
-                gift={modalGiftData}
+                gift={deleteModalGiftData}
                 giftListRefreshFunction={() => void refreshGiftList()}
-                setIsModalOpen={setIsModalOpen}
+                setIsModalOpen={setIsDeleteModalOpen}
               />
             )}
           </div>

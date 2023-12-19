@@ -1,35 +1,24 @@
-import { TitleText } from './TitleText';
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { FullLocalStorage } from '~/pages';
 import { Modal } from './Modal';
-import jsonServerFunctions from '~/utils/jsonServerFunctions';
+import { TitleText } from './TitleText';
+import { Button } from './Button';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
-import { Button } from './Button';
+import testiImportti from '~/utils/jsonServerFunctions';
 
-type DeleteModal_Type = {
+type ModifyModal_Type = {
   gift: FullLocalStorage;
   giftListRefreshFunction: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function DeleteModal({
+export function ModifyModal({
   gift,
   giftListRefreshFunction,
   setIsModalOpen,
-}: DeleteModal_Type) {
-  async function handleDeletion() {
-    const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(
-      `id=${gift.id}`,
-    );
-    if (giftToBeDeleted.length != 0) {
-      await jsonServerFunctions
-        .remove(`${gift.id}`)
-        .catch(() => giftListRefreshFunction());
-    }
-    giftListRefreshFunction();
-    setIsModalOpen(false);
-  }
+}: ModifyModal_Type) {
+  async function handleModifying() {}
 
   return (
     <Modal>
@@ -43,7 +32,7 @@ export function DeleteModal({
         <SvgAcceptButtonIcon
           width={64}
           height={64}
-          onClick={() => void handleDeletion()}
+          onClick={() => void handleModifying()}
         />
       </Button>
       <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
@@ -56,3 +45,14 @@ export function DeleteModal({
     </Modal>
   );
 }
+
+/*const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(
+      `id=${gift.id}`,
+    );
+    if (giftToBeDeleted.length != 0) {
+      await jsonServerFunctions
+        .remove(`${gift.id}`)
+        .catch(() => giftListRefreshFunction());
+    }
+    giftListRefreshFunction();
+    setIsModalOpen(false);*/

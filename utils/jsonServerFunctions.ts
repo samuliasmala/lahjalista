@@ -40,6 +40,6 @@ async function remove(id: string) {
   return (await axios.delete(`${baseURL}/${id}`)).data;
 }
 
-const exportableModules = { getAll, getOne, create, update, remove };
+export const jsonServerFunctions = { getAll, getOne, create, update, remove };
 
-export default exportableModules;
+
