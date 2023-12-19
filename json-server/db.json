@@ -1,16 +1,10 @@
 {
   "gifts": [
     {
-      "name": "test",
-      "gift": "test",
-      "id": "841d0c38-e2ee-49bf-afe2-2106a4cb10bd",
-      "createdDate": 1698877140504
-    },
-    {
-      "name": "a",
-      "gift": "a",
-      "id": "d3fb762a-e028-4f52-9f0a-95c0271e6c43",
-      "createdDate": 1698877174089
+      "name": "Matti Virtanen",
+      "gift": "Kortti",
+      "id": "ad674e17-6643-423f-8517-70fbd3ec1df8",
+      "createdDate": 1702975113280
     }
   ]
 }
