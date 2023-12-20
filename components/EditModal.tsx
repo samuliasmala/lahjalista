@@ -56,21 +56,21 @@ export function EditModal({
           Muokkaus
         </TitleText>
         <div className="row-start-2 row-end-2 grid mt-1 pt-3">
+          <label className="row-start-1 row-end-1">Saaja</label>
+          <Input
+            className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold"
+            onChange={(e) => setGiftReceiver(e.target.value)}
+            value={giftReceiver}
+            autoComplete="off"
+          />
+        </div>
+        <div className="row-start-3 row-end-3 grid pt-3">
           <label className="row-start-1 row-end-1">Lahja</label>
           <Input
             className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold border"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
-            autoComplete="off"
-          />
-        </div>
-        <div className="row-start-3 row-end-3 grid pt-3">
-          <label className="row-start-1 row-end-1">Saaja</label>
-          <Input
-            className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold"
-            onChange={(e) => setGiftReceiver(e.target.value)}
-            value={giftReceiver}
             autoComplete="off"
           />
         </div>
