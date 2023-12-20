@@ -8,12 +8,12 @@ async function getAll() {
 
 /**
  *
- * @param searchParamteres should be given a string that contains search paramteres as query strings.
+ * @param searchParameters should be given a string that contains search parameters as query strings.
  * @example name=Foo&gift=Bar
  * @returns an array of JavaScript objects if found. Else an empty array
  */
-async function getOne(searchParamteres: string) {
-  return (await axios.get(`${baseURL}?${searchParamteres}`)).data;
+async function getOne(searchParameters: string) {
+  return (await axios.get(`${baseURL}?${searchParameters}`)).data;
 }
 
 async function create(newObject: object) {
@@ -22,13 +22,13 @@ async function create(newObject: object) {
 
 /**
  *
- * @param searchParamteres should be given a string that contains search paramteres as query strings.
+ * @param searchParameters should be given a string that contains search parameters as query strings.
  * @example name=Foo&gift=Bar
  * @param newObject a new object that will be replacing the old object
  * @returns an array of JavaScript objects after the update
  */
-async function update(searchParamteres: string, newObject: object) {
-  return (await axios.put(`${baseURL}?${searchParamteres}`, newObject)).data;
+async function update(searchParameters: string, newObject: object) {
+  return (await axios.put(`${baseURL}?${searchParameters}`, newObject)).data;
 }
 
 /**
