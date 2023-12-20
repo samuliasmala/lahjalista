@@ -22,7 +22,7 @@ export function DeleteModal({
     const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(
       `id=${gift.id}`,
     );
-    if (giftToBeDeleted.length != 0) {
+    if (giftToBeDeleted.length === 1) {
       await jsonServerFunctions
         .remove(`${gift.id}`)
         .catch(() => giftListRefreshFunction());
