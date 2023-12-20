@@ -40,5 +40,3 @@ async function remove(id: string) {
 }
 
 export const jsonServerFunctions = { getAll, getOne, create, update, remove };
-
-

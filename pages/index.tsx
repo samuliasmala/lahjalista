@@ -174,7 +174,7 @@ export default function Home() {
             {isEditModalOpen && editModalGiftData && (
               <EditModal
                 gift={editModalGiftData}
-                giftListRefreshFunction={refreshGiftList}
+                giftListRefreshFunction={() => void refreshGiftList()}
                 setIsModalOpen={setIsEditModalOpen}
               />
             )}

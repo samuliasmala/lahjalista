@@ -31,7 +31,7 @@ export function EditModal({
   useEffect(() => {
     setGiftName(gift.gift);
     setGiftReceiver(gift.name);
-  }, []);
+  }, [gift]);
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
