@@ -9,13 +9,6 @@ export function getLocalStorage(key: string) {
   if (typeof item !== 'string') return '[]';
   return item;
 }
-/**
- *
- * @param key a string that contains the keyID that is wanted to be deleted
- */
-export function removeLocalStorage(key: string) {
-  window.localStorage.removeItem(key);
-}
 
 /**
  *
