@@ -97,20 +97,6 @@ export default function Home() {
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
-              <label htmlFor="giftName">Lahja</label>
-              <Input
-                onChange={(event) => setNewGiftName(event.target.value)}
-                autoComplete="off"
-                type="text"
-                placeholder="Kortti"
-                name="giftName"
-                value={newGiftName}
-              />
-              {giftNameError && (
-                <div className="text-red-500">Lahja on pakollinen</div>
-              )}
-            </div>
-            <div className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
@@ -122,6 +108,20 @@ export default function Home() {
               />
               {receiverError && (
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
+              )}
+            </div>
+            <div className="pt-4 grid">
+              <label htmlFor="giftName">Lahja</label>
+              <Input
+                onChange={(event) => setNewGiftName(event.target.value)}
+                autoComplete="off"
+                type="text"
+                placeholder="Kortti"
+                name="giftName"
+                value={newGiftName}
+              />
+              {giftNameError && (
+                <div className="text-red-500">Lahja on pakollinen</div>
               )}
             </div>
             <Button type="submit">Lisää</Button>
