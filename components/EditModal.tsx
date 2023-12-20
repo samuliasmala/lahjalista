@@ -8,17 +8,17 @@ import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
 import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
 import { Input } from './Input';
 
-type ModifyModal_Type = {
+type EditModal_Type = {
   gift: FullLocalStorage;
   giftListRefreshFunction: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function ModifyModal({
+export function EditModal({
   gift,
   giftListRefreshFunction,
   setIsModalOpen,
-}: ModifyModal_Type) {
+}: EditModal_Type) {
   const [giftReceiver, setGiftReceiver] = useState('');
   const [giftName, setGiftName] = useState('');
 
@@ -27,7 +27,7 @@ export function ModifyModal({
     setGiftReceiver(gift.name);
   }, []);
 
-  async function handleModifying() {
+  async function handleEdit() {
     //jsonServerFunctions.getAll();
     console.log('\nGift:', giftName);
     console.log('Receiver:', giftReceiver);
@@ -61,7 +61,7 @@ export function ModifyModal({
           <SvgAcceptButtonIcon
             width={64}
             height={64}
-            onClick={() => void handleModifying()}
+            onClick={() => void handleEdit()}
           />
         </Button>
         <Button className="mt-2 border border-yellow-500 relative p-0 row-start-1 row-end-1 col-start-2 col-end-2 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">

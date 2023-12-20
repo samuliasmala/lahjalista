@@ -4,7 +4,7 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-import { ModifyModal } from '~/components/ModifyModal';
+import { EditModal } from '~/components/EditModal';
 import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -32,8 +32,8 @@ export default function Home() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] =
     useState<FullLocalStorage>();
-  const [isModifyModalOpen, setIsModifyModalOpen] = useState(false);
-  const [modifyModalGiftData, setModifyModalGiftData] =
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editModalGiftData, setEditModalGiftData] =
     useState<FullLocalStorage>();
 
   useEffect(() => {
@@ -158,11 +158,11 @@ export default function Home() {
                     Poista
                   </Button>
                   <Button
-                    key={`${giftItem.id}_modifybutton`}
+                    key={`${giftItem.id}_editbutton`}
                     className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
                     onClick={() => {
-                      setModifyModalGiftData(giftItem);
-                      setIsModifyModalOpen(true);
+                      setEditModalGiftData(giftItem);
+                      setIsEditModalOpen(true);
                     }}
                     type="button"
                   >
@@ -171,11 +171,11 @@ export default function Home() {
                 </li>
               </div>
             ))}
-            {isModifyModalOpen && modifyModalGiftData && (
-              <ModifyModal
-                gift={modifyModalGiftData}
+            {isEditModalOpen && editModalGiftData && (
+              <EditModal
+                gift={editModalGiftData}
                 giftListRefreshFunction={refreshGiftList}
-                setIsModalOpen={setIsModifyModalOpen}
+                setIsModalOpen={setIsEditModalOpen}
               />
             )}
 
