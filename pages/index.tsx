@@ -4,8 +4,8 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-import jsonServerFunctions from '~/utils/jsonServerFunctions';
 import { ModifyModal } from '~/components/ModifyModal';
+import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -160,6 +160,10 @@ export default function Home() {
                   <Button
                     key={`${giftItem.id}_modifybutton`}
                     className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
+                    onClick={() => {
+                      setModifyModalGiftData(giftItem);
+                      setIsModifyModalOpen(true);
+                    }}
                     type="button"
                   >
                     Muokkaa
