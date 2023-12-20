@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { FullLocalStorage } from '~/pages';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
@@ -27,7 +33,8 @@ export function EditModal({
     setGiftReceiver(gift.name);
   }, []);
 
-  async function handleEdit() {
+  async function handleEdit(e: FormEvent<HTMLElement>) {
+    e.preventDefault();
     const giftToBeEdited: FullLocalStorage[] = await jsonServerFunctions.getOne(
       `id=${gift.id}`,
     );
@@ -44,44 +51,49 @@ export function EditModal({
   }
   return (
     <Modal className="sm:w-[26rem]">
-      <TitleText className="row-start-1 row-end-1 ps-3 font-bold text-lg">
-        Muokkaus
-      </TitleText>
-      <div className="row-start-2 row-end-2 grid mt-1 pt-3">
-        <label className="row-start-1 row-end-1">Lahja</label>
-        <Input
-          className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold border"
-          onChange={(e) => setGiftName(e.target.value)}
-          value={giftName}
-          name="giftName"
-          autoComplete="off"
-        />
-      </div>
-      <div className="row-start-3 row-end-3 grid pt-3">
-        <label className="row-start-1 row-end-1">Saaja</label>
-        <Input
-          className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold"
-          onChange={(e) => setGiftReceiver(e.target.value)}
-          value={giftReceiver}
-          autoComplete="off"
-        />
-      </div>
-      <div className="row-start-4 row-end-4 grid">
-        <Button className="relative mt-2 left-24 border border-yellow-500 p-0 row-start-1 row-end-1 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
-          <SvgAcceptButtonIcon
-            width={64}
-            height={64}
-            onClick={() => void handleEdit()}
+      <form onSubmit={(e) => void handleEdit(e)}>
+        <TitleText className="row-start-1 row-end-1 ps-3 font-bold text-lg">
+          Muokkaus
+        </TitleText>
+        <div className="row-start-2 row-end-2 grid mt-1 pt-3">
+          <label className="row-start-1 row-end-1">Lahja</label>
+          <Input
+            className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold border"
+            onChange={(e) => setGiftName(e.target.value)}
+            value={giftName}
+            name="giftName"
+            autoComplete="off"
           />
-        </Button>
-        <Button className="mt-2 border border-yellow-500 relative p-0 row-start-1 row-end-1 col-start-2 col-end-2 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
-          <SvgDeclineButtonIcon
-            width={64}
-            height={64}
-            onClick={() => setIsModalOpen(false)}
+        </div>
+        <div className="row-start-3 row-end-3 grid pt-3">
+          <label className="row-start-1 row-end-1">Saaja</label>
+          <Input
+            className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold"
+            onChange={(e) => setGiftReceiver(e.target.value)}
+            value={giftReceiver}
+            autoComplete="off"
           />
-        </Button>
-      </div>
+        </div>
+        <div className="row-start-4 row-end-4 grid">
+          <Button
+            className="relative mt-2 left-24 border border-yellow-500 p-0 row-start-1 row-end-1 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400"
+            type="submit"
+          >
+            <SvgAcceptButtonIcon width={64} height={64} />
+          </Button>
+
+          <Button
+            className="mt-2 border border-yellow-500 relative p-0 row-start-1 row-end-1 col-start-2 col-end-2 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400"
+            type="button"
+          >
+            <SvgDeclineButtonIcon
+              width={64}
+              height={64}
+              onClick={() => setIsModalOpen(false)}
+            />
+          </Button>
+        </div>
+      </form>
     </Modal>
   );
 }
