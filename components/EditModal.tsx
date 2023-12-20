@@ -28,9 +28,19 @@ export function EditModal({
   }, []);
 
   async function handleEdit() {
-    //jsonServerFunctions.getAll();
-    console.log('\nGift:', giftName);
-    console.log('Receiver:', giftReceiver);
+    const giftToBeEdited: FullLocalStorage[] = await jsonServerFunctions.getOne(
+      `id=${gift.id}`,
+    );
+    if (giftToBeEdited.length === 1) {
+      const JSON_OBJECT = giftToBeEdited[0];
+      JSON_OBJECT.name = giftReceiver;
+      JSON_OBJECT.gift = giftName;
+      await jsonServerFunctions
+        .update(gift.id, JSON_OBJECT)
+        .catch(() => giftListRefreshFunction());
+    }
+    giftListRefreshFunction();
+    setIsModalOpen(false);
   }
   return (
     <Modal className="sm:w-[26rem]">
@@ -75,14 +85,3 @@ export function EditModal({
     </Modal>
   );
 }
-
-/*const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(
-      `id=${gift.id}`,
-    );
-    if (giftToBeDeleted.length != 0) {
-      await jsonServerFunctions
-        .remove(`${gift.id}`)
-        .catch(() => giftListRefreshFunction());
-    }
-    giftListRefreshFunction();
-    setIsModalOpen(false);*/
