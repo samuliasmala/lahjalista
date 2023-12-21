@@ -6,6 +6,8 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
+import SvgGearIcon from '~/icons/gear_icon';
+import { Modal } from '~/components/Modal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,6 +36,9 @@ export default function Home() {
     useState<FullLocalStorage>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] =
+    useState<FullLocalStorage>();
+  const [isGiftSettingsModalOpen, setIsGiftSettingsModalOpen] = useState(true);
+  const [giftSettingsModalGiftData, setGiftSettingsModalGiftData] =
     useState<FullLocalStorage>();
 
   useEffect(() => {
@@ -133,44 +138,59 @@ export default function Home() {
             {giftData.map((giftItem) => (
               <div
                 key={`${giftItem.id}_divbutton`}
-                className="animate-width whitespace-nowrap overflow-hidden"
+                className="animate-width whitespace-nowrap overflow-hidden w-auto h-14"
               >
                 <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
-                    onMouseOver={(e) =>
-                      e.currentTarget.parentElement?.setAttribute(
-                        'class',
-                        'line-through',
-                      )
-                    }
-                    onMouseOut={(e) =>
-                      e.currentTarget.parentElement?.removeAttribute('class')
-                    }
-                    key={`${giftItem.id}_deletebutton`}
-                    className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
-                    onClick={() => {
-                      setDeleteModalGiftData(giftItem);
-                      setIsDeleteModalOpen(true);
-                    }}
+                    className="border-none bg-white p-0 mt-0 ms-3 w-auto h-auto relative top-3 hover:bg-gray-200"
                     type="button"
-                  >
-                    Poista
-                  </Button>
-                  <Button
-                    key={`${giftItem.id}_editbutton`}
-                    className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
                     onClick={() => {
-                      setEditModalGiftData(giftItem);
-                      setIsEditModalOpen(true);
+                      setIsGiftSettingsModalOpen(true);
+                      setGiftSettingsModalGiftData(giftItem);
                     }}
-                    type="button"
                   >
-                    Muokkaa
+                    <SvgGearIcon width={35} height={35} />
                   </Button>
                 </li>
               </div>
             ))}
+            {isGiftSettingsModalOpen && giftSettingsModalGiftData && (
+              <Modal className="grid justify-center w-96 h-40 sm:w-[10rem] sm:h-[10rem]">
+                <Button
+                  key={`${giftSettingsModalGiftData.id}_deletebutton`}
+                  className="row-start-1 row-end-1 mt-2 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
+                  onClick={() => {
+                    setDeleteModalGiftData(giftSettingsModalGiftData);
+                    setIsDeleteModalOpen(true);
+                    setIsGiftSettingsModalOpen(false);
+                  }}
+                  type="button"
+                >
+                  Poista
+                </Button>
+                <Button
+                  key={`${giftSettingsModalGiftData.id}_editbutton`}
+                  className="row-start-2 row-end-2 sm:mb-20 sm:mt-2 mb-[3.5rem] mt-0 p-0 w-20 h-8 hover:text-yellow-400"
+                  onClick={() => {
+                    setEditModalGiftData(giftSettingsModalGiftData);
+                    setIsEditModalOpen(true);
+                    setIsGiftSettingsModalOpen(false);
+                  }}
+                  type="button"
+                >
+                  Muokkaa
+                </Button>
+                <Button
+                  className="fixed sm:left-20 sm:top-32 right-0 -bottom-[0.7rem] mt-0 p-0 w-20 h-8 mb-3"
+                  type="button"
+                  onClick={() => setIsGiftSettingsModalOpen(false)}
+                >
+                  Peruuta
+                </Button>
+              </Modal>
+            )}
+
             {isEditModalOpen && editModalGiftData && (
               <EditModal
                 gift={editModalGiftData}
