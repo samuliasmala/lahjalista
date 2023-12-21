@@ -53,7 +53,7 @@ export function EditModal({
     <Modal className="sm:w-[26rem]">
       <form onSubmit={(e) => void handleEdit(e)}>
         <TitleText className="row-start-1 row-end-1 ps-3 font-bold text-lg">
-          Muokkaus
+          Muokataan:
         </TitleText>
         <div className="row-start-2 row-end-2 grid mt-1 pt-3">
           <label className="row-start-1 row-end-1">Saaja</label>

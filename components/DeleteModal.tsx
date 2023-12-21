@@ -34,7 +34,7 @@ export function DeleteModal({
   return (
     <Modal>
       <TitleText className="row-start-1 row-end-1 ps-5 font-bold">
-        Deleting:
+        Poistetaan:
       </TitleText>
       <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
         {gift.name} - {gift.gift}
