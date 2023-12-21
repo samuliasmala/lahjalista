@@ -14,6 +14,7 @@
     "check-types": "tsc --noemit",
     "lint": "(next lint || true) && npm run check-types",
     "lint:fix": "next lint --fix",
+    "prepush": "next lint --max-warnings=0 && npm run check-types",
     "svgr": "svgr --out-dir icons --typescript --jsx-runtime automatic --no-dimensions --silent --filename-case snake -- public/images/icons"
   },
   "dependencies": {
