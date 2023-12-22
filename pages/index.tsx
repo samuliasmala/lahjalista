@@ -1,43 +1,53 @@
 import { Inter } from 'next/font/google';
 import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
 import { TitleText } from '~/components/TitleText';
-import {
-  getLocalStorage,
-  setLocalStorage,
-} from '~/utils/localStorageFunctions';
-import { sortGiftsOldestFirst } from '~/utils/sortGiftsOldestFirst';
 import { Input } from '../components/Input';
+import { DeleteModal } from '~/components/DeleteModal';
+import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export type FullLocalStorage = {
   name: string;
   gift: string;
-  id?: string;
+  id: string;
   localStorageKeyID?: string;
   createdDate: number;
 };
 
+export type isGiftDeletedAlreadyType = {
+  showModal: boolean;
+  giftName: string;
+  giftReceiver: string;
+};
+
 export default function Home() {
   const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
-  const [giftNameError, setGiftNameError] = useState<boolean>(false);
-  const [receiverError, setReceiverError] = useState<boolean>(false);
-  const [newReceiver, setNewReceiver] = useState<string>('');
-  const [newGiftName, setNewGiftName] = useState<string>('');
+  const [giftNameError, setGiftNameError] = useState(false);
+  const [receiverError, setReceiverError] = useState(false);
+  const [newReceiver, setNewReceiver] = useState('');
+  const [newGiftName, setNewGiftName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
 
   useEffect(() => {
     console.log('effect');
-    const parsedGiftData = JSON.parse(getLocalStorage('giftData'));
-    const gifts = sortGiftsOldestFirst(parsedGiftData);
-    setGiftData(gifts);
+    async function fetchData() {
+      const gifts = await (await jsonServerFunctions.getAll()).data;
+      setGiftData(gifts);
+    }
+    fetchData().catch((e) => {
+      throw new Error(e);
+    });
   }, []);
 
-  function handleSubmit(e: FormEvent<HTMLElement>) {
+  async function handleSubmit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     setGiftNameError(false);
     setReceiverError(false);
+    // this variable is used for checking both inputs
+    // could use return statement instead of errorFound, but it would not give an error message to all invalid input. Only the first invalid input.
     let errorFound = false;
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
@@ -53,53 +63,35 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const jsonObject: FullLocalStorage[] = [
-      {
-        name: newReceiver,
-        gift: newGiftName,
-        id: generatedUUID,
-        createdDate: new Date().getTime(),
-      },
-    ];
-    let localStorageGiftData: FullLocalStorage[] = JSON.parse(
-      getLocalStorage('giftData'),
-    );
-    localStorageGiftData = localStorageGiftData.concat(jsonObject);
+    const JSON_OBJECT: FullLocalStorage = {
+      name: newReceiver,
+      gift: newGiftName,
+      id: generatedUUID,
+      createdDate: new Date().getTime(),
+    };
 
-    setLocalStorage('giftData', JSON.stringify(localStorageGiftData));
-    setGiftData(localStorageGiftData);
+    const currentGiftList: FullLocalStorage[] = (
+      await jsonServerFunctions.getAll()
+    ).data;
+    const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
+
+    await jsonServerFunctions.create(JSON_OBJECT);
+    setGiftData(updatedGiftList);
     setNewGiftName('');
     setNewReceiver('');
   }
 
-  function handleDeletion(gift: FullLocalStorage) {
-    const confirmDeletion = confirm(`Deleting ${gift.name} - ${gift.gift}`);
-    if (confirmDeletion) {
-      let localStorageGifts: FullLocalStorage[] = JSON.parse(
-        getLocalStorage('giftData'),
-      );
-      localStorageGifts = localStorageGifts.filter(
-        (localStorageGift) => localStorageGift.id !== gift.id,
-      );
-      setLocalStorage('giftData', JSON.stringify(localStorageGifts));
-      refreshGiftList();
-    }
-  }
-
-  function refreshGiftList() {
-    const sortedGifts = sortGiftsOldestFirst(
-      JSON.parse(getLocalStorage('giftData')),
-    );
-    setGiftData(sortedGifts);
+  async function refreshGiftList() {
+    setGiftData(await (await jsonServerFunctions.getAll()).data);
   }
 
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <Container className="justify-center grid h-5">
-        <Container className="mt-5">
-          <form onSubmit={(e) => handleSubmit(e)}>
+      <div className="justify-center grid h-5">
+        <div className="mt-5">
+          <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
-            <Container className="pt-4 grid">
+            <div className="pt-4 grid">
               <label htmlFor="giftName">Lahja</label>
               <Input
                 onChange={(event) => setNewGiftName(event.target.value)}
@@ -112,8 +104,8 @@ export default function Home() {
               {giftNameError && (
                 <div className="text-red-500">Lahja on pakollinen</div>
               )}
-            </Container>
-            <Container className="pt-4 grid">
+            </div>
+            <div className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
@@ -126,11 +118,11 @@ export default function Home() {
               {receiverError && (
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
-            </Container>
+            </div>
             <Button type="submit">Lisää</Button>
           </form>
-        </Container>
-        <Container className="mt-3">
+        </div>
+        <div className="mt-3">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
@@ -138,22 +130,18 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li key={giftItem.id}>
+                <li
+                  key={giftItem.id}
+                  className="hover:line-through pointer-events-none"
+                >
                   {giftItem.name} - {giftItem.gift}
                   <Button
                     key={`${giftItem.id}_deletebutton`}
-                    onMouseOver={(e) => {
-                      // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className =
-                        'line-through';
+                    className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
+                    onClick={() => {
+                      setModalGiftData(giftItem);
+                      setIsModalOpen(true);
                     }}
-                    onMouseOut={(e) => {
-                      // can use statement *as* here due to the button being inside of the li parentElement
-                      (e.currentTarget.parentElement as HTMLElement).className =
-                        '';
-                    }}
-                    className="ms-5 p-0 w-16 h-8 hover:text-red-600"
-                    onClick={() => handleDeletion(giftItem)}
                     type="button"
                   >
                     Poista
@@ -161,9 +149,16 @@ export default function Home() {
                 </li>
               </div>
             ))}
+            {isModalOpen && modalGiftData && (
+              <DeleteModal
+                gift={modalGiftData}
+                giftListRefreshFunction={() => void refreshGiftList()}
+                setIsModalOpen={setIsModalOpen}
+              />
+            )}
           </div>
-        </Container>
-      </Container>
+        </div>
+      </div>
     </main>
   );
 }
