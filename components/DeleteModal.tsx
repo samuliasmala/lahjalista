@@ -39,14 +39,14 @@ export function DeleteModal({
       <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
         {gift.name} - {gift.gift}
       </p>
-      <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
+      <Button className="border border-yellow-500 ms-16 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
         <SvgAcceptButtonIcon
           width={64}
           height={64}
           onClick={() => void handleDeletion()}
         />
       </Button>
-      <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
+      <Button className="border border-yellow-500 relative ms-10 mt-3 p-0 left-32 row-start-3 row-end-3 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400">
         <SvgDeclineButtonIcon
           width={64}
           height={64}
