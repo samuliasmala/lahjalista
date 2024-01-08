@@ -22,13 +22,12 @@ async function create(newObject: object) {
 
 /**
  *
- * @param searchParameters should be given a string that contains search parameters as query strings.
- * @example name=Foo&gift=Bar
- * @param newObject a new object that will be replacing the old object
+ * @param id should be given a string that contains search parameters as query strings.
+ * @param newObject a new object of Gifts that will be replacing the old object
  * @returns an array of JavaScript objects after the update
  */
-async function update(searchParameters: string, newObject: object) {
-  return (await axios.put(`${baseURL}?${searchParameters}`, newObject)).data;
+async function update(id: string, newObject: Gifts[]) {
+  return (await axios.put(`${baseURL}?${id}`, newObject)).data;
 }
 
 /**
