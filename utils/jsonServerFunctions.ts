@@ -4,17 +4,16 @@ import { Gifts } from '~/pages';
 const baseURL = 'http://localhost:3001/gifts';
 
 async function getAll() {
-  return (await (await axios.get(baseURL)).data) as Gifts[];
+  return ((await axios.get(baseURL)).data) as Gifts[];
 }
 
 /**
  *
- * @param searchParameters should be given a string that contains search parameters as query strings.
- * @example name=Foo&gift=Bar
+ * @param id should be given a string that contains the id that is wanted to be searched.
  * @returns an array of JavaScript objects if found. Else an empty array
  */
-async function getOne(searchParameters: string) {
-  return (await axios.get(`${baseURL}?${searchParameters}`)).data;
+async function getOne(id: string) {
+  return ((await axios.get(`${baseURL}?id=${id}`)).data) as Gifts[];
 }
 
 async function create(newObject: object) {

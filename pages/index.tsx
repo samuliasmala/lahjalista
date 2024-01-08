@@ -47,7 +47,7 @@ export default function Home() {
     setGiftNameError(false);
     setReceiverError(false);
     // this variable is used for checking both inputs
-    // could use return statement instead of errorFound, but it would not give an error message to all invalid input. Only the first invalid input.
+    // could use return statement instead of errorFound, but it would not give an error message to all invalid inputs. Only the first invalid input.
     let errorFound = false;
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {

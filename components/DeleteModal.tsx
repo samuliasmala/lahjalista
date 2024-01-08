@@ -19,9 +19,7 @@ export function DeleteModal({
   setIsModalOpen,
 }: ModalType) {
   async function handleDeletion() {
-    const giftToBeDeleted: any[] = await jsonServerFunctions.getOne(
-      `id=${gift.id}`,
-    );
+    const giftToBeDeleted = await jsonServerFunctions.getOne(gift.id);
     if (giftToBeDeleted.length != 0) {
       await jsonServerFunctions
         .remove(`${gift.id}`)
