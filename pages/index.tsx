@@ -34,7 +34,7 @@ export default function Home() {
   useEffect(() => {
     console.log('effect');
     async function fetchData() {
-      const gifts = await (await jsonServerFunctions.getAll()).data;
+      const gifts = await jsonServerFunctions.getAll();
       setGiftData(gifts);
     }
     fetchData().catch((e) => {
@@ -70,7 +70,7 @@ export default function Home() {
       createdDate: new Date().getTime(),
     };
 
-    const currentGiftList: Gifts[] = (await jsonServerFunctions.getAll()).data;
+    const currentGiftList = await jsonServerFunctions.getAll();
     const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
 
     await jsonServerFunctions.create(JSON_OBJECT);
@@ -80,7 +80,7 @@ export default function Home() {
   }
 
   async function refreshGiftList() {
-    setGiftData(await (await jsonServerFunctions.getAll()).data);
+    setGiftData(await jsonServerFunctions.getAll());
   }
 
   return (

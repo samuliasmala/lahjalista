@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { Gifts } from '~/pages';
 
 const baseURL = 'http://localhost:3001/gifts';
 
 async function getAll() {
-  return await axios.get(baseURL);
+  return (await (await axios.get(baseURL)).data) as Gifts[];
 }
 
 /**
