@@ -8,7 +8,7 @@ import jsonServerFunctions from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export type FullLocalStorage = {
+export type Gifts_Type = {
   name: string;
   gift: string;
   id: string;
@@ -23,13 +23,13 @@ export type isGiftDeletedAlreadyType = {
 };
 
 export default function Home() {
-  const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
+  const [giftData, setGiftData] = useState<Gifts_Type[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalGiftData, setModalGiftData] = useState<FullLocalStorage>();
+  const [modalGiftData, setModalGiftData] = useState<Gifts_Type>();
 
   useEffect(() => {
     console.log('effect');
@@ -63,16 +63,15 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const JSON_OBJECT: FullLocalStorage = {
+    const JSON_OBJECT: Gifts_Type = {
       name: newReceiver,
       gift: newGiftName,
       id: generatedUUID,
       createdDate: new Date().getTime(),
     };
 
-    const currentGiftList: FullLocalStorage[] = (
-      await jsonServerFunctions.getAll()
-    ).data;
+    const currentGiftList: Gifts_Type[] = (await jsonServerFunctions.getAll())
+      .data;
     const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
 
     await jsonServerFunctions.create(JSON_OBJECT);
