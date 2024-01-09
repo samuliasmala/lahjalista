@@ -4,7 +4,7 @@ import { Gifts } from '~/pages';
 const baseURL = 'http://localhost:3001/gifts';
 
 export async function getAllGifts() {
-  return ((await axios.get(baseURL)).data) as Gifts[];
+  return (await axios.get(baseURL)).data as Gifts[];
 }
 
 /**
@@ -15,14 +15,14 @@ export async function getAllGifts() {
 export async function getGift(id: string) {
   const gifts = (await axios.get(`${baseURL}?id=${id}`)).data;
   if (gifts.length != 0) {
-    return gifts[0]
+    return gifts[0];
   }
-  return null
+  return null;
 }
 
 /**
- * 
- * @param newObject 
+ *
+ * @param newObject
  * @returns an array of objects that contains all the gifts after creation
  */
 export async function createGift(newObject: object) {

@@ -1,4 +1,3 @@
-import { Container } from './Container';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 
