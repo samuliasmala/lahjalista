@@ -4,7 +4,7 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-import jsonServerFunctions from '~/utils/jsonServerFunctions';
+import { create, getAllGifts } from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,7 +34,7 @@ export default function Home() {
   useEffect(() => {
     console.log('effect');
     async function fetchData() {
-      const gifts = await jsonServerFunctions.getAll();
+      const gifts = await getAllGifts();
       setGiftData(gifts);
     }
     fetchData().catch((e) => {
@@ -70,17 +70,17 @@ export default function Home() {
       createdDate: new Date().getTime(),
     };
 
-    const currentGiftList = await jsonServerFunctions.getAll();
+    const currentGiftList = await getAllGifts();
     const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
 
-    await jsonServerFunctions.create(JSON_OBJECT);
+    await create(JSON_OBJECT);
     setGiftData(updatedGiftList);
     setNewGiftName('');
     setNewReceiver('');
   }
 
   async function refreshGiftList() {
-    setGiftData(await jsonServerFunctions.getAll());
+    setGiftData(await getAllGifts());
   }
 
   return (

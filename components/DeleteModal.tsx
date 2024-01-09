@@ -2,10 +2,10 @@ import { TitleText } from './TitleText';
 import React, { Dispatch, SetStateAction } from 'react';
 import { Gifts } from '~/pages';
 import { Modal } from './Modal';
-import jsonServerFunctions from '~/utils/jsonServerFunctions';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
 import { Button } from './Button';
+import { getGift, removeGift } from '~/utils/jsonServerFunctions';
 
 type ModalType = {
   gift: Gifts;
@@ -19,11 +19,9 @@ export function DeleteModal({
   setIsModalOpen,
 }: ModalType) {
   async function handleDeletion() {
-    const giftToBeDeleted = await jsonServerFunctions.getOne(gift.id);
-    if (giftToBeDeleted.length != 0) {
-      await jsonServerFunctions
-        .remove(`${gift.id}`)
-        .catch(() => giftListRefreshFunction());
+    const giftToBeDeleted = await getGift(gift.id);
+    if (giftToBeDeleted !== null) {
+      await removeGift(`${gift.id}`).catch(() => giftListRefreshFunction());
     }
     giftListRefreshFunction();
     setIsModalOpen(false);
