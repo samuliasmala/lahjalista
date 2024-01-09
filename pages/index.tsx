@@ -33,12 +33,12 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    async function fetchData() {
+    async function fetchGifts() {
       const gifts = await getAllGifts();
       setGiftData(gifts);
     }
-    fetchData().catch((e) => {
-      throw new Error(e);
+    fetchGifts().catch((e) => {
+      console.error(e);
     });
   }, []);
 
@@ -63,7 +63,7 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const JSON_OBJECT: Gifts = {
+    const newGift: Gifts = {
       name: newReceiver,
       gift: newGiftName,
       id: generatedUUID,
@@ -71,9 +71,9 @@ export default function Home() {
     };
 
     const currentGiftList = await getAllGifts();
-    const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
+    const updatedGiftList = currentGiftList.concat(newGift);
 
-    await createGift(JSON_OBJECT);
+    await createGift(newGift);
     setGiftData(updatedGiftList);
     setNewGiftName('');
     setNewReceiver('');
