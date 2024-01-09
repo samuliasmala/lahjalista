@@ -4,7 +4,7 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-import { create, getAllGifts } from '~/utils/jsonServerFunctions';
+import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -73,7 +73,7 @@ export default function Home() {
     const currentGiftList = await getAllGifts();
     const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
 
-    await create(JSON_OBJECT);
+    await createGift(JSON_OBJECT);
     setGiftData(updatedGiftList);
     setNewGiftName('');
     setNewReceiver('');
