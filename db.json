@@ -1,3 +1,10 @@
 {
-  "gifts": []
+  "gifts": [
+    {
+      "name": "Matti Meikäläinen",
+      "gift": "Kortti",
+      "id": "ad674e17-6643-423f-8517-70fbd3ec1df8",
+      "createdDate": 1702975113280
+    }
+  ]
 }
