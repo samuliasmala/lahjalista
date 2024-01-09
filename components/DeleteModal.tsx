@@ -21,7 +21,7 @@ export function DeleteModal({
   async function handleDeletion() {
     const giftToBeDeleted = await getGift(gift.id);
     if (giftToBeDeleted !== null) {
-      await removeGift(`${gift.id}`).catch(() => giftListRefreshFunction());
+      await removeGift(gift.id);
     }
     giftListRefreshFunction();
     setIsModalOpen(false);
