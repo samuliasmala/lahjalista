@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Gifts } from '~/pages';
 
-const baseURL = 'http://localhost:3001/gifts';
+//const baseURL = 'http://localhost:3001/gifts'; // localhost url
+const baseURL = 'https://my-json-server.typicode.com/samuliasmala/lahjalista/gifts'; // external url
 
 export async function getAllGifts() {
   return (await axios.get(baseURL)).data as Gifts[];
