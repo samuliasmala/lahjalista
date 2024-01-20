@@ -19,8 +19,8 @@ export async function getAllGifts() {
  */
 export async function getGift(id: string) {
   const gifts = (await axios.get(`${baseURL}?id=${id}`)).data;
-  if (gifts.length != 0) {
-    return gifts[0];
+  if (gifts.length !== 0) {
+    return gifts[0] as Gift;
   }
   return null;
 }
