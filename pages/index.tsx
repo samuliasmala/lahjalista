@@ -16,12 +16,6 @@ export type Gift = {
   createdDate: number;
 };
 
-export type isGiftDeletedAlreadyType = {
-  showModal: boolean;
-  giftName: string;
-  giftReceiver: string;
-};
-
 export default function Home() {
   const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
