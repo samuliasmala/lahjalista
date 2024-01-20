@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Gifts } from '~/pages';
+import { Gift } from '~/pages';
 
 //const baseURL = 'http://localhost:3001/gifts'; // localhost url
 const baseURL = 'https://my-json-server.typicode.com/samuliasmala/lahjalista/gifts'; // external url
@@ -9,7 +9,7 @@ const baseURL = 'https://my-json-server.typicode.com/samuliasmala/lahjalista/gif
  * @returns an array that contains all the gifts as objects
  */
 export async function getAllGifts() {
-  return (await axios.get(baseURL)).data as Gifts[];
+  return (await axios.get(baseURL)).data as Gift[];
 }
 
 /**
@@ -38,7 +38,7 @@ export async function createGift(newObject: object) {
  * @param id should be given a string that contains search parameters as query strings.
  * @param newObject a new object of Gifts that will be replacing the old object
  */
-export async function updateGift(id: string, newObject: Gifts) {
+export async function updateGift(id: string, newObject: Gift) {
   await axios.put(`${baseURL}/${id}`, newObject);
 }
 

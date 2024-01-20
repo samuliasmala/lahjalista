@@ -8,7 +8,7 @@ import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export type Gifts = {
+export type Gift = {
   name: string;
   gift: string;
   id: string;
@@ -23,13 +23,13 @@ export type isGiftDeletedAlreadyType = {
 };
 
 export default function Home() {
-  const [giftData, setGiftData] = useState<Gifts[]>([]);
+  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalGiftData, setModalGiftData] = useState<Gifts>();
+  const [modalGiftData, setModalGiftData] = useState<Gift>();
 
   useEffect(() => {
     console.log('effect');
@@ -63,7 +63,7 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const newGift: Gifts = {
+    const newGift: Gift = {
       name: newReceiver,
       gift: newGiftName,
       id: generatedUUID,

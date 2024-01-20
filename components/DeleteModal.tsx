@@ -1,6 +1,6 @@
 import { TitleText } from './TitleText';
 import React, { Dispatch, SetStateAction } from 'react';
-import { Gifts } from '~/pages';
+import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
 import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
@@ -8,7 +8,7 @@ import { Button } from './Button';
 import { getGift, removeGift } from '~/utils/jsonServerFunctions';
 
 type ModalType = {
-  gift: Gifts;
+  gift: Gift;
   giftListRefreshFunction: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
