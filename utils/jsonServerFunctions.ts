@@ -2,7 +2,8 @@ import axios from 'axios';
 import { Gift } from '~/pages';
 
 //const baseURL = 'http://localhost:3001/gifts'; // localhost url
-const baseURL = 'https://my-json-server.typicode.com/samuliasmala/lahjalista/gifts'; // external url
+const baseURL =
+  'https://my-json-server.typicode.com/samuliasmala/lahjalista/gifts'; // external url
 
 /**
  *
