@@ -9,6 +9,32 @@ const config: Config = {
   theme: {
     extend: {
       keyframes: {
+        rainbowBackGroundColor: {
+          '0%': {
+            backgroundColor: 'red',
+          },
+          '10%': {
+            backgroundColor: 'orange',
+          },
+          '20%': {
+            backgroundColor: 'yellow',
+          },
+          '30%': {
+            backgroundColor: 'green',
+          },
+          '40%': {
+            backgroundColor: 'blue',
+          },
+          '50%': {
+            backgroundColor: 'indigo',
+          },
+          '60%': {
+            backgroundColor: 'violet',
+          },
+          '70%': {
+            backgroundColor: 'black',
+          },
+        },
         width: {
           '0%': {
             width: '0px',
@@ -36,6 +62,7 @@ const config: Config = {
       },
       animation: {
         highlight: 'highlight 1200ms ease-in-out',
+        rainbowBackGroundColor: 'rainbowBackGroundColor 1000ms',
         background: 'background 1200ms ease-in-out',
         width: 'width 1200ms',
       },
