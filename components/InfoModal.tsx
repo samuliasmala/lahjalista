@@ -1,4 +1,3 @@
-import { Container } from './Container';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 
@@ -9,7 +8,7 @@ type InfoModalType = {
 
 export function InfoModal({ title, info }: InfoModalType) {
   return (
-    <Container>
+    <div>
       <Modal>
         <TitleText className="row-start-1 row-end-1 ps-5 font-bold">
           {title}
@@ -18,6 +17,6 @@ export function InfoModal({ title, info }: InfoModalType) {
           {info}
         </p>
       </Modal>
-    </Container>
+    </div>
   );
 }

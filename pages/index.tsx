@@ -4,12 +4,16 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
+<<<<<<< HEAD
 import { EditModal } from '~/components/EditModal';
 import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
+=======
+import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
+>>>>>>> antti/json-server
 
 const inter = Inter({ subsets: ['latin'] });
 
-export type FullLocalStorage = {
+export type Gift = {
   name: string;
   gift: string;
   id: string;
@@ -17,33 +21,32 @@ export type FullLocalStorage = {
   createdDate: number;
 };
 
-export type isGiftDeletedAlreadyType = {
-  showModal: boolean;
-  giftName: string;
-  giftReceiver: string;
-};
-
 export default function Home() {
-  const [giftData, setGiftData] = useState<FullLocalStorage[]>([]);
+  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
+<<<<<<< HEAD
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] =
     useState<FullLocalStorage>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] =
     useState<FullLocalStorage>();
+=======
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalGiftData, setModalGiftData] = useState<Gift>();
+>>>>>>> antti/json-server
 
   useEffect(() => {
     console.log('effect');
-    async function fetchData() {
-      const gifts = await (await jsonServerFunctions.getAll()).data;
+    async function fetchGifts() {
+      const gifts = await getAllGifts();
       setGiftData(gifts);
     }
-    fetchData().catch((e) => {
-      throw new Error(e);
+    fetchGifts().catch((e) => {
+      console.error(e);
     });
   }, []);
 
@@ -52,7 +55,7 @@ export default function Home() {
     setGiftNameError(false);
     setReceiverError(false);
     // this variable is used for checking both inputs
-    // could use return statement instead of errorFound, but it would not give an error message to all invalid input. Only the first invalid input.
+    // could use return statement instead of errorFound, but it would not give an error message to all invalid inputs. Only the first invalid input.
     let errorFound = false;
 
     if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
@@ -68,26 +71,24 @@ export default function Home() {
     }
 
     const generatedUUID = crypto.randomUUID();
-    const JSON_OBJECT: FullLocalStorage = {
+    const newGift: Gift = {
       name: newReceiver,
       gift: newGiftName,
       id: generatedUUID,
       createdDate: new Date().getTime(),
     };
 
-    const currentGiftList: FullLocalStorage[] = (
-      await jsonServerFunctions.getAll()
-    ).data;
-    const updatedGiftList = currentGiftList.concat(JSON_OBJECT);
+    const currentGiftList = await getAllGifts();
+    const updatedGiftList = currentGiftList.concat(newGift);
 
-    await jsonServerFunctions.create(JSON_OBJECT);
+    await createGift(newGift);
     setGiftData(updatedGiftList);
     setNewGiftName('');
     setNewReceiver('');
   }
 
   async function refreshGiftList() {
-    setGiftData(await (await jsonServerFunctions.getAll()).data);
+    setGiftData(await getAllGifts());
   }
 
   return (
