@@ -9,21 +9,22 @@ import { SvgDeclineIcon } from '~/icons/DeclineIcon';
 
 type DeleteModal = {
   gift: Gift;
-  giftListRefreshFunction: () => void;
+  refreshGiftList: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export function DeleteModal({
   gift,
-  giftListRefreshFunction,
+  refreshGiftList,
   setIsModalOpen,
 }: DeleteModal) {
   async function handleDeletion() {
-    const giftToBeDeleted = await getGift(gift.id);
-    if (giftToBeDeleted !== null) {
-      await removeGift(gift.id);
-    }
-    giftListRefreshFunction();
+    await removeGift(gift.id).catch((e) => {
+      if (e.response.status === 404) {
+        console.error('Lahjaa ei löytynyt palvelimelta!');
+      } else console.error(e.message);
+    });
+    refreshGiftList();
     setIsModalOpen(false);
   }
 
