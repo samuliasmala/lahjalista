@@ -4,12 +4,8 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
-<<<<<<< HEAD
 import { EditModal } from '~/components/EditModal';
-import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
-=======
 import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
->>>>>>> antti/json-server
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,17 +23,10 @@ export default function Home() {
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-<<<<<<< HEAD
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteModalGiftData, setDeleteModalGiftData] =
-    useState<FullLocalStorage>();
+  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editModalGiftData, setEditModalGiftData] =
-    useState<FullLocalStorage>();
-=======
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalGiftData, setModalGiftData] = useState<Gift>();
->>>>>>> antti/json-server
+  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
   useEffect(() => {
     console.log('effect');
@@ -175,7 +164,7 @@ export default function Home() {
             {isEditModalOpen && editModalGiftData && (
               <EditModal
                 gift={editModalGiftData}
-                giftListRefreshFunction={() => void refreshGiftList()}
+                refreshGiftList={() => void refreshGiftList()}
                 setIsModalOpen={setIsEditModalOpen}
               />
             )}
@@ -183,7 +172,7 @@ export default function Home() {
             {isDeleteModalOpen && deleteModalGiftData && (
               <DeleteModal
                 gift={deleteModalGiftData}
-                giftListRefreshFunction={() => void refreshGiftList()}
+                refreshGiftList={() => void refreshGiftList()}
                 setIsModalOpen={setIsDeleteModalOpen}
               />
             )}
