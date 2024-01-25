@@ -22,7 +22,9 @@ export function DeleteModal({
     await removeGift(gift.id).catch((e) => {
       if (e.response.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');
-      } else console.error(e.message);
+      } else {
+        console.error(e.message);
+      }
     });
     refreshGiftList();
     setIsModalOpen(false);
@@ -39,7 +41,7 @@ export function DeleteModal({
       <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[66px] h-[66px]">
         <SvgCheckMarkIcon
           className="bg-gray-300 hover:bg-gray-600 group/checkMarkIcon"
-          backgroundClassName="fill-black group-hover/checkMarkIcon:fill-yellow-400"
+          circleClassName="fill-black group-hover/checkMarkIcon:fill-yellow-400"
           checkMarkClassName="fill-gray-300 group-hover/checkMarkIcon:fill-gray-600"
           width={64}
           height={64}
@@ -49,7 +51,7 @@ export function DeleteModal({
       <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[66px] h-[66px] ">
         <SvgDeclineIcon
           className="group/declineIcon bg-gray-300 hover:bg-gray-600"
-          backgroundClassName="fill-black group-hover/declineIcon:fill-yellow-400"
+          circleClassName="fill-black group-hover/declineIcon:fill-yellow-400"
           width={64}
           height={64}
           onClick={() => setIsModalOpen(false)}
