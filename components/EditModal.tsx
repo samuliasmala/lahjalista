@@ -42,10 +42,10 @@ export function EditModal({
       }
     }
     document.addEventListener('keydown', handleKeyDown);
-    return function cleanFunctions() {
+    return function clearFunctions() {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [refreshGiftList, setIsModalOpen]);
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();

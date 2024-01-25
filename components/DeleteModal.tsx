@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import { Button } from './Button';
-import { getGift, removeGift } from '~/utils/jsonServerFunctions';
+import { removeGift } from '~/utils/jsonServerFunctions';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
 
