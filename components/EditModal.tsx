@@ -13,7 +13,6 @@ import { updateGift } from '~/utils/jsonServerFunctions';
 import { Input } from './Input';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
-import { moveInputCursorToEnd } from '~/utils/moveInputCursorToEnd';
 
 type EditModal = {
   gift: Gift;
@@ -73,7 +72,6 @@ export function EditModal({
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
-            onClick={(e) => moveInputCursorToEnd(e)}
           />
         </div>
         <div className="row-start-3 row-end-3 grid pt-3">
@@ -84,7 +82,6 @@ export function EditModal({
             value={giftName}
             name="giftName"
             autoComplete="off"
-            onClick={(e) => moveInputCursorToEnd(e)}
           />
         </div>
         <div className="row-start-4 row-end-4 grid">
