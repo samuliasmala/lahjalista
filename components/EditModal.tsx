@@ -5,26 +5,26 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { FullLocalStorage } from '~/pages';
+import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 import { Button } from './Button';
-import SvgAcceptButtonIcon from '~/icons/accept_button_icon';
-import SvgDeclineButtonIcon from '~/icons/decline_button_icon';
-import { jsonServerFunctions } from '~/utils/jsonServerFunctions';
+import { updateGift } from '~/utils/jsonServerFunctions';
 import { Input } from './Input';
+import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
+import { SvgDeclineIcon } from '~/icons/DeclineIcon';
 
-type EditModal_Type = {
-  gift: FullLocalStorage;
-  giftListRefreshFunction: () => void;
+type EditModal = {
+  gift: Gift;
+  refreshGiftList: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export function EditModal({
   gift,
-  giftListRefreshFunction,
+  refreshGiftList,
   setIsModalOpen,
-}: EditModal_Type) {
+}: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState('');
   const [giftName, setGiftName] = useState('');
 
@@ -33,20 +33,30 @@ export function EditModal({
     setGiftReceiver(gift.name);
   }, [gift]);
 
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        refreshGiftList();
+        setIsModalOpen(false);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return function cleanFunctions() {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
-    const giftToBeEdited: FullLocalStorage[] = await jsonServerFunctions.getOne(
-      `id=${gift.id}`,
-    );
-    if (giftToBeEdited.length === 1) {
-      const JSON_OBJECT = giftToBeEdited[0];
-      JSON_OBJECT.name = giftReceiver;
-      JSON_OBJECT.gift = giftName;
-      await jsonServerFunctions
-        .update(gift.id, JSON_OBJECT)
-        .catch(() => giftListRefreshFunction());
-    }
-    giftListRefreshFunction();
+
+    const newGift = gift;
+    newGift.name = giftReceiver;
+    newGift.gift = giftName;
+    await updateGift(gift.id, newGift).catch(() => {
+      refreshGiftList();
+      setIsModalOpen(false);
+    });
+    refreshGiftList();
     setIsModalOpen(false);
   }
   return (
@@ -76,17 +86,25 @@ export function EditModal({
         </div>
         <div className="row-start-4 row-end-4 grid">
           <Button
-            className="relative mt-2 left-24 border border-yellow-500 p-0 row-start-1 row-end-1 col-start-1 col-end-1 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400"
+            className="relative mt-2 left-24 border border-yellow-500 p-0 row-start-1 row-end-1 col-start-1 col-end-1 w-[66px] h-[66px] "
             type="submit"
           >
-            <SvgAcceptButtonIcon width={64} height={64} />
+            <SvgCheckMarkIcon
+              width={64}
+              height={64}
+              className="bg-gray-300 hover:bg-gray-600 group/checkMarkIcon"
+              circleClassName="fill-black group-hover/checkMarkIcon:fill-yellow-400 "
+              checkMarkClassName="fill-gray-300 group-hover/checkMarkIcon:fill-gray-600"
+            />
           </Button>
 
           <Button
-            className="mt-2 border border-yellow-500 relative p-0 row-start-1 row-end-1 col-start-2 col-end-2 w-[64px] h-[64px] bg-gray-300 text-black hover:bg-gray-600 hover:text-yellow-400"
+            className="mt-2 border border-yellow-500 relative p-0 row-start-1 row-end-1 col-start-2 col-end-2 w-[66px] h-[66px]"
             type="button"
           >
-            <SvgDeclineButtonIcon
+            <SvgDeclineIcon
+              className="bg-gray-300 hover:bg-gray-600 group/declineIcon"
+              circleClassName="fill-black group-hover/declineIcon:fill-yellow-400"
               width={64}
               height={64}
               onClick={() => setIsModalOpen(false)}
