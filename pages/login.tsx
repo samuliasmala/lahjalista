@@ -9,13 +9,20 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Login() {
   const router = useRouter();
 
+  function handleRegisterRedirect(
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+  ) {
+    e.preventDefault();
+    router.push('/register');
+  }
+
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <div className="h-screen w-screen bg-no-repeat bg-cover bg-center">
         <div className="w-full flex justify-center">
           <div className="mt-5 flex justify-center flex-col">
             <form>
-              <TitleText>Luo käyttäjätunnus</TitleText>
+              <TitleText className="text-center">Kirjaudu sisään</TitleText>
               <div className="mt-5 flex flex-col">
                 <label>Sähköposti</label>
                 <Input
@@ -37,15 +44,21 @@ export default function Login() {
                   name="username"
                 />
               </div>
+              <div className="flex mt-3">
+                <label className="select-none">
+                  <input type="checkbox" className="mr-2 cursor-pointer" />
+                  Muista minut
+                </label>
+              </div>
               <Button>Kirjaudu</Button>
             </form>
             <p className="mt-6 text-xs text-gray-600">
-              Onko sinulla jo tunnus?{' '}
+              Sinulla ei ole vielä tunnuksia?{' '}
               <span
-                className="underline cursor-pointer"
-                onClick={() => console.log('clicked')}
+                className="underline cursor-pointer select-none hover:text-black"
+                onClick={(e) => handleRegisterRedirect(e)}
               >
-                Kirjaudu sisään
+                Luo tunnus
               </span>
             </p>
           </div>
