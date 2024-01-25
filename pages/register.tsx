@@ -10,6 +10,8 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
 
   const router = useRouter();
 
@@ -22,8 +24,27 @@ export default function Login() {
 
   function handleRegister(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
+    setEmailError(false);
+
+    const isCorrectEmail = checkIsEmailCorrect();
+    if (isCorrectEmail === null) {
+      return setEmailError(true);
+    }
+
+    // could be used without splittedEmail variable, but the finalEmail variable would get extremely long and hard to read
+    const splittedEmail = isCorrectEmail[0].split('@');
+    const finalEmail = `${splittedEmail[0].replace(/[.]/g, '')}@${
+      splittedEmail[1]
+    }`;
+    console.log(finalEmail);
+  }
+
+  function checkIsEmailCorrect() {
+    // this should check with regex that there cannot be multiple dots etc
+    const regexPattern =
+      /^[^\s!@#$%^&*,:;¨|äöå]+@[^\s!@#$%^&*,:;¨|äöå0-9.]+\.[^\s!@#$%^&*,:;.¨|äöå0-9]+[a-z]*$/g;
+    // /^[^\s@]+@[^\s@]+\.[^\s@]+\.+$/;
+    return email.toLowerCase().match(regexPattern);
   }
 
   return (
@@ -44,6 +65,11 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
+                {emailError ? (
+                  <p className="text-red-600 mt-2">
+                    Sähköpostiosoite on virheellinen
+                  </p>
+                ) : null}
               </div>
               <div className="mt-5 flex flex-col">
                 <label>Salasana</label>
