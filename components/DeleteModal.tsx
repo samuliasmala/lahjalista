@@ -3,9 +3,9 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import { Button } from './Button';
-import { removeGift } from '~/utils/jsonServerFunctions';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
+import { deleteGift } from '~/utils/giftRequests';
 
 type DeleteModal = {
   gift: Gift;
@@ -19,7 +19,7 @@ export function DeleteModal({
   setIsModalOpen,
 }: DeleteModal) {
   async function handleDeletion() {
-    await removeGift(gift.id).catch((e) => {
+    await deleteGift(gift.id).catch((e) => {
       if (e.response.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');
       } else {
