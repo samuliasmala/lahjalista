@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { Gift } from '~/pages';
 
-//const baseURL = 'http://localhost:3001/gifts'; // localhost url
-const baseURL =
-  'https://my-json-server.typicode.com/samuliasmala/lahjalista/gifts'; // external url
+const baseURL = '/api/gifts';
 
 /**
  *
  * @returns an array that contains all the gifts as objects
  */
 export async function getAllGifts() {
-  return (await axios.get(baseURL)).data as Gift[];
+  return (await axios.get(baseURL)).data;
 }
 
 /**
@@ -19,18 +17,14 @@ export async function getAllGifts() {
  * @returns an object of a gift if it was found. Else it will return null
  */
 export async function getGift(id: string) {
-  const gifts = (await axios.get(`${baseURL}?id=${id}`)).data;
-  if (gifts.length !== 0) {
-    return gifts[0] as Gift;
-  }
-  return null;
+  return await axios.get(`${baseURL}/?id=${id}`);
 }
 
 /**
  *
  * @param newObject a new object of a gift that will added to the server
  */
-export async function createGift(newObject: object) {
+export async function createGift(newObject: Gift) {
   await axios.post(baseURL, newObject);
 }
 
@@ -40,13 +34,13 @@ export async function createGift(newObject: object) {
  * @param newObject a new object of Gifts that will be replacing the old object
  */
 export async function updateGift(id: string, newObject: Gift) {
-  await axios.put(`${baseURL}/${id}`, newObject);
+  await axios.put(`${baseURL}/?id=${id}`, newObject);
 }
 
 /**
  *
- * @param id should be given the id that is wanted to be removed
+ * @param id should be given the id that is wanted to be deleted
  */
-export async function removeGift(id: string) {
-  await axios.delete(`${baseURL}/${id}`);
+export async function deleteGift(id: string) {
+  await axios.delete(`${baseURL}/?id=${id}`);
 }
