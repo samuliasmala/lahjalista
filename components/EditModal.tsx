@@ -9,7 +9,7 @@ import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 import { Button } from './Button';
-import { updateGift } from '~/utils/jsonServerFunctions';
+import { updateGift } from '~/utils/giftRequests';
 import { Input } from './Input';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';

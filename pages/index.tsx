@@ -5,7 +5,7 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
+import { createGift, getAllGifts } from '~/utils/giftRequests';
 
 const inter = Inter({ subsets: ['latin'] });
 
