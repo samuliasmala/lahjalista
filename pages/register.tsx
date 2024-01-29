@@ -53,10 +53,10 @@ export default function Login() {
                 <label>Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
-                  className="border border-black w-[19rem] "
+                  className="border border-black sm:w-auto min-w-[19rem]"
                   autoComplete="off"
                   type="text"
-                  placeholder="mattimeikalainen@email.com"
+                  placeholder="matti.meikalainen@email.com"
                   name="email"
                   spellCheck="false"
                 />
@@ -79,7 +79,7 @@ export default function Login() {
               </div>
               <Button>Luo käyttäjätunnus</Button>
             </form>
-            <p className="mt-6 text-xs text-gray-600">
+            <p className="mt-6 text-xs text-gray-600 select-none">
               Onko sinulla jo tunnus?{' '}
               <span
                 className="underline cursor-pointer select-none"
@@ -88,6 +88,11 @@ export default function Login() {
                 Kirjaudu sisään
               </span>
             </p>
+            <div className="flex mt-5">
+              <TitleText className="mt-0 p-3 border-4 border-red-600 align-middle ">
+                Älä käytä oikeita sähköposteja!
+              </TitleText>
+            </div>
           </div>
         </div>
       </div>

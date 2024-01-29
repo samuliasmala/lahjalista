@@ -29,7 +29,7 @@ export default function Login() {
                   className="border border-black w-[19rem] "
                   autoComplete="off"
                   type="text"
-                  placeholder="mattimeikalainen@email.com"
+                  placeholder="matti.meikalainen@email.com"
                   name="username"
                   spellCheck="false"
                 />
@@ -45,14 +45,14 @@ export default function Login() {
                 />
               </div>
               <div className="flex mt-3">
-                <label className="select-none">
+                <label className="select-none cursor-pointer">
                   <input type="checkbox" className="mr-2 cursor-pointer" />
                   Muista minut
                 </label>
               </div>
               <Button>Kirjaudu</Button>
             </form>
-            <p className="mt-6 text-xs text-gray-600">
+            <p className="mt-6 text-xs text-gray-600 select-none">
               Sinulla ei ole vielä tunnuksia?{' '}
               <span
                 className="underline cursor-pointer select-none hover:text-black"
