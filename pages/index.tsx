@@ -29,6 +29,9 @@ export default function Home() {
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
   useEffect(() => {
+    fetch('http://localhost:3000/api/psqlTests')
+      .then((value) => value.json().then((valueJSON) => console.log(valueJSON)))
+      .catch((e) => console.error(e));
     console.log('effect');
     async function fetchGifts() {
       const gifts = await getAllGifts();
