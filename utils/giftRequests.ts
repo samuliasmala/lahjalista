@@ -34,7 +34,7 @@ export async function createGift(newObject: Gift) {
  * @param newObject should be given parts of Gift object type that are wanted to be updated
  */
 export async function updateGift(id: string, newObject: Partial<Gift>) {
-  await axios.patch(`${baseURL}/${id}`, newObject);
+  await axios.patch(`${baseURL}/?id=${id}`, newObject);
 }
 
 /**
