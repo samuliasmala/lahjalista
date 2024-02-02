@@ -5,11 +5,8 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
-<<<<<<< HEAD
 import { deleteGift } from '~/utils/giftRequests';
-=======
 import { isAxiosError } from 'axios';
->>>>>>> main
 
 type DeleteModal = {
   gift: Gift;
@@ -23,15 +20,10 @@ export function DeleteModal({
   setIsModalOpen,
 }: DeleteModal) {
   async function handleDeletion() {
-<<<<<<< HEAD
-    await deleteGift(gift.id).catch((e) => {
-      if (e.response.status === 404) {
-=======
     try {
-      await removeGift(gift.id);
+      await deleteGift(gift.id);
     } catch (e) {
       if (isAxiosError(e) && e.response?.status === 404) {
->>>>>>> main
         console.error('Lahjaa ei löytynyt palvelimelta!');
       } else if (e instanceof Error) {
         console.error(e.message);
