@@ -25,8 +25,11 @@ export default async function handler(
       await handleDELETE(req, res);
       break;
     default:
-      console.log(req.method, 'default');
-      break;
+      return res
+        .status(400)
+        .send(
+          `${req.method} is not a valid method. Valid methods are: GET, POST, PATCH, PUT and DELETE!`,
+        );
   }
 }
 
