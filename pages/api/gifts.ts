@@ -4,6 +4,18 @@ import { Gift } from '..';
 
 const baseURL = 'http://localhost:3001/gifts';
 
+function catchError(res: NextApiResponse, e: unknown) {
+  if (isAxiosError(e) && e.response?.status === 404) {
+    return res
+      .status(e.response.status)
+      .send('Lahjaa ei löytynyt palvelimelta!');
+  } else if (e instanceof Error) {
+    return res.status(500).send('Odottamaton virhe tapahtui!');
+  } else {
+    return res.status(500).send('Odottamaton virhe tapahtui!');
+  }
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -69,14 +81,6 @@ async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
     const deleteRequest = await axios.delete(`${baseURL}/${queryId}`);
     return res.status(deleteRequest.status).json(req.body);
   } catch (e) {
-    if (isAxiosError(e) && e.response?.status === 404) {
-      return res
-        .status(e.response.status)
-        .send('Lahjaa ei löytynyt palvelimelta!');
-    } else if (e instanceof Error) {
-      return res.status(500).send('Odottamaton virhe tapahtui!');
-    } else {
-      return res.status(500).send('Odottamaton virhe tapahtui!');
-    }
+    return catchError(res, e);
   }
 }
