@@ -22,7 +22,7 @@ export async function getGift(id: string) {
 
 /**
  *
- * @param newObject a new object of a gift that will added to the server
+ * @param newObject a new object of a gift with type Gift that will added to the server
  */
 export async function createGift(newObject: Gift) {
   await axios.post(baseURL, newObject);
@@ -31,7 +31,7 @@ export async function createGift(newObject: Gift) {
 /**
  *
  * @param id should be given a string that contains the id of the gift that is wanted to be updated
- * @param newObject a new object of Gifts that will be replacing the old object
+ * @param newObject should be given parts of Gift object type that are wanted to be updated
  */
 export async function updateGift(id: string, newObject: Partial<Gift>) {
   await axios.patch(`${baseURL}/${id}`, newObject);
@@ -39,7 +39,7 @@ export async function updateGift(id: string, newObject: Partial<Gift>) {
 
 /**
  *
- * @param id should be given the id that is wanted to be deleted
+ * @param id should be given the id of the gift that is wanted to be deleted
  */
 export async function deleteGift(id: string) {
   await axios.delete(`${baseURL}/?id=${id}`);
