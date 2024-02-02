@@ -23,7 +23,6 @@ export function DeleteModal({
     try {
       await removeGift(gift.id);
     } catch (e) {
-      console.log(e);
       if (isAxiosError(e) && e.response?.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');
       } else if (e instanceof Error) {
