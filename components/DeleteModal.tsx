@@ -3,27 +3,35 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import { Button } from './Button';
-import { getGift, removeGift } from '~/utils/jsonServerFunctions';
+import { removeGift } from '~/utils/jsonServerFunctions';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
+import { isAxiosError } from 'axios';
 
-type ModalType = {
+type DeleteModal = {
   gift: Gift;
-  giftListRefreshFunction: () => void;
+  refreshGiftList: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export function DeleteModal({
   gift,
-  giftListRefreshFunction,
+  refreshGiftList,
   setIsModalOpen,
-}: ModalType) {
+}: DeleteModal) {
   async function handleDeletion() {
-    const giftToBeDeleted = await getGift(gift.id);
-    if (giftToBeDeleted !== null) {
+    try {
       await removeGift(gift.id);
+    } catch (e) {
+      if (isAxiosError(e) && e.response?.status === 404) {
+        console.error('Lahjaa ei löytynyt palvelimelta!');
+      } else if (e instanceof Error) {
+        console.error(e.message);
+      } else {
+        console.error(e);
+      }
     }
-    giftListRefreshFunction();
+    refreshGiftList();
     setIsModalOpen(false);
   }
 
@@ -38,7 +46,7 @@ export function DeleteModal({
       <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[66px] h-[66px]">
         <SvgCheckMarkIcon
           className="bg-gray-300 hover:bg-gray-600 group/checkMarkIcon"
-          backgroundClassName="fill-black group-hover/checkMarkIcon:fill-yellow-400"
+          circleClassName="fill-black group-hover/checkMarkIcon:fill-yellow-400"
           checkMarkClassName="fill-gray-300 group-hover/checkMarkIcon:fill-gray-600"
           width={64}
           height={64}
@@ -48,7 +56,7 @@ export function DeleteModal({
       <Button className="border border-yellow-500 relative mt-3 p-0 left-32 sm:left-28 row-start-3 row-end-3 col-start-1 col-end-1 w-[66px] h-[66px] ">
         <SvgDeclineIcon
           className="group/declineIcon bg-gray-300 hover:bg-gray-600"
-          backgroundClassName="fill-black group-hover/declineIcon:fill-yellow-400"
+          circleClassName="fill-black group-hover/declineIcon:fill-yellow-400"
           width={64}
           height={64}
           onClick={() => setIsModalOpen(false)}

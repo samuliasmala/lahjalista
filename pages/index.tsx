@@ -4,6 +4,7 @@ import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
+import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -22,8 +23,10 @@ export default function Home() {
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalGiftData, setModalGiftData] = useState<Gift>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
   useEffect(() => {
     console.log('effect');
@@ -84,20 +87,6 @@ export default function Home() {
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
-              <label htmlFor="giftName">Lahja</label>
-              <Input
-                onChange={(event) => setNewGiftName(event.target.value)}
-                autoComplete="off"
-                type="text"
-                placeholder="Kortti"
-                name="giftName"
-                value={newGiftName}
-              />
-              {giftNameError && (
-                <div className="text-red-500">Lahja on pakollinen</div>
-              )}
-            </div>
-            <div className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
@@ -111,6 +100,20 @@ export default function Home() {
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
             </div>
+            <div className="pt-4 grid">
+              <label htmlFor="giftName">Lahja</label>
+              <Input
+                onChange={(event) => setNewGiftName(event.target.value)}
+                autoComplete="off"
+                type="text"
+                placeholder="Kortti"
+                name="giftName"
+                value={newGiftName}
+              />
+              {giftNameError && (
+                <div className="text-red-500">Lahja on pakollinen</div>
+              )}
+            </div>
             <Button type="submit">Lisää</Button>
           </form>
         </div>
@@ -122,30 +125,55 @@ export default function Home() {
                 key={`${giftItem.id}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li
-                  key={giftItem.id}
-                  className="hover:line-through pointer-events-none"
-                >
+                <li key={giftItem.id}>
                   {giftItem.name} - {giftItem.gift}
                   <Button
+                    onMouseOver={(e) =>
+                      e.currentTarget.parentElement?.setAttribute(
+                        'class',
+                        'line-through',
+                      )
+                    }
+                    onMouseOut={(e) =>
+                      e.currentTarget.parentElement?.removeAttribute('class')
+                    }
                     key={`${giftItem.id}_deletebutton`}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
                     onClick={() => {
-                      setModalGiftData(giftItem);
-                      setIsModalOpen(true);
+                      setDeleteModalGiftData(giftItem);
+                      setIsDeleteModalOpen(true);
                     }}
                     type="button"
                   >
                     Poista
                   </Button>
+                  <Button
+                    key={`${giftItem.id}_editbutton`}
+                    className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
+                    onClick={() => {
+                      setEditModalGiftData(giftItem);
+                      setIsEditModalOpen(true);
+                    }}
+                    type="button"
+                  >
+                    Muokkaa
+                  </Button>
                 </li>
               </div>
             ))}
-            {isModalOpen && modalGiftData && (
+            {isEditModalOpen && editModalGiftData && (
+              <EditModal
+                gift={editModalGiftData}
+                refreshGiftList={() => void refreshGiftList()}
+                setIsModalOpen={setIsEditModalOpen}
+              />
+            )}
+
+            {isDeleteModalOpen && deleteModalGiftData && (
               <DeleteModal
-                gift={modalGiftData}
-                giftListRefreshFunction={() => void refreshGiftList()}
-                setIsModalOpen={setIsModalOpen}
+                gift={deleteModalGiftData}
+                refreshGiftList={() => void refreshGiftList()}
+                setIsModalOpen={setIsDeleteModalOpen}
               />
             )}
           </div>

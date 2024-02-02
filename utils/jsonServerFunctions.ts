@@ -39,8 +39,8 @@ export async function createGift(newObject: object) {
  * @param id should be given a string that contains search parameters as query strings.
  * @param newObject a new object of Gifts that will be replacing the old object
  */
-export async function updateGift(id: string, newObject: Gift) {
-  await axios.put(`${baseURL}/${id}`, newObject);
+export async function updateGift(id: string, newObject: Partial<Gift>) {
+  await axios.patch(`${baseURL}/${id}`, newObject);
 }
 
 /**
