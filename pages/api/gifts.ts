@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Gift } from '..';
 
@@ -64,7 +64,19 @@ async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
-  const queryId = req.query.id as string; // forcing string type for queryId does not seem the best way to pass ESLint error, would probably be better to get it from req.body
-  const deleteRequest = await axios.delete(`${baseURL}/${queryId}`);
-  return res.status(deleteRequest.status).json(req.body);
+  try {
+    const queryId = req.query.id as string; // forcing string type for queryId does not seem the best way to pass ESLint error, would probably be better to get it from req.body
+    const deleteRequest = await axios.delete(`${baseURL}/${queryId}`);
+    return res.status(deleteRequest.status).json(req.body);
+  } catch (e) {
+    if (isAxiosError(e) && e.response?.status === 404) {
+      return res
+        .status(e.response.status)
+        .send('Lahjaa ei löytynyt palvelimelta!');
+    } else if (e instanceof Error) {
+      return res.status(500).send('Odottamaton virhe tapahtui!');
+    } else {
+      return res.status(500).send('Odottamaton virhe tapahtui!');
+    }
+  }
 }
