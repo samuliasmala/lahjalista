@@ -15,6 +15,9 @@ export default async function handler(
     case 'POST':
       await handlePOST(req, res);
       break;
+    case 'PATCH':
+      await handlePATCH(req, res);
+      break;
     case 'PUT':
       await handlePUT(req, res);
       break;
@@ -43,6 +46,12 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
   const postRequest = await axios.post(baseURL, req.body);
   return res.status(postRequest.status).json(req.body);
+}
+
+async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
+  const queryId = req.query.id as string;
+  const patchRequest = await axios.patch(`${baseURL}/${queryId}`, req.body);
+  return res.status(patchRequest.status).json(req.body);
 }
 
 async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
