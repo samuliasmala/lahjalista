@@ -9,6 +9,8 @@ function catchError(res: NextApiResponse, e: unknown) {
     return res
       .status(e.response.status)
       .send('Lahjaa ei löytynyt palvelimelta!');
+  } else if (isAxiosError(e) && e.code === 'ECONNREFUSED') {
+    return res.status(500).send('Palvelin virhe!');
   } else if (e instanceof Error) {
     return res.status(500).send('Odottamaton virhe tapahtui!');
   } else {
@@ -46,24 +48,30 @@ export default async function handler(
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  if (req.query.id !== undefined) {
-    try {
+  // if req.query.id is not undefined only one gift is wanted to be returned
+  try {
+    if (req.query.id !== undefined) {
       const queryId = req.query.id as string;
       const giftRequest = await axios.get(
         `http://localhost:3001/gifts/${queryId}`,
       );
       return res.status(giftRequest.status).json(giftRequest.data as Gift);
-    } catch (e) {
-      return catchError(res, e);
     }
+    // else return all the gifts as an array
+    const gifts = await axios.get(baseURL);
+    return res.status(gifts.status).json(gifts.data as Gift[]);
+  } catch (e) {
+    return catchError(res, e);
   }
-  const gifts = await axios.get(baseURL);
-  return res.status(gifts.status).json(gifts.data);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const postRequest = await axios.post(baseURL, req.body);
-  return res.status(postRequest.status).json(req.body);
+  try {
+    const postRequest = await axios.post(baseURL, req.body);
+    return res.status(postRequest.status).json(req.body);
+  } catch (e) {
+    return catchError(res, e);
+  }
 }
 
 async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
