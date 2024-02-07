@@ -93,7 +93,6 @@ export default function Home() {
   }
 
   function errorFound(e: unknown) {
-    console.log(e);
     if (isAxiosError(e) && e.code === 'ERR_BAD_RESPONSE') {
       if (e.response !== undefined && typeof e.response.data === 'string') {
         setIsAnyKindOfError(true);
