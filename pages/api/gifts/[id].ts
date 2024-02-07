@@ -1,6 +1,12 @@
+import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+const baseURL = 'http://localhost:3001/gifts';
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     if (req.method !== 'GET') {
       return res
@@ -10,6 +16,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         );
     }
     console.log(req.query, '[id].ts');
+
+    const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
+    console.log(giftRequest);
+
     return res.status(200).send(req.query.id);
   } catch (e) {
     console.log('Error');
