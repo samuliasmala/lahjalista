@@ -6,7 +6,7 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
-import { isAxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +18,8 @@ export type Gift = {
 };
 
 export default function Home() {
+  const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
+  const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
@@ -91,12 +93,15 @@ export default function Home() {
   }
 
   function errorFound(e: unknown) {
-    if (isAxiosError(e)) {
-      console.error(e.response?.data);
+    if (isAxiosError(e) && e.code === 'ERR_BAD_RESPONSE') {
+      setIsAnyKindOfError(true);
+      setIsAnyKindOfErrorMessage(e.response?.data);
     } else if (e instanceof Error) {
-      console.error(e.message);
+      setIsAnyKindOfError(true);
+      setIsAnyKindOfErrorMessage(e.message);
     } else {
-      console.error(e);
+      setIsAnyKindOfError(true);
+      setIsAnyKindOfErrorMessage('Odottamaton virhe tapahtui!');
     }
   }
 
@@ -195,6 +200,17 @@ export default function Home() {
                 refreshGiftList={() => void refreshGiftList()}
                 setIsModalOpen={setIsDeleteModalOpen}
               />
+            )}
+
+            {isAnyKindOfError && (
+              <>
+                <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
+                  <div className="bg-red-600 text-center p-10 z-[99] w-full" />
+                  <span className="animate-bounce fixed z-[99] text-5xl">
+                    {isAnyKindOfErrorMessage}
+                  </span>
+                </div>
+              </>
             )}
           </div>
         </div>
