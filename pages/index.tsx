@@ -38,7 +38,7 @@ export default function Home() {
         errorFound(e);
       }
     }
-    fetchGifts();
+    fetchGifts().catch((e) => console.error(e));
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
