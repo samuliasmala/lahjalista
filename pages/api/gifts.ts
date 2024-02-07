@@ -22,39 +22,34 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  switch (req.method) {
-    case 'GET':
-      await handleGET(req, res);
-      break;
-    case 'POST':
-      await handlePOST(req, res);
-      break;
-    case 'PATCH':
-      await handlePATCH(req, res);
-      break;
-    case 'PUT':
-      await handlePUT(req, res);
-      break;
-    case 'DELETE':
-      await handleDELETE(req, res);
-      break;
-    default:
-      return res
-        .status(400)
-        .send(
-          `${req.method} is not a valid method. Valid methods are: GET, POST, PATCH, PUT and DELETE!`,
-        );
+  const HANDLERS: Record<
+    string,
+    (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+  > = {
+    GET: handleGET,
+    POST: handlePOST,
+    PATCH: handlePATCH,
+    PUT: handlePUT,
+    DELETE: handleDELETE,
+  } as const;
+  const reqHandler = req.method !== undefined && HANDLERS[req.method];
+  if (reqHandler) {
+    await reqHandler(req, res);
+  } else {
+    return res
+      .status(400)
+      .send(
+        `${req.method} is not a valid method. Valid methods are: GET, POST, PATCH, PUT and DELETE!`,
+      );
   }
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  // if req.query.id is not undefined only one gift is wanted to be returned
+  // if req.query.id is not undefined, only one gift is wanted to be returned
   try {
     if (req.query.id !== undefined) {
       const queryId = req.query.id as string;
-      const giftRequest = await axios.get(
-        `http://localhost:3001/gifts/${queryId}`,
-      );
+      const giftRequest = await axios.get(`${baseURL}/${queryId}`);
       return res.status(giftRequest.status).json(giftRequest.data as Gift);
     }
     // else return all the gifts as an array
