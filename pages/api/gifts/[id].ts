@@ -15,6 +15,8 @@ export default async function handler(
       GET: handleGET,
       POST: handlePOST,
       PATCH: handlePATCH,
+      PUT: handlePUT,
+      DELETE: handleDELETE,
     } as const;
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
@@ -46,16 +48,17 @@ export default async function handler(
       `${baseURL}/${req.query.id}`,
       req.body,
     );
-
-    async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
-      const putRequest = await axios.put(
-        `${baseURL}/${req.query.id}`,
-        req.body,
-      );
-      return res.status(putRequest.status).json(req.body);
-    }
-
     return res.status(patchRequest.status).json(req.body);
+  }
+
+  async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
+    const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
+    return res.status(putRequest.status).json(req.body);
+  }
+
+  async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
+    const deleteRequest = await axios.delete(`${baseURL}/${req.query.id}`);
+    return res.status(deleteRequest.status).json(req.body);
   }
 
   function errorFound(res: NextApiResponse, e: unknown) {
