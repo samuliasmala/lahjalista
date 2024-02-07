@@ -51,7 +51,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
 async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
   if (typeof req.query.id === 'string') {
     const patchRequest = await axios.patch(
-      `${baseURL}/${req.query.id as string}`,
+      `${baseURL}/${req.query.id}`,
       req.body,
     );
     return res.status(patchRequest.status).json(req.body);
@@ -60,8 +60,11 @@ async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
-  const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
-  return res.status(putRequest.status).json(req.body);
+  if (typeof req.query.id === 'string') {
+    const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
+    return res.status(putRequest.status).json(req.body);
+  }
+  throw new Error('Invalid ID', { cause: 'idError' });
 }
 
 async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
