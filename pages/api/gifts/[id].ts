@@ -40,7 +40,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
     throw new Error('Invalid ID', { cause: 'idError' });
   }
   const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
-  return res.status(giftRequest.status).send(giftRequest.data as Gift[]);
+  return res.status(giftRequest.status).send(giftRequest.data as Gift);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
