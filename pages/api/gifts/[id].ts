@@ -13,6 +13,7 @@ export default async function handler(
       (req: NextApiRequest, res: NextApiResponse) => Promise<void>
     > = {
       GET: handleGET,
+      POST: handlePOST,
     } as const;
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
@@ -32,6 +33,11 @@ export default async function handler(
   async function handleGET(req: NextApiRequest, res: NextApiResponse) {
     const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
     return res.status(giftRequest.status).send(giftRequest.data);
+  }
+
+  async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+    const postRequest = await axios.post(baseURL, req.body);
+    return res.status(postRequest.status).json(req.body);
   }
 
   function errorFound(res: NextApiResponse, e: unknown) {
