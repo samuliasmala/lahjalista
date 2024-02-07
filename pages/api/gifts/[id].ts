@@ -15,13 +15,12 @@ export default async function handler(
           `${req.method} is not a valid method. Only GET requests are valid!`,
         );
     }
-    console.log(req.query, '[id].ts');
 
     const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
-    console.log(giftRequest);
 
-    return res.status(200).send(req.query.id);
+    return res.status(giftRequest.status).send(giftRequest.data);
   } catch (e) {
     console.log('Error');
+    return res.status(404).send('Was not found');
   }
 }
