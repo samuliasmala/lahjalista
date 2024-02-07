@@ -6,7 +6,7 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
-import { AxiosError, isAxiosError } from 'axios';
+import { isAxiosError } from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -93,9 +93,18 @@ export default function Home() {
   }
 
   function errorFound(e: unknown) {
+    console.log(e);
     if (isAxiosError(e) && e.code === 'ERR_BAD_RESPONSE') {
+      if (e.response !== undefined && typeof e.response.data === 'string') {
+        setIsAnyKindOfError(true);
+        setIsAnyKindOfErrorMessage(e.response.data);
+      } else {
+        setIsAnyKindOfError(true);
+        setIsAnyKindOfErrorMessage('Palvelin virhe!');
+      }
+    } else if (isAxiosError(e)) {
       setIsAnyKindOfError(true);
-      setIsAnyKindOfErrorMessage(e.response?.data);
+      setIsAnyKindOfErrorMessage(e.message);
     } else if (e instanceof Error) {
       setIsAnyKindOfError(true);
       setIsAnyKindOfErrorMessage(e.message);
