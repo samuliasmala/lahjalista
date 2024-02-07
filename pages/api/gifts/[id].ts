@@ -14,6 +14,7 @@ export default async function handler(
     > = {
       GET: handleGET,
       POST: handlePOST,
+      PATCH: handlePATCH,
     } as const;
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
@@ -38,6 +39,14 @@ export default async function handler(
   async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
     const postRequest = await axios.post(baseURL, req.body);
     return res.status(postRequest.status).json(req.body);
+  }
+
+  async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
+    const patchRequest = await axios.patch(
+      `${baseURL}/${req.query.id}`,
+      req.body,
+    );
+    return res.status(patchRequest.status).json(req.body);
   }
 
   function errorFound(res: NextApiResponse, e: unknown) {
