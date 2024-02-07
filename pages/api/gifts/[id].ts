@@ -46,6 +46,15 @@ export default async function handler(
       `${baseURL}/${req.query.id}`,
       req.body,
     );
+
+    async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
+      const putRequest = await axios.put(
+        `${baseURL}/${req.query.id}`,
+        req.body,
+      );
+      return res.status(putRequest.status).json(req.body);
+    }
+
     return res.status(patchRequest.status).json(req.body);
   }
 
