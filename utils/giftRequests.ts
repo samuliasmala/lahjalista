@@ -17,7 +17,7 @@ export async function getAllGifts() {
  * @returns an object of a gift if it was found. Else it will return null
  */
 export async function getGift(id: string) {
-  return (await axios.get(`${baseURL}/?id=${id}`)).data as Gift;
+  return (await axios.get(`${baseURL}/${id}`)).data as Gift;
 }
 
 /**
