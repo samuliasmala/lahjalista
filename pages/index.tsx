@@ -6,6 +6,7 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
+import { isAxiosError } from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,53 +32,73 @@ export default function Home() {
   useEffect(() => {
     console.log('effect');
     async function fetchGifts() {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
+      try {
+        const gifts = await getAllGifts();
+        setGiftData(gifts);
+      } catch (e) {
+        errorFound(e);
+      }
     }
-    fetchGifts().catch((e) => {
-      console.error(e);
-    });
+    fetchGifts();
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
-    e.preventDefault();
-    setGiftNameError(false);
-    setReceiverError(false);
-    // this variable is used for checking both inputs
-    // could use return statement instead of errorFound, but it would not give an error message to all invalid inputs. Only the first invalid input.
-    let errorFound = false;
+    try {
+      e.preventDefault();
+      setGiftNameError(false);
+      setReceiverError(false);
+      // this variable is used for checking both inputs
+      // could use return statement instead of errorFound, but it would not give an error message to all invalid inputs. Only the first invalid input.
+      let errorFound = false;
 
-    if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
-      setGiftNameError(true);
-      errorFound = true;
+      if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
+        setGiftNameError(true);
+        errorFound = true;
+      }
+      if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
+        setReceiverError(true);
+        errorFound = true;
+      }
+      if (errorFound) {
+        return;
+      }
+
+      const generatedUUID = crypto.randomUUID();
+      const newGift: Gift = {
+        name: newReceiver,
+        gift: newGiftName,
+        id: generatedUUID,
+        createdDate: new Date().getTime(),
+      };
+
+      const currentGiftList = await getAllGifts();
+      const updatedGiftList = currentGiftList.concat(newGift);
+
+      await createGift(newGift);
+      setGiftData(updatedGiftList);
+      setNewGiftName('');
+      setNewReceiver('');
+    } catch (e) {
+      errorFound(e);
     }
-    if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
-      setReceiverError(true);
-      errorFound = true;
-    }
-    if (errorFound) {
-      return;
-    }
-
-    const generatedUUID = crypto.randomUUID();
-    const newGift: Gift = {
-      name: newReceiver,
-      gift: newGiftName,
-      id: generatedUUID,
-      createdDate: new Date().getTime(),
-    };
-
-    const currentGiftList = await getAllGifts();
-    const updatedGiftList = currentGiftList.concat(newGift);
-
-    await createGift(newGift);
-    setGiftData(updatedGiftList);
-    setNewGiftName('');
-    setNewReceiver('');
   }
 
   async function refreshGiftList() {
-    setGiftData(await getAllGifts());
+    try {
+      setGiftData(await getAllGifts());
+    } catch (e) {
+      errorFound(e);
+    }
+  }
+
+  function errorFound(e: unknown) {
+    if (isAxiosError(e)) {
+      console.error(e.response?.data);
+    } else if (e instanceof Error) {
+      console.error(e.message);
+    } else {
+      console.error(e);
+    }
   }
 
   return (
