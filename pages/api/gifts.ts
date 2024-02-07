@@ -37,7 +37,7 @@ export default async function handler(
     await reqHandler(req, res);
   } else {
     return res
-      .status(400)
+      .status(405)
       .send(
         `${req.method} is not a valid method. Valid methods are: GET, POST, PATCH, PUT and DELETE!`,
       );
