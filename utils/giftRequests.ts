@@ -8,7 +8,7 @@ const baseURL = '/api/gifts';
  * @returns an array that contains all the gifts as objects
  */
 export async function getAllGifts() {
-  return (await axios.get(baseURL)).data;
+  return (await axios.get(baseURL)).data as Gift[];
 }
 
 /**
@@ -17,7 +17,7 @@ export async function getAllGifts() {
  * @returns an object of a gift if it was found. Else it will return null
  */
 export async function getGift(id: string) {
-  return await axios.get(`${baseURL}/?id=${id}`);
+  return (await axios.get(`${baseURL}/?id=${id}`)).data as Gift;
 }
 
 /**
