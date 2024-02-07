@@ -36,11 +36,11 @@ export default async function handler(
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id === 'string') {
-    const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
-    return res.status(giftRequest.status).send(giftRequest.data as Gift[]);
+  if (typeof req.query.id !== 'string') {
+    throw new Error('Invalid ID', { cause: 'idError' });
   }
-  throw new Error('Invalid ID', { cause: 'idError' });
+  const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
+  return res.status(giftRequest.status).send(giftRequest.data as Gift[]);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
@@ -49,30 +49,30 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id === 'string') {
-    const patchRequest = await axios.patch(
-      `${baseURL}/${req.query.id}`,
-      req.body,
-    );
-    return res.status(patchRequest.status).json(req.body);
+  if (typeof req.query.id !== 'string') {
+    throw new Error('Invalid ID', { cause: 'idError' });
   }
-  throw new Error('Invalid ID', { cause: 'idError' });
+  const patchRequest = await axios.patch(
+    `${baseURL}/${req.query.id}`,
+    req.body,
+  );
+  return res.status(patchRequest.status).json(req.body);
 }
 
 async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id === 'string') {
-    const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
-    return res.status(putRequest.status).json(req.body);
+  if (typeof req.query.id !== 'string') {
+    throw new Error('Invalid ID', { cause: 'idError' });
   }
-  throw new Error('Invalid ID', { cause: 'idError' });
+  const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
+  return res.status(putRequest.status).json(req.body);
 }
 
 async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id === 'string') {
-    const deleteRequest = await axios.delete(`${baseURL}/${req.query.id}`);
-    return res.status(deleteRequest.status).json(req.body);
+  if (typeof req.query.id !== 'string') {
+    throw new Error('Invalid ID', { cause: 'idError' });
   }
-  throw new Error('Invalid ID', { cause: 'idError' });
+  const deleteRequest = await axios.delete(`${baseURL}/${req.query.id}`);
+  return res.status(deleteRequest.status).json(req.body);
 }
 
 function errorFound(res: NextApiResponse, e: unknown) {
@@ -84,6 +84,7 @@ function errorFound(res: NextApiResponse, e: unknown) {
     return res.status(500).send('Palvelin virhe!');
   } else if (e instanceof Error) {
     if (e.cause === 'idError') return res.status(400).send('Virheellinen ID!');
+
     return res.status(500).send('Odottamaton virhe tapahtui!');
   } else {
     return res.status(500).send('Odottamaton virhe tapahtui!');
