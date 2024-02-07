@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Gift } from '..';
+import { Gift } from '../..';
 
 const baseURL = 'http://localhost:3001/gifts';
 
