@@ -25,7 +25,7 @@ export async function getGift(id: string) {
  * @param newObject a new object of a gift with type Gift that will added to the server
  */
 export async function createGift(newObject: Gift) {
-  await axios.post(`${baseURL}/${newObject.id}`, newObject);
+  await axios.post(`${baseURL}/`, newObject);
 }
 
 /**
