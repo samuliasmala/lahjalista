@@ -9,7 +9,6 @@ const HANDLERS: Record<
   (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 > = {
   GET: handleGET,
-  POST: handlePOST,
   PATCH: handlePATCH,
   PUT: handlePUT,
   DELETE: handleDELETE,
@@ -27,7 +26,7 @@ export default async function handler(
       return res
         .status(405)
         .send(
-          `${req.method} is not a valid method. Only GET requests are valid!`,
+          `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
         );
     }
   } catch (e) {
@@ -41,11 +40,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   }
   const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
   return res.status(giftRequest.status).send(giftRequest.data as Gift);
-}
-
-async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const postRequest = await axios.post(baseURL, req.body);
-  return res.status(postRequest.status).json(req.body);
 }
 
 async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
@@ -75,7 +69,7 @@ async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
   return res.status(deleteRequest.status).json(req.body);
 }
 
-function errorFound(res: NextApiResponse, e: unknown) {
+export function errorFound(res: NextApiResponse, e: unknown) {
   if (isAxiosError(e) && e.response?.status === 404) {
     return res
       .status(e.response.status)
