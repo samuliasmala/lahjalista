@@ -1,6 +1,7 @@
 import axios, { isAxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Gift } from '../..';
+import { errorFound } from './[id]';
 
 const baseURL = 'http://localhost:3001/gifts';
 
@@ -9,6 +10,7 @@ const HANDLERS: Record<
   (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 > = {
   GET: handleGET,
+  POST: handlePOST,
 } as const;
 
 export default async function handler(
@@ -22,7 +24,9 @@ export default async function handler(
     } else {
       return res
         .status(405)
-        .send(`${req.method} is not a valid method. Valid method is: GET`);
+        .send(
+          `${req.method} is not a valid method. Valid methods are: GET and POST`,
+        );
     }
   } catch (e) {
     return errorFound(res, e);
@@ -31,19 +35,10 @@ export default async function handler(
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   const giftRequest = await axios.get(`${baseURL}`);
-  return res.status(giftRequest.status).json(giftRequest.data as Gift);
+  return res.status(giftRequest.status).json(giftRequest.data as Gift[]);
 }
 
-function errorFound(res: NextApiResponse, e: unknown) {
-  if (isAxiosError(e) && e.response?.status === 404) {
-    return res
-      .status(e.response.status)
-      .send('Lahjaa ei löytynyt palvelimelta!');
-  } else if (isAxiosError(e) && e.code === 'ECONNREFUSED') {
-    return res.status(500).send('Palvelin virhe!');
-  } else if (e instanceof Error) {
-    return res.status(500).send('Odottamaton virhe tapahtui!');
-  } else {
-    return res.status(500).send('Odottamaton virhe tapahtui!');
-  }
+async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+  const postRequest = await axios.post(baseURL, req.body);
+  return res.status(postRequest.status).json(req.body);
 }
