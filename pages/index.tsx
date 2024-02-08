@@ -6,6 +6,7 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
+import axios from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,11 +30,14 @@ export default function Home() {
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/psqlTests')
-      .then((value) => value.json().then((valueJSON) => console.log(valueJSON)))
-      .catch((e) => console.error(e));
     console.log('effect');
     async function fetchGifts() {
+      try {
+        const psqlFetch = await axios('http://localhost:3000/api/psqlTests');
+        console.log(psqlFetch);
+      } catch (e) {
+        console.error(e);
+      }
       const gifts = await getAllGifts();
       setGiftData(gifts);
     }
