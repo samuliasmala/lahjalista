@@ -9,10 +9,11 @@ import { Gift } from '~/pages';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 import { Button } from './Button';
-import { updateGift } from '~/utils/jsonServerFunctions';
+import { updateGift } from '~/utils/giftRequests';
 import { Input } from './Input';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
+import { isAxiosError } from 'axios';
 
 type EditModal = {
   gift: Gift;
@@ -25,18 +26,12 @@ export function EditModal({
   refreshGiftList,
   setIsModalOpen,
 }: EditModal) {
-  const [giftReceiver, setGiftReceiver] = useState('');
-  const [giftName, setGiftName] = useState('');
-
-  useEffect(() => {
-    setGiftName(gift.gift);
-    setGiftReceiver(gift.name);
-  }, [gift]);
+  const [giftReceiver, setGiftReceiver] = useState(gift.name);
+  const [giftName, setGiftName] = useState(gift.gift);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        refreshGiftList();
         setIsModalOpen(false);
       }
     }
@@ -48,14 +43,17 @@ export function EditModal({
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
-
-    const newGift = gift;
-    newGift.name = giftReceiver;
-    newGift.gift = giftName;
-    await updateGift(gift.id, newGift).catch(() => {
-      refreshGiftList();
-      setIsModalOpen(false);
-    });
+    try {
+      await updateGift(gift.id, { name: giftReceiver, gift: giftName });
+    } catch (e) {
+      if (isAxiosError(e) && e.response?.status === 404) {
+        console.error('Lahjaa ei löytynyt palvelimelta!');
+      } else if (e instanceof Error) {
+        console.error(e.message);
+      } else {
+        console.error(e);
+      }
+    }
     refreshGiftList();
     setIsModalOpen(false);
   }

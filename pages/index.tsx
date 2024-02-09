@@ -5,8 +5,8 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/jsonServerFunctions';
-import axios from 'axios';
+import { createGift, getAllGifts } from '~/utils/giftRequests';
+import axios, { isAxiosError } from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,11 +14,12 @@ export type Gift = {
   name: string;
   gift: string;
   id: string;
-  localStorageKeyID?: string;
   createdDate: number;
 };
 
 export default function Home() {
+  const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
+  const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
@@ -33,54 +34,85 @@ export default function Home() {
     console.log('effect');
     async function fetchGifts() {
       console.log((await axios.get('http://localhost:3000/api/prisma/')).data);
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
+      try {
+        const gifts = await getAllGifts();
+        setGiftData(gifts);
+      } catch (e) {
+        errorFound(e);
+      }
     }
-    fetchGifts().catch((e) => {
-      console.error(e);
-    });
+    void fetchGifts();
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
-    e.preventDefault();
-    setGiftNameError(false);
-    setReceiverError(false);
-    // this variable is used for checking both inputs
-    // could use return statement instead of errorFound, but it would not give an error message to all invalid inputs. Only the first invalid input.
-    let errorFound = false;
+    try {
+      e.preventDefault();
+      setGiftNameError(false);
+      setReceiverError(false);
+      // this variable is used for checking both inputs
+      // could use return statement instead of errorFound, but it would not give an error message to all invalid inputs. Only the first invalid input.
+      let errorFound = false;
 
-    if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
-      setGiftNameError(true);
-      errorFound = true;
+      if (typeof newGiftName !== 'string' || newGiftName.length === 0) {
+        setGiftNameError(true);
+        errorFound = true;
+      }
+      if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
+        setReceiverError(true);
+        errorFound = true;
+      }
+      if (errorFound) {
+        return;
+      }
+
+      const generatedUUID = crypto.randomUUID();
+      const newGift: Gift = {
+        name: newReceiver,
+        gift: newGiftName,
+        id: generatedUUID,
+        createdDate: new Date().getTime(),
+      };
+
+      const currentGiftList = await getAllGifts();
+      const updatedGiftList = currentGiftList.concat(newGift);
+
+      axios.post('http://localhost:3000/api/prisma/', newGift);
+      await createGift(newGift);
+      setGiftData(updatedGiftList);
+      setNewGiftName('');
+      setNewReceiver('');
+    } catch (e) {
+      errorFound(e);
     }
-    if (typeof newReceiver !== 'string' || newReceiver.length === 0) {
-      setReceiverError(true);
-      errorFound = true;
-    }
-    if (errorFound) {
-      return;
-    }
-
-    const generatedUUID = crypto.randomUUID();
-    const newGift: Gift = {
-      name: newReceiver,
-      gift: newGiftName,
-      id: generatedUUID,
-      createdDate: new Date().getTime(),
-    };
-
-    axios.post('http://localhost:3000/api/prisma/', newGift);
-    const currentGiftList = await getAllGifts();
-    const updatedGiftList = currentGiftList.concat(newGift);
-
-    await createGift(newGift);
-    setGiftData(updatedGiftList);
-    setNewGiftName('');
-    setNewReceiver('');
   }
 
   async function refreshGiftList() {
-    setGiftData(await getAllGifts());
+    try {
+      setGiftData(await getAllGifts());
+    } catch (e) {
+      errorFound(e);
+    }
+  }
+
+  function errorFound(e: unknown) {
+    if (isAxiosError(e) && e.code === 'ERR_BAD_RESPONSE') {
+      if (e.response !== undefined && typeof e.response.data === 'string') {
+        setIsAnyKindOfError(true);
+        setIsAnyKindOfErrorMessage(e.response.data);
+      } else {
+        setIsAnyKindOfError(true);
+        setIsAnyKindOfErrorMessage('Palvelin virhe!');
+      }
+    } else if (isAxiosError(e)) {
+      setIsAnyKindOfError(true);
+      setIsAnyKindOfErrorMessage(e.message);
+    } else if (e instanceof Error) {
+      setIsAnyKindOfError(true);
+      setIsAnyKindOfErrorMessage(e.message);
+    } else {
+      setIsAnyKindOfError(true);
+      setIsAnyKindOfErrorMessage('Odottamaton virhe tapahtui!');
+    }
   }
 
   return (
@@ -178,6 +210,17 @@ export default function Home() {
                 refreshGiftList={() => void refreshGiftList()}
                 setIsModalOpen={setIsDeleteModalOpen}
               />
+            )}
+
+            {isAnyKindOfError && (
+              <>
+                <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
+                  <div className="bg-red-600 text-center p-10 z-[99] w-full" />
+                  <span className="animate-bounce fixed z-[99] text-5xl">
+                    {isAnyKindOfErrorMessage}
+                  </span>
+                </div>
+              </>
             )}
           </div>
         </div>
