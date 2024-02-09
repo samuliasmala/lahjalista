@@ -4,12 +4,45 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
 
-export default async function handleSomething(
+const HANDLER: Record<
+  string,
+  (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+> = {
+  GET: handleGET,
+  POST: handlePOST,
+};
+
+export default async function handlePrisma(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
-    console.log(req.method);
+  const reqHandler = req.method !== undefined && HANDLER[req.method];
+  if (reqHandler) {
+    await reqHandler(req, res);
+  } else {
+    return res
+      .status(405)
+      .send(
+        `${req.method} is not a valid method. Only GET and POST requests are valid!`,
+      );
+  }
+}
+
+async function handleGET(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const gifts = await prisma.gift.findMany();
+    //console.log(gifts);
+    return res.status(200).json(gifts);
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).send('Palvelin virhe!');
+    }
+    return res.status(500).send('Odottamaton virhe tapahtui!');
+  }
+}
+
+async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+  try {
     const giftData = req.body;
     console.log(giftData);
     const giftDataID = Math.floor(Math.random() * 10000000);
@@ -18,22 +51,13 @@ export default async function handleSomething(
       data: {
         gift: giftData.gift,
         receiver: giftData.name,
-        id: giftDataID,
-        createdAt: new Date(),
       },
     });
     console.log(gift);
-  }
-  if (req.method === 'GET') {
-    try {
-      const gifts = await prisma.gift.findMany();
-      console.log(gifts);
-      return res.status(200).json(gifts);
-    } catch (e) {
-      if (e instanceof Error) {
-        return res.status(500).send('Palvelin virhe!');
-      }
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).send('Palvelin virhe!');
     }
+    return res.status(500).send('Odottamaton virhe tapahtui!');
   }
-  return res.status(200).send('Worked');
 }
