@@ -40,7 +40,7 @@ export default function Home() {
         errorFound(e);
       }
     }
-    fetchGifts().catch((e) => console.error(e));
+    void fetchGifts();
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
