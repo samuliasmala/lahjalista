@@ -32,14 +32,6 @@ export default function Home() {
   useEffect(() => {
     console.log('effect');
     async function fetchGifts() {
-      /*
-      try {
-        const psqlFetch = await axios('http://localhost:3000/api/psqlTests');
-        console.log(psqlFetch);
-      } catch (e) {
-        console.error(e);
-      }
-      */
       console.log((await axios.get('http://localhost:3000/api/prisma/')).data);
       const gifts = await getAllGifts();
       setGiftData(gifts);
