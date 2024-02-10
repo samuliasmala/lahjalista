@@ -1,44 +1,63 @@
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { PrismaClient } from '@prisma/client';
 import { Gift } from '../..';
-import { errorFound } from './[id]';
 
-const baseURL = 'http://localhost:3001/gifts';
+const prisma = new PrismaClient();
 
-const HANDLERS: Record<
+const HANDLER: Record<
   string,
   (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 > = {
   GET: handleGET,
   POST: handlePOST,
-} as const;
+};
 
-export default async function handler(
+export default async function handlePrisma(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  try {
-    const reqHandler = req.method !== undefined && HANDLERS[req.method];
-    if (reqHandler) {
-      await reqHandler(req, res);
-    } else {
-      return res
-        .status(405)
-        .send(
-          `${req.method} is not a valid method. Valid methods are: GET and POST`,
-        );
-    }
-  } catch (e) {
-    return errorFound(res, e);
+  const reqHandler = req.method !== undefined && HANDLER[req.method];
+  if (reqHandler) {
+    await reqHandler(req, res);
+  } else {
+    return res
+      .status(405)
+      .send(
+        `${req.method} is not a valid method. Only GET and POST requests are valid!`,
+      );
   }
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  const giftRequest = await axios.get(`${baseURL}`);
-  return res.status(giftRequest.status).json(giftRequest.data as Gift[]);
+  try {
+    const gifts = await prisma.gift.findMany();
+    //console.log(gifts);
+    return res.status(200).json(gifts);
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).send('Palvelin virhe!');
+    }
+    return res.status(500).send('Odottamaton virhe tapahtui!');
+  }
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const postRequest = await axios.post(baseURL, req.body);
-  return res.status(postRequest.status).json(req.body);
+  try {
+    const giftData = req.body;
+    console.log(giftData);
+    const giftDataID = Math.floor(Math.random() * 10000000);
+    console.log(giftDataID);
+    const gift = await prisma.gift.create({
+      data: {
+        gift: giftData.gift,
+        receiver: giftData.name,
+      },
+    });
+    console.log(gift);
+  } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).send('Palvelin virhe!');
+    }
+    return res.status(500).send('Odottamaton virhe tapahtui!');
+  }
 }
