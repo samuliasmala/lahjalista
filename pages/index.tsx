@@ -33,7 +33,6 @@ export default function Home() {
   useEffect(() => {
     console.log('effect');
     async function fetchGifts() {
-      console.log((await axios.get('http://localhost:3000/api/prisma/')).data);
       try {
         const gifts = await getAllGifts();
         setGiftData(gifts);
@@ -76,7 +75,6 @@ export default function Home() {
       const currentGiftList = await getAllGifts();
       const updatedGiftList = currentGiftList.concat(newGift);
 
-      axios.post('http://localhost:3000/api/prisma/', newGift);
       await createGift(newGift);
       setGiftData(updatedGiftList);
       setNewGiftName('');
