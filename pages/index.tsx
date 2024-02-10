@@ -5,7 +5,7 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/giftRequests';
+import { createGift, getAllGifts, getGift } from '~/utils/giftRequests';
 import axios, { isAxiosError } from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -13,8 +13,9 @@ const inter = Inter({ subsets: ['latin'] });
 export type Gift = {
   receiver: string;
   gift: string;
-  id: string;
-  createdDate: number;
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export default function Home() {
@@ -68,8 +69,6 @@ export default function Home() {
       const newGift: Gift = {
         receiver: newReceiver,
         gift: newGiftName,
-        id: generatedUUID,
-        createdDate: new Date().getTime(),
       };
 
       const currentGiftList = await getAllGifts();
