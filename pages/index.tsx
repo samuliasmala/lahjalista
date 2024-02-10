@@ -11,7 +11,7 @@ import axios, { isAxiosError } from 'axios';
 const inter = Inter({ subsets: ['latin'] });
 
 export type Gift = {
-  name: string;
+  receiver: string;
   gift: string;
   id: string;
   createdDate: number;
@@ -66,7 +66,7 @@ export default function Home() {
 
       const generatedUUID = crypto.randomUUID();
       const newGift: Gift = {
-        name: newReceiver,
+        receiver: newReceiver,
         gift: newGiftName,
         id: generatedUUID,
         createdDate: new Date().getTime(),
@@ -159,7 +159,7 @@ export default function Home() {
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
                 <li key={giftItem.id}>
-                  {giftItem.name} - {giftItem.gift}
+                  {giftItem.receiver} - {giftItem.gift}
                   <Button
                     onMouseOver={(e) =>
                       e.currentTarget.parentElement?.setAttribute(

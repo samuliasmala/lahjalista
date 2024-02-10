@@ -41,7 +41,7 @@ export function DeleteModal({
         Deleting:
       </TitleText>
       <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
-        {gift.name} - {gift.gift}
+        {gift.receiver} - {gift.gift}
       </p>
       <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[66px] h-[66px]">
         <SvgCheckMarkIcon
