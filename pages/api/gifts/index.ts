@@ -39,6 +39,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const postRequest = await axios.post(baseURL, req.body);
-  return res.status(postRequest.status).json(req.body);
+  const requestBody = { ...req.body } as Gift;
+  requestBody.id = crypto.randomUUID();
+  const postRequest = await axios.post(baseURL, requestBody);
+  return res.status(postRequest.status).json(requestBody);
 }
