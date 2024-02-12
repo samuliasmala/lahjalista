@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Gift } from '../..';
 import { NextApiRequest, NextApiResponse } from 'next';
+//import { globalPrismaClient } from '~/lib/prismaClient';
 
 const prisma = new PrismaClient();
 
@@ -11,6 +12,7 @@ const HANDLER: Record<
   GET: handleGET,
   PATCH: handlePATCH,
   PUT: handlePUT,
+  DELETE: handleDELETE,
 };
 
 export default async function handlePrisma(
@@ -31,18 +33,17 @@ export default async function handlePrisma(
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   try {
-    let queryID: number;
-    if (typeof req.query.id !== 'string') {
-      throw new Error('Invalid ID', { cause: 'idError' });
+    const queryID = isQueryIdNumber(req.query.id);
+    if (queryID === undefined) {
+      throw new Error(`Invalid ID: ${queryID}`, { cause: 'idError' });
     }
-    queryID = Number(req.query.id);
-    const gifts = await prisma.gift.findFirstOrThrow({
+
+    const gift = await prisma.gift.findFirstOrThrow({
       where: {
         id: queryID,
       },
     });
-    console.log(gifts);
-    return res.status(200).json(gifts);
+    return res.status(200).json(gift);
   } catch (e) {
     return errorFound(res, e);
   }
@@ -64,7 +65,20 @@ async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
 
 async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
   try {
+    const queryID = isQueryIdNumber(req.query.id);
+    if (queryID === undefined) {
+      throw new Error(`Invalid ID: ${queryID}`, { cause: 'idError' });
+    }
+
+    await prisma.gift.delete({
+      where: {
+        id: queryID,
+      },
+    });
+
+    return res.status(200).send('Poistettu onnistuneesti!');
   } catch (e) {
+    console.log(e);
     return errorFound(res, e);
   }
 }
@@ -76,4 +90,17 @@ function errorFound(res: NextApiResponse, e: unknown) {
   }
 
   return res.status(500).send('Odottamaton virhe tapahtui!');
+}
+
+function isQueryIdNumber(
+  reqQueryId: string | string[] | undefined,
+): number | undefined {
+  if (typeof reqQueryId !== 'string') {
+    return undefined;
+  }
+  const compiledNumber = Number(reqQueryId);
+  if (Number.isNaN(compiledNumber) === true) {
+    return undefined;
+  }
+  return compiledNumber;
 }
