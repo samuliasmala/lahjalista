@@ -1,8 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { Gift } from '../..';
+import { PrismaClient } from '@prisma/client';
+//import { prisma } from '~/lib/prismaClient';
 
 const prisma = new PrismaClient();
+
+type CustomErrorMessages = 'prismaConnectionFailed' | 'prismaFail';
 
 const HANDLER: Record<
   string,
@@ -19,6 +22,7 @@ export default async function handlePrisma(
   const reqHandler = req.method !== undefined && HANDLER[req.method];
   if (reqHandler) {
     await reqHandler(req, res);
+    closePrismaConnection();
   } else {
     return res
       .status(405)
@@ -43,21 +47,31 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const giftData = req.body;
+    const giftData: Gift = req.body;
     console.log(giftData);
-    const giftDataID = Math.floor(Math.random() * 10000000);
-    console.log(giftDataID);
     const gift = await prisma.gift.create({
       data: {
         gift: giftData.gift,
-        receiver: giftData.name,
+        receiver: giftData.receiver,
       },
     });
     console.log(gift);
+    return res.status(200).send('Lahja lisätty onnistuneesti!');
   } catch (e) {
     if (e instanceof Error) {
+      console.log(e);
       return res.status(500).send('Palvelin virhe!');
     }
     return res.status(500).send('Odottamaton virhe tapahtui!');
+  }
+}
+
+async function closePrismaConnection() {
+  try {
+    await prisma.$disconnect();
+  } catch (e) {
+    throw new Error('Failed to close Prisma connection', {
+      cause: 'prismaDisconnectionFailed',
+    });
   }
 }
