@@ -64,11 +64,10 @@ export default function Home() {
         return;
       }
 
-      const generatedUUID = crypto.randomUUID();
       const newGift: Gift = {
         name: newReceiver,
         gift: newGiftName,
-        id: generatedUUID,
+        id: '',
         createdDate: new Date().getTime(),
       };
 
