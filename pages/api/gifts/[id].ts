@@ -49,17 +49,19 @@ async function handleGET({ res, queryId }: HandlerParams) {
 
 async function handlePATCH({ req, res, queryId }: HandlerParams) {
   const patchRequest = await axios.patch(`${baseURL}/${queryId}`, req.body);
-  return res.status(patchRequest.status).json(req.body);
+  return res.status(patchRequest.status).json(patchRequest.data as Gift);
 }
 
 async function handlePUT({ req, res, queryId }: HandlerParams) {
   const putRequest = await axios.put(`${baseURL}/${queryId}`, req.body);
-  return res.status(putRequest.status).json(req.body);
+  return res.status(putRequest.status).json(putRequest.data as Gift);
 }
 
-async function handleDELETE({ req, res, queryId }: HandlerParams) {
+async function handleDELETE({ res, queryId }: HandlerParams) {
   const deleteRequest = await axios.delete(`${baseURL}/${queryId}`);
-  return res.status(deleteRequest.status).json(req.body);
+  return res
+    .status(deleteRequest.status)
+    .send('Lahja poistettu onnistuneesti!');
 }
 
 export function errorFound(res: NextApiResponse, e: unknown) {
