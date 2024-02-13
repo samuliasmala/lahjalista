@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Gift } from '~/pages';
 
 const baseURL = 'http://localhost:3001/gifts';
+let queryID: string;
 
 const HANDLERS: Record<
   string,
@@ -24,6 +25,7 @@ export default async function handler(
       if (typeof req.query.id !== 'string') {
         throw new Error('Invalid ID', { cause: 'idError' });
       }
+      queryID = req.query.id;
 
       await reqHandler(req, res);
     } else {
@@ -39,25 +41,22 @@ export default async function handler(
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
+  const giftRequest = await axios.get(`${baseURL}/${queryID}`);
   return res.status(giftRequest.status).send(giftRequest.data as Gift);
 }
 
 async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
-  const patchRequest = await axios.patch(
-    `${baseURL}/${req.query.id}`,
-    req.body,
-  );
+  const patchRequest = await axios.patch(`${baseURL}/${queryID}`, req.body);
   return res.status(patchRequest.status).json(req.body);
 }
 
 async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
-  const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
+  const putRequest = await axios.put(`${baseURL}/${queryID}`, req.body);
   return res.status(putRequest.status).json(req.body);
 }
 
 async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
-  const deleteRequest = await axios.delete(`${baseURL}/${req.query.id}`);
+  const deleteRequest = await axios.delete(`${baseURL}/${queryID}`);
   return res.status(deleteRequest.status).json(req.body);
 }
 
