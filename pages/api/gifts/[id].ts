@@ -3,12 +3,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Gift } from '~/pages';
 
 const baseURL = 'http://localhost:3001/gifts';
-let queryID: string;
 
-const HANDLERS: Record<
-  string,
-  (req: NextApiRequest, res: NextApiResponse) => Promise<void>
-> = {
+type HandlerParams = {
+  req: NextApiRequest;
+  res: NextApiResponse;
+  queryId: string;
+};
+
+const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
   GET: handleGET,
   PATCH: handlePATCH,
   PUT: handlePUT,
@@ -25,9 +27,9 @@ export default async function handler(
       if (typeof req.query.id !== 'string') {
         throw new Error('Invalid ID', { cause: 'idError' });
       }
-      queryID = req.query.id;
+      const queryId = req.query.id;
 
-      await reqHandler(req, res);
+      await reqHandler({ req, res, queryId });
     } else {
       return res
         .status(405)
@@ -40,23 +42,23 @@ export default async function handler(
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  const giftRequest = await axios.get(`${baseURL}/${queryID}`);
+async function handleGET({ res, queryId }: HandlerParams) {
+  const giftRequest = await axios.get(`${baseURL}/${queryId}`);
   return res.status(giftRequest.status).send(giftRequest.data as Gift);
 }
 
-async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
-  const patchRequest = await axios.patch(`${baseURL}/${queryID}`, req.body);
+async function handlePATCH({ req, res, queryId }: HandlerParams) {
+  const patchRequest = await axios.patch(`${baseURL}/${queryId}`, req.body);
   return res.status(patchRequest.status).json(req.body);
 }
 
-async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
-  const putRequest = await axios.put(`${baseURL}/${queryID}`, req.body);
+async function handlePUT({ req, res, queryId }: HandlerParams) {
+  const putRequest = await axios.put(`${baseURL}/${queryId}`, req.body);
   return res.status(putRequest.status).json(req.body);
 }
 
-async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
-  const deleteRequest = await axios.delete(`${baseURL}/${queryID}`);
+async function handleDELETE({ req, res, queryId }: HandlerParams) {
+  const deleteRequest = await axios.delete(`${baseURL}/${queryId}`);
   return res.status(deleteRequest.status).json(req.body);
 }
 
