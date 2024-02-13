@@ -17,6 +17,8 @@ export type Gift = {
   createdDate: number;
 };
 
+export type CreateGift = Omit<Gift, 'id'>;
+
 export default function Home() {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
@@ -64,17 +66,16 @@ export default function Home() {
         return;
       }
 
-      const newGift: Gift = {
+      const newGift: CreateGift = {
         name: newReceiver,
         gift: newGiftName,
-        id: '',
         createdDate: new Date().getTime(),
       };
 
       const currentGiftList = await getAllGifts();
-      const updatedGiftList = currentGiftList.concat(newGift);
+      const createdGift = (await createGift(newGift)).data;
+      const updatedGiftList = currentGiftList.concat(createdGift);
 
-      await createGift(newGift);
       setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
