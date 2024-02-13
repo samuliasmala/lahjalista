@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Gift } from '~/pages';
+import { CreateGift, Gift } from '~/pages';
 
 const baseURL = '/api/gifts';
 
@@ -24,7 +24,7 @@ export async function getGift(id: string) {
  *
  * @param newObject a new object of a gift with type Gift that will added to the server
  */
-export async function createGift(newObject: Gift) {
+export async function createGift(newObject: CreateGift) {
   return await axios.post(`${baseURL}`, newObject);
 }
 
