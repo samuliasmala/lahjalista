@@ -25,7 +25,7 @@ export async function getGift(id: string) {
  * @param newObject a new object of a gift with type Gift that will added to the server
  */
 export async function createGift(newObject: CreateGift) {
-  return await axios.post(`${baseURL}`, newObject);
+  return (await axios.post(`${baseURL}`, newObject)).data as Gift;
 }
 
 /**
@@ -34,7 +34,7 @@ export async function createGift(newObject: CreateGift) {
  * @param newObject should be given parts of Gift object type that are wanted to be updated
  */
 export async function updateGift(id: string, newObject: Partial<Gift>) {
-  return await axios.patch(`${baseURL}/${id}`, newObject);
+  return (await axios.patch(`${baseURL}/${id}`, newObject)).data as Gift;
 }
 
 /**
