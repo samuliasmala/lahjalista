@@ -21,6 +21,10 @@ export default async function handler(
   try {
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
+      if (typeof req.query.id !== 'string') {
+        throw new Error('Invalid ID', { cause: 'idError' });
+      }
+
       await reqHandler(req, res);
     } else {
       return res
@@ -35,17 +39,11 @@ export default async function handler(
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id !== 'string') {
-    throw new Error('Invalid ID', { cause: 'idError' });
-  }
   const giftRequest = await axios.get(`${baseURL}/${req.query.id}`);
   return res.status(giftRequest.status).send(giftRequest.data as Gift);
 }
 
 async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id !== 'string') {
-    throw new Error('Invalid ID', { cause: 'idError' });
-  }
   const patchRequest = await axios.patch(
     `${baseURL}/${req.query.id}`,
     req.body,
@@ -54,17 +52,11 @@ async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id !== 'string') {
-    throw new Error('Invalid ID', { cause: 'idError' });
-  }
   const putRequest = await axios.put(`${baseURL}/${req.query.id}`, req.body);
   return res.status(putRequest.status).json(req.body);
 }
 
 async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
-  if (typeof req.query.id !== 'string') {
-    throw new Error('Invalid ID', { cause: 'idError' });
-  }
   const deleteRequest = await axios.delete(`${baseURL}/${req.query.id}`);
   return res.status(deleteRequest.status).json(req.body);
 }
