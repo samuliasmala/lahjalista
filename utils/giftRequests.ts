@@ -42,5 +42,6 @@ export async function updateGift(id: string, newObject: Partial<Gift>) {
  * @param id should be given the id of the gift that is wanted to be deleted
  */
 export async function deleteGift(id: string) {
-  return await axios.delete(`${baseURL}/${id}`);
+  await axios.delete(`${baseURL}/${id}`);
+  return;
 }
