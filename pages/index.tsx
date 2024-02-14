@@ -72,9 +72,8 @@ export default function Home() {
         createdDate: new Date().getTime(),
       };
 
-      const currentGiftList = await getAllGifts();
       const createdGift = await createGift(newGift);
-      const updatedGiftList = currentGiftList.concat(createdGift);
+      const updatedGiftList = giftData.concat(createdGift);
 
       setGiftData(updatedGiftList);
       setNewGiftName('');
