@@ -59,9 +59,8 @@ async function handlePUT({ req, res, queryId }: HandlerParams) {
 
 async function handleDELETE({ res, queryId }: HandlerParams) {
   const deleteRequest = await axios.delete(`${baseURL}/${queryId}`);
-  return res
-    .status(deleteRequest.status)
-    .send('Lahja poistettu onnistuneesti!');
+  res.status(deleteRequest.status).end();
+  return;
 }
 
 export function errorFound(res: NextApiResponse, e: unknown) {
