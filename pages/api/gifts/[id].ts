@@ -5,10 +5,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
 
-const HANDLER: Record<
-  string,
-  (req: NextApiRequest, res: NextApiResponse) => Promise<void>
-> = {
+type HandlerParams = {
+  req: NextApiRequest;
+  res: NextApiResponse;
+  queryId: string;
+};
+
+const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
   GET: handleGET,
   PATCH: handlePATCH,
   PUT: handlePUT,
@@ -19,28 +22,27 @@ export default async function handlePrisma(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const reqHandler = req.method !== undefined && HANDLER[req.method];
+  const reqHandler = req.method !== undefined && HANDLERS[req.method];
   if (reqHandler) {
-    await reqHandler(req, res);
+    if (typeof req.query.id !== 'string') {
+      throw new Error('Invalid ID', { cause: 'idError' });
+    }
+    const queryId = req.query.id;
+    await reqHandler({ req, res, queryId });
   } else {
     return res
       .status(405)
       .send(
-        `${req.method} is not a valid method. Only GET and POST requests are valid!`,
+        `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
       );
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
+async function handleGET({ res, queryId }: HandlerParams) {
   try {
-    const queryID = isQueryIdNumber(req.query.id);
-    if (queryID === undefined) {
-      throw new Error(`Invalid ID: ${queryID}`, { cause: 'idError' });
-    }
-
     const gift = await prisma.gift.findFirstOrThrow({
       where: {
-        id: queryID,
+        id: Number(queryId),
       },
     });
     return res.status(200).json(gift);
@@ -76,7 +78,8 @@ async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    return res.status(200).send('Poistettu onnistuneesti!');
+    res.status(200).end();
+    return;
   } catch (e) {
     console.log(e);
     return errorFound(res, e);

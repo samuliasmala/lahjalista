@@ -22,6 +22,8 @@ export type Gift = {
   updatedAt?: string;
 };
 
+export type CreateGift = Omit<Gift, 'id'>;
+
 export default function Home() {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
@@ -80,13 +82,15 @@ export default function Home() {
         return;
       }
 
-      const newGift: Gift = {
+      const newGift: CreateGift = {
         receiver: newReceiver,
         gift: newGiftName,
       };
 
-      await createGift(newGift);
-      setGiftData(await getAllGifts());
+      const createdGift = await createGift(newGift);
+      const updatedGiftList = giftData.concat(createdGift);
+
+      setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Gift } from '~/pages';
+import { CreateGift, Gift } from '~/pages';
 
 const baseURL = '/api/gifts';
 
@@ -24,8 +24,8 @@ export async function getGift(id: string) {
  *
  * @param newObject a new object of a gift with type Gift that will added to the server
  */
-export async function createGift(newObject: Gift) {
-  await axios.post(`${baseURL}/`, newObject);
+export async function createGift(newObject: CreateGift) {
+  return (await axios.post(`${baseURL}`, newObject)).data as Gift;
 }
 
 /**
@@ -34,7 +34,7 @@ export async function createGift(newObject: Gift) {
  * @param newObject should be given parts of Gift object type that are wanted to be updated
  */
 export async function updateGift(id: string, newObject: Partial<Gift>) {
-  await axios.patch(`${baseURL}/${id}`, newObject);
+  return (await axios.patch(`${baseURL}/${id}`, newObject)).data as Gift;
 }
 
 /**
@@ -43,4 +43,5 @@ export async function updateGift(id: string, newObject: Partial<Gift>) {
  */
 export async function deleteGift(id: string) {
   await axios.delete(`${baseURL}/${id}`);
+  return;
 }
