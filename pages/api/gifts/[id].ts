@@ -51,21 +51,21 @@ async function handleGET({ res, queryId }: HandlerParams) {
   }
 }
 
-async function handlePATCH(req: NextApiRequest, res: NextApiResponse) {
+async function handlePATCH({ req, res, queryId }: HandlerParams) {
   try {
   } catch (e) {
     return errorFound(res, e);
   }
 }
 
-async function handlePUT(req: NextApiRequest, res: NextApiResponse) {
+async function handlePUT({ req, res, queryId }: HandlerParams) {
   try {
   } catch (e) {
     return errorFound(res, e);
   }
 }
 
-async function handleDELETE(req: NextApiRequest, res: NextApiResponse) {
+async function handleDELETE({ req, res, queryId }: HandlerParams) {
   try {
     const queryID = isQueryIdNumber(req.query.id);
     if (queryID === undefined) {
