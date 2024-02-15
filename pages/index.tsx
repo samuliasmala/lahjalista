@@ -7,10 +7,6 @@ import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts, getGift } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
-import {
-  GreetingClass,
-  customError,
-} from '~/utils/errorHandlers/ownErrorHandler';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,17 +35,7 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
-    new customError();
-    new Error();
-    const Greeter = new GreetingClass(
-      { color: 'Yellow', drink: 'Water', food: 'Pizza', number: 313 },
-      'Moi',
-      { newFirstName: 'Aku', newLastName: 'Ankka' },
-    );
-    console.log(Greeter);
-    console.log(Greeter.getFirstName, Greeter.getLastName);
-    Greeter.setFirstName('Hannu');
-    console.log(Greeter.getFirstName);
+
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
