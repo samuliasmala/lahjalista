@@ -21,7 +21,7 @@ export function DeleteModal({
 }: DeleteModal) {
   async function handleDeletion() {
     try {
-      await deleteGift(gift.id);
+      await deleteGift(gift.uuid);
     } catch (e) {
       if (isAxiosError(e) && e.response?.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');

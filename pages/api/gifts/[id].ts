@@ -53,6 +53,8 @@ async function handleGET({ res, queryId }: HandlerParams) {
 
 async function handlePATCH({ req, res, queryId }: HandlerParams) {
   try {
+    const newGift = req.body;
+    console.log(newGift);
   } catch (e) {
     return errorFound(res, e);
   }
@@ -67,14 +69,21 @@ async function handlePUT({ req, res, queryId }: HandlerParams) {
 
 async function handleDELETE({ req, res, queryId }: HandlerParams) {
   try {
+    // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
+    /*
     const queryID = isQueryIdNumber(req.query.id);
     if (queryID === undefined) {
       throw new Error(`Invalid ID: ${queryID}`, { cause: 'idError' });
     }
+    */
+
+    if (typeof req.query.id !== 'string') {
+      throw new Error(`Invalid ID: ${req.query.id}`, { cause: 'idError' });
+    }
 
     await prisma.gift.delete({
       where: {
-        id: queryID,
+        uuid: req.query.id,
       },
     });
 
@@ -95,6 +104,7 @@ function errorFound(res: NextApiResponse, e: unknown) {
   return res.status(500).send('Odottamaton virhe tapahtui!');
 }
 
+// POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
 function isQueryIdNumber(
   reqQueryId: string | string[] | undefined,
 ): number | undefined {

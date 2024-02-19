@@ -44,7 +44,7 @@ export function EditModal({
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
-      await updateGift(gift.id, { receiver: giftReceiver, gift: giftName });
+      await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
       if (isAxiosError(e) && e.response?.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');
