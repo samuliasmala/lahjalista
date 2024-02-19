@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Gift } from '../..';
+import { CreateGift, Gift } from '../..';
 import prisma from '~/utils/prismaClient';
 
 const HANDLER: Record<
@@ -51,9 +51,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const giftData: Gift = req.body;
-    console.log(giftData);
-    const gift = await prisma.gift.create({
+    const giftData: CreateGift = req.body;
+    const addedGift = await prisma.gift.create({
       data: {
         gift: giftData.gift,
         receiver: giftData.receiver,
@@ -67,7 +66,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    return res.status(200).json(gift as Gift);
+    return res.status(200).json(addedGift as Gift);
   } catch (e) {
     if (e instanceof Error) {
       console.log(e);
