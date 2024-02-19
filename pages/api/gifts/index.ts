@@ -15,65 +15,52 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   const reqHandler = req.method !== undefined && HANDLER[req.method];
-
-  if (reqHandler) {
-    await reqHandler(req, res);
-  } else {
-    return res
-      .status(405)
-      .send(
-        `${req.method} is not a valid method. Only GET and POST requests are valid!`,
-      );
+  try {
+    if (reqHandler) {
+      await reqHandler(req, res);
+    } else {
+      return res
+        .status(405)
+        .send(
+          `${req.method} is not a valid method. Only GET and POST requests are valid!`,
+        );
+    }
+  } catch (e) {
+    return errorFound(res, e);
   }
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const gifts = await prisma.gift.findMany({
-      select: {
-        createdAt: true,
-        gift: true,
-        receiver: true,
-        updatedAt: true,
-        uuid: true,
-      },
-    });
+  const gifts = await prisma.gift.findMany({
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  });
 
-    return res.status(200).json(gifts as Gift[]);
-  } catch (e) {
-    if (e instanceof Error) {
-      console.log(e);
-      return res.status(500).send('Palvelin virhe!');
-    }
-    return res.status(500).send('Odottamaton virhe tapahtui!');
-  }
+  return res.status(200).json(gifts as Gift[]);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    const giftData: CreateGift = req.body;
-    const addedGift = await prisma.gift.create({
-      data: {
-        gift: giftData.gift,
-        receiver: giftData.receiver,
-      },
-      select: {
-        createdAt: true,
-        gift: true,
-        receiver: true,
-        updatedAt: true,
-        uuid: true,
-      },
-    });
+  const giftData: CreateGift = req.body;
+  const addedGift = await prisma.gift.create({
+    data: {
+      gift: giftData.gift,
+      receiver: giftData.receiver,
+    },
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  });
 
-    return res.status(200).json(addedGift as Gift);
-  } catch (e) {
-    if (e instanceof Error) {
-      console.log(e);
-      return res.status(500).send('Palvelin virhe!');
-    }
-    return res.status(500).send('Odottamaton virhe tapahtui!');
-  }
+  return res.status(200).json(addedGift as Gift);
 }
 
 export function errorFound(res: NextApiResponse, e: unknown) {
