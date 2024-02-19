@@ -1,6 +1,7 @@
 import { Gift } from '../..';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/utils/prismaClient';
+import { errorFound } from '.';
 
 type HandlerParams = {
   req: NextApiRequest;
@@ -115,15 +116,6 @@ async function handleDELETE({ req, res, queryId }: HandlerParams) {
 
   res.status(200).end();
   return;
-}
-
-function errorFound(res: NextApiResponse, e: unknown) {
-  if (e instanceof Error) {
-    if (e.cause === 'idError') return res.status(400).send('Virheellinen ID!');
-    return res.status(500).send('Palvelin virhe!');
-  }
-
-  return res.status(500).send('Odottamaton virhe tapahtui!');
 }
 
 // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ

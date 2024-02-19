@@ -15,6 +15,7 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   const reqHandler = req.method !== undefined && HANDLER[req.method];
+
   if (reqHandler) {
     await reqHandler(req, res);
     closePrismaConnection();
@@ -84,4 +85,13 @@ async function closePrismaConnection() {
       cause: 'prismaDisconnectionFailed',
     });
   }
+}
+
+export function errorFound(res: NextApiResponse, e: unknown) {
+  if (e instanceof Error) {
+    if (e.cause === 'idError') return res.status(400).send('Virheellinen ID!');
+    return res.status(500).send('Palvelin virhe!');
+  }
+
+  return res.status(500).send('Odottamaton virhe tapahtui!');
 }
