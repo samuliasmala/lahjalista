@@ -13,9 +13,9 @@ const inter = Inter({ subsets: ['latin'] });
 export type Gift = {
   receiver: string;
   gift: string;
-  id?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  id?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type CreateGift = Omit<Gift, 'id'>;
