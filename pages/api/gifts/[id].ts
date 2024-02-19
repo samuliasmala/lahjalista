@@ -87,6 +87,23 @@ async function handlePATCH({ req, res, queryId }: HandlerParams) {
 
 async function handlePUT({ req, res, queryId }: HandlerParams) {
   try {
+    const newGiftData = req.body as Gift;
+
+    const updatedGift = (await prisma.gift.update({
+      where: {
+        uuid: queryId,
+      },
+      data: newGiftData,
+      select: {
+        createdAt: true,
+        gift: true,
+        receiver: true,
+        updatedAt: true,
+        uuid: true,
+      },
+    })) as Gift;
+
+    return res.status(200).json(updatedGift);
   } catch (e) {
     return errorFound(res, e);
   }
