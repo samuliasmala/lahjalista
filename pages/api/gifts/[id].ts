@@ -42,7 +42,14 @@ async function handleGET({ res, queryId }: HandlerParams) {
   try {
     const gift = await prisma.gift.findFirstOrThrow({
       where: {
-        id: Number(queryId),
+        uuid: queryId,
+      },
+      select: {
+        createdAt: true,
+        gift: true,
+        receiver: true,
+        updatedAt: true,
+        uuid: true,
       },
     });
     return res.status(200).json(gift);
@@ -77,13 +84,9 @@ async function handleDELETE({ req, res, queryId }: HandlerParams) {
     }
     */
 
-    if (typeof req.query.id !== 'string') {
-      throw new Error(`Invalid ID: ${req.query.id}`, { cause: 'idError' });
-    }
-
     await prisma.gift.delete({
       where: {
-        uuid: req.query.id,
+        uuid: queryId,
       },
     });
 
