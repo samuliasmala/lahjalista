@@ -18,7 +18,6 @@ export default async function handlePrisma(
 
   if (reqHandler) {
     await reqHandler(req, res);
-    closePrismaConnection();
   } else {
     return res
       .status(405)
@@ -74,16 +73,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
       return res.status(500).send('Palvelin virhe!');
     }
     return res.status(500).send('Odottamaton virhe tapahtui!');
-  }
-}
-
-async function closePrismaConnection() {
-  try {
-    await prisma.$disconnect();
-  } catch (e) {
-    throw new Error('Failed to close Prisma connection', {
-      cause: 'prismaDisconnectionFailed',
-    });
   }
 }
 
