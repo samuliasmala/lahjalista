@@ -17,7 +17,7 @@
     "start-json-server": "json-server -p3001 --watch db.json",
     "prepush": "next lint --max-warnings=0 && npm run check-types",
     "svgr": "svgr --out-dir icons --typescript --jsx-runtime automatic --no-dimensions --silent --filename-case snake -- public/images/icons",
-    "prisma": "dotenv -e -c .env.local -- prisma"
+    "prisma": "dotenv -c .env.local -- prisma"
   },
   "dependencies": {
     "@prisma/client": "5.9.1",
