@@ -5,8 +5,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-type CustomErrorMessages = 'prismaConnectionFailed' | 'prismaFail';
-
 const HANDLER: Record<
   string,
   (req: NextApiRequest, res: NextApiResponse) => Promise<void>
@@ -35,10 +33,11 @@ export default async function handlePrisma(
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   try {
     const gifts = await prisma.gift.findMany();
-    //console.log(gifts);
+    console.log(gifts);
     return res.status(200).json(gifts);
   } catch (e) {
     if (e instanceof Error) {
+      console.log(e);
       return res.status(500).send('Palvelin virhe!');
     }
     return res.status(500).send('Odottamaton virhe tapahtui!');
@@ -56,7 +55,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
       },
     });
     console.log(gift);
-    return res.status(200).send('Lahja lisätty onnistuneesti!');
+    return res.status(200).json(gift as Gift);
   } catch (e) {
     if (e instanceof Error) {
       console.log(e);
