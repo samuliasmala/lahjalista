@@ -1,9 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import { Gift } from '../..';
 import { NextApiRequest, NextApiResponse } from 'next';
-//import { globalPrismaClient } from '~/lib/prismaClient';
-
-const prisma = new PrismaClient();
+import prisma from '~/utils/prismaClient';
 
 type HandlerParams = {
   req: NextApiRequest;

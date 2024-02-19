@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Gift } from '../..';
-import { PrismaClient } from '@prisma/client';
-//import { prisma } from '~/lib/prismaClient';
-
-const prisma = new PrismaClient();
+import prisma from '~/utils/prismaClient';
 
 const HANDLER: Record<
   string,
