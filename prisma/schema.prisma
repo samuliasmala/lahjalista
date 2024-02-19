@@ -9,6 +9,7 @@ datasource db {
 
 model Gift {
     id        Int      @id @default(autoincrement())
+    uuid      String   @unique @default(uuid())
     receiver  String
     gift      String
     createdAt DateTime @default(now())
