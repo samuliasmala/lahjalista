@@ -39,7 +39,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    return res.status(200).json(gifts);
+    return res.status(200).json(gifts as Gift[]);
   } catch (e) {
     if (e instanceof Error) {
       console.log(e);
