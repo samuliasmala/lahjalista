@@ -32,8 +32,16 @@ export default async function handlePrisma(
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const gifts = await prisma.gift.findMany();
-    console.log(gifts);
+    const gifts = await prisma.gift.findMany({
+      select: {
+        createdAt: true,
+        gift: true,
+        receiver: true,
+        updatedAt: true,
+        uuid: true,
+      },
+    });
+
     return res.status(200).json(gifts);
   } catch (e) {
     if (e instanceof Error) {
@@ -53,8 +61,15 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
         gift: giftData.gift,
         receiver: giftData.receiver,
       },
+      select: {
+        createdAt: true,
+        gift: true,
+        receiver: true,
+        updatedAt: true,
+        uuid: true,
+      },
     });
-    console.log(gift);
+
     return res.status(200).json(gift as Gift);
   } catch (e) {
     if (e instanceof Error) {
