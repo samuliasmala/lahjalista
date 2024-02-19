@@ -22,115 +22,102 @@ export default async function handlePrisma(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const reqHandler = req.method !== undefined && HANDLERS[req.method];
-  if (reqHandler) {
-    if (typeof req.query.id !== 'string') {
-      throw new Error('Invalid ID', { cause: 'idError' });
+  try {
+    const reqHandler = req.method !== undefined && HANDLERS[req.method];
+    if (reqHandler) {
+      if (typeof req.query.id !== 'string') {
+        throw new Error('Invalid ID', { cause: 'idError' });
+      }
+      const queryId = req.query.id;
+      await reqHandler({ req, res, queryId });
+    } else {
+      return res
+        .status(405)
+        .send(
+          `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
+        );
     }
-    const queryId = req.query.id;
-    await reqHandler({ req, res, queryId });
-  } else {
-    return res
-      .status(405)
-      .send(
-        `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
-      );
+  } catch (e) {
+    return errorFound(res, e);
   }
 }
 
 async function handleGET({ res, queryId }: HandlerParams) {
-  try {
-    const gift = await prisma.gift.findFirstOrThrow({
-      where: {
-        uuid: queryId,
-      },
-      select: {
-        createdAt: true,
-        gift: true,
-        receiver: true,
-        updatedAt: true,
-        uuid: true,
-      },
-    });
-    return res.status(200).json(gift);
-  } catch (e) {
-    return errorFound(res, e);
-  }
+  const gift = await prisma.gift.findFirstOrThrow({
+    where: {
+      uuid: queryId,
+    },
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  });
+  return res.status(200).json(gift);
 }
 
 async function handlePATCH({ req, res, queryId }: HandlerParams) {
-  try {
-    const newGiftData = req.body as Gift;
+  const newGiftData = req.body as Gift;
 
-    const updatedGift = (await prisma.gift.update({
-      where: {
-        uuid: queryId,
-      },
-      data: {
-        receiver: newGiftData['receiver'],
-        gift: newGiftData['gift'],
-      },
-      select: {
-        createdAt: true,
-        gift: true,
-        receiver: true,
-        updatedAt: true,
-        uuid: true,
-      },
-    })) as Gift;
+  const updatedGift = (await prisma.gift.update({
+    where: {
+      uuid: queryId,
+    },
+    data: {
+      receiver: newGiftData['receiver'],
+      gift: newGiftData['gift'],
+    },
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  })) as Gift;
 
-    return res.status(200).json(updatedGift);
-  } catch (e) {
-    return errorFound(res, e);
-  }
+  return res.status(200).json(updatedGift);
 }
 
 async function handlePUT({ req, res, queryId }: HandlerParams) {
-  try {
-    const newGiftData = req.body as Gift;
+  const newGiftData = req.body as Gift;
 
-    const updatedGift = (await prisma.gift.update({
-      where: {
-        uuid: queryId,
-      },
-      data: newGiftData,
-      select: {
-        createdAt: true,
-        gift: true,
-        receiver: true,
-        updatedAt: true,
-        uuid: true,
-      },
-    })) as Gift;
+  const updatedGift = (await prisma.gift.update({
+    where: {
+      uuid: queryId,
+    },
+    data: newGiftData,
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  })) as Gift;
 
-    return res.status(200).json(updatedGift);
-  } catch (e) {
-    return errorFound(res, e);
-  }
+  return res.status(200).json(updatedGift);
 }
 
 async function handleDELETE({ req, res, queryId }: HandlerParams) {
-  try {
-    // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
-    /*
+  // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
+  /*
     const queryID = isQueryIdNumber(req.query.id);
     if (queryID === undefined) {
       throw new Error(`Invalid ID: ${queryID}`, { cause: 'idError' });
     }
     */
 
-    await prisma.gift.delete({
-      where: {
-        uuid: queryId,
-      },
-    });
+  await prisma.gift.delete({
+    where: {
+      uuid: queryId,
+    },
+  });
 
-    res.status(200).end();
-    return;
-  } catch (e) {
-    console.log(e);
-    return errorFound(res, e);
-  }
+  res.status(200).end();
+  return;
 }
 
 function errorFound(res: NextApiResponse, e: unknown) {
