@@ -5,7 +5,7 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts, getGift } from '~/utils/giftRequests';
+import { createGift, getAllGifts } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });

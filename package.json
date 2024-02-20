@@ -4,7 +4,7 @@
   "private": true,
   "files": [],
   "engines": {
-    "node": "`>=20`",
+    "node": ">=20",
     "npm": ">=9"
   },
   "scripts": {
