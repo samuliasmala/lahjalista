@@ -45,7 +45,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const giftData: CreateGift = req.body as CreateGift;
+  const giftData: CreateGift = req.body;
   const addedGift = await prisma.gift.create({
     data: {
       gift: giftData.gift,
@@ -66,9 +66,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
 export function errorFound(res: NextApiResponse, e: unknown) {
   if (e instanceof Error) {
     if (e.cause === 'idError') return res.status(400).send('Virheellinen ID!');
-    if (e.cause === 'incorrectRequestBody') {
-      return res.status(400).send('Incorrect body in the request!');
-    }
     return res.status(500).send('Palvelin virhe!');
   }
 
