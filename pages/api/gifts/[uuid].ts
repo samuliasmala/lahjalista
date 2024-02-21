@@ -99,7 +99,7 @@ async function handlePUT({ req, res, queryUUID }: HandlerParams) {
   return res.status(200).json(updatedGift);
 }
 
-async function handleDELETE({ req, res, queryUUID }: HandlerParams) {
+async function handleDELETE({ res, queryUUID }: HandlerParams) {
   // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
   /*
     const queryID = isQueryIdNumber(req.query.id);
@@ -119,6 +119,7 @@ async function handleDELETE({ req, res, queryUUID }: HandlerParams) {
 }
 
 // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
+/*
 function isQueryIdNumber(
   reqQueryId: string | string[] | undefined,
 ): number | undefined {
@@ -131,3 +132,4 @@ function isQueryIdNumber(
   }
   return compiledNumber;
 }
+*/
