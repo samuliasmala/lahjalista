@@ -65,6 +65,9 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
 
 export function errorFound(res: NextApiResponse, e: unknown) {
   if (e instanceof Error) {
+    if (e.message.toLowerCase() === 'no gift found') {
+      return res.status(400).send('Gift was not found!');
+    }
     if (e.cause === 'idError') return res.status(400).send('Virheellinen ID!');
     return res.status(500).send('Palvelin virhe!');
   }

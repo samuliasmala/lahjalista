@@ -41,7 +41,7 @@ export default async function handlePrisma(
 }
 
 async function handleGET({ res, queryUUID }: HandlerParams) {
-  const gift = await prisma.gift.findFirstOrThrow({
+  const gift = await prisma.gift.findUniqueOrThrow({
     where: {
       uuid: queryUUID,
     },
