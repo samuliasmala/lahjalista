@@ -45,7 +45,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const giftData: CreateGift = req.body;
+  const giftData: CreateGift = req.body as CreateGift;
   const addedGift = await prisma.gift.create({
     data: {
       gift: giftData.gift,
