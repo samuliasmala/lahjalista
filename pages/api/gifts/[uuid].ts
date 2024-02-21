@@ -100,14 +100,6 @@ async function handlePUT({ req, res, queryUUID }: HandlerParams) {
 }
 
 async function handleDELETE({ res, queryUUID }: HandlerParams) {
-  // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
-  /*
-    const queryID = isQueryIdNumber(req.query.id);
-    if (queryID === undefined) {
-      throw new Error(`Invalid ID: ${queryID}`, { cause: 'idError' });
-    }
-    */
-
   await prisma.gift.delete({
     where: {
       uuid: queryUUID,
@@ -117,19 +109,3 @@ async function handleDELETE({ res, queryUUID }: HandlerParams) {
   res.status(200).end();
   return;
 }
-
-// POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
-/*
-function isQueryIdNumber(
-  reqQueryId: string | string[] | undefined,
-): number | undefined {
-  if (typeof reqQueryId !== 'string') {
-    return undefined;
-  }
-  const compiledNumber = Number(reqQueryId);
-  if (Number.isNaN(compiledNumber) === true) {
-    return undefined;
-  }
-  return compiledNumber;
-}
-*/
