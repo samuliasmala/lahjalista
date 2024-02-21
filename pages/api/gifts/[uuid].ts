@@ -6,7 +6,7 @@ import { errorFound } from '.';
 type HandlerParams = {
   req: NextApiRequest;
   res: NextApiResponse;
-  queryId: string;
+  queryUUID: string;
 };
 
 const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
@@ -23,11 +23,11 @@ export default async function handlePrisma(
   try {
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      if (typeof req.query.id !== 'string') {
+      if (typeof req.query.uuid !== 'string') {
         throw new Error('Invalid ID', { cause: 'idError' });
       }
-      const queryId = req.query.id;
-      await reqHandler({ req, res, queryId });
+      const queryUUID = req.query.uuid;
+      await reqHandler({ req, res, queryUUID });
     } else {
       return res
         .status(405)
@@ -40,10 +40,10 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, queryId }: HandlerParams) {
+async function handleGET({ res, queryUUID }: HandlerParams) {
   const gift = await prisma.gift.findFirstOrThrow({
     where: {
-      uuid: queryId,
+      uuid: queryUUID,
     },
     select: {
       createdAt: true,
@@ -56,12 +56,12 @@ async function handleGET({ res, queryId }: HandlerParams) {
   return res.status(200).json(gift);
 }
 
-async function handlePATCH({ req, res, queryId }: HandlerParams) {
+async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
   const newGiftData = req.body as Gift;
 
   const updatedGift = (await prisma.gift.update({
     where: {
-      uuid: queryId,
+      uuid: queryUUID,
     },
     data: {
       receiver: newGiftData['receiver'],
@@ -79,12 +79,12 @@ async function handlePATCH({ req, res, queryId }: HandlerParams) {
   return res.status(200).json(updatedGift);
 }
 
-async function handlePUT({ req, res, queryId }: HandlerParams) {
+async function handlePUT({ req, res, queryUUID }: HandlerParams) {
   const newGiftData = req.body as Gift;
 
   const updatedGift = (await prisma.gift.update({
     where: {
-      uuid: queryId,
+      uuid: queryUUID,
     },
     data: newGiftData,
     select: {
@@ -99,7 +99,7 @@ async function handlePUT({ req, res, queryId }: HandlerParams) {
   return res.status(200).json(updatedGift);
 }
 
-async function handleDELETE({ req, res, queryId }: HandlerParams) {
+async function handleDELETE({ req, res, queryUUID }: HandlerParams) {
   // POISTOON KUN SAADAAN VARMUUS ID:N KÄYTÖSTÄ
   /*
     const queryID = isQueryIdNumber(req.query.id);
@@ -110,7 +110,7 @@ async function handleDELETE({ req, res, queryId }: HandlerParams) {
 
   await prisma.gift.delete({
     where: {
-      uuid: queryId,
+      uuid: queryUUID,
     },
   });
 
