@@ -42,7 +42,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  return res.status(200).json(gifts as Gift[]);
+  return res.status(200).json(gifts);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
@@ -61,7 +61,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  return res.status(200).json(addedGift as Gift);
+  return res.status(200).json(addedGift);
 }
 
 export function errorFound(res: NextApiResponse, e: unknown) {

@@ -59,7 +59,7 @@ async function handleGET({ res, queryUUID }: HandlerParams) {
 async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
   const newGiftData = req.body as Gift;
 
-  const updatedGift = (await prisma.gift.update({
+  const updatedGift = await prisma.gift.update({
     where: {
       uuid: queryUUID,
     },
@@ -74,7 +74,7 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
       updatedAt: true,
       uuid: true,
     },
-  })) as Gift;
+  });
 
   return res.status(200).json(updatedGift);
 }
@@ -82,7 +82,7 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
 async function handlePUT({ req, res, queryUUID }: HandlerParams) {
   const newGiftData = req.body as Gift;
 
-  const updatedGift = (await prisma.gift.update({
+  const updatedGift = await prisma.gift.update({
     where: {
       uuid: queryUUID,
     },
@@ -94,7 +94,7 @@ async function handlePUT({ req, res, queryUUID }: HandlerParams) {
       updatedAt: true,
       uuid: true,
     },
-  })) as Gift;
+  });
 
   return res.status(200).json(updatedGift);
 }
