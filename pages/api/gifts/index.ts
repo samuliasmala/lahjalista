@@ -46,7 +46,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<Gift[]>) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<Gift>) {
-  const giftData: CreateGift = req.body as CreateGift;
+  const giftData = req.body as CreateGift;
   const addedGift = await prisma.gift.create({
     data: {
       gift: giftData.gift,
@@ -69,9 +69,9 @@ export function errorFound(res: NextApiResponse, e: unknown) {
     if (e.message.toLowerCase() === 'no gift found') {
       return res.status(400).send('Gift was not found!');
     }
-    if (e.cause === 'idError') return res.status(400).send('Virheellinen ID!');
-    return res.status(500).send('Palvelin virhe!');
+    if (e.cause === 'idError') return res.status(400).send('Invalid ID!');
+    return res.status(500).send('Server error!');
   }
 
-  return res.status(500).send('Odottamaton virhe tapahtui!');
+  return res.status(500).send('Unexpected error occurred!');
 }
