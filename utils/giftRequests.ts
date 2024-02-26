@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { CreateGift } from '~/shared/types';
-import { Gift } from '~/shared/types';
+import { CreateGift, Gift } from '~/shared/types';
 
 const baseURL = '/api/gifts';
 

@@ -7,8 +7,7 @@ import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
-import { Gift } from '~/shared/types';
-import { CreateGift } from '~/shared/types';
+import { Gift, CreateGift } from '~/shared/types';
 
 const inter = Inter({ subsets: ['latin'] });
 

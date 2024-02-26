@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateGift } from '~/shared/types';
-import { Gift } from '~/shared/types';
+import { CreateGift, Gift } from '~/shared/types';
 import prisma from '~/prisma';
 
 const HANDLER: Record<
