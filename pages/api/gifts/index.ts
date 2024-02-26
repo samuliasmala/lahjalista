@@ -31,7 +31,7 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
+async function handleGET(req: NextApiRequest, res: NextApiResponse<Gift[]>) {
   const gifts = await prisma.gift.findMany({
     select: {
       createdAt: true,
@@ -45,7 +45,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).json(gifts);
 }
 
-async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+async function handlePOST(req: NextApiRequest, res: NextApiResponse<Gift>) {
   const giftData: CreateGift = req.body as CreateGift;
   const addedGift = await prisma.gift.create({
     data: {
