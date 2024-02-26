@@ -5,7 +5,7 @@ import { errorFound } from '.';
 
 type HandlerParams = {
   req: NextApiRequest;
-  res: NextApiResponse;
+  res: NextApiResponse<Gift>;
   queryUUID: string;
 };
 
