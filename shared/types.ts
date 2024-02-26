@@ -1,7 +1,3 @@
-export type Gift = {
-  receiver: string;
-  gift: string;
-  uuid: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
+import { Prisma, Gift as PrismaGift } from '@prisma/client';
+
+export type Gift = Omit<PrismaGift, 'id'>;
