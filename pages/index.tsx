@@ -7,16 +7,9 @@ import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
+import { Gift } from '~/shared/types';
 
 const inter = Inter({ subsets: ['latin'] });
-
-export type Gift = {
-  receiver: string;
-  gift: string;
-  uuid: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
 
 export type CreateGift = Omit<Gift, 'uuid'>;
 

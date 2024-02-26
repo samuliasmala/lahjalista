@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Gift } from '~/pages';
+import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 import { Button } from './Button';
