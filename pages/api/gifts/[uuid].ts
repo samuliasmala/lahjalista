@@ -64,8 +64,8 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
       uuid: queryUUID,
     },
     data: {
-      receiver: newGiftData['receiver'],
-      gift: newGiftData['gift'],
+      receiver: newGiftData.receiver,
+      gift: newGiftData.gift,
     },
     select: {
       createdAt: true,
