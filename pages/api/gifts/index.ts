@@ -15,8 +15,8 @@ export default async function handlePrisma(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const reqHandler = req.method !== undefined && HANDLER[req.method];
   try {
+    const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
       await reqHandler(req, res);
     } else {
