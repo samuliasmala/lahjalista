@@ -8,10 +8,9 @@ import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
 import { Gift } from '~/shared/types';
+import { CreateGift } from '~/shared/types';
 
 const inter = Inter({ subsets: ['latin'] });
-
-export type CreateGift = Omit<Gift, 'uuid'>;
 
 export default function Home() {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);

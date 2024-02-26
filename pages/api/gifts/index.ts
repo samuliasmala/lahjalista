@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateGift } from '../..';
+import { CreateGift } from '~/shared/types';
 import { Gift } from '~/shared/types';
 import prisma from '~/prisma';
 

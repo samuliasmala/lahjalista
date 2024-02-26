@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateGift } from '~/pages';
+import { CreateGift } from '~/shared/types';
 import { Gift } from '~/shared/types';
 
 const baseURL = '/api/gifts';
