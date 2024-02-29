@@ -3,9 +3,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { errorFound } from '.';
 
-type HandlerParams = {
+type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
-  res: NextApiResponse<Gift>;
+  res: NextApiResponse<ResponseType>;
   queryUUID: string;
 };
 
@@ -40,7 +40,7 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, queryUUID }: HandlerParams) {
+async function handleGET({ res, queryUUID }: HandlerParams<Gift>) {
   const gift = await prisma.gift.findUniqueOrThrow({
     where: {
       uuid: queryUUID,
@@ -56,7 +56,7 @@ async function handleGET({ res, queryUUID }: HandlerParams) {
   return res.status(200).json(gift);
 }
 
-async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
+async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
   const newGiftData = req.body as Gift;
 
   const updatedGift = await prisma.gift.update({
@@ -79,7 +79,7 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams) {
   return res.status(200).json(updatedGift);
 }
 
-async function handlePUT({ req, res, queryUUID }: HandlerParams) {
+async function handlePUT({ req, res, queryUUID }: HandlerParams<Gift>) {
   const newGiftData = req.body as Gift;
 
   const updatedGift = await prisma.gift.update({
