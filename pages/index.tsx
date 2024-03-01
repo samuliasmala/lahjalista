@@ -7,17 +7,9 @@ import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
+import { Gift, CreateGift } from '~/shared/types';
 
 const inter = Inter({ subsets: ['latin'] });
-
-export type Gift = {
-  name: string;
-  gift: string;
-  id: string;
-  createdDate: number;
-};
-
-export type CreateGift = Omit<Gift, 'id'>;
 
 export default function Home() {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
@@ -34,6 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     console.log('effect');
+
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
@@ -67,9 +60,8 @@ export default function Home() {
       }
 
       const newGift: CreateGift = {
-        name: newReceiver,
+        receiver: newReceiver,
         gift: newGiftName,
-        createdDate: new Date().getTime(),
       };
 
       const createdGift = await createGift(newGift);
@@ -154,11 +146,11 @@ export default function Home() {
           <div>
             {giftData.map((giftItem) => (
               <div
-                key={`${giftItem.id}_divbutton`}
+                key={`${giftItem.uuid}_divbutton`}
                 className="animate-width whitespace-nowrap overflow-hidden"
               >
-                <li key={giftItem.id}>
-                  {giftItem.name} - {giftItem.gift}
+                <li key={giftItem.uuid}>
+                  {giftItem.receiver} - {giftItem.gift}
                   <Button
                     onMouseOver={(e) =>
                       e.currentTarget.parentElement?.setAttribute(
@@ -169,7 +161,7 @@ export default function Home() {
                     onMouseOut={(e) =>
                       e.currentTarget.parentElement?.removeAttribute('class')
                     }
-                    key={`${giftItem.id}_deletebutton`}
+                    key={`${giftItem.uuid}_deletebutton`}
                     className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
                     onClick={() => {
                       setDeleteModalGiftData(giftItem);
@@ -180,7 +172,7 @@ export default function Home() {
                     Poista
                   </Button>
                   <Button
-                    key={`${giftItem.id}_editbutton`}
+                    key={`${giftItem.uuid}_editbutton`}
                     className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
                     onClick={() => {
                       setEditModalGiftData(giftItem);

@@ -1,6 +1,6 @@
 import { TitleText } from './TitleText';
 import React, { Dispatch, SetStateAction } from 'react';
-import { Gift } from '~/pages';
+import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
@@ -21,7 +21,7 @@ export function DeleteModal({
 }: DeleteModal) {
   async function handleDeletion() {
     try {
-      await deleteGift(gift.id);
+      await deleteGift(gift.uuid);
     } catch (e) {
       if (isAxiosError(e) && e.response?.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');
@@ -41,7 +41,7 @@ export function DeleteModal({
         Deleting:
       </TitleText>
       <p className="row-start-2 row-end-2 ps-5 pt-5 text-lg w-full h-full font-bold">
-        {gift.name} - {gift.gift}
+        {gift.receiver} - {gift.gift}
       </p>
       <Button className="border border-yellow-500 mt-3 p-0 row-start-3 row-end-3 col-start-1 col-end-1 w-[66px] h-[66px]">
         <SvgCheckMarkIcon

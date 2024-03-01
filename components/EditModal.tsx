@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Gift } from '~/pages';
+import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 import { Button } from './Button';
@@ -26,7 +26,7 @@ export function EditModal({
   refreshGiftList,
   setIsModalOpen,
 }: EditModal) {
-  const [giftReceiver, setGiftReceiver] = useState(gift.name);
+  const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export function EditModal({
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
-      await updateGift(gift.id, { name: giftReceiver, gift: giftName });
+      await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
       if (isAxiosError(e) && e.response?.status === 404) {
         console.error('Lahjaa ei löytynyt palvelimelta!');

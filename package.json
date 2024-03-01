@@ -4,7 +4,7 @@
   "private": true,
   "files": [],
   "engines": {
-    "node": "^18",
+    "node": "^20",
     "npm": ">=9"
   },
   "scripts": {
@@ -16,22 +16,26 @@
     "lint:fix": "next lint --fix",
     "start-json-server": "json-server -p3001 --watch db.json",
     "prepush": "next lint --max-warnings=0 && npm run check-types",
-    "svgr": "svgr --out-dir icons --typescript --jsx-runtime automatic --no-dimensions --silent --filename-case snake -- public/images/icons"
+    "svgr": "svgr --out-dir icons --typescript --jsx-runtime automatic --no-dimensions --silent --filename-case snake -- public/images/icons",
+    "prisma": "dotenv -c .env.local -- prisma"
   },
   "dependencies": {
+    "@prisma/client": "5.9.1",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
-    "axios": "1.5.1",
+    "axios": "1.6.7",
+    "dotenv": "16.4.1",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "json-server": "0.17.3",
     "next": "13.5.4",
-    "postcss": "8.4.29",
+    "postcss": "8.4.33",
+    "prisma": "5.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "0.32.5",
+    "sharp": "0.32.6",
     "tailwind-merge": "1.14.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"

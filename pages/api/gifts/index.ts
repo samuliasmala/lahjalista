@@ -1,31 +1,28 @@
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Gift } from '../..';
-import { errorFound } from './[id]';
+import { CreateGift, Gift } from '~/shared/types';
+import prisma from '~/prisma';
 
-const baseURL = 'http://localhost:3001/gifts';
-
-const HANDLERS: Record<
+const HANDLER: Record<
   string,
   (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 > = {
   GET: handleGET,
   POST: handlePOST,
-} as const;
+};
 
-export default async function handler(
+export default async function handlePrisma(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    const reqHandler = req.method !== undefined && HANDLERS[req.method];
+    const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
       await reqHandler(req, res);
     } else {
       return res
         .status(405)
         .send(
-          `${req.method} is not a valid method. Valid methods are: GET and POST`,
+          `${req.method} is not a valid method. Only GET and POST requests are valid!`,
         );
     }
   } catch (e) {
@@ -33,12 +30,47 @@ export default async function handler(
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  const giftRequest = await axios.get(`${baseURL}`);
-  return res.status(giftRequest.status).json(giftRequest.data as Gift[]);
+async function handleGET(req: NextApiRequest, res: NextApiResponse<Gift[]>) {
+  const gifts = await prisma.gift.findMany({
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  });
+
+  return res.status(200).json(gifts);
 }
 
-async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const postRequest = await axios.post(baseURL, req.body);
-  return res.status(postRequest.status).json(postRequest.data as Gift);
+async function handlePOST(req: NextApiRequest, res: NextApiResponse<Gift>) {
+  const giftData = req.body as CreateGift;
+  const addedGift = await prisma.gift.create({
+    data: {
+      gift: giftData.gift,
+      receiver: giftData.receiver,
+    },
+    select: {
+      createdAt: true,
+      gift: true,
+      receiver: true,
+      updatedAt: true,
+      uuid: true,
+    },
+  });
+
+  return res.status(200).json(addedGift);
+}
+
+export function errorFound(res: NextApiResponse, e: unknown) {
+  if (e instanceof Error) {
+    if (e.message.toLowerCase() === 'no gift found') {
+      return res.status(400).send('Gift was not found!');
+    }
+    if (e.cause === 'idError') return res.status(400).send('Invalid ID!');
+    return res.status(500).send('Server error!');
+  }
+
+  return res.status(500).send('Unexpected error occurred!');
 }

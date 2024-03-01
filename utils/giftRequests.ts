@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateGift, Gift } from '~/pages';
+import { CreateGift, Gift } from '~/shared/types';
 
 const baseURL = '/api/gifts';
 
@@ -13,11 +13,11 @@ export async function getAllGifts() {
 
 /**
  *
- * @param id should be given a string that contains the id that is wanted to be searched.
+ * @param uuid should be given a string that contains the id that is wanted to be searched.
  * @returns an object of a gift if it was found. Else it will return null
  */
-export async function getGift(id: string) {
-  return (await axios.get(`${baseURL}/${id}`)).data as Gift;
+export async function getGift(uuid: string) {
+  return (await axios.get(`${baseURL}/${uuid}`)).data as Gift;
 }
 
 /**
@@ -30,18 +30,18 @@ export async function createGift(newObject: CreateGift) {
 
 /**
  *
- * @param id should be given a string that contains the id of the gift that is wanted to be updated
+ * @param uuid should be given a string that contains the id of the gift that is wanted to be updated
  * @param newObject should be given parts of Gift object type that are wanted to be updated
  */
-export async function updateGift(id: string, newObject: Partial<Gift>) {
-  return (await axios.patch(`${baseURL}/${id}`, newObject)).data as Gift;
+export async function updateGift(uuid: string, newObject: Partial<Gift>) {
+  return (await axios.patch(`${baseURL}/${uuid}`, newObject)).data as Gift;
 }
 
 /**
  *
- * @param id should be given the id of the gift that is wanted to be deleted
+ * @param uuid should be given the id of the gift that is wanted to be deleted
  */
-export async function deleteGift(id: string) {
-  await axios.delete(`${baseURL}/${id}`);
+export async function deleteGift(uuid: string) {
+  await axios.delete(`${baseURL}/${uuid}`);
   return;
 }
