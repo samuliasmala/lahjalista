@@ -11,6 +11,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "check-types": "tsc --noemit",
     "lint": "(next lint || true) && npm run check-types",
     "lint:fix": "next lint --fix",
