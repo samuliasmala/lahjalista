@@ -174,6 +174,15 @@ export default function Home() {
                 </Button>
                 <Button
                   key={`${giftItem.uuid}_editbutton`}
+                  onMouseOver={(e) =>
+                    e.currentTarget.parentElement?.setAttribute(
+                      'class',
+                      'underline',
+                    )
+                  }
+                  onMouseOut={(e) =>
+                    e.currentTarget.parentElement?.removeAttribute('class')
+                  }
                   className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
