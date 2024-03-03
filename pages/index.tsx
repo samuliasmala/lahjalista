@@ -163,7 +163,7 @@ export default function Home() {
                     e.currentTarget.parentElement?.removeAttribute('class')
                   }
                   key={`${giftItem.uuid}_deletebutton`}
-                  className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
+                  className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
                   onClick={() => {
                     setDeleteModalGiftData(giftItem);
                     setIsDeleteModalOpen(true);
@@ -174,7 +174,7 @@ export default function Home() {
                 </Button>
                 <Button
                   key={`${giftItem.uuid}_editbutton`}
-                  className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
+                  className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
                     setIsEditModalOpen(true);
