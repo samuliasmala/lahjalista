@@ -116,7 +116,7 @@ export default function Home() {
                 onChange={(event) => setNewReceiver(event.target.value)}
                 autoComplete="off"
                 type="text"
-                placeholder="Aku Ankka"
+                placeholder="Matti Meikäläinen"
                 name="receiver"
                 value={newReceiver}
               />
