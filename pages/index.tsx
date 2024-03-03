@@ -107,7 +107,7 @@ export default function Home() {
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <div className="justify-center grid">
-        <div className="mt-5">
+        <div className="mt-5 justify-self-center">
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
