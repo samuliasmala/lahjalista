@@ -1,0 +1,27 @@
+# Example requests for VS Code REST Client extension
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseUrl = http://localhost:3000/api
+
+###
+GET {{baseUrl}}/gifts
+
+###
+GET {{baseUrl}}/gifts/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+
+###
+POST {{baseUrl}}/gifts
+Content-Type: application/json
+
+{
+  "receiver": "Aku Ankka",
+  "gift": "Kortti"
+}
+
+###
+PUT {{baseUrl}}/gifts/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+Content-Type: application/json
+
+{
+  "receiver": "Aku Ankka"
+}
