@@ -7,11 +7,25 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Gift {
+model User {
     id        Int      @id @default(autoincrement())
     uuid      String   @unique @default(uuid())
-    receiver  String
-    gift      String
+    firstName String
+    lastName  String
+    email     String   @unique
+    password  String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+    gift      Gift[]
+}
+
+model Gift {
+    id          Int      @id @default(autoincrement())
+    uuid        String   @unique @default(uuid())
+    receiver    String
+    gift        String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    authorEmail String?
+    author      User?    @relation(fields: [authorEmail], references: [email])
 }
