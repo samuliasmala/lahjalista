@@ -145,11 +145,11 @@ export default function Home() {
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
-              <div
-                key={`${giftItem.uuid}_divbutton`}
-                className="animate-width whitespace-nowrap overflow-auto"
-              >
-                <li key={giftItem.uuid}>
+              <div key={`${giftItem.uuid}_divbutton`} className="animate-width">
+                <li
+                  key={giftItem.uuid}
+                  className="whitespace-nowrap overflow-auto"
+                >
                   {giftItem.receiver} - {giftItem.gift}
                 </li>
                 <Button
