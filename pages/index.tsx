@@ -147,42 +147,42 @@ export default function Home() {
             {giftData.map((giftItem) => (
               <div
                 key={`${giftItem.uuid}_divbutton`}
-                className="animate-width whitespace-nowrap overflow-hidden"
+                className="animate-width whitespace-nowrap overflow-auto"
               >
                 <li key={giftItem.uuid}>
                   {giftItem.receiver} - {giftItem.gift}
-                  <Button
-                    onMouseOver={(e) =>
-                      e.currentTarget.parentElement?.setAttribute(
-                        'class',
-                        'line-through',
-                      )
-                    }
-                    onMouseOut={(e) =>
-                      e.currentTarget.parentElement?.removeAttribute('class')
-                    }
-                    key={`${giftItem.uuid}_deletebutton`}
-                    className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
-                    onClick={() => {
-                      setDeleteModalGiftData(giftItem);
-                      setIsDeleteModalOpen(true);
-                    }}
-                    type="button"
-                  >
-                    Poista
-                  </Button>
-                  <Button
-                    key={`${giftItem.uuid}_editbutton`}
-                    className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
-                    onClick={() => {
-                      setEditModalGiftData(giftItem);
-                      setIsEditModalOpen(true);
-                    }}
-                    type="button"
-                  >
-                    Muokkaa
-                  </Button>
                 </li>
+                <Button
+                  onMouseOver={(e) =>
+                    e.currentTarget.parentElement?.setAttribute(
+                      'class',
+                      'line-through',
+                    )
+                  }
+                  onMouseOut={(e) =>
+                    e.currentTarget.parentElement?.removeAttribute('class')
+                  }
+                  key={`${giftItem.uuid}_deletebutton`}
+                  className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
+                  onClick={() => {
+                    setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
+                  }}
+                  type="button"
+                >
+                  Poista
+                </Button>
+                <Button
+                  key={`${giftItem.uuid}_editbutton`}
+                  className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
+                  onClick={() => {
+                    setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
+                  }}
+                  type="button"
+                >
+                  Muokkaa
+                </Button>
               </div>
             ))}
             {isEditModalOpen && editModalGiftData && (
