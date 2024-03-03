@@ -141,14 +141,14 @@ export default function Home() {
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="mt-3 w-screen sm:w-auto">
+        <div className="mt-3 w-[20rem]">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
               <div key={`${giftItem.uuid}_divbutton`} className="animate-width">
                 <li
                   key={giftItem.uuid}
-                  className="whitespace-nowrap overflow-auto"
+                  className="whitespace-normal text-ellipsis overflow-clip"
                 >
                   {giftItem.receiver} - {giftItem.gift}
                 </li>
