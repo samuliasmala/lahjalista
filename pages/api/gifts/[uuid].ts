@@ -24,7 +24,7 @@ export default async function handlePrisma(
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
       if (typeof req.query.uuid !== 'string') {
-        throw new Error('Invalid ID', { cause: 'idError' });
+        return res.status(400).send('Invalid ID');
       }
       const queryUUID = req.query.uuid;
       await reqHandler({ req, res, queryUUID });
