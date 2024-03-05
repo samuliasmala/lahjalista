@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateGift, Gift, User } from '~/shared/types';
+import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 
 const HANDLER: Record<
@@ -45,23 +45,26 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
   return res.status(200).json(users);
 }
 
-async function handlePOST(req: NextApiRequest, res: NextApiResponse<Gift>) {
-  const giftData = req.body as CreateGift;
-  const addedGift = await prisma.gift.create({
+async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
+  const userDetails = req.body as CreateUser;
+  const addedUser = await prisma.user.create({
     data: {
-      gift: giftData.gift,
-      receiver: giftData.receiver,
+      email: userDetails.email,
+      firstName: userDetails.firstName,
+      lastName: userDetails.lastName,
+      password: userDetails.password,
     },
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return res.status(200).json(addedGift);
+  return res.status(200).json(addedUser);
 }
 
 export function errorFound(res: NextApiResponse, e: unknown) {
