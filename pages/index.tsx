@@ -141,7 +141,7 @@ export default function Home() {
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="mt-3 w-[20rem]">
+        <div className="mt-3 w-full sm:w-[20rem]">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
@@ -149,10 +149,7 @@ export default function Home() {
                 key={`${giftItem.uuid}_divbutton`}
                 className="animate-opacity"
               >
-                <li
-                  key={giftItem.uuid}
-                  className="whitespace-normal text-ellipsis overflow-clip"
-                >
+                <li key={giftItem.uuid} className="[overflow-wrap:anywhere]">
                   {giftItem.receiver} - {giftItem.gift}
                 </li>
                 <Button
