@@ -104,7 +104,7 @@ async function handlePUT({ req, res, queryUUID }: HandlerParams<User>) {
 }
 
 async function handleDELETE({ res, queryUUID }: HandlerParams) {
-  await prisma.gift.delete({
+  await prisma.user.delete({
     where: {
       uuid: queryUUID,
     },
