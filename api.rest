@@ -25,3 +25,29 @@ Content-Type: application/json
 {
   "receiver": "Aku Ankka"
 }
+
+###
+GET {{baseUrl}}/users
+
+###
+GET {{baseUrl}}/gifts/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+
+###
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "email": "john.doe@doemail.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "password": "AlwaysHashThePasswordAndNeverUsePlainText"
+}
+
+###
+PATCH {{baseUrl}}/users/2ebac01e-4586-4f2a-9fbd-486770ce04af
+Content-Type: application/json
+
+{
+  "firstName": "Matti",
+  "lastName": "Meikäläinen"
+}
