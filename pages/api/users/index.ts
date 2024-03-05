@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
+import * as bcrypt from 'bcrypt';
 
 const HANDLER: Record<
   string,
@@ -49,12 +50,13 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
   await isEmailValid(userDetails.email);
 
+  const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
     data: {
       email: userDetails.email,
       firstName: userDetails.firstName,
       lastName: userDetails.lastName,
-      password: userDetails.password,
+      password: password,
     },
     select: {
       uuid: true,
@@ -109,4 +111,10 @@ async function isEmailValid(emailAddress: string): Promise<boolean> {
 
   // email is ready to be used
   return true;
+}
+
+async function hashPassword(password: string): Promise<string> {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  return hashedPassword;
 }
