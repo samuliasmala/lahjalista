@@ -145,7 +145,10 @@ export default function Home() {
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
-              <div key={`${giftItem.uuid}_divbutton`} className="animate-width">
+              <div
+                key={`${giftItem.uuid}_divbutton`}
+                className="animate-opacity"
+              >
                 <li
                   key={giftItem.uuid}
                   className="whitespace-normal text-ellipsis overflow-clip"
