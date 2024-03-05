@@ -20,12 +20,12 @@ model User {
 }
 
 model Gift {
-    id          Int      @id @default(autoincrement())
-    uuid        String   @unique @default(uuid())
-    receiver    String
-    gift        String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    authorEmail String?
-    author      User?    @relation(fields: [authorEmail], references: [email])
+    id        Int      @id @default(autoincrement())
+    uuid      String   @unique @default(uuid())
+    receiver  String
+    gift      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    userUUID  String?
+    user      User?    @relation(fields: [userUUID], references: [uuid])
 }
