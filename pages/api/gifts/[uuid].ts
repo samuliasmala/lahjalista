@@ -1,7 +1,7 @@
 import { Gift } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
-import { errorFound } from '.';
+import { handleError } from '~/backend/handleError';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -36,7 +36,7 @@ export default async function handlePrisma(
         );
     }
   } catch (e) {
-    return errorFound(res, e);
+    return handleError(res, e);
   }
 }
 
