@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateGift, Gift } from '~/shared/types';
 import prisma from '~/prisma';
+import { handleError } from '~/backend/handleError';
 
 const HANDLER: Record<
   string,
@@ -26,7 +27,7 @@ export default async function handlePrisma(
         );
     }
   } catch (e) {
-    return errorFound(res, e);
+    return handleError(res, e);
   }
 }
 
@@ -61,16 +62,4 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<Gift>) {
   });
 
   return res.status(200).json(addedGift);
-}
-
-export function errorFound(res: NextApiResponse, e: unknown) {
-  if (e instanceof Error) {
-    if (e.message.toLowerCase() === 'no gift found') {
-      return res.status(400).send('Gift was not found!');
-    }
-    if (e.cause === 'idError') return res.status(400).send('Invalid ID!');
-    return res.status(500).send('Server error!');
-  }
-
-  return res.status(500).send('Unexpected error occurred!');
 }
