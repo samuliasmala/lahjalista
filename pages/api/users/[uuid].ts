@@ -57,27 +57,29 @@ async function handleGET({ res, queryUUID }: HandlerParams<User>) {
   return res.status(200).json(user);
 }
 
-async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
+  const newUserDetails = req.body as User;
 
-  const updatedGift = await prisma.gift.update({
+  const updatedUser = await prisma.user.update({
     where: {
       uuid: queryUUID,
     },
     data: {
-      receiver: newGiftData.receiver,
-      gift: newGiftData.gift,
+      email: newUserDetails.email,
+      firstName: newUserDetails.firstName,
+      lastName: newUserDetails.lastName,
     },
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return res.status(200).json(updatedGift);
+  return res.status(200).json(updatedUser);
 }
 
 async function handlePUT({ req, res, queryUUID }: HandlerParams<Gift>) {
