@@ -47,6 +47,8 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
+  await isEmailValid(userDetails.email);
+
   const addedUser = await prisma.user.create({
     data: {
       email: userDetails.email,
@@ -72,9 +74,41 @@ export function errorFound(res: NextApiResponse, e: unknown) {
     if (e.message.toLowerCase() === 'no gift found') {
       return res.status(400).send('Gift was not found!');
     }
+    if (e.message === 'Invalid email!') {
+      return res.status(400).send(e.message);
+    }
+    if (e.message === 'Email is used already!') {
+      return res.status(400).send(e.message);
+    }
     if (e.cause === 'idError') return res.status(400).send('Invalid ID!');
     return res.status(500).send('Server error!');
   }
 
   return res.status(500).send('Unexpected error occurred!');
+}
+
+async function isEmailValid(emailAddress: string): Promise<boolean> {
+  const checkedEmailAddress = emailAddress
+    .toLowerCase()
+    .match(
+      /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g,
+    );
+  if (checkedEmailAddress === null) {
+    throw new Error('Invalid email!');
+  }
+
+  // checking if email exists in database
+  const isEmailFound = await prisma.user.findUnique({
+    where: {
+      email: emailAddress,
+    },
+  });
+
+  // email exists already
+  if (isEmailFound) {
+    throw new Error('Email is used already!');
+  }
+
+  // email is ready to be used
+  return true;
 }
