@@ -1,4 +1,4 @@
-import { Gift, User } from '~/shared/types';
+import { User } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { errorFound } from '.';
