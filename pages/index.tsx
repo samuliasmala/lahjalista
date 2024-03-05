@@ -141,7 +141,7 @@ export default function Home() {
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="ml-1 mt-3 w-full sm:w-[20rem]">
+        <div className="pl-1 mt-3 w-full sm:w-[20rem]">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
