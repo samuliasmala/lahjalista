@@ -1,4 +1,4 @@
-import { Gift } from '~/shared/types';
+import { Gift, User } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { errorFound } from '.';
@@ -40,20 +40,21 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, queryUUID }: HandlerParams<Gift>) {
-  const gift = await prisma.gift.findUniqueOrThrow({
+async function handleGET({ res, queryUUID }: HandlerParams<User>) {
+  const user = await prisma.user.findUniqueOrThrow({
     where: {
       uuid: queryUUID,
     },
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
-  return res.status(200).json(gift);
+  return res.status(200).json(user);
 }
 
 async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
