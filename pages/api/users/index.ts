@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateGift, Gift } from '~/shared/types';
+import { CreateGift, Gift, User } from '~/shared/types';
 import prisma from '~/prisma';
 
 const HANDLER: Record<
@@ -30,18 +30,19 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse<Gift[]>) {
-  const gifts = await prisma.gift.findMany({
+async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
+  const users = await prisma.user.findMany({
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return res.status(200).json(gifts);
+  return res.status(200).json(users);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<Gift>) {
