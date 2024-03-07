@@ -33,12 +33,7 @@ export default function Login() {
 
   function checkIsEmailCorrect() {
     // this should check with regex that there cannot be multiple dots etc
-    const regexPattern =
-      /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-
-    //const regexPattern = /^[a-zA-Z0-9._]+@[a-zA-Z]+\.[a-zA-Z]+$/; // AI-version
-    // /^[^\s!@#$%^&*,:;¨|äöå]+@[^\s!@#$%^&*,:;¨|äöå0-9.]+\.[^\s!@#$%^&*,:;.¨|äöå0-9]+[a-z]*$/g; // my own version
-    // /^[^\s@]+@[^\s@]+\.[^\s@]+\.+$/; // found from internet and used as a base
+    const regexPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return email.toLowerCase().match(regexPattern);
   }
 
