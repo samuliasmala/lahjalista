@@ -39,16 +39,16 @@ export default function Login() {
 
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <div className="h-screen w-screen bg-no-repeat bg-cover bg-center">
+      <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
-          <div className="mt-5 flex justify-center flex-col">
+          <div className="mt-5 flex flex-col">
             <form onSubmit={(e) => handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
               <div className="mt-5 flex flex-col">
                 <label>Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
-                  className="border border-black sm:w-auto min-w-[19rem]"
+                  className="border border-black w-auto min-w-[19rem]"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
@@ -74,20 +74,18 @@ export default function Login() {
               </div>
               <Button>Luo käyttäjätunnus</Button>
             </form>
-            <p className="mt-6 text-xs text-gray-600 select-none">
+            <p className="mt-6 text-xs text-gray-600">
               Onko sinulla jo tunnus?{' '}
               <span
-                className="underline cursor-pointer select-none"
+                className="underline cursor-pointer"
                 onClick={(e) => handleLoginRedirect(e)}
               >
                 Kirjaudu sisään
               </span>
             </p>
-            <div className="flex mt-5">
-              <TitleText className="mt-0 p-3 border-4 border-red-600 align-middle ">
-                Älä käytä oikeita sähköposteja!
-              </TitleText>
-            </div>
+            <TitleText className="mt-5 p-3 border-4 border-red-600">
+              Älä käytä oikeita sähköposteja!
+            </TitleText>
           </div>
         </div>
       </div>
