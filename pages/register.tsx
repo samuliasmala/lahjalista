@@ -29,6 +29,10 @@ export default function Login() {
     if (checkIsEmailCorrect() === null) {
       return setEmailError(true);
     }
+    try {
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   function checkIsEmailCorrect() {
@@ -48,7 +52,7 @@ export default function Login() {
                 <label>Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
-                  className="border border-black w-auto min-w-[19rem]"
+                  className="border border-black min-w-[19rem]"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
