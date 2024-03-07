@@ -3,6 +3,7 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
 import { NextApiResponse } from 'next';
+import { HttpError } from './HttpError';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
