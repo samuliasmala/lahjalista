@@ -5,6 +5,10 @@ import {
 import { NextApiResponse } from 'next';
 
 export function handleError(res: NextApiResponse, e: unknown) {
+  if (e instanceof HttpError) {
+    return res.status(e.httpStatusCode ?? 400).send(e.message);
+  }
+
   if (e instanceof PrismaClientKnownRequestError) {
     if (e.code === 'P2025') {
       return res.status(404).send('Gift was not found on the server!');
