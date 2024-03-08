@@ -8,6 +8,8 @@ import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/giftRequests';
 import { isAxiosError } from 'axios';
 import { Gift, CreateGift } from '~/shared/types';
+import { SessionProvider, useSession } from 'next-auth/react';
+import { SessionComponent } from '~/components/SessionComponent';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +25,6 @@ export default function Home() {
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
-
   useEffect(() => {
     console.log('effect');
 
@@ -108,6 +109,9 @@ export default function Home() {
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <div className="justify-center grid h-5">
         <div className="mt-5">
+          <SessionProvider>
+            <SessionComponent />
+          </SessionProvider>
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">

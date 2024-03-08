@@ -1,10 +1,10 @@
+import axios from 'axios';
 import { Inter } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
-
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
@@ -22,7 +22,7 @@ export default function Login() {
     router.push('/login');
   }
 
-  function handleRegister(e: FormEvent<HTMLFormElement>) {
+  async function handleRegister(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setEmailError(false);
 
@@ -30,6 +30,22 @@ export default function Login() {
       return setEmailError(true);
     }
     try {
+      console.log('Handling registering!');
+      const testAxiosPostRequest = await axios.post(
+        '/api/users',
+        {
+          email: email,
+          password: password,
+          firstName: 'Teppo',
+          lastName: 'Testaaja',
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      console.log(testAxiosPostRequest);
     } catch (e) {
       console.error(e);
     }
