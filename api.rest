@@ -34,6 +34,10 @@ Content-Type: application/json
   "gift": "Kortti"
 }
 
+# Deletes a specific Gift
+###
+DELETE {{baseUrl}}/gifts/
+
 
 # Returns all the Users as an array
 ###
