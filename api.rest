@@ -26,12 +26,14 @@ Content-Type: application/json
 
 # Changes Gift's data 
 ###
-PUT {{baseUrl}}/gifts/
+PATCH {{baseUrl}}/gifts/
 Content-Type: application/json
 
 {
-  "receiver": "Aku Ankka"
+  "receiver": "Aku Ankka",
+  "gift": "Kortti"
 }
+
 
 # Returns all the Users as an array
 ###
