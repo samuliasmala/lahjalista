@@ -7,7 +7,7 @@
 GET {{baseUrl}}/gifts
 
 ###
-GET {{baseUrl}}/gifts/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+GET {{baseUrl}}/gifts/
 
 ###
 POST {{baseUrl}}/gifts
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/gifts/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+PUT {{baseUrl}}/gifts/
 Content-Type: application/json
 
 {
@@ -30,7 +30,7 @@ Content-Type: application/json
 GET {{baseUrl}}/users
 
 ###
-GET {{baseUrl}}/users/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+GET {{baseUrl}}/users/
 
 ###
 POST {{baseUrl}}/users
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/users/2ebac01e-4586-4f2a-9fbd-486770ce04af
+PATCH {{baseUrl}}/users/
 Content-Type: application/json
 
 {
@@ -53,4 +53,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{baseUrl}}/users/deb51ffe-d030-4317-aa2c-bcdebd728756
+DELETE {{baseUrl}}/users/
