@@ -30,7 +30,7 @@ Content-Type: application/json
 GET {{baseUrl}}/users
 
 ###
-GET {{baseUrl}}/gifts/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
+GET {{baseUrl}}/users/1141b4b1-7ea3-40dd-853c-1a0f9eecb4b5
 
 ###
 POST {{baseUrl}}/users
