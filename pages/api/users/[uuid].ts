@@ -89,7 +89,11 @@ async function handlePUT({ req, res, queryUUID }: HandlerParams<User>) {
     where: {
       uuid: queryUUID,
     },
-    data: newUserDetails,
+    data: {
+      email: newUserDetails.email.toLowerCase(),
+      firstName: newUserDetails.firstName,
+      lastName: newUserDetails.lastName,
+    },
     select: {
       uuid: true,
       firstName: true,
