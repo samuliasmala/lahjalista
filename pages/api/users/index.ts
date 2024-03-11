@@ -49,7 +49,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
-  await isEmailValid(userDetails.email);
+  isEmailValid(userDetails.email);
 
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
@@ -98,10 +98,11 @@ export function errorFound(res: NextApiResponse, e: unknown) {
   return res.status(500).send('Unexpected error occurred!');
 }
 
-async function isEmailValid(emailAddress: string): Promise<boolean> {
+function isEmailValid(emailAddress: string): boolean {
   const checkedEmailAddress = emailAddress
     .toLowerCase()
     .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+
   if (checkedEmailAddress === null) {
     throw new Error('Invalid email!');
   }
