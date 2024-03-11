@@ -51,3 +51,6 @@ Content-Type: application/json
   "firstName": "Matti",
   "lastName": "Meikäläinen"
 }
+
+###
+DELETE {{baseUrl}}/users/deb51ffe-d030-4317-aa2c-bcdebd728756
