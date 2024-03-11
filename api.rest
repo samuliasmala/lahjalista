@@ -61,6 +61,7 @@ PATCH {{baseUrl}}/users/
 Content-Type: application/json
 
 {
+  "email": "matti.meikalainen@esimerkkimail.com",
   "firstName": "Matti",
   "lastName": "Meikäläinen",
 }
