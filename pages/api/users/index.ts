@@ -97,19 +97,6 @@ async function isEmailValid(emailAddress: string): Promise<boolean> {
     throw new Error('Invalid email!');
   }
 
-  // checking if email exists in database
-  const isEmailFound = await prisma.user.findUnique({
-    where: {
-      email: emailAddress,
-    },
-  });
-
-  // email exists already
-
-  if (isEmailFound) {
-    throw new Error('Email is used already!');
-  }
-
   // email is ready to be used
   return true;
 }
