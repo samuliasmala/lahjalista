@@ -65,7 +65,7 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
       uuid: queryUUID,
     },
     data: {
-      email: newUserDetails.email,
+      email: newUserDetails.email.toLowerCase(),
       firstName: newUserDetails.firstName,
       lastName: newUserDetails.lastName,
     },
