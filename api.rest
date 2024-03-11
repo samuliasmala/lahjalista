@@ -34,6 +34,16 @@ Content-Type: application/json
   "gift": "Kortti"
 }
 
+# Changes Gift's data
+###
+PUT {{baseUrl}}/gifts/
+Content-Type: application/json
+
+{
+  "receiver": "Aku Ankka",
+  "gift": "Kortti"
+}
+
 # Deletes a specific Gift
 ###
 DELETE {{baseUrl}}/gifts/
@@ -62,6 +72,11 @@ Content-Type: application/json
 # Changes User's data
 ###
 PATCH {{baseUrl}}/users/
+Content-Type: application/json
+
+# Changes User's data
+###
+PUT {{baseUrl}}/users/
 Content-Type: application/json
 
 {
