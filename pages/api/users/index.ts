@@ -53,7 +53,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
     data: {
-      email: userDetails.email,
+      email: userDetails.email.toLowerCase(),
       firstName: userDetails.firstName,
       lastName: userDetails.lastName,
       password: password,
@@ -105,6 +105,7 @@ async function isEmailValid(emailAddress: string): Promise<boolean> {
   });
 
   // email exists already
+
   if (isEmailFound) {
     throw new Error('Email is used already!');
   }
