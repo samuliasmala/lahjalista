@@ -20,5 +20,6 @@ export function handleError(res: NextApiResponse, e: unknown) {
     return res.status(400).send('Invalid request body!');
   }
 
+  console.error(e);
   return res.status(500).send('Server error!');
 }
