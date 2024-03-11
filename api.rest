@@ -77,7 +77,7 @@ Content-Type: application/json
 {
   "email": "matti.meikalainen@esimerkkimail.com",
   "firstName": "Matti",
-  "lastName": "Meikäläinen",
+  "lastName": "Meikäläinen"
 }
 
 # Changes User's data
@@ -88,7 +88,7 @@ Content-Type: application/json
 {
   "email": "matti.meikalainen@esimerkkimail.com",
   "firstName": "Matti",
-  "lastName": "Meikäläinen",
+  "lastName": "Meikäläinen"
 }
 
 # Deletes a specific User
