@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
-import * as bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
 
 const HANDLER: Record<
   string,
@@ -115,6 +115,6 @@ async function isEmailValid(emailAddress: string): Promise<boolean> {
 
 async function hashPassword(password: string): Promise<string> {
   const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await hash(password, saltRounds);
   return hashedPassword;
 }
