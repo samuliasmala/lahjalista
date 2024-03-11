@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { hash } from 'bcrypt';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 const HANDLER: Record<
   string,
@@ -72,6 +73,15 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
 }
 
 export function errorFound(res: NextApiResponse, e: unknown) {
+  if (e instanceof PrismaClientKnownRequestError) {
+    if (e.code === 'P2025') {
+      return res.status(404).send('Record was not found!');
+    }
+    if (e.code === 'P2002') {
+      return res.status(400).send('Record was not unique!');
+    }
+    return res.status(500).send('Server error!');
+  }
   if (e instanceof Error) {
     if (e.message.toLowerCase() === 'no gift found') {
       return res.status(400).send('Gift was not found!');
@@ -85,7 +95,6 @@ export function errorFound(res: NextApiResponse, e: unknown) {
     if (e.cause === 'idError') return res.status(400).send('Invalid ID!');
     return res.status(500).send('Server error!');
   }
-
   return res.status(500).send('Unexpected error occurred!');
 }
 
