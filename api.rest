@@ -3,12 +3,18 @@
 
 @baseUrl = http://localhost:3000/api
 
+# ALL REQUESTS THAT ENDS WITH / WILL REQUIRE AN ID TO WORK!
+# For example: GET {{baseUrl}}/gifts/2ebac01e-4586-4f2a-9fbd-486770ce04af
+
+# Returns all the Gifts as an array
 ###
 GET {{baseUrl}}/gifts
 
+# Returns a specific Gift
 ###
 GET {{baseUrl}}/gifts/
 
+# Creates a new Gift
 ###
 POST {{baseUrl}}/gifts
 Content-Type: application/json
@@ -18,6 +24,7 @@ Content-Type: application/json
   "gift": "Kortti"
 }
 
+# Changes Gift's data 
 ###
 PUT {{baseUrl}}/gifts/
 Content-Type: application/json
@@ -26,12 +33,15 @@ Content-Type: application/json
   "receiver": "Aku Ankka"
 }
 
+# Returns all the Users as an array
 ###
 GET {{baseUrl}}/users
 
+# Returns a specific User
 ###
 GET {{baseUrl}}/users/
 
+# Creates a new User
 ###
 POST {{baseUrl}}/users
 Content-Type: application/json
@@ -43,14 +53,16 @@ Content-Type: application/json
   "password": "AlwaysHashThePasswordAndNeverUsePlainText"
 }
 
+# Changes User's data
 ###
 PATCH {{baseUrl}}/users/
 Content-Type: application/json
 
 {
   "firstName": "Matti",
-  "lastName": "Meikäläinen"
+  "lastName": "Meikäläinen",
 }
 
+# Deletes a specific User
 ###
 DELETE {{baseUrl}}/users/
