@@ -3,6 +3,8 @@
 
 @baseUrl = http://localhost:3000/api
 
+# GIFT REQUESTS
+
 ###
 GET {{baseUrl}}/gifts
 
@@ -39,6 +41,8 @@ Content-Type: application/json
 ###
 DELETE {{baseUrl}}/gifts/
 
+
+# USER REQUESTS
 
 ###
 GET {{baseUrl}}/users
