@@ -12,10 +12,9 @@ export function handleError(res: NextApiResponse, e: unknown) {
 
   if (e instanceof PrismaClientKnownRequestError) {
     if (e.code === 'P2025') {
-      if (e.meta?.modelName === 'Gift') {
-        return res.status(404).send('Gift was not found on the server!');
-      }
-      return res.status(404).send('Record was not found on the server!');
+      const modelName =
+        typeof e.meta?.modelName === 'string' ? e.meta?.modelName : 'Record';
+      return res.status(404).send(`${modelName} was not found on the server!`);
     }
   }
 
