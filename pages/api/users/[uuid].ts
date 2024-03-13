@@ -58,14 +58,14 @@ async function handleGET({ res, queryUUID }: HandlerParams<User>) {
 }
 
 async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
-  const newUserDetails = req.body as User;
+  const newUserDetails = req.body as Partial<User>;
 
   const updatedUser = await prisma.user.update({
     where: {
       uuid: queryUUID,
     },
     data: {
-      email: newUserDetails.email.toLowerCase(),
+      email: newUserDetails.email?.toLowerCase(),
       firstName: newUserDetails.firstName,
       lastName: newUserDetails.lastName,
     },
@@ -78,7 +78,6 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
       updatedAt: true,
     },
   });
-
   return res.status(200).json(updatedUser);
 }
 
