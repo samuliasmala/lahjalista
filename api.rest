@@ -9,7 +9,7 @@
 GET {{baseUrl}}/gifts
 
 ###
-GET {{baseUrl}}/gifts/
+GET {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
 
 ###
 POST {{baseUrl}}/gifts
@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/gifts/
+PATCH {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
 Content-Type: application/json
 
 {
@@ -30,7 +30,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/gifts/
+PUT {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
 Content-Type: application/json
 
 {
@@ -39,7 +39,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{baseUrl}}/gifts/
+DELETE {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
 
 
 # USER REQUESTS
@@ -48,7 +48,7 @@ DELETE {{baseUrl}}/gifts/
 GET {{baseUrl}}/users
 
 ###
-GET {{baseUrl}}/users/
+GET {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
 
 ###
 POST {{baseUrl}}/users
@@ -62,7 +62,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/users/
+PATCH {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
 Content-Type: application/json
 
 {
@@ -72,7 +72,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/users/
+PUT {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
 Content-Type: application/json
 
 {
@@ -82,4 +82,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{baseUrl}}/users/
+DELETE {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
