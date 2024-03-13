@@ -107,7 +107,7 @@ export default function Home() {
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <div className="justify-center grid">
-        <div className="mt-5 justify-self-center">
+        <div className="mt-5 pl-8 pr-8">
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
@@ -141,7 +141,7 @@ export default function Home() {
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="pl-1 mt-3 w-full sm:w-[20rem]">
+        <div className="pl-8 pr-8 mt-3 w-full sm:w-[20rem]">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
