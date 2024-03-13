@@ -13,7 +13,7 @@ import { updateGift } from '~/utils/giftRequests';
 import { Input } from './Input';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
-import { handleGiftError } from '~/frontend/handleError';
+import { handleGiftError } from '~/utils/handleError';
 
 type EditModal = {
   gift: Gift;
