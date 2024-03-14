@@ -13,7 +13,7 @@ import { updateGift } from '~/utils/giftRequests';
 import { Input } from './Input';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
-import { isAxiosError } from 'axios';
+import { handleGiftError } from '~/utils/handleError';
 
 type EditModal = {
   gift: Gift;
@@ -46,13 +46,7 @@ export function EditModal({
     try {
       await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
-      if (isAxiosError(e) && e.response?.status === 404) {
-        console.error('Lahjaa ei löytynyt palvelimelta!');
-      } else if (e instanceof Error) {
-        console.error(e.message);
-      } else {
-        console.error(e);
-      }
+      handleGiftError(e);
     }
     refreshGiftList();
     setIsModalOpen(false);
