@@ -31,21 +31,6 @@ export default function Login() {
     }
     try {
       console.log('Handling registering!');
-      const testAxiosPostRequest = await axios.post(
-        '/api/users',
-        {
-          email: email,
-          password: password,
-          firstName: 'Teppo',
-          lastName: 'Testaaja',
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      console.log(testAxiosPostRequest);
     } catch (e) {
       console.error(e);
     }

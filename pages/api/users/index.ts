@@ -3,7 +3,6 @@ import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { hash } from 'bcrypt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { z } from 'zod';
 
 const HANDLER: Record<
   string,
@@ -12,16 +11,6 @@ const HANDLER: Record<
   GET: handleGET,
   POST: handlePOST,
 };
-
-const registerationUserSchema = z.object({
-  email: z
-    .string()
-    .regex(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      'Invalid email!',
-    ),
-  password: z.string().min(6, 'Password has to be at least 6 characters long!'),
-});
 
 export default async function handlePrisma(
   req: NextApiRequest,
@@ -64,11 +53,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   console.log(userDetails);
   isEmailValid(userDetails.email);
 
-  const parsedData = registerationUserSchema.parse(userDetails);
-
-  isEmailValid(parsedData.email);
-
-  const password = await hashPassword(parsedData.password);
+  const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
     data: {
       //email: parsedData.email,

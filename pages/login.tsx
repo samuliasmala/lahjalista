@@ -24,11 +24,6 @@ export default function Login() {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    signIn('credentials', {
-      email: email,
-      password: password,
-      callbackUrl: '/',
-    });
   }
 
   return (
