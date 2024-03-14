@@ -141,7 +141,7 @@ export default function Home() {
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="pl-8 pr-8 mt-3 w-full sm:w-[20rem]">
+        <div className="pl-8 pr-8 mt-3 w-full max-w-xl">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
