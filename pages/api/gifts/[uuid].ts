@@ -1,7 +1,8 @@
 import { Gift } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
-import { errorFound } from '.';
+import { handleError } from '~/backend/handleError';
+import { HttpError } from '~/backend/HttpError';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -24,19 +25,18 @@ export default async function handlePrisma(
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
       if (typeof req.query.uuid !== 'string') {
-        throw new Error('Invalid ID', { cause: 'idError' });
+        throw new HttpError('Invalid ID', 400);
       }
       const queryUUID = req.query.uuid;
       await reqHandler({ req, res, queryUUID });
     } else {
-      return res
-        .status(405)
-        .send(
-          `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
-        );
+      throw new HttpError(
+        `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
+        405,
+      );
     }
   } catch (e) {
-    return errorFound(res, e);
+    return handleError(res, e);
   }
 }
 
