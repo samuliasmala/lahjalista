@@ -1,9 +1,8 @@
-import { signIn } from 'next-auth/react';
 import { Inter } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
+import { LoginAndSignOutButton } from '~/components/LoginAndSignOutButton';
 import { TitleText } from '~/components/TitleText';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -62,7 +61,7 @@ export default function Login() {
                   Muista minut
                 </label>
               </div>
-              <Button>Kirjaudu</Button>
+              <LoginAndSignOutButton>Kirjaudu</LoginAndSignOutButton>
             </form>
             <p className="mt-6 text-xs text-gray-600 select-none">
               Sinulla ei ole vielä tunnuksia?{' '}
