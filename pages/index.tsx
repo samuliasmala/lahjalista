@@ -149,21 +149,15 @@ export default function Home() {
                 key={`${giftItem.uuid}_divbutton`}
                 className="animate-opacity"
               >
-                <li key={giftItem.uuid} className="[overflow-wrap:anywhere]">
+                <li
+                  key={giftItem.uuid}
+                  className="[overflow-wrap:anywhere] hover-target"
+                >
                   {giftItem.receiver} - {giftItem.gift}
                 </li>
                 <Button
-                  onMouseOver={(e) =>
-                    e.currentTarget.parentElement?.setAttribute(
-                      'class',
-                      'line-through',
-                    )
-                  }
-                  onMouseOut={(e) =>
-                    e.currentTarget.parentElement?.removeAttribute('class')
-                  }
                   key={`${giftItem.uuid}_deletebutton`}
-                  className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
+                  className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
                   onClick={() => {
                     setDeleteModalGiftData(giftItem);
                     setIsDeleteModalOpen(true);
@@ -174,16 +168,7 @@ export default function Home() {
                 </Button>
                 <Button
                   key={`${giftItem.uuid}_editbutton`}
-                  onMouseOver={(e) =>
-                    e.currentTarget.parentElement?.setAttribute(
-                      'class',
-                      'underline',
-                    )
-                  }
-                  onMouseOut={(e) =>
-                    e.currentTarget.parentElement?.removeAttribute('class')
-                  }
-                  className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400"
+                  className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
                     setIsEditModalOpen(true);
