@@ -3,9 +3,26 @@ import NextAuth from 'next-auth/next';
 import CredentialProvider from 'next-auth/providers/credentials';
 
 export const authOptions: AuthOptions = {
-  pages:{
-    signIn: '/login'
-  }
+  pages: {
+    signIn: '/login',
+  },
+  callbacks: {
+    async signIn(data) {
+      console.log(data, 'This is printed out!');
+      return false;
+    },
+    async jwt({ token, account }) {
+      console.log(token, account);
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    async session(sessionData) {
+      console.log('sessionData: \n\n', sessionData);
+      return sessionData.session;
+    },
+  },
   providers: [
     CredentialProvider({
       credentials: {
