@@ -61,7 +61,7 @@ export default function Login() {
                   Muista minut
                 </label>
               </div>
-              <LoginAndSignOutButton>Kirjaudu</LoginAndSignOutButton>
+              <LoginAndSignOutButton type="submit" />
             </form>
             <p className="mt-6 text-xs text-gray-600 select-none">
               Sinulla ei ole vielä tunnuksia?{' '}
