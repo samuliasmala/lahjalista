@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 import { Input } from '~/components/Input';
 import { LoginAndSignOutButton } from '~/components/LoginAndSignOutButton';
 import { TitleText } from '~/components/TitleText';
-
+import { signIn } from 'next-auth/react';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
@@ -21,8 +21,14 @@ export default function Login() {
     router.push('/register');
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    await signIn('credentials', {
+      email: email,
+      password: password,
+      callbackUrl: '/login',
+      redirect: false,
+    });
   }
 
   return (
