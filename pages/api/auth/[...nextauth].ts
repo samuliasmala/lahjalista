@@ -29,10 +29,9 @@ export const authOptions: AuthOptions = {
         email: {},
         password: {},
       },
-      async authorize(credentials, req) {
-        const response = await fetch(req);
-        if (!response.ok) return null;
-        return (await response.json()) ?? null;
+      async authorize(credentials) {
+        console.log('credentials: ', credentials);
+        return null;
       },
     }),
   ],
