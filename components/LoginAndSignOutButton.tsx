@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 import { Button } from './Button';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 export function LoginAndSignOutButton({
   children,
@@ -12,7 +12,7 @@ export function LoginAndSignOutButton({
     return (
       <>
         <p className="text-3xl">Signed in as {session.user?.email}</p>
-        <Button onClick={() => signOut()} className={className} {...rest}>
+        <Button className={className} {...rest}>
           Sign out
         </Button>
       </>
@@ -21,7 +21,7 @@ export function LoginAndSignOutButton({
   return (
     <>
       <p className="text-3xl">Not signed in</p>
-      <Button onClick={() => signIn()} className={className} {...rest}>
+      <Button className={className} {...rest}>
         Sign in
       </Button>
     </>
