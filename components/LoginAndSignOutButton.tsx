@@ -12,7 +12,7 @@ export function LoginAndSignOutButton({
     return (
       <>
         <p className="text-3xl">Signed in as {session.user?.email}</p>
-        <Button className={className} {...rest}>
+        <Button onClick={() => signOut()} className={className} {...rest}>
           Sign out
         </Button>
       </>
@@ -21,7 +21,7 @@ export function LoginAndSignOutButton({
   return (
     <>
       <p className="text-3xl">Not signed in</p>
-      <Button className={className} {...rest}>
+      <Button onClick={() => signIn()} className={className} {...rest}>
         Sign in
       </Button>
     </>
