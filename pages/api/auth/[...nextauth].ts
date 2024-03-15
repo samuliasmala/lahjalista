@@ -26,16 +26,8 @@ export const authOptions: AuthOptions = {
   providers: [
     CredentialProvider({
       credentials: {
-        email: {
-          label: 'Sähköposti',
-          type: 'email',
-          placeholder: 'matti.meikalainen@email.com',
-        },
-        password: {
-          label: 'Password',
-          type: 'password',
-          placeholder: '************',
-        },
+        email: {},
+        password: {},
       },
       async authorize(credentials, req) {
         const response = await fetch(req);
