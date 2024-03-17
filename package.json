@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@auth/pg-adapter": "0.7.0",
+    "@auth/prisma-adapter": "1.5.0",
     "@prisma/client": "5.10.2",
     "@types/node": "20.6.0",
     "@types/react": "18.2.21",
