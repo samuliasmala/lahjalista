@@ -59,12 +59,21 @@ const config: Config = {
             backgroundColor: 'blue',
           },
         },
+        opacity: {
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
+          },
+        },
       },
       animation: {
         highlight: 'highlight 1200ms ease-in-out',
         rainbowBackGroundColor: 'rainbowBackGroundColor 1000ms',
         background: 'background 1200ms ease-in-out',
         width: 'width 1200ms',
+        opacity: 'opacity 800ms',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
