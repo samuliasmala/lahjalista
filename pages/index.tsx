@@ -106,8 +106,8 @@ export default function Home() {
 
   return (
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
-      <div className="justify-center grid h-5">
-        <div className="mt-5">
+      <div className="justify-center grid">
+        <div className="mt-5 pl-8 pr-8">
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
@@ -116,7 +116,7 @@ export default function Home() {
                 onChange={(event) => setNewReceiver(event.target.value)}
                 autoComplete="off"
                 type="text"
-                placeholder="Aku Ankka"
+                placeholder="Matti Meikäläinen"
                 name="receiver"
                 value={newReceiver}
               />
@@ -141,48 +141,42 @@ export default function Home() {
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="mt-3">
+        <div className="pl-8 pr-8 mt-3 w-full max-w-xl">
           <TitleText>Lahjaideat</TitleText>
           <div>
             {giftData.map((giftItem) => (
               <div
                 key={`${giftItem.uuid}_divbutton`}
-                className="animate-width whitespace-nowrap overflow-hidden"
+                className="animate-opacity"
               >
-                <li key={giftItem.uuid}>
+                <li
+                  key={giftItem.uuid}
+                  className="[overflow-wrap:anywhere] hover-target"
+                >
                   {giftItem.receiver} - {giftItem.gift}
-                  <Button
-                    onMouseOver={(e) =>
-                      e.currentTarget.parentElement?.setAttribute(
-                        'class',
-                        'line-through',
-                      )
-                    }
-                    onMouseOut={(e) =>
-                      e.currentTarget.parentElement?.removeAttribute('class')
-                    }
-                    key={`${giftItem.uuid}_deletebutton`}
-                    className="ms-5 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto"
-                    onClick={() => {
-                      setDeleteModalGiftData(giftItem);
-                      setIsDeleteModalOpen(true);
-                    }}
-                    type="button"
-                  >
-                    Poista
-                  </Button>
-                  <Button
-                    key={`${giftItem.uuid}_editbutton`}
-                    className="ms-3 p-0 w-20 h-8 hover:text-yellow-400"
-                    onClick={() => {
-                      setEditModalGiftData(giftItem);
-                      setIsEditModalOpen(true);
-                    }}
-                    type="button"
-                  >
-                    Muokkaa
-                  </Button>
                 </li>
+                <Button
+                  key={`${giftItem.uuid}_deletebutton`}
+                  className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
+                  onClick={() => {
+                    setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
+                  }}
+                  type="button"
+                >
+                  Poista
+                </Button>
+                <Button
+                  key={`${giftItem.uuid}_editbutton`}
+                  className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
+                  onClick={() => {
+                    setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
+                  }}
+                  type="button"
+                >
+                  Muokkaa
+                </Button>
               </div>
             ))}
             {isEditModalOpen && editModalGiftData && (
