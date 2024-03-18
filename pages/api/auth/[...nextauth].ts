@@ -4,6 +4,7 @@ import CredentialProvider from 'next-auth/providers/credentials';
 import prisma from '~/prisma';
 import { compare as bcryptCompare } from 'bcrypt';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { Adapter } from 'next-auth/adapters';
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -72,7 +73,7 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
 };
 
