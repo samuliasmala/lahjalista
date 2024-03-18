@@ -59,6 +59,12 @@ export const authOptions: AuthOptions = {
           });
           if (!user) return null;
 
+          const isPasswordSame: boolean = await verifyPassword(
+            credentialsPassword,
+            user.password,
+          );
+          if (!isPasswordSame) return null;
+
           return null;
         } catch (e) {
           return null;
