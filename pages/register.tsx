@@ -98,6 +98,9 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
+                {isLastNameError ? (
+                  <ErrorParagraph>{lastNameErrorText}</ErrorParagraph>
+                ) : null}
                 <label className="pt-5">Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
