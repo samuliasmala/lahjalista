@@ -53,4 +53,17 @@ export const authOptions: AuthOptions = {
   ],
 };
 
+function isEmailValid(emailAddress: string): boolean {
+  const checkedEmailAddress = emailAddress
+    .toLowerCase()
+    .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+
+  if (checkedEmailAddress === null) {
+    throw new Error('Invalid email!');
+  }
+
+  // email is ready to be used
+  return true;
+}
+
 export default NextAuth(authOptions);
