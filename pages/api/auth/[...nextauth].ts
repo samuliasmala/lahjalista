@@ -31,6 +31,9 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         console.log('credentials: ', credentials);
+        const credentialsEmail = credentials?.email;
+        const credentialsPassword = credentials?.password;
+
         return null;
       },
     }),
