@@ -1,6 +1,7 @@
 import { AuthOptions } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialProvider from 'next-auth/providers/credentials';
+import prisma from '~/prisma';
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -49,6 +50,12 @@ export const authOptions: AuthOptions = {
           }
 
           isEmailValid(credentialsEmail);
+
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentialsEmail,
+            },
+          });
 
           return null;
         } catch (e) {
