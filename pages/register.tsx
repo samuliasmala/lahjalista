@@ -114,6 +114,7 @@ export default function Login() {
                 {isFirstNameError ? (
                   <ErrorParagraph>{firstNameErrorText}</ErrorParagraph>
                 ) : null}
+
                 <label className="pt-5">Sukunimi</label>
                 <Input
                   onChange={(e) => setLastName(e.currentTarget.value)}
@@ -127,6 +128,7 @@ export default function Login() {
                 {isLastNameError ? (
                   <ErrorParagraph>{lastNameErrorText}</ErrorParagraph>
                 ) : null}
+
                 <label className="pt-5">Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
@@ -140,6 +142,7 @@ export default function Login() {
                 {isEmailError ? (
                   <ErrorParagraph>{emailErrorText}</ErrorParagraph>
                 ) : null}
+
                 <label className="pt-5">Salasana</label>
                 <Input
                   onChange={(e) => setPassword(e.currentTarget.value)}
@@ -152,11 +155,12 @@ export default function Login() {
                 {isPasswordError ? (
                   <ErrorParagraph>{passwordErrorText}</ErrorParagraph>
                 ) : null}
+
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
                   <span
-                    className="underline cursor-pointer"
+                    className="underline cursor-pointer hover:text-blue-500"
                     onClick={() => {
                       router.push('/login');
                     }}
