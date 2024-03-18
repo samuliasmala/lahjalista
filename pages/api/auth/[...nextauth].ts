@@ -2,6 +2,7 @@ import { AuthOptions } from 'next-auth';
 import NextAuth from 'next-auth/next';
 import CredentialProvider from 'next-auth/providers/credentials';
 import prisma from '~/prisma';
+import { compare as bcryptCompare } from 'bcrypt';
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -78,6 +79,14 @@ function isEmailValid(emailAddress: string): boolean {
 
   // email is ready to be used
   return true;
+}
+
+async function verifyPassword(
+  givenPassword: string,
+  hashedPassword: string,
+): Promise<boolean> {
+  const isMatch = await bcryptCompare(givenPassword, hashedPassword);
+  return isMatch;
 }
 
 export default NextAuth(authOptions);
