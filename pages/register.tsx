@@ -51,6 +51,17 @@ export default function Login() {
     return true;
   }
 
+  function isLastNameValid(): boolean {
+    const checkedLastName = lastName.match(
+      /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
+    );
+
+    if (!checkedLastName) {
+      return false;
+    }
+    return true;
+  }
+
   function isPasswordValid(): boolean {
     const checkedPassword = password.match(
       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
