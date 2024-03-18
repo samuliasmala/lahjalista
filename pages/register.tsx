@@ -109,7 +109,7 @@ export default function Login() {
                   spellCheck="false"
                 />
                 {isEmailError ? (
-                  <p className="text-red-600 mt-2">{emailErrorText}</p>
+                  <ErrorParagraph>{emailErrorText}</ErrorParagraph>
                 ) : null}
                 <label className="pt-5">Salasana</label>
                 <Input
