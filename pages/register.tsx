@@ -93,7 +93,7 @@ export default function Login() {
                   name="password"
                 />
                 <Button>Luo käyttäjätunnus</Button>
-                <p className="mt-6 text-xs text-gray-600">
+                <p className="pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
                   <span
                     className="underline cursor-pointer"
