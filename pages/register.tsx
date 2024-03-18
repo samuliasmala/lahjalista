@@ -120,6 +120,9 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
+                {isPasswordError ? (
+                  <ErrorParagraph>{passwordErrorText}</ErrorParagraph>
+                ) : null}
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
