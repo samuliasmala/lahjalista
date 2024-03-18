@@ -8,18 +8,18 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async signIn(data) {
-      console.log(data, 'This is printed out!');
+      console.log('signIn data: \n\n\n\n', data);
       return false;
     },
-    async jwt({ token, account }) {
-      console.log(token, account);
-      if (account) {
-        token.accessToken = account.access_token;
+    async jwt(jwtData) {
+      console.log('jwtData: \n\n\n\n', jwtData);
+      if (jwtData.account) {
+        jwtData.token.accessToken = jwtData.account.access_token;
       }
-      return token;
+      return jwtData.token;
     },
     async session(sessionData) {
-      console.log('sessionData: \n\n', sessionData);
+      console.log('sessionData: \n\n\n\n', sessionData);
       return sessionData.session;
     },
   },
