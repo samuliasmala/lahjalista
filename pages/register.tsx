@@ -50,6 +50,16 @@ export default function Login() {
             <form onSubmit={(e) => handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
               <div className="mt-5 flex flex-col">
+                <label>Etunimi</label>
+                <Input
+                  className="border border-black min-w-[19rem]"
+                  autoComplete="off"
+                  type="text"
+                  placeholder="Matti"
+                  name="firstName"
+                  spellCheck="false"
+                />
+
                 <label>Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
