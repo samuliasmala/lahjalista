@@ -46,10 +46,10 @@ export default function Login() {
     <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
-          <div className="mt-5 flex flex-col">
+          <div className="pt-5 flex flex-col">
             <form onSubmit={(e) => handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
-              <div className="mt-5 flex flex-col">
+              <div className="pt-5 sm-w-full flex flex-col">
                 <label>Etunimi</label>
                 <Input
                   className="border border-black"
@@ -59,7 +59,7 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-                <label>Sukunimi</label>
+                <label className="pt-5">Sukunimi</label>
                 <Input
                   className="border border-black"
                   autoComplete="off"
@@ -68,7 +68,7 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
-                <label>Sähköposti</label>
+                <label className="pt-5">Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
                   className="border border-black"
@@ -83,7 +83,7 @@ export default function Login() {
                     Sähköpostiosoite on virheellinen
                   </p>
                 ) : null}
-                <label className="mt-5">Salasana</label>
+                <label className="pt-5">Salasana</label>
                 <Input
                   onChange={(e) => setPassword(e.currentTarget.value)}
                   className="border border-black"
