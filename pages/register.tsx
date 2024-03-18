@@ -59,7 +59,15 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-
+                <label>Sukunimi</label>
+                <Input
+                  className="border border-black min-w-[19rem]"
+                  autoComplete="off"
+                  type="text"
+                  placeholder="Meikäläinen"
+                  name="lastName"
+                  spellCheck="false"
+                />
                 <label>Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
