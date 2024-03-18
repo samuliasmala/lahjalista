@@ -11,7 +11,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn(data) {
       console.log('signIn data: \n\n\n\n', data);
-      return false;
+      return true;
     },
     async jwt(jwtData) {
       console.log('jwtData: \n\n\n\n', jwtData);
