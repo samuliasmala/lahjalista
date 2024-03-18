@@ -9,9 +9,9 @@ export const authOptions: AuthOptions = {
     signIn: '/login',
   },
   callbacks: {
-    async signIn(data) {
-      console.log('signIn data: \n\n\n\n', data);
-      return true;
+    async signIn({ account }) {
+      if (account) return true;
+      return false;
     },
     async jwt(jwtData) {
       if (jwtData.account) {
