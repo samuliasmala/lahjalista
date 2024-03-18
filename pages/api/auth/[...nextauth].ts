@@ -14,14 +14,13 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async jwt(jwtData) {
-      console.log('jwtData: \n\n\n\n', jwtData);
       if (jwtData.account) {
-        jwtData.token.accessToken = jwtData.account.access_token;
+        console.log('jwtData: \n\n\n\n', jwtData);
       }
       return jwtData.token;
     },
     async session(sessionData) {
-      console.log('sessionData: \n\n\n\n', sessionData);
+      console.log('sessionData: \n\n\n\n', sessionData.session.user);
       return sessionData.session;
     },
   },
@@ -33,7 +32,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         try {
-          console.log('credentials: ', credentials);
+          console.log('credentials: \n\n\n\n', credentials);
           const credentialsEmail = credentials?.email;
           const credentialsPassword = credentials?.password;
 
