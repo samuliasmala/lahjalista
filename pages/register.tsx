@@ -32,8 +32,17 @@ export default function Login() {
 
   function isEmailValid() {
     // this should check with regex that there cannot be multiple dots etc
-    const regexPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return email.toLowerCase().match(regexPattern);
+    const checkedEmailAddress = email
+      .toLowerCase()
+      .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+
+    if (!checkedEmailAddress) {
+      setIsEmailError(true);
+      setEmailErrorText('Virheellinen sähköposti!');
+      return false;
+    }
+
+    return true;
   }
 
   return (
