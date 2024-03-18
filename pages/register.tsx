@@ -30,7 +30,6 @@ export default function Login() {
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsEmailError(false);
-
     if (isEmailValid() === null) {
       return setIsEmailError(true);
     }
@@ -39,6 +38,17 @@ export default function Login() {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  function isFirstNameValid(): boolean {
+    const checkedFirstName = firstName.match(
+      /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
+    );
+
+    if (!checkedFirstName) {
+      return false;
+    }
+    return true;
   }
 
   function isPasswordValid(): boolean {
