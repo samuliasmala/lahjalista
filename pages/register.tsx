@@ -40,6 +40,22 @@ export default function Login() {
     }
   }
 
+  function isPasswordValid(): boolean {
+    const checkedPassword = password.match(
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+    );
+
+    if (!checkedPassword) {
+      setIsPasswordError(true);
+      setPasswordErrorText(
+        'Salasanan täytyy sisältää vähintään yksi kirjain ja yksi numero',
+      );
+      return false;
+    }
+
+    return true;
+  }
+
   function isEmailValid() {
     // this should check with regex that there cannot be multiple dots etc
     const checkedEmailAddress = email
