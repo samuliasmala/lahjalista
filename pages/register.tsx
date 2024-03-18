@@ -49,7 +49,7 @@ export default function Login() {
           <div className="pt-5 flex flex-col">
             <form onSubmit={(e) => handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
-              <div className="pt-5 sm-w-full flex flex-col">
+              <div className="pt-5 pl-4 pr-4 flex flex-col">
                 <label>Etunimi</label>
                 <Input
                   className="border border-black"
