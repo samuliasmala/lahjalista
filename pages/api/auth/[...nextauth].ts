@@ -34,6 +34,19 @@ export const authOptions: AuthOptions = {
         const credentialsEmail = credentials?.email;
         const credentialsPassword = credentials?.password;
 
+        // this checks that values are valid. Will be checked by Zod in the future
+        // TLDR: email and password has to be a string and is atleast 1 letter long. Values cannot be undefined
+        if (
+          (typeof credentialsEmail === 'string' &&
+            credentialsEmail.length <= 0 &&
+            typeof credentialsPassword === 'string' &&
+            credentialsPassword.length <= 0) ||
+          credentialsEmail === undefined ||
+          credentialsPassword === undefined
+        ) {
+          return null;
+        }
+
         return null;
       },
     }),
