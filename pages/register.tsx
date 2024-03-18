@@ -8,6 +8,9 @@ import { TitleText } from '~/components/TitleText';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
+  const [firstName, setFirstName] = useState('');
+  const [firstNameErrorText, setFirstNameErrorText] = useState('');
+  const [isFirstNameError, setIsFirstNameError] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailErrorText, setEmailErrorText] = useState('');
