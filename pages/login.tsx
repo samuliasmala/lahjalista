@@ -26,8 +26,7 @@ export default function Login() {
     await signIn('credentials', {
       email: email,
       password: password,
-      callbackUrl: '/login',
-      redirect: false,
+      callbackUrl: '/',
     });
   }
 
