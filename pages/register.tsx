@@ -11,12 +11,15 @@ export default function Login() {
   const [firstName, setFirstName] = useState('');
   const [firstNameErrorText, setFirstNameErrorText] = useState('');
   const [isFirstNameError, setIsFirstNameError] = useState(false);
+
   const [lastName, setLastName] = useState('');
   const [lastNameErrorText, setLastNameErrorText] = useState('');
   const [isLastNameError, setIsLastNameError] = useState(false);
+
   const [email, setEmail] = useState('');
   const [emailErrorText, setEmailErrorText] = useState('');
   const [isEmailError, setIsEmailError] = useState(false);
+
   const [password, setPassword] = useState('');
   const [passwordErrorText, setPasswordErrorText] = useState(true);
   const [isPasswordError, setIsPasswordError] = useState(false);
