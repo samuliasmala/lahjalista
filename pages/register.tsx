@@ -62,6 +62,21 @@ export default function Login() {
     return true;
   }
 
+  function isEmailValid(): boolean {
+    // this should check with regex that there cannot be multiple dots etc
+    const checkedEmailAddress = email
+      .toLowerCase()
+      .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+
+    if (!checkedEmailAddress) {
+      setIsEmailError(true);
+      setEmailErrorText('Virheellinen sähköposti!');
+      return false;
+    }
+
+    return true;
+  }
+
   function isPasswordValid(): boolean {
     const checkedPassword = password.match(
       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
@@ -72,21 +87,6 @@ export default function Login() {
       setPasswordErrorText(
         'Salasanan täytyy sisältää vähintään yksi kirjain ja yksi numero',
       );
-      return false;
-    }
-
-    return true;
-  }
-
-  function isEmailValid() {
-    // this should check with regex that there cannot be multiple dots etc
-    const checkedEmailAddress = email
-      .toLowerCase()
-      .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-
-    if (!checkedEmailAddress) {
-      setIsEmailError(true);
-      setEmailErrorText('Virheellinen sähköposti!');
       return false;
     }
 
