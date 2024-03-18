@@ -65,7 +65,7 @@ export const authOptions: AuthOptions = {
           );
           if (!isPasswordSame) return null;
 
-          return null;
+          return { id: user.uuid };
         } catch (e) {
           return null;
         }
