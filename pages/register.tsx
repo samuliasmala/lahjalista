@@ -83,9 +83,7 @@ export default function Login() {
                     Sähköpostiosoite on virheellinen
                   </p>
                 ) : null}
-              </div>
-              <div className="mt-5 flex flex-col">
-                <label>Salasana</label>
+                <label className="mt-5">Salasana</label>
                 <Input
                   onChange={(e) => setPassword(e.currentTarget.value)}
                   className="border border-black"
@@ -94,8 +92,8 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
+                <Button>Luo käyttäjätunnus</Button>
               </div>
-              <Button>Luo käyttäjätunnus</Button>
             </form>
             <p className="mt-6 text-xs text-gray-600">
               Onko sinulla jo tunnus?{' '}
