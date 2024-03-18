@@ -16,13 +16,6 @@ export default function Login() {
 
   const router = useRouter();
 
-  function handleLoginRedirect(
-    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-  ) {
-    e.preventDefault();
-    router.push('/login');
-  }
-
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsEmailError(false);
@@ -96,7 +89,9 @@ export default function Login() {
                   Onko sinulla jo tunnus?{' '}
                   <span
                     className="underline cursor-pointer"
-                    onClick={(e) => handleLoginRedirect(e)}
+                    onClick={() => {
+                      router.push('/login');
+                    }}
                   >
                     Kirjaudu sisään
                   </span>
