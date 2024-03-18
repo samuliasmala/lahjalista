@@ -21,7 +21,7 @@ export default function Login() {
   const [isEmailError, setIsEmailError] = useState(false);
 
   const [password, setPassword] = useState('');
-  const [passwordErrorText, setPasswordErrorText] = useState(true);
+  const [passwordErrorText, setPasswordErrorText] = useState('');
   const [isPasswordError, setIsPasswordError] = useState(false);
 
   const router = useRouter();
