@@ -71,6 +71,7 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 function isEmailValid(emailAddress: string): boolean {
