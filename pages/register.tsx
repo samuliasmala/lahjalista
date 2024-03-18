@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Inter } from 'next/font/google';
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, HTMLAttributes, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
@@ -140,5 +141,17 @@ export default function Login() {
         </div>
       </div>
     </main>
+  );
+}
+
+function ErrorParagraph({
+  className,
+  children,
+  ...rest
+}: HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p className={twMerge('text-red-600 mt-2 max-w-xs', className)} {...rest}>
+      {children}
+    </p>
   );
 }
