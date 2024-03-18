@@ -93,17 +93,17 @@ export default function Login() {
                   name="password"
                 />
                 <Button>Luo käyttäjätunnus</Button>
+                <p className="mt-6 text-xs text-gray-600">
+                  Onko sinulla jo tunnus?{' '}
+                  <span
+                    className="underline cursor-pointer"
+                    onClick={(e) => handleLoginRedirect(e)}
+                  >
+                    Kirjaudu sisään
+                  </span>
+                </p>
               </div>
             </form>
-            <p className="mt-6 text-xs text-gray-600">
-              Onko sinulla jo tunnus?{' '}
-              <span
-                className="underline cursor-pointer"
-                onClick={(e) => handleLoginRedirect(e)}
-              >
-                Kirjaudu sisään
-              </span>
-            </p>
             <TitleText className="mt-5 p-3 border-4 border-red-600">
               Älä käytä oikeita sähköposteja!
             </TitleText>
