@@ -56,6 +56,7 @@ export const authOptions: AuthOptions = {
               email: credentialsEmail,
             },
           });
+          if (!user) return null;
 
           return null;
         } catch (e) {
