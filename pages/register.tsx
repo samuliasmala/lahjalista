@@ -103,6 +103,7 @@ export default function Login() {
               <div className="pt-5 pl-4 pr-4 flex flex-col">
                 <label>Etunimi</label>
                 <Input
+                  onChange={(e) => setFirstName(e.currentTarget.value)}
                   className="border border-black"
                   autoComplete="off"
                   type="text"
@@ -115,6 +116,7 @@ export default function Login() {
                 ) : null}
                 <label className="pt-5">Sukunimi</label>
                 <Input
+                  onChange={(e) => setLastName(e.currentTarget.value)}
                   className="border border-black"
                   autoComplete="off"
                   type="text"
