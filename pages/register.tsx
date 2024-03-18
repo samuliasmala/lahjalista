@@ -89,6 +89,9 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
+                {isFirstNameError ? (
+                  <ErrorParagraph>{firstNameErrorText}</ErrorParagraph>
+                ) : null}
                 <label className="pt-5">Sukunimi</label>
                 <Input
                   className="border border-black"
