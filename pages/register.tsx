@@ -78,14 +78,14 @@ export default function Login() {
   }
 
   function isPasswordValid(): boolean {
+    // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 kirjain ja yksi erikoismerkki
     const checkedPassword = password.match(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?]).{8,}$/,
     );
-
     if (!checkedPassword) {
       setIsPasswordError(true);
       setPasswordErrorText(
-        'Salasanan täytyy sisältää vähintään yksi kirjain ja yksi numero',
+        'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi kirjain, yksi numero ja yksi erikoismerkki',
       );
       return false;
     }
