@@ -10,7 +10,8 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState(false);
+  const [emailErrorText, setEmailErrorText] = useState('');
+  const [isEmailError, setIsEmailError] = useState(false);
   const [emailExists, setEmailExists] = useState(false);
 
   const router = useRouter();
@@ -24,10 +25,10 @@ export default function Login() {
 
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setEmailError(false);
+    setIsEmailError(false);
 
     if (checkIsEmailCorrect() === null) {
-      return setEmailError(true);
+      return setIsEmailError(true);
     }
     try {
       console.log('Handling registering!');
@@ -78,10 +79,8 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
-                {emailError ? (
-                  <p className="text-red-600 mt-2">
-                    Sähköpostiosoite on virheellinen
-                  </p>
+                {isEmailError ? (
+                  <p className="text-red-600 mt-2">{emailErrorText}</p>
                 ) : null}
                 <label className="pt-5">Salasana</label>
                 <Input
