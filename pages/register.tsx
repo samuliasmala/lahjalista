@@ -20,7 +20,7 @@ export default function Login() {
     e.preventDefault();
     setIsEmailError(false);
 
-    if (checkIsEmailCorrect() === null) {
+    if (isEmailValid() === null) {
       return setIsEmailError(true);
     }
     try {
@@ -30,7 +30,7 @@ export default function Login() {
     }
   }
 
-  function checkIsEmailCorrect() {
+  function isEmailValid() {
     // this should check with regex that there cannot be multiple dots etc
     const regexPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return email.toLowerCase().match(regexPattern);
