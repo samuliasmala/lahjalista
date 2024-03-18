@@ -52,7 +52,7 @@ export default function Login() {
               <div className="mt-5 flex flex-col">
                 <label>Etunimi</label>
                 <Input
-                  className="border border-black min-w-[19rem]"
+                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="Matti"
@@ -61,7 +61,7 @@ export default function Login() {
                 />
                 <label>Sukunimi</label>
                 <Input
-                  className="border border-black min-w-[19rem]"
+                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="Meikäläinen"
@@ -71,7 +71,7 @@ export default function Login() {
                 <label>Sähköposti</label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
-                  className="border border-black min-w-[19rem]"
+                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
