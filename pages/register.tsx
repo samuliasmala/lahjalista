@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
-import { emailRegex } from '~/utils/regexPatterns';
+import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
@@ -104,9 +104,7 @@ export default function Login() {
       return false;
     }
     // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 kirjain ja yksi erikoismerkki
-    const checkedPassword = password.match(
-      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?]).{8,}$/,
-    );
+    const checkedPassword = password.match(passwordRegex);
     if (!checkedPassword) {
       setIsPasswordError(true);
       setPasswordErrorText(
