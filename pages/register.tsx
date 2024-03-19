@@ -78,6 +78,11 @@ export default function Login() {
   }
 
   function isPasswordValid(): boolean {
+    if (password.length <= 0) {
+      setIsPasswordError(true);
+      setPasswordErrorText('Salasana on pakollinen!');
+      return false;
+    }
     // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 kirjain ja yksi erikoismerkki
     const checkedPassword = password.match(
       /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?]).{8,}$/,
