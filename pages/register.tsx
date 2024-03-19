@@ -6,6 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
+import { emailRegex } from '~/utils/regexPatterns';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
@@ -82,9 +83,7 @@ export default function Login() {
       return false;
     }
     // this should check with regex that there cannot be multiple dots etc
-    const checkedEmailAddress = email
-      .toLowerCase()
-      .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+    const checkedEmailAddress = email.toLowerCase().match(emailRegex);
 
     if (!checkedEmailAddress) {
       setIsEmailError(true);
