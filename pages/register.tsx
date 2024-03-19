@@ -41,6 +41,11 @@ export default function Login() {
   }
 
   function isFirstNameValid(): boolean {
+    if (firstName.length <= 0) {
+      setIsFirstNameError(true);
+      setFirstNameErrorText('Etunimi on pakollinen!');
+      return false;
+    }
     const checkedFirstName = firstName.match(
       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
     );
@@ -52,6 +57,12 @@ export default function Login() {
   }
 
   function isLastNameValid(): boolean {
+    if (lastName.length <= 0) {
+      setIsLastNameError(true);
+      setLastNameErrorText('Sukunimi on pakollinen!');
+      return false;
+    }
+
     const checkedLastName = lastName.match(
       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
     );
@@ -63,6 +74,11 @@ export default function Login() {
   }
 
   function isEmailValid(): boolean {
+    if (email.length <= 0) {
+      setIsEmailError(true);
+      setEmailErrorText('Sähköposti on pakollinen!');
+      return false;
+    }
     // this should check with regex that there cannot be multiple dots etc
     const checkedEmailAddress = email
       .toLowerCase()
