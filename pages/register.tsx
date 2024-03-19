@@ -25,6 +25,8 @@ export default function Login() {
   const [passwordErrorText, setPasswordErrorText] = useState('');
   const [isPasswordError, setIsPasswordError] = useState(false);
 
+  const [isAnyError, setIsAnyError] = useState(false);
+
   const router = useRouter();
 
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
