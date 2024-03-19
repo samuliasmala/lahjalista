@@ -28,12 +28,12 @@ export default function Login() {
   const router = useRouter();
 
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsEmailError(false);
-    if (isEmailValid() === null) {
-      return setIsEmailError(true);
-    }
     try {
+      e.preventDefault();
+      setIsEmailError(false);
+      if (isEmailValid() === null) {
+        return setIsEmailError(true);
+      }
       console.log('Handling registering!');
     } catch (e) {
       console.error(e);
