@@ -49,6 +49,8 @@ export default function Login() {
       setFirstNameErrorText('Etunimi on pakollinen!');
       return false;
     }
+    return true;
+    /*
     const checkedFirstName = firstName.match(
       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
     );
@@ -56,7 +58,7 @@ export default function Login() {
     if (!checkedFirstName) {
       return false;
     }
-    return true;
+    */
   }
 
   function isLastNameValid(): boolean {
@@ -65,7 +67,8 @@ export default function Login() {
       setLastNameErrorText('Sukunimi on pakollinen!');
       return false;
     }
-
+    return true;
+    /*
     const checkedLastName = lastName.match(
       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
     );
@@ -73,7 +76,7 @@ export default function Login() {
     if (!checkedLastName) {
       return false;
     }
-    return true;
+    */
   }
 
   function isEmailValid(): boolean {
