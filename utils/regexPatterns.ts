@@ -9,7 +9,7 @@ export const emailRegex =
 /**
  * Reference: https://stackoverflow.com/a/19605207
  *
- * TLDR: at least 8 characters, one number, one letter and one special character
+ * TLDR: at least 8 characters, one number, one capital letter, one "small" letter and one special character
  */
 export const passwordRegex =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
