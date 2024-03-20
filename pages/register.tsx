@@ -43,6 +43,13 @@ export default function Login() {
     }
   }
 
+  function clearAllErrors() {
+    setIsFirstNameError(false);
+    setIsLastNameError(false);
+    setIsEmailError(false);
+    setIsPasswordError(false);
+  }
+
   function isFirstNameValid(): boolean {
     if (firstName.length <= 0) {
       setIsFirstNameError(true);
