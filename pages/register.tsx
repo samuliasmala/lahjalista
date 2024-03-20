@@ -33,7 +33,7 @@ export default function Login() {
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      if (!isAllFieldsValid) return;
+      if (!isAllFieldsValid()) return;
       console.log('Handling registering!');
     } catch (e) {
       console.error(e);
@@ -68,15 +68,6 @@ export default function Login() {
       return false;
     }
     return true;
-    /*
-    const checkedFirstName = firstName.match(
-      /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
-    );
-
-    if (!checkedFirstName) {
-      return false;
-    }
-    */
   }
 
   function isLastNameValid(): boolean {
@@ -86,15 +77,6 @@ export default function Login() {
       return false;
     }
     return true;
-    /*
-    const checkedLastName = lastName.match(
-      /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
-    );
-
-    if (!checkedLastName) {
-      return false;
-    }
-    */
   }
 
   function isEmailValid(): boolean {
