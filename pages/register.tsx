@@ -103,12 +103,12 @@ export default function Login() {
       setPasswordErrorText('Salasana on pakollinen!');
       return false;
     }
-    // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 kirjain ja yksi erikoismerkki
+    // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
     const checkedPassword = password.match(passwordRegex);
     if (!checkedPassword) {
       setIsPasswordError(true);
       setPasswordErrorText(
-        'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi kirjain, yksi numero ja yksi erikoismerkki',
+        'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki',
       );
       return false;
     }
