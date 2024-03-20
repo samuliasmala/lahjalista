@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Inter } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
@@ -7,6 +6,7 @@ import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
@@ -26,11 +26,9 @@ export default function Login() {
   const [passwordErrorText, setPasswordErrorText] = useState('');
   const [isPasswordError, setIsPasswordError] = useState(false);
 
-  const [isAnyError, setIsAnyError] = useState(false);
-
   const router = useRouter();
 
-  async function handleRegister(e: FormEvent<HTMLFormElement>) {
+  function handleRegister(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
@@ -185,7 +183,7 @@ export default function Login() {
                   <span
                     className="underline cursor-pointer hover:text-blue-500"
                     onClick={() => {
-                      router.push('/login');
+                      router.push('/login').catch((e) => console.error(e));
                     }}
                   >
                     Kirjaudu sisään
