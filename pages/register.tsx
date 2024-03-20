@@ -33,10 +33,7 @@ export default function Login() {
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      setIsEmailError(false);
-      if (isEmailValid() === null) {
-        return setIsEmailError(true);
-      }
+      if (!isAllFieldsValid) return;
       console.log('Handling registering!');
     } catch (e) {
       console.error(e);
@@ -48,6 +45,20 @@ export default function Login() {
     setIsLastNameError(false);
     setIsEmailError(false);
     setIsPasswordError(false);
+  }
+
+  function isAllFieldsValid(): boolean {
+    clearAllErrors();
+    let errorFound = false;
+    if (!isFirstNameValid()) errorFound = true;
+    if (!isLastNameValid()) errorFound = true;
+    if (!isEmailValid()) errorFound = true;
+    if (!isPasswordValid()) errorFound = true;
+
+    if (errorFound) {
+      return false;
+    }
+    return true;
   }
 
   function isFirstNameValid(): boolean {
