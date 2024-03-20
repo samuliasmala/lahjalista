@@ -209,7 +209,7 @@ function ErrorParagraph({
   ...rest
 }: HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={twMerge('text-red-600 mt-2 max-w-xs', className)} {...rest}>
+    <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
       {children}
     </p>
   );
