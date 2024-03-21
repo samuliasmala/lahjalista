@@ -45,9 +45,21 @@ export default function Login() {
         lastName: lastName,
         password: password,
       });
+      userCreatedSuccesfully();
     } catch (e) {
       handleUserError(e);
     }
+  }
+
+  function userCreatedSuccesfully() {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setIsUserCreated(true);
+    setTimeout(() => {
+      router.push('/').catch((e) => console.error(e));
+    }, 1000);
   }
 
   function clearAllErrors() {
