@@ -5,6 +5,8 @@ import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
+import { createUser } from '~/utils/apiRequests';
+import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -28,11 +30,17 @@ export default function Login() {
 
   const router = useRouter();
 
-  function handleRegister(e: FormEvent<HTMLFormElement>) {
+  async function handleRegister(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
       console.log('Handling registering!');
+      await createUser({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: password,
+      });
     } catch (e) {
       console.error(e);
     }
