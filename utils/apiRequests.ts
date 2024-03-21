@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateGift, Gift } from '~/shared/types';
+import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
 
 const giftsBaseUrl = '/api/gifts';
 
@@ -47,3 +47,26 @@ export async function deleteGift(uuid: string) {
 }
 
 // USER REQUESTS!
+
+const usersBaseUrl = '/api/users';
+
+export async function getAllUsers() {
+  return (await axios.get(usersBaseUrl)).data as User[];
+}
+
+export async function getUser(uuid: string) {
+  return (await axios.get(`${usersBaseUrl}/${uuid}`)).data as User;
+}
+
+export async function createUser(newObject: CreateUser) {
+  return (await axios.post(`${usersBaseUrl}`, newObject)).data as User;
+}
+
+export async function updateUser(uuid: string, newObject: Partial<User>) {
+  return (await axios.patch(`${usersBaseUrl}/${uuid}`, newObject)).data as User;
+}
+
+export async function deleteUser(uuid: string) {
+  await axios.delete(`${usersBaseUrl}/${uuid}`);
+  return;
+}
