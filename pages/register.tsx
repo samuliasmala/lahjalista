@@ -4,7 +4,9 @@ import { FormEvent, HTMLAttributes, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
+import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
+import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
@@ -209,6 +211,15 @@ export default function Login() {
               Älä käytä oikeita sähköposteja!
             </TitleText>
           </div>
+          {isUserCreated ? (
+            <Modal>
+              <SvgCheckMarkIcon
+                className="bg-green-300"
+                circleClassName="fill-green-500"
+                checkMarkClassName="fill-black-500"
+              />
+            </Modal>
+          ) : null}
         </div>
       </div>
     </main>
