@@ -42,7 +42,7 @@ export default function Login() {
         password: password,
       });
     } catch (e) {
-      console.error(e);
+      handleUserError(e);
     }
   }
 
