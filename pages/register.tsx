@@ -132,6 +132,7 @@ export default function Login() {
               <div className="pt-5 pl-4 pr-4 flex flex-col">
                 <label>Etunimi</label>
                 <Input
+                  value={firstName}
                   onChange={(e) => setFirstName(e.currentTarget.value)}
                   className="border border-black"
                   autoComplete="off"
@@ -146,6 +147,7 @@ export default function Login() {
 
                 <label className="pt-5">Sukunimi</label>
                 <Input
+                  value={lastName}
                   onChange={(e) => setLastName(e.currentTarget.value)}
                   className="border border-black"
                   autoComplete="off"
@@ -160,6 +162,7 @@ export default function Login() {
 
                 <label className="pt-5">Sähköposti</label>
                 <Input
+                  value={email}
                   onChange={(e) => setEmail(e.currentTarget.value)}
                   className="border border-black"
                   autoComplete="off"
@@ -174,6 +177,7 @@ export default function Login() {
 
                 <label className="pt-5">Salasana</label>
                 <Input
+                  value={password}
                   onChange={(e) => setPassword(e.currentTarget.value)}
                   className="border border-black"
                   autoComplete="off"
