@@ -9,7 +9,7 @@ import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { TitleText } from './TitleText';
 import { Button } from './Button';
-import { updateGift } from '~/utils/giftRequests';
+import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
