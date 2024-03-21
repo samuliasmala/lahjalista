@@ -5,7 +5,7 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { SvgDeclineIcon } from '~/icons/DeclineIcon';
-import { deleteGift } from '~/utils/giftRequests';
+import { deleteGift } from '~/utils/apiRequests';
 import { handleGiftError } from '~/utils/handleError';
 
 type DeleteModal = {
