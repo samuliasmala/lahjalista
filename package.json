@@ -30,7 +30,7 @@
     "bcrypt": "5.1.1",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
-    "eslint-config-next": "13.4.19",
+    "eslint-config-next": "14.1.4",
     "json-server": "0.17.3",
     "next": "13.5.4",
     "postcss": "8.4.38",
