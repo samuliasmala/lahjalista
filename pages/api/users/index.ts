@@ -74,32 +74,6 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   return res.status(200).json(addedUser);
 }
 
-export function errorFound(res: NextApiResponse, e: unknown) {
-  if (e instanceof PrismaClientKnownRequestError) {
-    if (e.code === 'P2025') {
-      return res.status(404).send('Record was not found!');
-    }
-    if (e.code === 'P2002') {
-      return res.status(400).send('Record was not unique!');
-    }
-    return res.status(500).send('Server error!');
-  }
-  if (e instanceof Error) {
-    if (e.message.toLowerCase() === 'no gift found') {
-      return res.status(400).send('Gift was not found!');
-    }
-    if (e.message === 'Invalid email!') {
-      return res.status(400).send(e.message);
-    }
-    if (e.message === 'Email is used already!') {
-      return res.status(400).send(e.message);
-    }
-    if (e.cause === 'idError') return res.status(400).send('Invalid ID!');
-    return res.status(500).send('Server error!');
-  }
-  return res.status(500).send('Unexpected error occurred!');
-}
-
 function isEmailValid(emailAddress: string): boolean {
   const checkedEmailAddress = emailAddress.toLowerCase().match(emailRegex);
 
