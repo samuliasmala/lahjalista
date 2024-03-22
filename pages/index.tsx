@@ -6,8 +6,8 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { isAxiosError } from 'axios';
 import { Gift, CreateGift } from '~/shared/types';
+import { handleDefaultError } from '~/utils/handleError';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -32,7 +32,7 @@ export default function Home() {
         const gifts = await getAllGifts();
         setGiftData(gifts);
       } catch (e) {
-        errorFound(e);
+        handleError(e);
       }
     }
     void fetchGifts();
@@ -71,7 +71,7 @@ export default function Home() {
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
-      errorFound(e);
+      handleError(e);
     }
   }
 
@@ -79,29 +79,14 @@ export default function Home() {
     try {
       setGiftData(await getAllGifts());
     } catch (e) {
-      errorFound(e);
+      handleError(e);
     }
   }
 
-  function errorFound(e: unknown) {
-    if (isAxiosError(e) && e.code === 'ERR_BAD_RESPONSE') {
-      if (e.response !== undefined && typeof e.response.data === 'string') {
-        setIsAnyKindOfError(true);
-        setIsAnyKindOfErrorMessage(e.response.data);
-      } else {
-        setIsAnyKindOfError(true);
-        setIsAnyKindOfErrorMessage('Palvelin virhe!');
-      }
-    } else if (isAxiosError(e)) {
-      setIsAnyKindOfError(true);
-      setIsAnyKindOfErrorMessage(e.message);
-    } else if (e instanceof Error) {
-      setIsAnyKindOfError(true);
-      setIsAnyKindOfErrorMessage(e.message);
-    } else {
-      setIsAnyKindOfError(true);
-      setIsAnyKindOfErrorMessage('Odottamaton virhe tapahtui!');
-    }
+  function handleError(e: unknown) {
+    const errorMessage = handleDefaultError(e);
+    setIsAnyKindOfError(true);
+    setIsAnyKindOfErrorMessage(errorMessage);
   }
 
   return (
