@@ -3,6 +3,7 @@ import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { hash } from 'bcrypt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { handleError } from '~/backend/handleError';
 
 const HANDLER: Record<
   string,
@@ -28,7 +29,7 @@ export default async function handlePrisma(
         );
     }
   } catch (e) {
-    return errorFound(res, e);
+    return handleError(res, e);
   }
 }
 
