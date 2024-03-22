@@ -33,7 +33,7 @@ export default function Home() {
         const gifts = await getAllGifts();
         setGiftData(gifts);
       } catch (e) {
-        handleDefaultError(e);
+        handleError(e);
       }
     }
     void fetchGifts();
@@ -72,7 +72,7 @@ export default function Home() {
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
-      handleDefaultError(e);
+      handleError(e);
     }
   }
 
@@ -80,8 +80,14 @@ export default function Home() {
     try {
       setGiftData(await getAllGifts());
     } catch (e) {
-      handleDefaultError(e);
+      handleError(e);
     }
+  }
+
+  function handleError(e: unknown) {
+    const errorMessage = handleDefaultError(e);
+    setIsAnyKindOfError(true);
+    setIsAnyKindOfErrorMessage(errorMessage);
   }
 
   return (
