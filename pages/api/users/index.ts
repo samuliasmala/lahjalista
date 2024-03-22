@@ -4,6 +4,7 @@ import prisma from '~/prisma';
 import { hash } from 'bcrypt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { handleError } from '~/backend/handleError';
+import { emailRegex } from '~/shared/regexPatterns';
 
 const HANDLER: Record<
   string,
@@ -100,9 +101,7 @@ export function errorFound(res: NextApiResponse, e: unknown) {
 }
 
 function isEmailValid(emailAddress: string): boolean {
-  const checkedEmailAddress = emailAddress
-    .toLowerCase()
-    .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+  const checkedEmailAddress = emailAddress.toLowerCase().match(emailRegex);
 
   if (checkedEmailAddress === null) {
     throw new Error('Invalid email!');
