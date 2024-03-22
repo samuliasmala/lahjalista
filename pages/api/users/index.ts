@@ -104,7 +104,7 @@ function isEmailValid(emailAddress: string): boolean {
   const checkedEmailAddress = emailAddress.toLowerCase().match(emailRegex);
 
   if (checkedEmailAddress === null) {
-    throw new Error('Invalid email!');
+    throw new HttpError('Invalid email!', 400);
   }
 
   // email is ready to be used
