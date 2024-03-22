@@ -30,11 +30,10 @@ export default async function handlePrisma(
       const queryUUID = req.query.uuid;
       await reqHandler({ req, res, queryUUID });
     } else {
-      return res
-        .status(405)
-        .send(
-          `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
-        );
+      throw new HttpError(
+        `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
+        405,
+      );
     }
   } catch (e) {
     return errorFound(res, e);
