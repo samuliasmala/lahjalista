@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { hash } from 'bcrypt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { handleError } from '~/backend/handleError';
 import { emailRegex } from '~/shared/regexPatterns';
 import { HttpError } from '~/backend/HttpError';
