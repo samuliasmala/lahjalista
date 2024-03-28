@@ -5,6 +5,7 @@ import prisma from '~/prisma';
 import { compare as bcryptCompare } from 'bcrypt';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { Adapter } from 'next-auth/adapters';
+import { randomBytes } from 'crypto';
 
 export const authOptions: AuthOptions = {
   pages: {
@@ -12,17 +13,19 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async signIn({ account }) {
+      console.log('account!!!!!', account);
       if (account) return true;
       return false;
     },
     async jwt(jwtData) {
       if (jwtData.account) {
-        console.log('jwtData: \n\n\n\n', jwtData);
+        console.log('jwtData:', jwtData);
       }
-      return jwtData.token;
+      return jwtData;
     },
     async session(sessionData) {
-      console.log('sessionData: \n\n\n\n', sessionData.session.user);
+      console.log('sessionData: \n\n\n\n', sessionData.token);
+      console.log(sessionData.session.user);
       return sessionData.session;
     },
   },
@@ -34,7 +37,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         try {
-          console.log('credentials: \n\n\n\n', credentials);
+          //console.log('credentials: \n\n\n\n', credentials);
           const credentialsEmail = credentials?.email;
           const credentialsPassword = credentials?.password;
 
@@ -66,8 +69,11 @@ export const authOptions: AuthOptions = {
           );
           if (!isPasswordSame) return null;
 
+          console.log('credentials!!!!!!!!!!!!11\n\n', credentials);
+
           return { id: user.uuid };
         } catch (e) {
+          console.log(e);
           return null;
         }
       },
@@ -75,6 +81,14 @@ export const authOptions: AuthOptions = {
   ],
   adapter: PrismaAdapter(prisma) as Adapter,
   secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+    generateSessionToken: () => {
+      return randomBytes(32).toString('hex');
+    },
+  },
 };
 
 function isEmailValid(emailAddress: string): boolean {

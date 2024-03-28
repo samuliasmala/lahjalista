@@ -11,7 +11,9 @@ export function LoginAndSignOutButton({
   if (session) {
     return (
       <>
-        <p className="text-3xl">Signed in as {session.user?.email}</p>
+        <p className="text-3xl">
+          Signed in as {session.user?.email ?? 'test_user'}
+        </p>
         <Button className={className} {...rest}>
           Sign out
         </Button>

@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-    id        Int      @id @default(autoincrement())
-    uuid      String   @unique @default(uuid())
+    id        Int       @id @default(autoincrement())
+    uuid      String    @unique @default(uuid())
     firstName String
     lastName  String
-    email     String   @unique
+    email     String    @unique
     password  String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
     gift      Gift[]
+    Session   Session[]
 }
 
 model Gift {
@@ -28,4 +29,21 @@ model Gift {
     updatedAt DateTime @updatedAt
     userUUID  String?
     user      User?    @relation(fields: [userUUID], references: [uuid])
+}
+
+model Session {
+    id           String   @id @default(uuid())
+    sessionToken String   @unique
+    userId       Int?
+    userUUID     String
+    expires      DateTime
+    user         User?    @relation(fields: [userUUID], references: [uuid])
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
 }
