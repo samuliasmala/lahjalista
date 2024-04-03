@@ -92,10 +92,7 @@ export default function Login() {
     if (!isEmailValid()) errorFound = true;
     if (!isPasswordValid()) errorFound = true;
 
-    if (errorFound) {
-      return false;
-    }
-    return true;
+    return !errorFound;
   }
 
   function isFirstNameValid(): boolean {
