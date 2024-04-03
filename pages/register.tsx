@@ -11,6 +11,8 @@ import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 
+type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
+
 type Errors = {
   firstNameErrorText: string;
   lastNameErrorText: string;
