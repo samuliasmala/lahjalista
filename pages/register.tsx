@@ -234,7 +234,6 @@ export default function Login() {
 
 function ErrorParagraph({
   className,
-  children,
   errorText,
   ...rest
 }: HTMLAttributes<HTMLParagraphElement> & { errorText: string }) {
