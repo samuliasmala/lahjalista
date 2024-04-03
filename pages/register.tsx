@@ -111,8 +111,12 @@ export default function Login() {
 
   function isFirstNameValid(): boolean {
     if (firstName.length <= 0) {
-      setIsFirstNameError(true);
-      setFirstNameErrorText('Etunimi on pakollinen!');
+      setErrors((prevValue) => {
+        const changedObject = structuredClone(prevValue);
+        changedObject.firstName.errorText = 'Testi';
+        changedObject.firstName.isError = true;
+        return changedObject;
+      });
       return false;
     }
     return true;
