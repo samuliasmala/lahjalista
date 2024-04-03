@@ -12,23 +12,18 @@ import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 
 type Errors = {
-  firstName: {
-    isError: boolean;
-    errorText: string;
-  };
-  lastName: {
-    isError: boolean;
-    errorText: string;
-  };
-  email: {
-    isError: boolean;
-    errorText: string;
-  };
-  password: {
-    isError: boolean;
-    errorText: string;
-  };
+  firstNameErrorText: string;
+  lastNameErrorText: string;
+  emailErrorText: string;
+  passwordErrorText: string;
 };
+
+const NO_ERRORS = {
+  firstNameErrorText: '',
+  lastNameErrorText: '',
+  emailErrorText: '',
+  passwordErrorText: '',
+} as const;
 
 export default function Login() {
   const [firstName, setFirstName] = useState('');
@@ -36,12 +31,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [errors, setErrors] = useState<Errors>({
-    firstName: { errorText: '', isError: false },
-    email: { errorText: '', isError: false },
-    lastName: { errorText: '', isError: false },
-    password: { errorText: '', isError: false },
-  });
+  const [errors, setErrors] = useState<Errors>(NO_ERRORS);
 
   const [isUserCreated, setIsUserCreated] = useState(false);
 
