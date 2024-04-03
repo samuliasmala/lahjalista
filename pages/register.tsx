@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -240,14 +241,12 @@ export default function Login() {
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
-                  <span
+                  <Link
+                    href={'/login'}
                     className="underline cursor-pointer hover:text-blue-500"
-                    onClick={() => {
-                      router.push('/login').catch((e) => console.error(e));
-                    }}
                   >
                     Kirjaudu sisään
-                  </span>
+                  </Link>
                 </p>
               </div>
             </form>
