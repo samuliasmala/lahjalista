@@ -183,9 +183,9 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-                {errors.firstName.isError ? (
-                  <ErrorParagraph>{errors.firstName.errorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph error={errors.firstName.isError}>
+                  {errors.firstName.errorText}
+                </ErrorParagraph>
 
                 <label className="pt-5">Sukunimi</label>
                 <Input
@@ -198,9 +198,9 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
-                {errors.lastName.isError ? (
-                  <ErrorParagraph>{errors.lastName.errorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph error={errors.lastName.isError}>
+                  {errors.lastName.errorText}
+                </ErrorParagraph>
 
                 <label className="pt-5">Sähköposti</label>
                 <Input
@@ -213,9 +213,9 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
-                {errors.email.isError ? (
-                  <ErrorParagraph>{errors.email.errorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph error={errors.email.isError}>
+                  {errors.email.errorText}
+                </ErrorParagraph>
 
                 <label className="pt-5">Salasana</label>
                 <Input
@@ -227,9 +227,9 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
-                {errors.password.isError ? (
-                  <ErrorParagraph>{errors.password.errorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph error={errors.password.isError}>
+                  {errors.password.errorText}
+                </ErrorParagraph>
 
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
@@ -262,8 +262,10 @@ export default function Login() {
 function ErrorParagraph({
   className,
   children,
+  error,
   ...rest
-}: HTMLAttributes<HTMLParagraphElement>) {
+}: HTMLAttributes<HTMLParagraphElement> & { error: boolean }) {
+  if (!error) return null;
   return (
     <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
       {children}
