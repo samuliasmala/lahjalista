@@ -49,6 +49,13 @@ export default function Login() {
   const [passwordErrorText, setPasswordErrorText] = useState('');
   const [isPasswordError, setIsPasswordError] = useState(false);
 
+  const [errors, setErrors] = useState<Errors>({
+    firstName: { errorText: '', isError: false },
+    email: { errorText: '', isError: false },
+    lastName: { errorText: '', isError: false },
+    password: { errorText: '', isError: false },
+  });
+
   const [isUserCreated, setIsUserCreated] = useState(false);
 
   const router = useRouter();
