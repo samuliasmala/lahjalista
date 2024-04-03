@@ -243,9 +243,6 @@ export default function Login() {
                 </p>
               </div>
             </form>
-            <TitleText className="mt-5 p-3 border-4 border-red-600">
-              Älä käytä oikeita sähköposteja!
-            </TitleText>
           </div>
           {isUserCreated ? (
             <Modal>
