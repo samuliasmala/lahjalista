@@ -54,7 +54,6 @@ export default function Login() {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
-      console.log('Handling registering!');
       await createUser({
         email: email,
         firstName: firstName,
