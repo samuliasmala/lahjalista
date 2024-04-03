@@ -83,7 +83,7 @@ export default function Login() {
     if (firstName.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        firstName: { errorText: 'Etunimi on pakollinen!', isError: true },
+        firstNameErrorText: 'Etunimi on pakollinen',
       }));
       return false;
     }
@@ -94,7 +94,7 @@ export default function Login() {
     if (lastName.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        lastName: { errorText: 'Sukunimi on pakollinen!', isError: true },
+        lastNameErrorText: 'Sukunimi on pakollinen',
       }));
       return false;
     }
@@ -105,7 +105,7 @@ export default function Login() {
     if (email.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        email: { errorText: 'Sähköposti on pakollinen!', isError: true },
+        emailErrorText: 'Sähköposti on pakollinen',
       }));
       return false;
     }
@@ -115,7 +115,7 @@ export default function Login() {
     if (!checkedEmailAddress) {
       setErrors((prevValue) => ({
         ...prevValue,
-        email: { errorText: 'Virheellinen sähköposti!', isError: true },
+        emailErrorText: 'Virheellinen sähköposti',
       }));
       return false;
     }
@@ -127,7 +127,7 @@ export default function Login() {
     if (password.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        password: { errorText: 'Salasana on pakollinen!', isError: true },
+        passwordErrorText: 'Salasana on pakollinen',
       }));
       return false;
     }
@@ -136,11 +136,8 @@ export default function Login() {
     if (!checkedPassword) {
       setErrors((prevValue) => ({
         ...prevValue,
-        password: {
-          errorText:
-            'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
-          isError: true,
-        },
+        passwordErrorText:
+          'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
       }));
       return false;
     }
@@ -167,9 +164,7 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-                <ErrorParagraph error={errors.firstName.isError}>
-                  {errors.firstName.errorText}
-                </ErrorParagraph>
+                <ErrorParagraph errorText={errors.firstNameErrorText} />
 
                 <label className="pt-5">Sukunimi</label>
                 <Input
@@ -182,9 +177,7 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
-                <ErrorParagraph error={errors.lastName.isError}>
-                  {errors.lastName.errorText}
-                </ErrorParagraph>
+                <ErrorParagraph errorText={errors.lastNameErrorText} />
 
                 <label className="pt-5">Sähköposti</label>
                 <Input
@@ -197,9 +190,7 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
-                <ErrorParagraph error={errors.email.isError}>
-                  {errors.email.errorText}
-                </ErrorParagraph>
+                <ErrorParagraph errorText={errors.emailErrorText} />
 
                 <label className="pt-5">Salasana</label>
                 <Input
@@ -211,9 +202,7 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
-                <ErrorParagraph error={errors.password.isError}>
-                  {errors.password.errorText}
-                </ErrorParagraph>
+                <ErrorParagraph errorText={errors.passwordErrorText} />
 
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
@@ -246,13 +235,13 @@ export default function Login() {
 function ErrorParagraph({
   className,
   children,
-  error,
+  errorText,
   ...rest
-}: HTMLAttributes<HTMLParagraphElement> & { error: boolean }) {
-  if (!error) return null;
+}: HTMLAttributes<HTMLParagraphElement> & { errorText: string }) {
+  if (errorText.length <= 0) return null;
   return (
     <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
-      {children}
+      {errorText}
     </p>
   );
 }
