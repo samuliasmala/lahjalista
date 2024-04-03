@@ -1,4 +1,3 @@
-import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
@@ -11,8 +10,6 @@ import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
-
-const inter = Inter({ subsets: ['latin'] });
 
 type Errors = {
   firstName: {
@@ -171,7 +168,7 @@ export default function Login() {
   }
 
   return (
-    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+    <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
