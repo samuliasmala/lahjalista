@@ -114,12 +114,10 @@ export default function Login() {
 
   function isFirstNameValid(): boolean {
     if (firstName.length <= 0) {
-      setErrors((prevValue) => {
-        const changedObject = structuredClone(prevValue);
-        changedObject.firstName.errorText = 'Testi';
-        changedObject.firstName.isError = true;
-        return changedObject;
-      });
+      setErrors((prevValue) => ({
+        ...prevValue,
+        firstName: { errorText: 'Etunimi on pakollinen!', isError: true },
+      }));
       return false;
     }
     return true;
@@ -127,8 +125,10 @@ export default function Login() {
 
   function isLastNameValid(): boolean {
     if (lastName.length <= 0) {
-      setIsLastNameError(true);
-      setLastNameErrorText('Sukunimi on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        lastName: { errorText: 'Sukunimi on pakollinen!', isError: true },
+      }));
       return false;
     }
     return true;
@@ -136,16 +136,20 @@ export default function Login() {
 
   function isEmailValid(): boolean {
     if (email.length <= 0) {
-      setIsEmailError(true);
-      setEmailErrorText('Sähköposti on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        email: { errorText: 'Sähköposti on pakollinen!', isError: true },
+      }));
       return false;
     }
     // this should check with regex that there cannot be multiple dots etc
     const checkedEmailAddress = email.toLowerCase().match(emailRegex);
 
     if (!checkedEmailAddress) {
-      setIsEmailError(true);
-      setEmailErrorText('Virheellinen sähköposti!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        email: { errorText: 'Virheellinen sähköposti!', isError: true },
+      }));
       return false;
     }
 
@@ -154,17 +158,23 @@ export default function Login() {
 
   function isPasswordValid(): boolean {
     if (password.length <= 0) {
-      setIsPasswordError(true);
-      setPasswordErrorText('Salasana on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        password: { errorText: 'Salasana on pakollinen!', isError: true },
+      }));
       return false;
     }
     // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
     const checkedPassword = password.match(passwordRegex);
     if (!checkedPassword) {
-      setIsPasswordError(true);
-      setPasswordErrorText(
-        'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki',
-      );
+      setErrors((prevValue) => ({
+        ...prevValue,
+        password: {
+          errorText:
+            'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
+          isError: true,
+        },
+      }));
       return false;
     }
 
