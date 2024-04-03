@@ -161,7 +161,7 @@ export default function Login() {
         ...prevValue,
         password: {
           errorText:
-            'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
+            'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
           isError: true,
         },
       }));
