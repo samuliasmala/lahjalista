@@ -34,20 +34,9 @@ type Errors = {
 
 export default function Login() {
   const [firstName, setFirstName] = useState('');
-  const [firstNameErrorText, setFirstNameErrorText] = useState('');
-  const [isFirstNameError, setIsFirstNameError] = useState(false);
-
   const [lastName, setLastName] = useState('');
-  const [lastNameErrorText, setLastNameErrorText] = useState('');
-  const [isLastNameError, setIsLastNameError] = useState(false);
-
   const [email, setEmail] = useState('');
-  const [emailErrorText, setEmailErrorText] = useState('');
-  const [isEmailError, setIsEmailError] = useState(false);
-
   const [password, setPassword] = useState('');
-  const [passwordErrorText, setPasswordErrorText] = useState('');
-  const [isPasswordError, setIsPasswordError] = useState(false);
 
   const [errors, setErrors] = useState<Errors>({
     firstName: { errorText: '', isError: false },
@@ -200,8 +189,8 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-                {isFirstNameError ? (
-                  <ErrorParagraph>{firstNameErrorText}</ErrorParagraph>
+                {errors.firstName.isError ? (
+                  <ErrorParagraph>{errors.firstName.errorText}</ErrorParagraph>
                 ) : null}
 
                 <label className="pt-5">Sukunimi</label>
@@ -215,8 +204,8 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
-                {isLastNameError ? (
-                  <ErrorParagraph>{lastNameErrorText}</ErrorParagraph>
+                {errors.lastName.isError ? (
+                  <ErrorParagraph>{errors.lastName.errorText}</ErrorParagraph>
                 ) : null}
 
                 <label className="pt-5">Sähköposti</label>
@@ -230,8 +219,8 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
-                {isEmailError ? (
-                  <ErrorParagraph>{emailErrorText}</ErrorParagraph>
+                {errors.email.isError ? (
+                  <ErrorParagraph>{errors.email.errorText}</ErrorParagraph>
                 ) : null}
 
                 <label className="pt-5">Salasana</label>
@@ -244,8 +233,8 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
-                {isPasswordError ? (
-                  <ErrorParagraph>{passwordErrorText}</ErrorParagraph>
+                {errors.password.isError ? (
+                  <ErrorParagraph>{errors.password.errorText}</ErrorParagraph>
                 ) : null}
 
                 <Button>Luo käyttäjätunnus</Button>
