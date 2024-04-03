@@ -13,6 +13,25 @@ import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 
 const inter = Inter({ subsets: ['latin'] });
 
+type Errors = {
+  firstName: {
+    isError: boolean;
+    errorText: string;
+  };
+  lastName: {
+    isError: boolean;
+    errorText: string;
+  };
+  email: {
+    isError: boolean;
+    errorText: string;
+  };
+  password: {
+    isError: boolean;
+    errorText: string;
+  };
+};
+
 export default function Login() {
   const [firstName, setFirstName] = useState('');
   const [firstNameErrorText, setFirstNameErrorText] = useState('');
