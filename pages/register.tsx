@@ -13,19 +13,7 @@ import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
-type Errors = {
-  firstNameErrorText: string;
-  lastNameErrorText: string;
-  emailErrorText: string;
-  passwordErrorText: string;
-};
-
-const NO_ERRORS = {
-  firstNameErrorText: '',
-  lastNameErrorText: '',
-  emailErrorText: '',
-  passwordErrorText: '',
-} as const;
+type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
 export default function Login() {
   const [firstName, setFirstName] = useState('');
@@ -33,7 +21,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [errors, setErrors] = useState<Errors>(NO_ERRORS);
+  const [errors, setErrors] = useState<ErrorTypes>({});
 
   const [isUserCreated, setIsUserCreated] = useState(false);
 
@@ -67,7 +55,7 @@ export default function Login() {
   }
 
   function clearAllErrors() {
-    setErrors(NO_ERRORS);
+    setErrors({});
   }
 
   function isAllFieldsValid(): boolean {
@@ -85,7 +73,7 @@ export default function Login() {
     if (firstName.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        firstNameErrorText: 'Etunimi on pakollinen',
+        firstName: 'Etunimi on pakollinen',
       }));
       return false;
     }
@@ -96,7 +84,7 @@ export default function Login() {
     if (lastName.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        lastNameErrorText: 'Sukunimi on pakollinen',
+        lastName: 'Sukunimi on pakollinen',
       }));
       return false;
     }
@@ -107,7 +95,7 @@ export default function Login() {
     if (email.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        emailErrorText: 'Sähköposti on pakollinen',
+        email: 'Sähköposti on pakollinen',
       }));
       return false;
     }
@@ -117,7 +105,7 @@ export default function Login() {
     if (!checkedEmailAddress) {
       setErrors((prevValue) => ({
         ...prevValue,
-        emailErrorText: 'Virheellinen sähköposti',
+        email: 'Virheellinen sähköposti',
       }));
       return false;
     }
@@ -129,7 +117,7 @@ export default function Login() {
     if (password.length <= 0) {
       setErrors((prevValue) => ({
         ...prevValue,
-        passwordErrorText: 'Salasana on pakollinen',
+        password: 'Salasana on pakollinen',
       }));
       return false;
     }
@@ -138,7 +126,7 @@ export default function Login() {
     if (!checkedPassword) {
       setErrors((prevValue) => ({
         ...prevValue,
-        passwordErrorText:
+        password:
           'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
       }));
       return false;
@@ -166,7 +154,7 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-                <ErrorParagraph errorText={errors.firstNameErrorText} />
+                <ErrorParagraph errorText={errors.firstName} />
 
                 <label className="pt-5">Sukunimi</label>
                 <Input
@@ -179,7 +167,7 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
-                <ErrorParagraph errorText={errors.lastNameErrorText} />
+                <ErrorParagraph errorText={errors.lastName} />
 
                 <label className="pt-5">Sähköposti</label>
                 <Input
@@ -192,7 +180,7 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
-                <ErrorParagraph errorText={errors.emailErrorText} />
+                <ErrorParagraph errorText={errors.email} />
 
                 <label className="pt-5">Salasana</label>
                 <Input
@@ -204,7 +192,7 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
-                <ErrorParagraph errorText={errors.passwordErrorText} />
+                <ErrorParagraph errorText={errors.password} />
 
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
@@ -238,8 +226,8 @@ function ErrorParagraph({
   className,
   errorText,
   ...rest
-}: HTMLAttributes<HTMLParagraphElement> & { errorText: string }) {
-  if (errorText.length <= 0) return null;
+}: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
+  if (typeof errorText !== 'string' || errorText.length <= 0) return null;
   return (
     <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
       {errorText}
