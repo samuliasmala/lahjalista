@@ -65,13 +65,7 @@ export default function Login() {
   }
 
   function clearAllErrors() {
-    setErrors((prevValue) => ({
-      ...prevValue,
-      firstName: { errorText: '', isError: false },
-      email: { errorText: '', isError: false },
-      lastName: { errorText: '', isError: false },
-      password: { errorText: '', isError: false },
-    }));
+    setErrors(NO_ERRORS);
   }
 
   function isAllFieldsValid(): boolean {
