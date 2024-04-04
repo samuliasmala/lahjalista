@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
@@ -12,21 +13,13 @@ export default function Login() {
 
   const router = useRouter();
 
-  function handleRegisterRedirect(
-    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-  ) {
-    e.preventDefault();
-    router.push('/register').catch((e) => console.error(e));
-  }
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
     return await router.push('/');
   }
 
   return (
-    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+    <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen bg-no-repeat bg-cover bg-center">
         {isError ? (
           <div className="pt-3 flex justify-center ">
@@ -72,14 +65,14 @@ export default function Login() {
               </div>
               <Button type="submit">Kirjaudu</Button>
             </form>
-            <p className="mt-6 text-xs text-gray-600 select-none">
+            <p className="mt-6 text-xs text-gray-600">
               Sinulla ei ole vielä tunnuksia?{' '}
-              <span
-                className="underline cursor-pointer select-none hover:text-black"
-                onClick={(e) => handleRegisterRedirect(e)}
+              <Link
+                href={'/register'}
+                className="underline cursor-pointer hover:text-blue-500"
               >
                 Luo tunnus
-              </span>
+              </Link>
             </p>
           </div>
         </div>
