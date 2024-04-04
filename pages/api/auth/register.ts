@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import type { CreateUser } from '~/shared/types';
+import { CUSTOM_HEADER } from '~/middleware';
+import type { CreateUser, User } from '~/shared/types';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 
 export default async function handler(
@@ -21,6 +23,34 @@ export default async function handler(
     ) {
       throw new HttpError('Invalid request body!', 400);
     }
+    isFirstNameValid(requestBody.firstName);
+    isLastNameValid(requestBody.lastName);
+    isEmailValid(requestBody.email);
+    isPasswordValid(requestBody.password);
+
+    if (CUSTOM_HEADER.key === undefined || CUSTOM_HEADER.value === undefined) {
+      throw new HttpError('Server error!', 500);
+    }
+    const userCreationRequest = (await (
+      await axios.post(
+        process.env.NODE_ENV === 'production'
+          ? '/api/users'
+          : 'http://localhost:3000/api/users',
+        {
+          email: requestBody.email,
+          firstName: requestBody.firstName,
+          lastName: requestBody.lastName,
+          password: requestBody.password,
+        } as CreateUser,
+        {
+          headers: {
+            [CUSTOM_HEADER.key]: CUSTOM_HEADER.value,
+          },
+        },
+      )
+    ).data) as User;
+
+    return res.status(200).json(userCreationRequest);
   } catch (e) {
     return handleError(res, e);
   }
