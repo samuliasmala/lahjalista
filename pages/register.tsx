@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
@@ -7,6 +8,7 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
+import type { CreateUser } from '~/shared/types';
 import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
@@ -16,10 +18,10 @@ type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
 export default function Login() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('a');
+  const [lastName, setLastName] = useState('a');
+  const [email, setEmail] = useState('a@a.aa');
+  const [password, setPassword] = useState('!TeppoTesteri123123');
 
   const [errors, setErrors] = useState<ErrorTypes>({});
 
@@ -31,7 +33,12 @@ export default function Login() {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
-      console.log('Registering');
+      await axios.post('/api/auth/register', {
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: password,
+      } as CreateUser);
       /*
       await createUser({
         email: email,
