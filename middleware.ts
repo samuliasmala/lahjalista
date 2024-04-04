@@ -2,7 +2,7 @@ import { verifyRequestOrigin } from 'lucia';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const CUSTOM_HEADER = {
+export const CUSTOM_HEADER = {
   key: process.env.HEADER_KEY,
   value: process.env.HEADER_VALUE,
 } as const;
