@@ -7,7 +7,7 @@ import { TitleText } from '~/components/TitleText';
 
 export default function Login() {
   const [email, setEmail] = useState('john.doe@doemail.com');
-  const [password, setPassword] = useState('1');
+  const [password, setPassword] = useState('!JohnDoePassword123');
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
