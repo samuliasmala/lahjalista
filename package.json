@@ -21,6 +21,7 @@
     "prisma": "dotenv -c .env.local -- prisma"
   },
   "dependencies": {
+    "@lucia-auth/adapter-prisma": "4.0.1",
     "@prisma/client": "5.12.0",
     "@types/node": "20.12.4",
     "@types/react": "18.2.74",
