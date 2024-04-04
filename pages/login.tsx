@@ -1,12 +1,8 @@
-import { Inter } from 'next/font/google';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
-import { LoginAndSignOutButton } from '~/components/LoginAndSignOutButton';
 import { TitleText } from '~/components/TitleText';
-import { signIn } from 'next-auth/react';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export default function Login() {
   const [email, setEmail] = useState('john.doe@doemail.com');
@@ -25,31 +21,8 @@ export default function Login() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const loggingAttempt = await signIn('credentials', {
-      email: email,
-      password: password,
-      callbackUrl: '/',
-      redirect: false,
-    });
-    console.log(loggingAttempt);
-    if (loggingAttempt === undefined) {
-      return handleUndefinedLogging();
-    }
-
-    if (loggingAttempt.ok === false) {
-      if (loggingAttempt.error === 'CredentialsSignin') {
-        setErrorText('Virheellinen sähköposti tai salasana.');
-        setIsError(true);
-      }
-      return;
-    }
 
     return await router.push('/');
-  }
-
-  function handleUndefinedLogging() {
-    setErrorText('Palvelin virhe!');
-    setIsError(true);
   }
 
   return (
@@ -97,7 +70,7 @@ export default function Login() {
                   Muista minut
                 </label>
               </div>
-              <LoginAndSignOutButton type="submit" />
+              <Button type="submit">Kirjaudu</Button>
             </form>
             <p className="mt-6 text-xs text-gray-600 select-none">
               Sinulla ei ole vielä tunnuksia?{' '}
