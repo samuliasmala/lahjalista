@@ -9,3 +9,13 @@ export function handleGiftError(e: unknown) {
     console.error(e);
   }
 }
+
+export function handleUserError(e: unknown) {
+  if (isAxiosError(e) && e.response?.status === 400) {
+    console.error('Sähköposti on jo käytössä!');
+  } else if (e instanceof Error) {
+    console.error(e.message);
+  } else {
+    console.error(e);
+  }
+}

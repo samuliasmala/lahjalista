@@ -1,15 +1,12 @@
-import { Inter } from 'next/font/google';
 import { FormEvent, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/giftRequests';
+import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { isAxiosError } from 'axios';
 import { Gift, CreateGift } from '~/shared/types';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
@@ -105,7 +102,7 @@ export default function Home() {
   }
 
   return (
-    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+    <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
           <form onSubmit={(e) => void handleSubmit(e)}>
