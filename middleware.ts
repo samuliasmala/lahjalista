@@ -7,6 +7,7 @@ export const CUSTOM_HEADER = {
   value: process.env.HEADER_VALUE,
 } as const;
 
+//eslint-disable-next-line
 export async function middleware(req: NextRequest): Promise<NextResponse> {
   if (req.method === 'GET') {
     return NextResponse.next();

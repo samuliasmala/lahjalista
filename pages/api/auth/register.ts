@@ -70,7 +70,7 @@ function isLastNameValid(lastName: string): boolean {
   return true;
 }
 
-function isEmailValid(email: string): boolean {
+export function isEmailValid(email: string): boolean {
   if (email.length <= 0) {
     throw new HttpError('Email is mandatory!', 400);
   }

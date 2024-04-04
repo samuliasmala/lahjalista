@@ -28,4 +28,4 @@ declare module 'lucia' {
   }
 }
 
-type DatabaseUserAttributes = {} & User;
+interface DatabaseUserAttributes extends User {}

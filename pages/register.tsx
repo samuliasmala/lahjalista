@@ -9,7 +9,6 @@ import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import type { CreateUser } from '~/shared/types';
-import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 

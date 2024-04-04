@@ -98,19 +98,6 @@ export function errorFound(res: NextApiResponse, e: unknown) {
   return res.status(500).send('Unexpected error occurred!');
 }
 
-function isEmailValid(emailAddress: string): boolean {
-  const checkedEmailAddress = emailAddress
-    .toLowerCase()
-    .match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
-
-  if (checkedEmailAddress === null) {
-    throw new Error('Invalid email!');
-  }
-
-  // email is ready to be used
-  return true;
-}
-
 async function hashPassword(password: string): Promise<string> {
   const saltRounds = 10;
   const hashedPassword = await hash(password, saltRounds);

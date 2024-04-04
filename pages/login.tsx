@@ -8,8 +8,6 @@ import { TitleText } from '~/components/TitleText';
 export default function Login() {
   const [email, setEmail] = useState('john.doe@doemail.com');
   const [password, setPassword] = useState('!JohnDoePassword123');
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
 
   const router = useRouter();
 
@@ -21,13 +19,6 @@ export default function Login() {
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen bg-no-repeat bg-cover bg-center">
-        {isError ? (
-          <div className="pt-3 flex justify-center ">
-            <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
-              {errorText}
-            </div>
-          </div>
-        ) : null}
         <div className="w-full flex justify-center">
           <div className="mt-5 flex flex-col">
             <form onSubmit={(e) => void handleSubmit(e)}>
