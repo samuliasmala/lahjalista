@@ -41,7 +41,7 @@ export default function Login() {
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
-                  name="username"
+                  name="email"
                   spellCheck="false"
                 />
               </div>
@@ -54,7 +54,7 @@ export default function Login() {
                   autoComplete="off"
                   type="password"
                   placeholder="************"
-                  name="username"
+                  name="password"
                 />
               </div>
               <div className="flex mt-3">
