@@ -49,7 +49,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
-  isEmailValid(userDetails.email);
+  //isEmailValid(userDetails.email); // should not be needed because the check is done in /api/auth/register.ts
 
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
