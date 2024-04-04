@@ -39,15 +39,7 @@ export default function Login() {
         lastName: lastName,
         password: password,
       } as CreateUser);
-      /*
-      await createUser({
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        password: password,
-      });
       userCreatedSuccesfully();
-      */
     } catch (e) {
       handleUserError(e);
     }
