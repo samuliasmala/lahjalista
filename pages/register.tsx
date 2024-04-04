@@ -31,6 +31,8 @@ export default function Login() {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
+      console.log('Registering');
+      /*
       await createUser({
         email: email,
         firstName: firstName,
@@ -38,6 +40,7 @@ export default function Login() {
         password: password,
       });
       userCreatedSuccesfully();
+      */
     } catch (e) {
       handleUserError(e);
     }
