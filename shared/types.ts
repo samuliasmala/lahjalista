@@ -11,3 +11,10 @@ export type CreateUser = Omit<
   Prisma.UserCreateInput,
   'uuid' | 'createdAt' | 'updatedAt' | 'gift'
 >;
+
+export type CreateSession = Omit<
+  Prisma.SessionCreateInput,
+  'id' | 'expiresAt' | 'userId'
+> & {
+  user: Prisma.UserCreateNestedOneWithoutSessionInput;
+};
