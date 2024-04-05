@@ -19,27 +19,27 @@ export function isEmailValid(email: string): boolean {
 
 export function isFirstNameValid(firstName: string): boolean {
   if (firstName.length <= 0) {
-    throw new HttpError('First name is mandatory!', 400);
+    return false;
   }
   return true;
 }
 
 export function isLastNameValid(lastName: string): boolean {
   if (lastName.length <= 0) {
-    throw new HttpError('Last name is mandatory!', 400);
+    return false;
   }
   return true;
 }
 
 export function isPasswordValid(password: string): boolean {
   if (password.length <= 0) {
-    throw new HttpError('Password is mandatory!', 400);
+    return false;
   }
   // TLDR: 8 merkkiä pitkä, maksimissaan 128, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
   const checkedPassword = password.match(passwordRegex);
 
   if (!checkedPassword) {
-    throw new HttpError('Invalid password!', 400);
+    return false;
   }
 
   return true;
