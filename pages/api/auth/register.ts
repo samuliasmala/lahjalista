@@ -29,10 +29,15 @@ export default async function handler(
     ) {
       throw new HttpError('Invalid request body!', 400);
     }
-    isFirstNameValid(requestBody.firstName);
-    isLastNameValid(requestBody.lastName);
-    isEmailValid(requestBody.email);
-    isPasswordValid(requestBody.password);
+
+    if (
+      !isFirstNameValid(requestBody.firstName) ||
+      !isLastNameValid(requestBody.lastName) ||
+      !isEmailValid(requestBody.email) ||
+      !isPasswordValid(requestBody.password)
+    ) {
+      throw new HttpError('Invalid request body!', 400);
+    }
 
     if (CUSTOM_HEADER.key === undefined || CUSTOM_HEADER.value === undefined) {
       throw new HttpError('Server error!', 500);
