@@ -1,10 +1,7 @@
 import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import { Lucia } from 'lucia';
 import prisma from '~/prisma';
-import { webcrypto } from 'crypto';
-import type { User } from '~/shared/types';
-
-globalThis.crypto = webcrypto as Crypto;
+import type { CreateSession, User } from '~/shared/types';
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -25,7 +22,10 @@ declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
     DatabaseUserAttributes: DatabaseUserAttributes;
+    DatabaseSessionAttributes: DatabaseSessionAttributes;
   }
 }
 
 interface DatabaseUserAttributes extends User {}
+
+interface DatabaseSessionAttributes extends CreateSession {}
