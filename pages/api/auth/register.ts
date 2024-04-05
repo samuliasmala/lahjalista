@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { CUSTOM_HEADER } from '~/middleware';
@@ -50,7 +51,20 @@ export default async function handler(
       )
     ).data) as User;
 
-    return res.status(200).json(userCreationRequest);
+    const session = await lucia.createSession(userCreationRequest.uuid, {
+      user: {
+        connect: {
+          uuid: userCreationRequest.uuid,
+        },
+      },
+    });
+    res
+      .appendHeader(
+        'Set-Cookie',
+        lucia.createSessionCookie(session.id).serialize(),
+      )
+      .status(200)
+      .end();
   } catch (e) {
     return handleError(res, e);
   }
