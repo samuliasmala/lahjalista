@@ -1,18 +1,10 @@
 import { isAxiosError } from 'axios';
 
-export function handleDefaultError(e: unknown) {
+export function handleGeneralError(e: unknown) {
   if (isAxiosError(e)) {
-    if (e.code === 'ERR_BAD_RESPONSE') {
-      return typeof e.response?.data === 'string'
-        ? e.response?.data
-        : 'Palvelin virhe!';
-    }
-    if (e.code === 'ERR_BAD_REQUEST') {
-      return typeof e.response?.data === 'string'
-        ? e.response?.data
-        : 'Palvelin virhe!';
-    }
-    return 'Palvelin virhe!';
+    return typeof e.response?.data === 'string'
+      ? e.response?.data
+      : 'Palvelin virhe!';
   }
   if (e instanceof Error) {
     return e.message;
