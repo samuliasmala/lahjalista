@@ -6,8 +6,8 @@ import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
 
 export default function Login() {
-  const [email, setEmail] = useState('john.doe@doemail.com');
-  const [password, setPassword] = useState('!JohnDoePassword123');
+  const [email, setEmail] = useState('a@a.aa');
+  const [password, setPassword] = useState('!TeppoTesteri123123');
 
   const router = useRouter();
 
