@@ -6,7 +6,7 @@ import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift } from '~/shared/types';
-import { handleDefaultError } from '~/utils/handleError';
+import { handleGeneralError } from '~/utils/handleError';
 
 export default function Home() {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
@@ -81,7 +81,7 @@ export default function Home() {
   }
 
   function handleError(e: unknown) {
-    const errorMessage = handleDefaultError(e);
+    const errorMessage = handleGeneralError(e);
     setIsAnyKindOfError(true);
     setIsAnyKindOfErrorMessage(errorMessage);
   }
