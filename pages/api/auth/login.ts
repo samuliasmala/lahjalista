@@ -30,8 +30,9 @@ export default async function handleR(
       throw new HttpError('Invalid request body!', 400);
     }
 
-    isEmailValid(email);
-    isPasswordValid(password);
+    if (!isEmailValid(email) || !isPasswordValid(password)) {
+      throw new HttpError('Invalid credentials!', 400);
+    }
 
     const userData = await prisma.user.findUnique({
       where: {
@@ -45,17 +46,25 @@ export default async function handleR(
 
     const isPasswordSame = await verifyPassword(password, userData.password);
 
-    /*
-    if (
-      (typeof email === 'string' &&
-        email.length <= 0 &&
-        typeof password === 'string' &&
-        password.length <= 0) ||
-      email === undefined ||
-      password === undefined
-    ) {
+    if (!isPasswordSame) {
+      throw new HttpError('Invalid credentials!', 400);
     }
-    */
+
+    const session = await lucia.createSession(userData.uuid, {
+      user: {
+        connect: {
+          uuid: userData.uuid,
+        },
+      },
+    });
+
+    res
+      .appendHeader(
+        'Set-cookie',
+        lucia.createSessionCookie(session.id).serialize(),
+      )
+      .status(200)
+      .end();
   } catch (e) {
     return handleError(res, e);
   }
