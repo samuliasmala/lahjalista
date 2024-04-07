@@ -12,4 +12,4 @@ export const emailRegex =
  * TLDR: at least 8 characters, one number, one capital letter, one "small" letter and one special character
  */
 export const passwordRegex =
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$/;

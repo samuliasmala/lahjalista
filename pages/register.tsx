@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -11,24 +11,17 @@ import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 
-const inter = Inter({ subsets: ['latin'] });
+type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
+
+type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
 export default function Login() {
   const [firstName, setFirstName] = useState('');
-  const [firstNameErrorText, setFirstNameErrorText] = useState('');
-  const [isFirstNameError, setIsFirstNameError] = useState(false);
-
   const [lastName, setLastName] = useState('');
-  const [lastNameErrorText, setLastNameErrorText] = useState('');
-  const [isLastNameError, setIsLastNameError] = useState(false);
-
   const [email, setEmail] = useState('');
-  const [emailErrorText, setEmailErrorText] = useState('');
-  const [isEmailError, setIsEmailError] = useState(false);
-
   const [password, setPassword] = useState('');
-  const [passwordErrorText, setPasswordErrorText] = useState('');
-  const [isPasswordError, setIsPasswordError] = useState(false);
+
+  const [errors, setErrors] = useState<ErrorTypes>({});
 
   const [isUserCreated, setIsUserCreated] = useState(false);
 
@@ -38,7 +31,6 @@ export default function Login() {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
-      console.log('Handling registering!');
       await createUser({
         email: email,
         firstName: firstName,
@@ -63,10 +55,7 @@ export default function Login() {
   }
 
   function clearAllErrors() {
-    setIsFirstNameError(false);
-    setIsLastNameError(false);
-    setIsEmailError(false);
-    setIsPasswordError(false);
+    setErrors({});
   }
 
   function isAllFieldsValid(): boolean {
@@ -77,16 +66,15 @@ export default function Login() {
     if (!isEmailValid()) errorFound = true;
     if (!isPasswordValid()) errorFound = true;
 
-    if (errorFound) {
-      return false;
-    }
-    return true;
+    return !errorFound;
   }
 
   function isFirstNameValid(): boolean {
     if (firstName.length <= 0) {
-      setIsFirstNameError(true);
-      setFirstNameErrorText('Etunimi on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        firstName: 'Etunimi on pakollinen',
+      }));
       return false;
     }
     return true;
@@ -94,8 +82,10 @@ export default function Login() {
 
   function isLastNameValid(): boolean {
     if (lastName.length <= 0) {
-      setIsLastNameError(true);
-      setLastNameErrorText('Sukunimi on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        lastName: 'Sukunimi on pakollinen',
+      }));
       return false;
     }
     return true;
@@ -103,16 +93,20 @@ export default function Login() {
 
   function isEmailValid(): boolean {
     if (email.length <= 0) {
-      setIsEmailError(true);
-      setEmailErrorText('Sähköposti on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        email: 'Sähköposti on pakollinen',
+      }));
       return false;
     }
     // this should check with regex that there cannot be multiple dots etc
     const checkedEmailAddress = email.toLowerCase().match(emailRegex);
 
     if (!checkedEmailAddress) {
-      setIsEmailError(true);
-      setEmailErrorText('Virheellinen sähköposti!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        email: 'Virheellinen sähköposti',
+      }));
       return false;
     }
 
@@ -121,17 +115,20 @@ export default function Login() {
 
   function isPasswordValid(): boolean {
     if (password.length <= 0) {
-      setIsPasswordError(true);
-      setPasswordErrorText('Salasana on pakollinen!');
+      setErrors((prevValue) => ({
+        ...prevValue,
+        password: 'Salasana on pakollinen',
+      }));
       return false;
     }
     // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
     const checkedPassword = password.match(passwordRegex);
     if (!checkedPassword) {
-      setIsPasswordError(true);
-      setPasswordErrorText(
-        'Salasanan täytyy olla vähintään 8 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki',
-      );
+      setErrors((prevValue) => ({
+        ...prevValue,
+        password:
+          'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
+      }));
       return false;
     }
 
@@ -139,7 +136,7 @@ export default function Login() {
   }
 
   return (
-    <main className={`bg-white w-full max-w-full h-screen ${inter.className}`}>
+    <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
@@ -157,9 +154,7 @@ export default function Login() {
                   name="firstName"
                   spellCheck="false"
                 />
-                {isFirstNameError ? (
-                  <ErrorParagraph>{firstNameErrorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph errorText={errors.firstName} />
 
                 <label className="pt-5">Sukunimi</label>
                 <Input
@@ -172,9 +167,7 @@ export default function Login() {
                   name="lastName"
                   spellCheck="false"
                 />
-                {isLastNameError ? (
-                  <ErrorParagraph>{lastNameErrorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph errorText={errors.lastName} />
 
                 <label className="pt-5">Sähköposti</label>
                 <Input
@@ -187,9 +180,7 @@ export default function Login() {
                   name="email"
                   spellCheck="false"
                 />
-                {isEmailError ? (
-                  <ErrorParagraph>{emailErrorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph errorText={errors.email} />
 
                 <label className="pt-5">Salasana</label>
                 <Input
@@ -201,27 +192,20 @@ export default function Login() {
                   placeholder="************"
                   name="password"
                 />
-                {isPasswordError ? (
-                  <ErrorParagraph>{passwordErrorText}</ErrorParagraph>
-                ) : null}
+                <ErrorParagraph errorText={errors.password} />
 
                 <Button>Luo käyttäjätunnus</Button>
                 <p className="pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
-                  <span
+                  <Link
+                    href={'/login'}
                     className="underline cursor-pointer hover:text-blue-500"
-                    onClick={() => {
-                      router.push('/login').catch((e) => console.error(e));
-                    }}
                   >
                     Kirjaudu sisään
-                  </span>
+                  </Link>
                 </p>
               </div>
             </form>
-            <TitleText className="mt-5 p-3 border-4 border-red-600">
-              Älä käytä oikeita sähköposteja!
-            </TitleText>
           </div>
           {isUserCreated ? (
             <Modal>
@@ -240,12 +224,13 @@ export default function Login() {
 
 function ErrorParagraph({
   className,
-  children,
+  errorText,
   ...rest
-}: HTMLAttributes<HTMLParagraphElement>) {
+}: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
+  if (typeof errorText !== 'string' || errorText.length <= 0) return null;
   return (
     <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
-      {children}
+      {errorText}
     </p>
   );
 }
