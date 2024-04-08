@@ -9,7 +9,7 @@ import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { createUser } from '~/utils/apiRequests';
 import { handleUserError } from '~/utils/handleError';
-import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
+import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
