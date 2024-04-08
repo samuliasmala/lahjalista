@@ -2,7 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
-import { hashPassword } from '~/backend/utils';
+import {
+  hashPassword,
+  isEmailValid,
+  isFirstNameValid,
+  isLastNameValid,
+  isPasswordValid,
+} from '~/backend/utils';
+import { HttpError } from '~/backend/HttpError';
 
 const HANDLER: Record<
   string,
@@ -61,6 +68,14 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
 }
 
 async function createUser(userDetails: CreateUser) {
+  if (
+    !isEmailValid(userDetails.email) ||
+    !isFirstNameValid(userDetails.firstName) ||
+    !isLastNameValid(userDetails.lastName) ||
+    !isPasswordValid(userDetails.password)
+  ) {
+    throw new HttpError('Invalid credentials', 400);
+  }
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
     data: {
