@@ -15,9 +15,7 @@ export default async function handleR(
       throw new HttpError('Invalid request method!', 405);
     }
 
-    const requestBody = req.body as UserLoginDetails;
-    const email = requestBody.email;
-    const password = requestBody.password;
+    const { email, password } = req.body as UserLoginDetails;
 
     if (
       !email ||
