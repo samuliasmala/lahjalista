@@ -3,7 +3,7 @@ import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import type { CreateUser } from '~/shared/types';
-import { createUser } from '~/utils/apiRequests';
+import { createUser } from '../users';
 
 export default async function handler(
   req: NextApiRequest,

@@ -67,7 +67,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   return res.status(200).json(addedUser);
 }
 
-async function createUser(userDetails: CreateUser) {
+export async function createUser(userDetails: CreateUser) {
   if (
     !isEmailValid(userDetails.email) ||
     !isFirstNameValid(userDetails.firstName) ||
