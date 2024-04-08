@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { handleError } from '~/backend/handleError';
 import { hashPassword } from '~/backend/utils';
 
@@ -50,7 +49,6 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
-  //isEmailValid(userDetails.email); // should not be needed because the check is done in /api/auth/register.ts
 
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
