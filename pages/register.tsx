@@ -10,7 +10,7 @@ import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import type { CreateUser } from '~/shared/types';
 import { handleUserError } from '~/utils/handleError';
-import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
+import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
