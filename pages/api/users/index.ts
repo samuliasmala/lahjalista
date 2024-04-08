@@ -50,6 +50,17 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
 
+  const addedUser = await createUser({
+    email: userDetails.email.toLowerCase(),
+    firstName: userDetails.firstName,
+    lastName: userDetails.lastName,
+    password: userDetails.password,
+  });
+
+  return res.status(200).json(addedUser);
+}
+
+async function createUser(userDetails: CreateUser) {
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
     data: {
@@ -67,6 +78,5 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
       updatedAt: true,
     },
   });
-
-  return res.status(200).json(addedUser);
+  return addedUser;
 }
