@@ -3,7 +3,7 @@ import { isAxiosError } from 'axios';
 export function handleGeneralError(e: unknown) {
   if (isAxiosError(e)) {
     return typeof e.response?.data === 'string'
-      ? e.response?.data
+      ? e.response.data
       : 'Palvelin virhe!';
   }
   if (e instanceof Error) {
