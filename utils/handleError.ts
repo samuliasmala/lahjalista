@@ -23,9 +23,24 @@ export function handleGiftError(e: unknown) {
   }
 }
 
+type KnownFrontEndErrorTexts = 'email was not unique!' | string;
+
+const USER_ERROR_HANDLER: Record<KnownFrontEndErrorTexts, string> = {
+  'email was not unique!': 'Sähköposti on jo käytössä',
+};
+
 export function handleUserError(e: unknown) {
   if (isAxiosError(e) && e.response?.status === 400) {
-    console.error('Sähköposti on jo käytössä!');
+    const responseText = e.response.data.toLowerCase();
+    if (
+      typeof e.response.data === 'string' &&
+      USER_ERROR_HANDLER[responseText]
+    ) {
+      console.error(USER_ERROR_HANDLER[responseText]);
+    } else {
+      console.error('Unexpected error occured!');
+      console.error('Unexpected error: ', e.response.data);
+    }
   } else if (e instanceof Error) {
     console.error(e.message);
   } else {
