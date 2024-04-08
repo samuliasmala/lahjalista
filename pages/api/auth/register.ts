@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import type { CreateUser, User } from '~/shared/types';
+import type { CreateUser } from '~/shared/types';
 import { createUser } from '~/utils/apiRequests';
 
 export default async function handler(
