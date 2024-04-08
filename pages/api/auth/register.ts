@@ -7,8 +7,8 @@ import {
   isFirstNameValid,
   isLastNameValid,
   isPasswordValid,
+  isEmailValid,
 } from '~/backend/utils';
-import { isEmailValid } from '~/backend/utils';
 import { CUSTOM_HEADER } from '~/middleware';
 import type { CreateUser, User } from '~/shared/types';
 

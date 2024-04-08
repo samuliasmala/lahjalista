@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { User, UserLoginDetails } from '~/shared/types';
+import { UserLoginDetails } from '~/shared/types';
 import { isEmailValid, isPasswordValid, verifyPassword } from '~/backend/utils';
 import prisma from '~/prisma';
 
