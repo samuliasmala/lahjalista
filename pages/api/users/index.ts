@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
-import { hash } from 'bcrypt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { handleError } from '~/backend/handleError';
+import { hashPassword } from '~/backend/utils';
 
 const HANDLER: Record<
   string,
@@ -71,10 +71,4 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   });
 
   return res.status(200).json(addedUser);
-}
-
-async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 10;
-  const hashedPassword = await hash(password, saltRounds);
-  return hashedPassword;
 }

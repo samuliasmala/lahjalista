@@ -1,6 +1,6 @@
 import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
 import { HttpError } from './HttpError';
-import { compare as bcryptCompare } from 'bcrypt';
+import { compare as bcryptCompare, hash } from 'bcrypt';
 
 export function isEmailValid(email: string): boolean {
   if (email.length <= 0) {
@@ -51,4 +51,10 @@ export async function verifyPassword(
 ): Promise<boolean> {
   const isMatch = await bcryptCompare(givenPassword, hashedPassword);
   return isMatch;
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  const saltRounds = 10;
+  const hashedPassword = await hash(password, saltRounds);
+  return hashedPassword;
 }
