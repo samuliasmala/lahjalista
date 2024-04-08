@@ -20,21 +20,16 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const requestBody = req.body as CreateUser;
-    if (
-      !requestBody.email ||
-      !requestBody.firstName ||
-      !requestBody.lastName ||
-      !requestBody.password
-    ) {
+    const { email, firstName, lastName, password } = req.body as CreateUser;
+    if (!email || !firstName || !lastName || !password) {
       throw new HttpError('Invalid request body!', 400);
     }
 
     if (
-      !isFirstNameValid(requestBody.firstName) ||
-      !isLastNameValid(requestBody.lastName) ||
-      !isEmailValid(requestBody.email) ||
-      !isPasswordValid(requestBody.password)
+      !isFirstNameValid(firstName) ||
+      !isLastNameValid(lastName) ||
+      !isEmailValid(email) ||
+      !isPasswordValid(password)
     ) {
       throw new HttpError('Invalid request body!', 400);
     }
@@ -48,10 +43,10 @@ export default async function handler(
           ? '/api/users'
           : 'http://localhost:3000/api/users',
         {
-          email: requestBody.email,
-          firstName: requestBody.firstName,
-          lastName: requestBody.lastName,
-          password: requestBody.password,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          password: password,
         } as CreateUser,
         {
           headers: {
