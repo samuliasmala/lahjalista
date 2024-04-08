@@ -4,13 +4,13 @@ import { compare as bcryptCompare, hash } from 'bcrypt';
 
 export function isEmailValid(email: string): boolean {
   if (email.length <= 0) {
-    throw new HttpError('Email is mandatory!', 400);
+    return false;
   }
   // this should check with regex that there cannot be multiple dots etc
   const checkedEmailAddress = email.toLowerCase().match(emailRegex);
 
   if (!checkedEmailAddress) {
-    throw new HttpError('Invalid email!', 400);
+    return false;
   }
 
   // email is ready to be used
