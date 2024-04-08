@@ -1,5 +1,4 @@
-import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
-import { HttpError } from './HttpError';
+import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import { compare as bcryptCompare, hash } from 'bcrypt';
 
 export function isEmailValid(email: string): boolean {
