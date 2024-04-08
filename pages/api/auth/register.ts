@@ -1,16 +1,9 @@
-import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import {
-  isFirstNameValid,
-  isLastNameValid,
-  isPasswordValid,
-  isEmailValid,
-} from '~/backend/utils';
-import { CUSTOM_HEADER } from '~/middleware';
 import type { CreateUser, User } from '~/shared/types';
+import { createUser } from '~/utils/apiRequests';
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,36 +18,12 @@ export default async function handler(
       throw new HttpError('Invalid request body!', 400);
     }
 
-    if (
-      !isFirstNameValid(firstName) ||
-      !isLastNameValid(lastName) ||
-      !isEmailValid(email) ||
-      !isPasswordValid(password)
-    ) {
-      throw new HttpError('Invalid request body!', 400);
-    }
-
-    if (CUSTOM_HEADER.key === undefined || CUSTOM_HEADER.value === undefined) {
-      throw new HttpError('Server error!', 500);
-    }
-    const userCreationRequest = (await (
-      await axios.post(
-        process.env.NODE_ENV === 'production'
-          ? '/api/users'
-          : 'http://localhost:3000/api/users',
-        {
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          password: password,
-        } as CreateUser,
-        {
-          headers: {
-            [CUSTOM_HEADER.key]: CUSTOM_HEADER.value,
-          },
-        },
-      )
-    ).data) as User;
+    const userCreationRequest = await createUser({
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      password: password,
+    });
 
     const session = await lucia.createSession(userCreationRequest.uuid, {
       user: {
