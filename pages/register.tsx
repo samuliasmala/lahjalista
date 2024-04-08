@@ -22,6 +22,8 @@ export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
   const [password, setPassword] = useState('!TeppoTesteri123123');
 
+  const [registerError, setRegisterError] = useState('');
+
   const [errors, setErrors] = useState<ErrorTypes>({});
 
   const [isUserCreated, setIsUserCreated] = useState(false);
@@ -40,7 +42,8 @@ export default function Login() {
       } as CreateUser);
       userCreatedSuccesfully();
     } catch (e) {
-      handleUserError(e);
+      const errorText = handleUserError(e);
+      setRegisterError(errorText);
     }
   }
 
@@ -49,6 +52,7 @@ export default function Login() {
     setLastName('');
     setEmail('');
     setPassword('');
+    setRegisterError('');
     setIsUserCreated(true);
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
@@ -141,6 +145,11 @@ export default function Login() {
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
+            {registerError.length > 0 ? (
+              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+                {registerError}
+              </div>
+            ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
               <div className="pt-5 pl-4 pr-4 flex flex-col">

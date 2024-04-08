@@ -37,6 +37,7 @@ export function handleUserError(e: unknown) {
       USER_ERROR_HANDLER[responseText]
     ) {
       console.error(USER_ERROR_HANDLER[responseText]);
+      return USER_ERROR_HANDLER[responseText];
     } else {
       console.error('Unexpected error occured!');
       console.error('Unexpected error: ', e.response.data);
@@ -46,4 +47,5 @@ export function handleUserError(e: unknown) {
   } else {
     console.error(e);
   }
+  return '';
 }
