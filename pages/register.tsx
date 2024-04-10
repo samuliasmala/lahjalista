@@ -11,6 +11,8 @@ import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import type { CreateUser } from '~/shared/types';
 import { handleUserError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
+import SvgEyeOpen from '~/icons/eye_open';
+import SvgEyeSlash from '~/icons/eye_slash';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -22,8 +24,11 @@ export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
   const [password, setPassword] = useState('!TeppoTesteri123123');
 
+  const [registerError, setRegisterError] = useState('');
+
   const [errors, setErrors] = useState<ErrorTypes>({});
 
+  const [showPassword, setShowPassword] = useState(false);
   const [isUserCreated, setIsUserCreated] = useState(false);
 
   const router = useRouter();
@@ -40,7 +45,8 @@ export default function Login() {
       } as CreateUser);
       userCreatedSuccesfully();
     } catch (e) {
-      handleUserError(e);
+      const errorText = handleUserError(e);
+      setRegisterError(errorText);
     }
   }
 
@@ -49,6 +55,7 @@ export default function Login() {
     setLastName('');
     setEmail('');
     setPassword('');
+    setRegisterError('');
     setIsUserCreated(true);
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
@@ -141,6 +148,11 @@ export default function Login() {
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
+            {registerError.length > 0 ? (
+              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+                {registerError}
+              </div>
+            ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
               <div className="pt-5 pl-4 pr-4 flex flex-col">
@@ -184,19 +196,38 @@ export default function Login() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <label className="pt-5">Salasana</label>
-                <Input
-                  value={password}
-                  onChange={(e) => setPassword(e.currentTarget.value)}
-                  className="border border-black"
-                  autoComplete="off"
-                  type="password"
-                  placeholder="************"
-                  name="password"
-                />
+                <div className="flex outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                  <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.currentTarget.value)}
+                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
+                    autoComplete="off"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="************"
+                    name="password"
+                  />
+                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                    {showPassword ? (
+                      <SvgEyeSlash
+                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                        onClick={() => {
+                          setShowPassword((prevValue) => !prevValue);
+                        }}
+                      />
+                    ) : (
+                      <SvgEyeOpen
+                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                        onClick={() => {
+                          setShowPassword((prevValue) => !prevValue);
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button>Luo käyttäjätunnus</Button>
-                <p className="pt-6 text-xs text-gray-600">
+                <Button className="select-none">Luo käyttäjätunnus</Button>
+                <p className="select-none pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
