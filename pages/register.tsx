@@ -18,7 +18,7 @@ type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
-export default function Login() {
+export default function Register() {
   const [firstName, setFirstName] = useState('a');
   const [lastName, setLastName] = useState('a');
   const [email, setEmail] = useState('a@a.aa');
