@@ -1,4 +1,4 @@
-import { emailRegex, passwordRegex } from '~/utils/regexPatterns';
+import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import { HttpError } from './HttpError';
 import { compare as bcryptCompare, hash } from 'bcrypt';
 

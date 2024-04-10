@@ -28,11 +28,10 @@ export default async function handlePrisma(
     if (reqHandler) {
       await reqHandler(req, res);
     } else {
-      return res
-        .status(405)
-        .send(
-          `${req.method} is not a valid method. Only GET and POST requests are valid!`,
-        );
+      throw new HttpError(
+        `${req.method} is not a valid method. Only GET and POST requests are valid!`,
+        405,
+      );
     }
   } catch (e) {
     return handleError(res, e);
