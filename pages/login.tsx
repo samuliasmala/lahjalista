@@ -1,9 +1,11 @@
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
+import { UserLoginDetails } from '~/shared/types';
 
 export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
@@ -13,7 +15,20 @@ export default function Login() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    return await router.push('/');
+    try {
+      const loginCredentials: UserLoginDetails = {
+        email: email,
+        password: password,
+      };
+      const loginRequest = await axios.post(
+        '/api/auth/login',
+        loginCredentials,
+      );
+      return await router.push('/');
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
   }
 
   return (
