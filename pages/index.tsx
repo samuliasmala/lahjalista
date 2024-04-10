@@ -7,8 +7,38 @@ import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
+import {
+  GetServerSidePropsContext,
+  GetServerSidePropsResult,
+  InferGetServerSidePropsType,
+} from 'next';
+import { User } from 'lucia';
+import { validateRequest } from '~/backend/auth';
 
-export default function Home() {
+async function getServerSideProps(
+  context: GetServerSidePropsContext,
+): Promise<GetServerSidePropsResult<{ user: User }>> {
+  console.log('jeps');
+  const validatingRequest = await validateRequest(context.req, context.res);
+  if (!validatingRequest.user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    };
+  }
+  const user = validatingRequest.user;
+  return {
+    props: {
+      user,
+    },
+  };
+}
+
+export default function Home({
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [giftData, setGiftData] = useState<Gift[]>([]);
@@ -90,6 +120,7 @@ export default function Home() {
     <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
+          {user ? <p>{user.email}</p> : <p>Error!</p>}
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
