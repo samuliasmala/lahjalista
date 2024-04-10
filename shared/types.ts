@@ -13,7 +13,7 @@ export type CreateUser = Omit<
 >;
 export type UserLoginDetails = Omit<
   PrismaUser,
-  'id' | 'uuid' | 'createdAt' | 'updatedAt' | 'gift'
+  'id' | 'uuid' | 'createdAt' | 'updatedAt' | 'gift' | 'firstName' | 'lastName'
 >;
 
 export type CreateSession = Omit<
