@@ -1,21 +1,34 @@
 import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { IncomingMessage, ServerResponse } from 'http';
-import { Lucia } from 'lucia';
+import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
 import type { CreateSession, User } from '~/shared/types';
-import type { Session, User as LuciaUser } from 'lucia';
+import type { Session } from 'lucia';
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
+  sessionExpiresIn: new TimeSpan(2, 'd'),
   sessionCookie: {
     attributes: {
       secure: process.env.NODE_ENV === 'production',
     },
   },
-  getUserAttributes(attributes: Partial<User>) {
+  getUserAttributes({
+    createdAt,
+    email,
+    firstName,
+    lastName,
+    updatedAt,
+    uuid,
+  }: User): User {
     return {
-      email: attributes.email,
+      uuid: uuid,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     };
   },
 });
@@ -33,9 +46,7 @@ interface DatabaseSessionAttributes extends CreateSession {}
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
-): Promise<
-  { user: LuciaUser; session: Session } | { user: null; session: null }
-> {
+): Promise<{ user: User; session: Session } | { user: null; session: null }> {
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
