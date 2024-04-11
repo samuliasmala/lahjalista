@@ -1,11 +1,32 @@
 import axios from 'axios';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
-import { UserLoginDetails } from '~/shared/types';
+import { User, UserLoginDetails } from '~/shared/types';
+
+export async function getServerSideProps(
+  context: GetServerSidePropsContext,
+): Promise<GetServerSidePropsResult<{ user: Partial<User> }>> {
+  const cookieData = await validateRequest(context.req, context.res);
+  if (!cookieData.user) {
+    return {
+      props: {
+        user: {},
+      },
+    };
+  }
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/',
+    },
+  };
+}
 
 export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
@@ -24,10 +45,9 @@ export default function Login() {
         '/api/auth/login',
         loginCredentials,
       );
-      return await router.push('/');
+      await router.push('/');
     } catch (e) {
       console.error(e);
-      return null;
     }
   }
 
