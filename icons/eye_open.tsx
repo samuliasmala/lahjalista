@@ -1,5 +1,3 @@
-// Credits: https://heroicons.com/
-
 import type { SVGProps } from 'react';
 const SvgEyeOpen = (props: SVGProps<SVGSVGElement>) => (
   <svg
