@@ -5,22 +5,22 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift } from '~/shared/types';
+import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   InferGetServerSidePropsType,
 } from 'next';
-import { User } from 'lucia';
 import { validateRequest } from '~/backend/auth';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
-async function getServerSideProps(
+export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<{ user: User }>> {
-  console.log('jeps');
-  const validatingRequest = await validateRequest(context.req, context.res);
-  if (!validatingRequest.user) {
+  const cookieData = await validateRequest(context.req, context.res);
+  if (!cookieData.user) {
     return {
       redirect: {
         permanent: false,
@@ -28,10 +28,9 @@ async function getServerSideProps(
       },
     };
   }
-  const user = validatingRequest.user;
   return {
     props: {
-      user,
+      user: JSON.parse(JSON.stringify(cookieData.user)),
     },
   };
 }
@@ -51,9 +50,10 @@ export default function Home({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
+  const router = useRouter();
+
   useEffect(() => {
     console.log('effect');
-
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
@@ -120,7 +120,11 @@ export default function Home({
     <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
-          {user ? <p>{user.email}</p> : <p>Error!</p>}
+          {user ? (
+            <p>
+              {user.firstName} {user.lastName}
+            </p>
+          ) : null}
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Lahjalistaidea</TitleText>
             <div className="pt-4 grid">
@@ -218,6 +222,15 @@ export default function Home({
                 </div>
               </>
             )}
+
+            <Button
+              onClick={async () => {
+                const request = await axios.post('/api/auth/logout');
+                if (request) router.push('/login');
+              }}
+            >
+              Sign out
+            </Button>
           </div>
         </div>
       </div>
