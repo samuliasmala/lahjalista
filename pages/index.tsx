@@ -15,6 +15,8 @@ import {
 import { validateRequest } from '~/backend/auth';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import SvgUser from '~/icons/user';
+import { Modal } from '~/components/Modal';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -118,15 +120,33 @@ export default function Home({
 
   return (
     <main className="bg-white w-full max-w-full h-screen">
+      <div className="justify-center flex">
+        <div className="bg-gray-300 sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
+          <div className="text-lg select-none">Greetbook</div>
+          <SvgUser
+            width={32}
+            height={32}
+            className="cursor-pointer hover:stroke-yellow-600"
+          />
+          <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-24 shadow-md shadow-black outline outline-2">
+            <div>
+              {user ? (
+                <div>
+                  <p className="pl-3 pt-3 pb-0 font-bold">
+                    {user.firstName} {user.lastName}
+                  </p>
+                  <p className="pl-3">{user.email}</p>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
-          {user ? (
-            <p>
-              {user.firstName} {user.lastName}
-            </p>
-          ) : null}
+          {user ? <p>{user.email}</p> : null}
           <form onSubmit={(e) => void handleSubmit(e)}>
-            <TitleText>Lahjalistaidea</TitleText>
+            <TitleText>Uusi idea</TitleText>
             <div className="pt-4 grid">
               <label htmlFor="receiver">Saaja</label>
               <Input
