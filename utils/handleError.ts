@@ -29,7 +29,7 @@ const USER_ERROR_HANDLER: Record<KnownFrontEndErrorTexts, string> = {
   'email was not unique!': 'Sähköposti on jo käytössä',
 };
 
-export function handleUserError(e: unknown) {
+export function handleRegisterError(e: unknown) {
   if (isAxiosError(e) && e.response?.status === 400) {
     const responseText = e.response.data.toLowerCase();
     if (

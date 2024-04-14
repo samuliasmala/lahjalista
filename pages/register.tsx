@@ -9,7 +9,7 @@ import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import type { CreateUser } from '~/shared/types';
-import { handleUserError } from '~/utils/handleError';
+import { handleRegisterError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
@@ -45,7 +45,7 @@ export default function Register() {
       } as CreateUser);
       userCreatedSuccesfully();
     } catch (e) {
-      const errorText = handleUserError(e);
+      const errorText = handleRegisterError(e);
       setRegisterError(errorText);
     }
   }
