@@ -52,6 +52,7 @@ export default function Home({
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+  const [showUserWindow, setShowUserWindow] = useState(false);
 
   const router = useRouter();
 
@@ -128,10 +129,11 @@ export default function Home({
             width={32}
             height={32}
             className="cursor-pointer hover:stroke-yellow-600"
+            onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
-          <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-28 shadow-md shadow-black outline outline-2">
-            <div>
-              {user ? (
+          {user && showUserWindow ? (
+            <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-28 shadow-md shadow-black outline outline-2">
+              <div>
                 <div>
                   <p className="pl-3 pt-3 pb-0 font-bold">
                     {user.firstName} {user.lastName}
@@ -150,14 +152,13 @@ export default function Home({
                     </div>
                   </div>
                 </div>
-              ) : null}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
-          {user ? <p>{user.email}</p> : null}
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText>Uusi idea</TitleText>
             <div className="pt-4 grid">
