@@ -5,7 +5,7 @@ import prisma from '~/prisma';
 import type { CreateSession, User } from '~/shared/types';
 import type { Session } from 'lucia';
 
-const adapter = new PrismaAdapter(prisma.session, prisma.user);
+export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
   sessionExpiresIn: new TimeSpan(2, 'd'),
