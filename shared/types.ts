@@ -11,10 +11,12 @@ export type CreateUser = Omit<
   Prisma.UserCreateInput,
   'uuid' | 'createdAt' | 'updatedAt' | 'gift'
 >;
-export type UserLoginDetails = Omit<
-  PrismaUser,
-  'id' | 'uuid' | 'createdAt' | 'updatedAt' | 'gift' | 'firstName' | 'lastName'
->;
+
+export type UserLoginDetails = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
 
 export type CreateSession = Omit<
   Prisma.SessionCreateInput,
