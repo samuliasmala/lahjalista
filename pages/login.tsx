@@ -7,6 +7,8 @@ import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
+import SvgEyeOpen from '~/icons/eye_open';
+import SvgEyeSlash from '~/icons/eye_slash';
 import { isEmailValid } from '~/shared/isValidFunctions';
 import { User, UserLoginDetails } from '~/shared/types';
 import { handleLoginError } from '~/utils/handleError';
@@ -34,6 +36,7 @@ export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
   const [password, setPassword] = useState('!TeppoTesteri123123');
   const [errorText, setErrorText] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -85,15 +88,34 @@ export default function Login() {
               </div>
               <div className="mt-5 flex flex-col">
                 <label>Salasana</label>
-                <Input
-                  onChange={(e) => setPassword(e.currentTarget.value)}
-                  value={password}
-                  className="border border-black"
-                  autoComplete="off"
-                  type="password"
-                  placeholder="************"
-                  name="password"
-                />
+                <div className="flex outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                  <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.currentTarget.value)}
+                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
+                    autoComplete="off"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="************"
+                    name="password"
+                  />
+                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                    {showPassword ? (
+                      <SvgEyeSlash
+                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                        onClick={() => {
+                          setShowPassword((prevValue) => !prevValue);
+                        }}
+                      />
+                    ) : (
+                      <SvgEyeOpen
+                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                        onClick={() => {
+                          setShowPassword((prevValue) => !prevValue);
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="flex mt-3">
                 <label className="select-none cursor-pointer">
