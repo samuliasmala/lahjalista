@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
+import { hashPassword } from '~/backend/utils';
 import {
-  hashPassword,
   isEmailValid,
   isFirstNameValid,
   isLastNameValid,
   isPasswordValid,
-} from '~/backend/utils';
+} from '~/shared/isValidFunctions';
 import { HttpError } from '~/backend/HttpError';
 
 const HANDLER: Record<

@@ -3,7 +3,8 @@ import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { UserLoginDetails } from '~/shared/types';
-import { isEmailValid, isPasswordValid, verifyPassword } from '~/backend/utils';
+import { verifyPassword } from '~/backend/utils';
+import { isEmailValid, isPasswordValid } from '~/shared/isValidFunctions';
 import prisma from '~/prisma';
 
 export default async function handleR(
