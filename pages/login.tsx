@@ -35,6 +35,7 @@ export async function getServerSideProps(
 export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
   const [password, setPassword] = useState('!TeppoTesteri123123');
+  const [rememberMe, setRememberMe] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,6 +48,7 @@ export default function Login() {
         const loginCredentials: UserLoginDetails = {
           email: email,
           password: password,
+          rememberMe: rememberMe,
         };
         await axios.post('/api/auth/login', loginCredentials);
         await router.push('/');
@@ -119,7 +121,11 @@ export default function Login() {
               </div>
               <div className="flex mt-3">
                 <label className="select-none cursor-pointer">
-                  <input type="checkbox" className="mr-2 cursor-pointer" />
+                  <input
+                    type="checkbox"
+                    className="mr-2 cursor-pointer"
+                    onClick={() => setRememberMe((prevValue) => !prevValue)}
+                  />
                   Muista minut
                 </label>
               </div>
