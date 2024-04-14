@@ -7,7 +7,9 @@ import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
+import { isEmailValid } from '~/shared/isValidFunctions';
 import { User, UserLoginDetails } from '~/shared/types';
+import { handleLoginError } from '~/utils/handleError';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -31,7 +33,6 @@ export async function getServerSideProps(
 export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
   const [password, setPassword] = useState('!TeppoTesteri123123');
-  const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
   const router = useRouter();
@@ -39,23 +40,32 @@ export default function Login() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const loginCredentials: UserLoginDetails = {
-        email: email,
-        password: password,
-      };
-      const loginRequest = await axios.post(
-        '/api/auth/login',
-        loginCredentials,
-      );
-      await router.push('/');
+      if (isEmailValid(email)) {
+        const loginCredentials: UserLoginDetails = {
+          email: email,
+          password: password,
+        };
+        await axios.post('/api/auth/login', loginCredentials);
+        await router.push('/');
+      } else {
+        setErrorText('Sähköposti ei ole sääntöjen mukainen!');
+      }
     } catch (e) {
       console.error(e);
+      setErrorText(handleLoginError(e));
     }
   }
 
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen bg-no-repeat bg-cover bg-center">
+        {errorText.length > 0 ? (
+          <div className="pt-4 flex justify-center ">
+            <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+              {errorText}
+            </div>
+          </div>
+        ) : null}
         <div className="w-full flex justify-center">
           <div className="mt-5 flex flex-col">
             <form onSubmit={(e) => void handleSubmit(e)}>
