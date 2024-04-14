@@ -31,6 +31,8 @@ export async function getServerSideProps(
 export default function Login() {
   const [email, setEmail] = useState('a@a.aa');
   const [password, setPassword] = useState('!TeppoTesteri123123');
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const router = useRouter();
 
