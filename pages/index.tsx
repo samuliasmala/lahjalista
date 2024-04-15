@@ -124,7 +124,7 @@ export default function Home({
     <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center flex">
         <div className="bg-gray-300 sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
-          <div className="text-lg select-none">Lahjalista</div>
+          <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
             width={32}
             height={32}
@@ -132,14 +132,14 @@ export default function Home({
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           {user && showUserWindow ? (
-            <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-28 shadow-md shadow-black outline outline-2">
+            <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
               <div>
                 <div>
                   <p className="pl-3 pt-3 pb-0 font-bold">
                     {user.firstName} {user.lastName}
                   </p>
                   <p className="pl-3">{user.email}</p>
-                  <div className="pt-2 pl-3 pr-3 pb-10">
+                  <div className="pt-2 pl-3 pr-3 pb-4">
                     <div className="bg-black flex items-center h-9 hover:cursor-pointer group/logout">
                       <p className="group-hover/logout:text-gray-500 text-white ml-3">
                         Kirjaudu ulos
@@ -160,9 +160,11 @@ export default function Home({
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
           <form onSubmit={(e) => void handleSubmit(e)}>
-            <TitleText>Uusi idea</TitleText>
+            <TitleText className="select-none">Uusi idea</TitleText>
             <div className="pt-4 grid">
-              <label htmlFor="receiver">Saaja</label>
+              <label htmlFor="receiver" className="select-none">
+                Saaja
+              </label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
                 autoComplete="off"
@@ -176,7 +178,9 @@ export default function Home({
               )}
             </div>
             <div className="pt-4 grid">
-              <label htmlFor="giftName">Lahja</label>
+              <label htmlFor="giftName" className="select-none">
+                Lahja
+              </label>
               <Input
                 onChange={(event) => setNewGiftName(event.target.value)}
                 autoComplete="off"
