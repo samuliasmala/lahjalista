@@ -9,7 +9,7 @@ import prisma from '~/prisma';
 import { Lucia, TimeSpan } from 'lucia';
 
 const luciaLongSession = new Lucia(adapter, {
-  sessionExpiresIn: new TimeSpan(90, 'd'),
+  sessionExpiresIn: new TimeSpan(30, 'd'),
 });
 
 export default async function handleR(
