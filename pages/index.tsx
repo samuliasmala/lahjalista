@@ -119,6 +119,11 @@ export default function Home({
     setIsAnyKindOfErrorMessage(errorMessage);
   }
 
+  async function handleLogout() {
+    const request = await axios.post('/api/auth/logout');
+    if (request) router.push('/login');
+  }
+
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center flex">
@@ -130,7 +135,11 @@ export default function Home({
             className="cursor-pointer hover:stroke-yellow-600"
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
-          <UserDetailModal showUserWindow={showUserWindow} user={user} />
+          <UserDetailModal
+            showUserWindow={showUserWindow}
+            user={user}
+            handleLogout={handleLogout}
+          />
         </div>
       </div>
       <div className="justify-center grid">
@@ -256,8 +265,13 @@ function UserDetailModal({
   className,
   user,
   showUserWindow,
+  handleLogout,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { user: User; showUserWindow: boolean }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  user: User;
+  showUserWindow: boolean;
+  handleLogout: () => void;
+}) {
   if (user && showUserWindow) {
     return (
       <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
@@ -268,7 +282,10 @@ function UserDetailModal({
             </p>
             <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
             <div className="pt-2 pl-3 pr-3 pb-4">
-              <div className="bg-black flex items-center h-9 hover:cursor-pointer group/logout">
+              <div
+                className="bg-black flex items-center h-9 hover:cursor-pointer group/logout"
+                onClick={() => handleLogout()}
+              >
                 <p className="group-hover/logout:text-gray-500 text-white ml-3">
                   Kirjaudu ulos
                 </p>
