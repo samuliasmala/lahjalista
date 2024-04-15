@@ -132,13 +132,14 @@ export default function Home({
           <SvgUser
             width={32}
             height={32}
-            className="cursor-pointer hover:stroke-yellow-600"
+            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} z-[98]`}
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           <UserDetailModal
             showUserWindow={showUserWindow}
             user={user}
             handleLogout={handleLogout}
+            closeUserWindow={() => setShowUserWindow(false)}
           />
         </div>
       </div>
@@ -256,40 +257,44 @@ function UserDetailModal({
   className,
   user,
   showUserWindow,
+  closeUserWindow,
   handleLogout,
   ...rest
 }: HTMLAttributes<HTMLDivElement> & {
   user: User;
   showUserWindow: boolean;
+  closeUserWindow: () => void;
   handleLogout: () => void;
 }) {
   if (user && showUserWindow) {
     return (
-      <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
-        <div>
-          <div>
-            <p className="pl-3 pt-3 pb-0 font-bold overflow [overflow-wrap:anywhere]">
-              {user.firstName} {user.lastName}
-            </p>
-            <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
-            <div className="pt-2 pl-3 pr-3 pb-4">
-              <div
-                className="bg-black flex items-center h-9 hover:cursor-pointer group/logout"
-                onClick={() => handleLogout()}
-              >
-                <p className="group-hover/logout:text-gray-500 text-white ml-3">
-                  Kirjaudu ulos
-                </p>
-                <SvgArrowRightStartOnRectangle
-                  width={28}
-                  height={28}
-                  className="group-hover/logout:stroke-gray-500 stroke-white ml-3"
-                />
-              </div>
+      <>
+        <div
+          className="fixed top-0 left-0 max-w-full w-full h-full bg-transparent"
+          onClick={() => closeUserWindow()}
+        />
+        <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
+          <p className="pl-3 pt-3 pb-0 font-bold overflow [overflow-wrap:anywhere]">
+            {user.firstName} {user.lastName}
+          </p>
+          <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
+          <div className="pt-2 pl-3 pr-3 pb-4">
+            <div
+              className="bg-black flex items-center h-9 hover:cursor-pointer group/logout"
+              onClick={() => handleLogout()}
+            >
+              <p className="group-hover/logout:text-gray-500 text-white ml-3">
+                Kirjaudu ulos
+              </p>
+              <SvgArrowRightStartOnRectangle
+                width={28}
+                height={28}
+                className="group-hover/logout:stroke-gray-500 stroke-white ml-3"
+              />
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
   return null;
