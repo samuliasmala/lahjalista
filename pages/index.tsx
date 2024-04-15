@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -16,7 +16,6 @@ import { validateRequest } from '~/backend/auth';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import SvgUser from '~/icons/user';
-import { Modal } from '~/components/Modal';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 
 export async function getServerSideProps(
@@ -131,30 +130,7 @@ export default function Home({
             className="cursor-pointer hover:stroke-yellow-600"
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
-          {user && showUserWindow ? (
-            <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
-              <div>
-                <div>
-                  <p className="pl-3 pt-3 pb-0 font-bold">
-                    {user.firstName} {user.lastName}
-                  </p>
-                  <p className="pl-3">{user.email}</p>
-                  <div className="pt-2 pl-3 pr-3 pb-4">
-                    <div className="bg-black flex items-center h-9 hover:cursor-pointer group/logout">
-                      <p className="group-hover/logout:text-gray-500 text-white ml-3">
-                        Kirjaudu ulos
-                      </p>
-                      <SvgArrowRightStartOnRectangle
-                        width={28}
-                        height={28}
-                        className="group-hover/logout:stroke-gray-500 stroke-white ml-3"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
+          <UserDetailModal showUserWindow={showUserWindow} user={user} />
         </div>
       </div>
       <div className="justify-center grid">
@@ -274,4 +250,39 @@ export default function Home({
       </div>
     </main>
   );
+}
+
+function UserDetailModal({
+  className,
+  user,
+  showUserWindow,
+  ...rest
+}: HTMLAttributes<HTMLDivElement> & { user: User; showUserWindow: boolean }) {
+  if (user && showUserWindow) {
+    return (
+      <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
+        <div>
+          <div>
+            <p className="pl-3 pt-3 pb-0 font-bold overflow [overflow-wrap:anywhere]">
+              {user.firstName} {user.lastName}
+            </p>
+            <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
+            <div className="pt-2 pl-3 pr-3 pb-4">
+              <div className="bg-black flex items-center h-9 hover:cursor-pointer group/logout">
+                <p className="group-hover/logout:text-gray-500 text-white ml-3">
+                  Kirjaudu ulos
+                </p>
+                <SvgArrowRightStartOnRectangle
+                  width={28}
+                  height={28}
+                  className="group-hover/logout:stroke-gray-500 stroke-white ml-3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
 }
