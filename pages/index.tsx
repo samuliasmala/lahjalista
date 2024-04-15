@@ -245,15 +245,6 @@ export default function Home({
                 </div>
               </>
             )}
-
-            <Button
-              onClick={async () => {
-                const request = await axios.post('/api/auth/logout');
-                if (request) router.push('/login');
-              }}
-            >
-              Sign out
-            </Button>
           </div>
         </div>
       </div>
