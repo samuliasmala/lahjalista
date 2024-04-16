@@ -23,7 +23,7 @@ export default async function handleR(
 
     const { email, password, rememberMe } = req.body as UserLoginDetails;
 
-    let lucia = rememberMe ? luciaLongSession : luciaShortSession;
+    const lucia = rememberMe ? luciaLongSession : luciaShortSession;
 
     if (
       !email ||

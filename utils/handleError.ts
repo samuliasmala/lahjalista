@@ -26,15 +26,22 @@ export function handleGiftError(e: unknown) {
 type KnownFrontEndErrorTexts =
   | 'email was not unique!'
   | 'invalid credentials!'
-  | string;
+  | 'invalid request body!'
+  | (string & Record<never, never>);
 
 const FRONT_END_HANDLER: Record<KnownFrontEndErrorTexts, string> = {
   'email was not unique!': 'Sähköposti on jo käytössä',
   'invalid credentials!': 'Sähköposti tai salasana on virheellinen!',
+  'invalid request body!': 'Sähköposti tai salasana on virheellinen',
 };
 
 export function handleRegisterError(e: unknown) {
   if (isAxiosError(e) && e.response?.status === 400) {
+    if (typeof e.response.data !== 'string') {
+      console.error('Unexpected error occured!');
+      console.error('Unexpected error: ', e.response.data);
+      return 'Palvelin virhe!';
+    }
     const responseText = e.response.data.toLowerCase();
     if (
       typeof e.response.data === 'string' &&
@@ -45,6 +52,7 @@ export function handleRegisterError(e: unknown) {
     } else {
       console.error('Unexpected error occured!');
       console.error('Unexpected error: ', e.response.data);
+      return 'Palvelin virhe!';
     }
   } else if (e instanceof Error) {
     console.error(e.message);
@@ -56,6 +64,11 @@ export function handleRegisterError(e: unknown) {
 
 export function handleLoginError(e: unknown) {
   if (isAxiosError(e) && e.response?.status === 400) {
+    if (typeof e.response.data !== 'string') {
+      console.error('Unexpected error occured!');
+      console.error('Unexpected error: ', e.response.data);
+      return 'Palvelin virhe!';
+    }
     const responseText = e.response.data.toLowerCase();
     if (
       typeof e.response.data === 'string' &&

@@ -32,7 +32,7 @@ export async function getServerSideProps(
   }
   return {
     props: {
-      user: JSON.parse(JSON.stringify(cookieData.user)),
+      user: JSON.parse(JSON.stringify(cookieData.user)) as User,
     },
   };
 }
@@ -121,7 +121,7 @@ export default function Home({
 
   async function handleLogout() {
     const request = await axios.post('/api/auth/logout');
-    if (request) router.push('/login');
+    if (request) await router.push('/login').catch((e) => console.error(e));
   }
 
   return (
@@ -254,17 +254,15 @@ export default function Home({
 }
 
 function UserDetailModal({
-  className,
   user,
   showUserWindow,
   closeUserWindow,
   handleLogout,
-  ...rest
 }: HTMLAttributes<HTMLDivElement> & {
   user: User;
   showUserWindow: boolean;
   closeUserWindow: () => void;
-  handleLogout: () => void;
+  handleLogout: () => void | Promise<void>;
 }) {
   if (user && showUserWindow) {
     return (
@@ -281,7 +279,7 @@ function UserDetailModal({
           <div className="pt-2 pl-3 pr-3 pb-4">
             <div
               className="bg-black flex items-center h-9 hover:cursor-pointer group/logout"
-              onClick={() => handleLogout()}
+              onClick={() => void handleLogout()}
             >
               <p className="group-hover/logout:text-gray-500 text-white ml-3">
                 Kirjaudu ulos
