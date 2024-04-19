@@ -4,6 +4,7 @@ import {
 } from '@prisma/client/runtime/library';
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
+import { ZodError } from 'zod';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
@@ -27,6 +28,14 @@ export function handleError(res: NextApiResponse, e: unknown) {
 
   if (e instanceof PrismaClientValidationError) {
     return res.status(400).send('Invalid request body!');
+  }
+
+  if (e instanceof ZodError) {
+    if (e.issues[0].message === 'Required') {
+      const fieldRequired = e.issues[0].path[0] ?? 'Required';
+      return res.status(400).send(`${fieldRequired} field was missing!`);
+    }
+    return res.status(400).send('Sent request is invalid!');
   }
 
   console.error(e);
