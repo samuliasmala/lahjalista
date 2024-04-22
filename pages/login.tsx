@@ -11,7 +11,7 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { User, UserLoginDetails } from '~/shared/types';
 import { handleLoginError } from '~/utils/handleError';
-import { isEmailValid } from '~/utils/isValidFunctionsFrontend';
+import { isEmailValid } from '~/backend/isValidFunctionsBackend';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -45,6 +45,9 @@ export default function Login() {
     e.preventDefault();
     try {
       if (isEmailValid(email)) {
+        if (password.length <= 0) {
+          return setErrorText('Salasana-kenttä ei voi olla tyhjä!');
+        }
         const loginCredentials: UserLoginDetails = {
           email: email,
           password: password,
