@@ -13,6 +13,7 @@ import { handleRegisterError } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
+import { z } from 'zod';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -78,7 +79,8 @@ export default function Register() {
   }
 
   function isFirstNameValid(): boolean {
-    if (firstName.length <= 0) {
+    const zodCheck = z.string().min(1).max(128).safeParse(firstName);
+    if (!zodCheck.success) {
       setErrors((prevValue) => ({
         ...prevValue,
         firstName: 'Etunimi on pakollinen',
@@ -89,7 +91,8 @@ export default function Register() {
   }
 
   function isLastNameValid(): boolean {
-    if (lastName.length <= 0) {
+    const zodCheck = z.string().min(1).max(128).safeParse(lastName);
+    if (!zodCheck.success) {
       setErrors((prevValue) => ({
         ...prevValue,
         lastName: 'Sukunimi on pakollinen',
@@ -100,44 +103,78 @@ export default function Register() {
   }
 
   function isEmailValid(): boolean {
-    if (email.length <= 0) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        email: 'Sähköposti on pakollinen',
-      }));
-      return false;
-    }
-    // this should check with regex that there cannot be multiple dots etc
-    const checkedEmailAddress = email.toLowerCase().match(emailRegex);
+    // Olisiko parempi laittaa suoraan .safeParse(email.toLowerCase())-funktioon?
+    const lowerCasedEmail = email.toLowerCase();
+    const zodCheck = z
+      .string()
+      .min(1, { message: 'lengthError' })
+      .max(128)
+      .regex(emailRegex, { message: 'regexError' })
+      .safeParse(lowerCasedEmail);
 
-    if (!checkedEmailAddress) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        email: 'Virheellinen sähköposti',
-      }));
-      return false;
+    if (!zodCheck.success) {
+      const isLengthErrorFound = zodCheck.error
+        .format()
+        ._errors.includes('lengthError');
+
+      if (isLengthErrorFound) {
+        setErrors((prevValue) => ({
+          ...prevValue,
+          email: 'Sähköposti on pakollinen',
+        }));
+        return false;
+      }
+
+      const isRegexErrorFound = zodCheck.error
+        .format()
+        ._errors.includes('regexError');
+
+      if (isRegexErrorFound) {
+        setErrors((prevValue) => ({
+          ...prevValue,
+          email: 'Virheellinen sähköposti',
+        }));
+
+        return false;
+      }
     }
 
     return true;
   }
 
   function isPasswordValid(): boolean {
-    if (password.length <= 0) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        password: 'Salasana on pakollinen',
-      }));
-      return false;
-    }
-    // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
-    const checkedPassword = password.match(passwordRegex);
-    if (!checkedPassword) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        password:
-          'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
-      }));
-      return false;
+    const zodCheck = z
+      .string()
+      .min(1, { message: 'lengthError' })
+      .max(128)
+      .regex(passwordRegex, { message: 'regexError' })
+      .safeParse(password);
+
+    if (!zodCheck.success) {
+      const isLengthErrorFound = zodCheck.error
+        .format()
+        ._errors.includes('lengthError');
+
+      if (isLengthErrorFound) {
+        setErrors((prevValue) => ({
+          ...prevValue,
+          password: 'Salasana on pakollinen',
+        }));
+        return false;
+      }
+
+      const isRegexErrorFound = zodCheck.error
+        .format()
+        ._errors.includes('regexError');
+
+      if (isRegexErrorFound) {
+        setErrors((prevValue) => ({
+          ...prevValue,
+          password:
+            'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
+        }));
+        return false;
+      }
     }
 
     return true;
