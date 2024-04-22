@@ -1,4 +1,3 @@
-import { Prisma, Gift as PrismaGift, User as PrismaUser } from '@prisma/client';
 import { z } from 'zod';
 import {
   createGiftSchema,

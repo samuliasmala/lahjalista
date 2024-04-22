@@ -9,9 +9,9 @@ import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { isEmailValid } from '~/shared/isValidFunctions';
 import { User, UserLoginDetails } from '~/shared/types';
 import { handleLoginError } from '~/utils/handleError';
+import { isEmailValid } from '~/utils/isValidFunctionsFrontend';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,

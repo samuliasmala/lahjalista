@@ -4,7 +4,10 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { UserLoginDetails } from '~/shared/types';
 import { verifyPassword } from '~/backend/utils';
-import { isEmailValid, isPasswordValid } from '~/shared/isValidFunctions';
+import {
+  isEmailValid,
+  isPasswordValid,
+} from '~/backend/isValidFunctionsBackend';
 import prisma from '~/prisma';
 import { Lucia, TimeSpan } from 'lucia';
 

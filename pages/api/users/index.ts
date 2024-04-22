@@ -8,7 +8,7 @@ import {
   isFirstNameValid,
   isLastNameValid,
   isPasswordValid,
-} from '~/shared/isValidFunctions';
+} from '~/backend/isValidFunctionsBackend';
 import { HttpError } from '~/backend/HttpError';
 
 const HANDLER: Record<

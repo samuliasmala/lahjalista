@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { emailRegex, passwordRegex } from './regexPatterns';
+import { emailRegex, passwordRegex } from '../shared/regexPatterns';
 
 export type ValidErrorFound = 'lengthError' | 'regexError';
 
