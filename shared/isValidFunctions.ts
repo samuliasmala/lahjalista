@@ -1,42 +1,50 @@
+import { z } from 'zod';
 import { emailRegex, passwordRegex } from './regexPatterns';
 
 export function isEmailValid(email: string): boolean {
-  if (email.length <= 0) {
+  const zodCheck = z
+    .string()
+    .min(1)
+    .max(128)
+    .regex(emailRegex)
+    .safeParse(email);
+
+  if (!zodCheck.success) {
     return false;
   }
-  // this should check with regex that there cannot be multiple dots etc
-  const checkedEmailAddress = email.toLowerCase().match(emailRegex);
 
-  if (!checkedEmailAddress) {
-    return false;
-  }
-
-  // email is ready to be used
   return true;
 }
 
 export function isFirstNameValid(firstName: string): boolean {
-  if (firstName.length <= 0) {
+  const zodCheck = z.string().min(1).max(128).safeParse(firstName);
+
+  if (!zodCheck.success) {
     return false;
   }
+
   return true;
 }
 
 export function isLastNameValid(lastName: string): boolean {
-  if (lastName.length <= 0) {
+  const zodCheck = z.string().min(1).max(128).safeParse(lastName);
+
+  if (!zodCheck.success) {
     return false;
   }
+
   return true;
 }
 
 export function isPasswordValid(password: string): boolean {
-  if (password.length <= 0) {
-    return false;
-  }
-  // TLDR: 8 merkkiä pitkä, maksimissaan 128, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
-  const checkedPassword = password.match(passwordRegex);
+  const zodCheck = z
+    .string()
+    .min(1)
+    .max(128)
+    .regex(passwordRegex)
+    .safeParse(password);
 
-  if (!checkedPassword) {
+  if (!zodCheck.success) {
     return false;
   }
 
