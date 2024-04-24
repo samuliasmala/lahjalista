@@ -25,9 +25,12 @@ export default async function handleR(
       throw new HttpError('Invalid request method!', 405);
     }
 
-    const { email, password, rememberMe } = userLoginDetailsSchema.parse(
-      req.body,
-    );
+    const userDetailsParse = userLoginDetailsSchema.safeParse(req.body);
+
+    if (!userDetailsParse.success) {
+      throw new HttpError('Invalid credentials!', 400);
+    }
+    const { email, password, rememberMe } = userDetailsParse.data;
 
     const lucia = rememberMe ? luciaLongSession : luciaShortSession;
 
