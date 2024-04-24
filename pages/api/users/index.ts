@@ -3,12 +3,6 @@ import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { hashPassword } from '~/backend/utils';
-import {
-  isEmailValid,
-  isFirstNameValid,
-  isLastNameValid,
-  isPasswordValid,
-} from '~/backend/isValidFunctionsBackend';
 import { HttpError } from '~/backend/HttpError';
 import { createUserSchema } from '~/shared/zodSchemas';
 
