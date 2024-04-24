@@ -19,22 +19,22 @@ export const userSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   uuid: z.string(),
-  email: z.string().regex(emailRegex),
+  email: z.string().min(1).max(128).regex(emailRegex),
   firstName: z.string().min(1).max(128),
   lastName: z.string().min(1).max(128),
 });
 
 export const createUserSchema = z.object({
-  email: z.string().regex(emailRegex),
+  email: z.string().min(1).max(128).regex(emailRegex),
   firstName: z.string().min(1).max(128),
   lastName: z.string().min(1).max(128),
-  password: z.string().regex(passwordRegex),
+  password: z.string().min(1).max(128).regex(passwordRegex),
   Session: z.custom<Prisma.SessionCreateNestedOneWithoutUserInput>().optional(),
 });
 
 export const userLoginDetailsSchema = z.object({
-  email: z.string().regex(emailRegex),
-  password: z.string().regex(passwordRegex),
+  email: z.string().min(1).max(100).regex(emailRegex),
+  password: z.string().min(1).max(100).regex(passwordRegex),
   rememberMe: z.boolean(),
 });
 
