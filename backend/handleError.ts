@@ -4,7 +4,7 @@ import {
 } from '@prisma/client/runtime/library';
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
-import { ZodError } from 'zod';
+import { ZodError, ZodIssue } from 'zod';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
@@ -31,20 +31,44 @@ export function handleError(res: NextApiResponse, e: unknown) {
   }
 
   if (e instanceof ZodError) {
-    const issueMessage = e.issues[0].message;
-    if (issueMessage === 'Required') {
-      const fieldRequired = e.issues[0].path[0] ?? 'Required';
-      return res.status(400).send(`${fieldRequired} field was missing!`);
-    }
-    if (issueMessage === 'Invalid') {
-      const invalidFieldText = e.issues[0].path[0]
-        ? `${e.issues[0].path[0]} field was invalid!`
-        : 'One of the given fields was invalid!';
-      return res.status(400).send(invalidFieldText);
-    }
-    return res.status(400).send('Sent request is invalid!');
+    return zodErrorHandler(res, e.issues[0]);
   }
 
   console.error(e);
   return res.status(500).send('Server error!');
+}
+
+function zodErrorHandler(res: NextApiResponse, e: ZodIssue) {
+  switch (e.code) {
+    case 'invalid_type':
+      // code below is run if some of the fields is missing
+      if (e.received === 'undefined') {
+        return res.status(400).send(`${e.path[0]} was missing!`);
+      }
+      if (e.received !== 'null') {
+        return res
+          .status(400)
+          .send(
+            `${e.path[0]}'s type was invalid, got ${e.received}, should be ${e.expected}`,
+          );
+      }
+      break;
+
+    case 'invalid_string':
+      if (e.validation === 'regex') {
+        return res.status(400).send(`${e.path[0]} has an invalid format!`);
+      }
+      break;
+
+    case 'too_small':
+      return res
+        .status(400)
+        .send(`${e.path[0]} is required and cannot be empty!`);
+
+    case 'too_big':
+      return res.status(400).send(`${e.path[0]} was too long!`);
+
+    default:
+      return res.status(400).send('Sent request was invalid!');
+  }
 }
