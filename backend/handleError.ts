@@ -45,7 +45,7 @@ function zodErrorHandler(res: NextApiResponse, e: ZodIssue) {
       if (e.received === 'undefined') {
         return res.status(400).send(`${e.path[0]} was missing!`);
       }
-      if (e.received !== 'null') {
+      if (e.received !== e.expected) {
         return res
           .status(400)
           .send(
