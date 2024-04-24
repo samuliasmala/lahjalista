@@ -31,9 +31,16 @@ export function handleError(res: NextApiResponse, e: unknown) {
   }
 
   if (e instanceof ZodError) {
-    if (e.issues[0].message === 'Required') {
+    const issueMessage = e.issues[0].message;
+    if (issueMessage === 'Required') {
       const fieldRequired = e.issues[0].path[0] ?? 'Required';
       return res.status(400).send(`${fieldRequired} field was missing!`);
+    }
+    if (issueMessage === 'Invalid') {
+      const invalidFieldText =
+        `${e.issues[0].path[0]} field was invalid!` ??
+        'One of the given fields was invalid!';
+      return res.status(400).send(invalidFieldText);
     }
     return res.status(400).send('Sent request is invalid!');
   }
