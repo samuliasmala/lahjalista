@@ -37,9 +37,9 @@ export function handleError(res: NextApiResponse, e: unknown) {
       return res.status(400).send(`${fieldRequired} field was missing!`);
     }
     if (issueMessage === 'Invalid') {
-      const invalidFieldText =
-        `${e.issues[0].path[0]} field was invalid!` ??
-        'One of the given fields was invalid!';
+      const invalidFieldText = e.issues[0].path[0]
+        ? `${e.issues[0].path[0]} field was invalid!`
+        : 'One of the given fields was invalid!';
       return res.status(400).send(invalidFieldText);
     }
     return res.status(400).send('Sent request is invalid!');
