@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
+import { giftSchema } from '~/shared/zodSchemas';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -57,7 +58,9 @@ async function handleGET({ res, queryUUID }: HandlerParams<Gift>) {
 }
 
 async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+  const newGiftData = giftSchema
+    .pick({ receiver: true, gift: true })
+    .parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {
@@ -80,7 +83,7 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
 }
 
 async function handlePUT({ req, res, queryUUID }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+  const newGiftData = giftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {

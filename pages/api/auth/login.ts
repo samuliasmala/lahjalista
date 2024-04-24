@@ -2,14 +2,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { adapter, lucia as luciaShortSession } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { UserLoginDetails } from '~/shared/types';
 import { verifyPassword } from '~/backend/utils';
-import {
-  isEmailValid,
-  isPasswordValid,
-} from '~/backend/isValidFunctionsBackend';
 import prisma from '~/prisma';
 import { Lucia, TimeSpan } from 'lucia';
+import { userLoginDetailsSchema } from '~/shared/zodSchemas';
 
 const luciaLongSession = new Lucia(adapter, {
   sessionExpiresIn: new TimeSpan(30, 'd'),
@@ -29,24 +25,11 @@ export default async function handleR(
       throw new HttpError('Invalid request method!', 405);
     }
 
-    const { email, password, rememberMe } = req.body as UserLoginDetails;
+    const { email, password, rememberMe } = userLoginDetailsSchema.parse(
+      req.body,
+    );
 
     const lucia = rememberMe ? luciaLongSession : luciaShortSession;
-
-    if (
-      !email ||
-      !password ||
-      typeof email !== 'string' ||
-      typeof password !== 'string' ||
-      email.length <= 0 ||
-      password.length <= 0
-    ) {
-      throw new HttpError('Invalid request body!', 400);
-    }
-
-    if (!isEmailValid(email) || !isPasswordValid(password)) {
-      throw new HttpError('Invalid request body!', 400);
-    }
 
     const userData = await prisma.user.findUnique({
       where: {

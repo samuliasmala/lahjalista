@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
+import { userSchema } from '~/shared/zodSchemas';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -58,7 +59,9 @@ async function handleGET({ res, queryUUID }: HandlerParams<User>) {
 }
 
 async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
-  const newUserDetails = req.body as Partial<User>;
+  const newUserDetails = userSchema
+    .pick({ email: true, firstName: true, lastName: true })
+    .parse(req.body);
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -82,7 +85,9 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
 }
 
 async function handlePUT({ req, res, queryUUID }: HandlerParams<User>) {
-  const newUserDetails = req.body as User;
+  const newUserDetails = userSchema
+    .pick({ email: true, firstName: true, lastName: true })
+    .parse(req.body);
 
   const updatedUser = await prisma.user.update({
     where: {

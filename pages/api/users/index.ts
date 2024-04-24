@@ -10,6 +10,7 @@ import {
   isPasswordValid,
 } from '~/backend/isValidFunctionsBackend';
 import { HttpError } from '~/backend/HttpError';
+import { createUserSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -54,7 +55,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
-  const userDetails = req.body as CreateUser;
+  const userDetails = createUserSchema.parse(req.body);
 
   const addedUser = await createUser({
     email: userDetails.email.toLowerCase(),
@@ -67,20 +68,14 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
 }
 
 export async function createUser(userDetails: CreateUser) {
-  if (
-    !isEmailValid(userDetails.email) ||
-    !isFirstNameValid(userDetails.firstName) ||
-    !isLastNameValid(userDetails.lastName) ||
-    !isPasswordValid(userDetails.password)
-  ) {
-    throw new HttpError('Invalid credentials', 400);
-  }
-  const password = await hashPassword(userDetails.password);
+  const verifiedUserDetails = createUserSchema.parse(userDetails);
+
+  const password = await hashPassword(verifiedUserDetails.password);
   const addedUser = await prisma.user.create({
     data: {
-      email: userDetails.email.toLowerCase(),
-      firstName: userDetails.firstName,
-      lastName: userDetails.lastName,
+      email: verifiedUserDetails.email.toLowerCase(),
+      firstName: verifiedUserDetails.firstName,
+      lastName: verifiedUserDetails.lastName,
       password: password,
     },
     select: {

@@ -4,6 +4,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import type { CreateUser } from '~/shared/types';
 import { createUser } from '../users';
+import { createUserSchema } from '~/shared/zodSchemas';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,10 +14,9 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const { email, firstName, lastName, password } = req.body as CreateUser;
-    if (!email || !firstName || !lastName || !password) {
-      throw new HttpError('Invalid request body!', 400);
-    }
+    const { email, firstName, lastName, password } = createUserSchema
+      .pick({ email: true, firstName: true, lastName: true, password: true })
+      .parse(req.body);
 
     const userCreationRequest = await createUser({
       email: email,
