@@ -55,28 +55,31 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
-  const userDetails = createUserSchema.parse(req.body);
+  const { email, firstName, lastName, password } = createUserSchema.parse(
+    req.body,
+  );
 
   const addedUser = await createUser({
-    email: userDetails.email.toLowerCase(),
-    firstName: userDetails.firstName,
-    lastName: userDetails.lastName,
-    password: userDetails.password,
+    email: email.toLowerCase(),
+    firstName: firstName,
+    lastName: lastName,
+    password: password,
   });
 
   return res.status(200).json(addedUser);
 }
 
 export async function createUser(userDetails: CreateUser) {
-  const verifiedUserDetails = createUserSchema.parse(userDetails);
+  const { email, firstName, lastName, password } =
+    createUserSchema.parse(userDetails);
 
-  const password = await hashPassword(verifiedUserDetails.password);
+  const hashedPassword = await hashPassword(password);
   const addedUser = await prisma.user.create({
     data: {
-      email: verifiedUserDetails.email.toLowerCase(),
-      firstName: verifiedUserDetails.firstName,
-      lastName: verifiedUserDetails.lastName,
-      password: password,
+      email: email.toLowerCase(),
+      firstName: firstName,
+      lastName: lastName,
+      password: hashedPassword,
     },
     select: {
       uuid: true,

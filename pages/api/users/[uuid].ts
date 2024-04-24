@@ -59,7 +59,7 @@ async function handleGET({ res, queryUUID }: HandlerParams<User>) {
 }
 
 async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
-  const newUserDetails = userSchema
+  const { email, firstName, lastName } = userSchema
     .pick({ email: true, firstName: true, lastName: true })
     .parse(req.body);
 
@@ -68,9 +68,9 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams<User>) {
       uuid: queryUUID,
     },
     data: {
-      email: newUserDetails.email?.toLowerCase(),
-      firstName: newUserDetails.firstName,
-      lastName: newUserDetails.lastName,
+      email: email.toLowerCase(),
+      firstName: firstName,
+      lastName: lastName,
     },
     select: {
       uuid: true,
