@@ -96,7 +96,7 @@ export default function Login() {
               </div>
               <div className="mt-5 flex flex-col">
                 <label>Salasana</label>
-                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
@@ -106,7 +106,7 @@ export default function Login() {
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center bg-white">
                     {showPassword ? (
                       <SvgEyeSlash
                         className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
@@ -129,7 +129,7 @@ export default function Login() {
                 <label className="select-none cursor-pointer flex">
                   <input
                     type="checkbox"
-                    className="mr-2 cursor-pointer w-6 h-6"
+                    className="mr-2 cursor-pointer w-6 h-6 accent-emerald-500 "
                     onClick={() => setRememberMe((prevValue) => !prevValue)}
                   />
                   Muista minut
@@ -139,8 +139,8 @@ export default function Login() {
                 Kirjaudu
               </Button>
             </form>
-            <p className="mt-6 text-xs text-gray-600">
-              Sinulla ei ole vielä tunnuksia?{' '}
+            <p className="mt-6 text-xs text-gray-600 text-center">
+              Ei ole vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
                 className="underline cursor-pointer hover:text-blue-500"
