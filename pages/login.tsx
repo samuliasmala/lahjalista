@@ -65,7 +65,7 @@ export default function Login() {
   }
 
   return (
-    <main className="bg-white w-full max-w-full h-screen ">
+    <main className="bg-orange-50 w-full max-w-full h-screen ">
       <div className="h-screen w-screen">
         {errorText.length > 0 ? (
           <div className="pt-4 flex justify-center ">
@@ -125,17 +125,19 @@ export default function Login() {
                   </div>
                 </div>
               </div>
-              <div className="flex mt-3">
-                <label className="select-none cursor-pointer">
+              <div className="flex mt-3 align-middle">
+                <label className="select-none cursor-pointer flex">
                   <input
                     type="checkbox"
-                    className="mr-2 cursor-pointer"
+                    className="mr-2 cursor-pointer w-6 h-6"
                     onClick={() => setRememberMe((prevValue) => !prevValue)}
                   />
                   Muista minut
                 </label>
               </div>
-              <Button type="submit">Kirjaudu</Button>
+              <Button type="submit" className="bg-emerald-500">
+                Kirjaudu
+              </Button>
             </form>
             <p className="mt-6 text-xs text-gray-600">
               Sinulla ei ole vielä tunnuksia?{' '}
