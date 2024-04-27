@@ -233,7 +233,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <label className="pt-5">Salasana</label>
-                <div className="flex outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
