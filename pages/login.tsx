@@ -65,8 +65,8 @@ export default function Login() {
   }
 
   return (
-    <main className="bg-white w-full max-w-full h-screen">
-      <div className="h-screen w-screen bg-no-repeat bg-cover bg-center">
+    <main className="bg-white w-full max-w-full h-screen ">
+      <div className="h-screen w-screen">
         {errorText.length > 0 ? (
           <div className="pt-4 flex justify-center ">
             <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
@@ -76,6 +76,9 @@ export default function Login() {
         ) : null}
         <div className="w-full flex justify-center">
           <div className="mt-5 flex flex-col">
+            <div className="border rounded-full w-32 h-32 bg-blue-500 self-center">
+              <div className="p-11 pl-8 pt-12 text-white">Lahjalista</div>
+            </div>
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="text-center">Kirjaudu sisään</TitleText>
               <div className="mt-5 flex flex-col">
