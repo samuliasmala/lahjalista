@@ -11,7 +11,7 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { isEmailValid } from '~/shared/isValidFunctions';
 import { User, UserLoginDetails } from '~/shared/types';
-import { handleLoginError } from '~/utils/handleError';
+import { handleAuthErrors } from '~/utils/handleError';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -57,7 +57,7 @@ export default function Login() {
       }
     } catch (e) {
       console.error(e);
-      setErrorText(handleLoginError(e));
+      setErrorText(handleAuthErrors(e));
     }
   }
 
