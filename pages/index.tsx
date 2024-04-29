@@ -119,11 +119,6 @@ export default function Home({
     setIsAnyKindOfErrorMessage(errorMessage);
   }
 
-  async function handleLogout() {
-    const request = await axios.post('/api/auth/logout');
-    if (request) await router.push('/login').catch((e) => console.error(e));
-  }
-
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center flex">
@@ -138,7 +133,6 @@ export default function Home({
           <UserDetailModal
             showUserWindow={showUserWindow}
             user={user}
-            handleLogout={handleLogout}
             closeUserWindow={() => setShowUserWindow(false)}
           />
         </div>
@@ -257,13 +251,16 @@ function UserDetailModal({
   user,
   showUserWindow,
   closeUserWindow,
-  handleLogout,
 }: HTMLAttributes<HTMLDivElement> & {
   user: User;
   showUserWindow: boolean;
   closeUserWindow: () => void;
-  handleLogout: () => void | Promise<void>;
 }) {
+  async function handleLogout() {
+    const request = await axios.post('/api/auth/logout');
+    if (request) window.location.href = '/login';
+  }
+
   if (user && showUserWindow) {
     return (
       <>
