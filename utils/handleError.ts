@@ -23,17 +23,13 @@ export function handleGiftError(e: unknown) {
   }
 }
 
-type KnownFrontEndErrorTexts =
-  | 'email was not unique!'
-  | 'invalid credentials!'
-  | 'invalid request body!'
-  | (string & Record<never, never>);
-
-const FRONT_END_HANDLER: Record<KnownFrontEndErrorTexts, string> = {
+const FRONT_END_HANDLER = {
   'email was not unique!': 'Sähköposti on jo käytössä',
   'invalid credentials!': 'Sähköposti tai salasana on virheellinen!',
   'invalid request body!': 'Sähköposti tai salasana on virheellinen',
-};
+} as const;
+
+type KnownFrontEndErrorTexts = keyof typeof FRONT_END_HANDLER;
 
 export function handleRegisterError(e: unknown) {
   if (isAxiosError(e) && e.response?.status === 400) {
@@ -43,12 +39,11 @@ export function handleRegisterError(e: unknown) {
       return 'Palvelin virhe!';
     }
     const responseText = e.response.data.toLowerCase();
-    if (
-      typeof e.response.data === 'string' &&
-      FRONT_END_HANDLER[responseText]
-    ) {
-      console.error(FRONT_END_HANDLER[responseText]);
-      return FRONT_END_HANDLER[responseText];
+    const frontendText =
+      FRONT_END_HANDLER[responseText as KnownFrontEndErrorTexts];
+    if (frontendText) {
+      console.error(frontendText);
+      return frontendText;
     } else {
       console.error('Unexpected error occured!');
       console.error('Unexpected error: ', e.response.data);
@@ -70,12 +65,11 @@ export function handleLoginError(e: unknown) {
       return 'Palvelin virhe!';
     }
     const responseText = e.response.data.toLowerCase();
-    if (
-      typeof e.response.data === 'string' &&
-      FRONT_END_HANDLER[responseText]
-    ) {
-      console.error(FRONT_END_HANDLER[responseText]);
-      return FRONT_END_HANDLER[responseText];
+    const frontendText =
+      FRONT_END_HANDLER[responseText as KnownFrontEndErrorTexts];
+    if (frontendText) {
+      console.error(frontendText);
+      return frontendText;
     } else {
       console.error('Unexpected error occured!');
       console.error('Unexpected error: ', e.response.data);
