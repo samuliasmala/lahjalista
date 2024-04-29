@@ -33,6 +33,32 @@ export const lucia = new Lucia(adapter, {
   },
 });
 
+export const luciaLongSession = new Lucia(adapter, {
+  sessionExpiresIn: new TimeSpan(30, 'd'),
+  sessionCookie: {
+    attributes: {
+      secure: process.env.NODE_ENV === 'production',
+    },
+  },
+  getUserAttributes({
+    createdAt,
+    email,
+    firstName,
+    lastName,
+    updatedAt,
+    uuid,
+  }: User): User {
+    return {
+      uuid: uuid,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    };
+  },
+});
+
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;

@@ -1,21 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { adapter, lucia as luciaShortSession } from '~/backend/auth';
+import {
+  adapter,
+  luciaLongSession,
+  lucia as luciaShortSession,
+} from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { UserLoginDetails } from '~/shared/types';
 import { verifyPassword } from '~/backend/utils';
 import { isEmailValid, isPasswordValid } from '~/shared/isValidFunctions';
 import prisma from '~/prisma';
-import { Lucia, TimeSpan } from 'lucia';
-
-const luciaLongSession = new Lucia(adapter, {
-  sessionExpiresIn: new TimeSpan(30, 'd'),
-  sessionCookie: {
-    attributes: {
-      secure: process.env.NODE_ENV === 'production',
-    },
-  },
-});
 
 export default async function handleR(
   req: NextApiRequest,
