@@ -17,7 +17,9 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
-
+import { getServerSideProps } from '~/utils/getServerSideProps';
+export { getServerSideProps };
+/*
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<{ user: User }>> {
@@ -36,6 +38,7 @@ export async function getServerSideProps(
     },
   };
 }
+*/
 
 export default function Home({
   user,
@@ -57,6 +60,7 @@ export default function Home({
 
   useEffect(() => {
     console.log('effect');
+    console.log(user);
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
@@ -257,8 +261,15 @@ function UserDetailModal({
   closeUserWindow: () => void;
 }) {
   async function handleLogout() {
-    const request = await axios.post('/api/auth/logout');
-    if (request) window.location.href = '/login';
+    try {
+      const request = await axios.post('/api/auth/logout');
+      if (request) {
+        window.location.href = '/login';
+      }
+    } catch (e) {
+      console.error(e);
+      window.location.href = '/';
+    }
   }
 
   if (user && showUserWindow) {

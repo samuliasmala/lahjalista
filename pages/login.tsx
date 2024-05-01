@@ -13,16 +13,13 @@ import { isEmailValid } from '~/shared/isValidFunctions';
 import { User, UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 
+/*
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<{ user: Partial<User> }>> {
   const cookieData = await validateRequest(context.req, context.res);
   if (!cookieData.user) {
-    return {
-      props: {
-        user: {},
-      },
-    };
+    return;
   }
   return {
     redirect: {
@@ -31,6 +28,7 @@ export async function getServerSideProps(
     },
   };
 }
+*/
 
 export default function Login() {
   const [email, setEmail] = useState('');
