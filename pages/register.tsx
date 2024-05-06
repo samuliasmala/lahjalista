@@ -143,6 +143,8 @@ export default function Register() {
     return true;
   }
 
+  const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
+
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen">
@@ -207,21 +209,12 @@ export default function Register() {
                     name="password"
                   />
                   <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
-                    {showPassword ? (
-                      <SvgEyeSlash
-                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
-                        onClick={() => {
-                          setShowPassword((prevValue) => !prevValue);
-                        }}
-                      />
-                    ) : (
-                      <SvgEyeOpen
-                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
-                        onClick={() => {
-                          setShowPassword((prevValue) => !prevValue);
-                        }}
-                      />
-                    )}
+                    <SvgEye
+                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      onClick={() => {
+                        setShowPassword((prevValue) => !prevValue);
+                      }}
+                    />
                   </div>
                 </div>
                 <ErrorParagraph errorText={errors.password} />
