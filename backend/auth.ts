@@ -3,7 +3,7 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
 import type { PrismaUser, User } from '~/shared/types';
-import type { Session } from 'lucia';
+import type { Session, User as LuciaUser } from 'lucia';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -69,7 +69,9 @@ declare module 'lucia' {
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
-): Promise<{ user: User; session: Session } | { user: null; session: null }> {
+): Promise<
+  { user: LuciaUser; session: Session } | { user: null; session: null }
+> {
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
