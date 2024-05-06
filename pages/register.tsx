@@ -42,7 +42,7 @@ export default function Register() {
         firstName: firstName,
         lastName: lastName,
         password: password,
-      } as CreateUser);
+      });
       userCreatedSuccesfully();
     } catch (e) {
       const errorText = handleAuthErrors(e);
