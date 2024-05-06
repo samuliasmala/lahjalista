@@ -24,3 +24,9 @@ export type CreateSession = Omit<
 > & {
   user: Prisma.UserCreateNestedOneWithoutSessionInput;
 };
+
+export type {
+  Gift as PrismaGift,
+  User as PrismaUser,
+  Session as PrismaSession,
+} from '@prisma/client';
