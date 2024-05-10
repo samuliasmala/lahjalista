@@ -19,26 +19,6 @@ import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 export { getServerSideProps };
-/*
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user: User }>> {
-  const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      },
-    };
-  }
-  return {
-    props: {
-      user: JSON.parse(JSON.stringify(cookieData.user)) as User,
-    },
-  };
-}
-*/
 
 export default function Home({
   user,
@@ -60,7 +40,6 @@ export default function Home({
 
   useEffect(() => {
     console.log('effect');
-    console.log(user);
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
