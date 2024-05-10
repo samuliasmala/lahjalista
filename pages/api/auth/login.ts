@@ -1,9 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  adapter,
-  luciaLongSession,
-  lucia as luciaShortSession,
-} from '~/backend/auth';
+import { luciaLongSession, lucia as luciaShortSession } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { UserLoginDetails } from '~/shared/types';

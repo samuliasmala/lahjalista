@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
@@ -10,7 +10,7 @@ import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { isEmailValid } from '~/shared/isValidFunctions';
-import { User, UserLoginDetails } from '~/shared/types';
+import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

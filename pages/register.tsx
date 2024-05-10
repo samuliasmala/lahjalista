@@ -8,7 +8,6 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import type { CreateUser } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
