@@ -14,22 +14,9 @@ export const lucia = new Lucia(adapter, {
       secure: process.env.NODE_ENV === 'production',
     },
   },
-  getUserAttributes({
-    createdAt,
-    email,
-    firstName,
-    lastName,
-    updatedAt,
-    uuid,
-  }: User): User {
-    return {
-      uuid: uuid,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    };
+  getUserAttributes(user): User {
+    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
+    return { uuid, firstName, lastName, email, createdAt, updatedAt };
   },
 });
 
@@ -40,22 +27,9 @@ export const luciaLongSession = new Lucia(adapter, {
       secure: process.env.NODE_ENV === 'production',
     },
   },
-  getUserAttributes({
-    createdAt,
-    email,
-    firstName,
-    lastName,
-    updatedAt,
-    uuid,
-  }: User): User {
-    return {
-      uuid: uuid,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    };
+  getUserAttributes(user): User {
+    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
+    return { uuid, firstName, lastName, email, createdAt, updatedAt };
   },
 });
 
