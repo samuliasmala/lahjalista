@@ -4,14 +4,11 @@ export function isEmailValid(email: string): boolean {
   if (email.length <= 0) {
     return false;
   }
-  // this should check with regex that there cannot be multiple dots etc
-  const checkedEmailAddress = email.toLowerCase().match(emailRegex);
 
-  if (!checkedEmailAddress) {
+  if (!email.toLowerCase().match(emailRegex)) {
     return false;
   }
 
-  // email is ready to be used
   return true;
 }
 
