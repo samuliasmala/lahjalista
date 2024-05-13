@@ -30,7 +30,6 @@ export default async function handlePrisma(
       throw new HttpError('You are unauthorized!', 401);
     }
     const userData = validationRequest.user;
-    console.log(userData);
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
       if (typeof req.query.uuid !== 'string') {
@@ -72,7 +71,6 @@ async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
       uuid: true,
     },
   });
-  console.log(gift, 'asdasd');
   return res.status(200).json(gift);
 }
 
