@@ -3,11 +3,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
+import { validateRequest } from '~/backend/auth';
+import { User as LuciaUser } from 'lucia';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
   res: NextApiResponse<ResponseType>;
-  queryUUID: string;
+  giftUUID: string;
+  userData: LuciaUser;
 };
 
 const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
@@ -22,13 +25,24 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
+    const validationRequest = await validateRequest(req, res);
+    if (!validationRequest.session || !validationRequest.user) {
+      throw new HttpError('You are unauthorized!', 401);
+    }
+    const userData = validationRequest.user;
+    console.log(userData);
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
       if (typeof req.query.uuid !== 'string') {
         throw new HttpError('Invalid ID', 400);
       }
-      const queryUUID = req.query.uuid;
-      await reqHandler({ req, res, queryUUID });
+      const giftUUID = req.query.uuid;
+      await reqHandler({
+        req,
+        res,
+        giftUUID,
+        userData,
+      });
     } else {
       throw new HttpError(
         `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
@@ -40,10 +54,15 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, queryUUID }: HandlerParams<Gift>) {
+async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
   const gift = await prisma.gift.findUniqueOrThrow({
     where: {
-      uuid: queryUUID,
+      uuid: giftUUID,
+      AND: {
+        user: {
+          uuid: userData.uuid,
+        },
+      },
     },
     select: {
       createdAt: true,
@@ -53,15 +72,26 @@ async function handleGET({ res, queryUUID }: HandlerParams<Gift>) {
       uuid: true,
     },
   });
+  console.log(gift, 'asdasd');
   return res.status(200).json(gift);
 }
 
-async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
+async function handlePATCH({
+  req,
+  res,
+  giftUUID,
+  userData,
+}: HandlerParams<Gift>) {
   const newGiftData = req.body as Gift;
 
   const updatedGift = await prisma.gift.update({
     where: {
-      uuid: queryUUID,
+      uuid: giftUUID,
+      AND: {
+        user: {
+          uuid: userData.uuid,
+        },
+      },
     },
     data: {
       receiver: newGiftData.receiver,
@@ -79,12 +109,22 @@ async function handlePATCH({ req, res, queryUUID }: HandlerParams<Gift>) {
   return res.status(200).json(updatedGift);
 }
 
-async function handlePUT({ req, res, queryUUID }: HandlerParams<Gift>) {
+async function handlePUT({
+  req,
+  res,
+  giftUUID,
+  userData,
+}: HandlerParams<Gift>) {
   const newGiftData = req.body as Gift;
 
   const updatedGift = await prisma.gift.update({
     where: {
-      uuid: queryUUID,
+      uuid: giftUUID,
+      AND: {
+        user: {
+          uuid: userData.uuid,
+        },
+      },
     },
     data: newGiftData,
     select: {
@@ -99,10 +139,15 @@ async function handlePUT({ req, res, queryUUID }: HandlerParams<Gift>) {
   return res.status(200).json(updatedGift);
 }
 
-async function handleDELETE({ res, queryUUID }: HandlerParams) {
+async function handleDELETE({ res, giftUUID, userData }: HandlerParams) {
   await prisma.gift.delete({
     where: {
-      uuid: queryUUID,
+      uuid: giftUUID,
+      AND: {
+        user: {
+          uuid: userData.uuid,
+        },
+      },
     },
   });
 
