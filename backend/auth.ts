@@ -2,51 +2,50 @@ import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
-import type { CreateSession, User } from '~/shared/types';
-import type { Session } from 'lucia';
+import type { PrismaUser, User } from '~/shared/types';
+import type { Session, User as LuciaUser } from 'lucia';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 export const lucia = new Lucia(adapter, {
-  sessionExpiresIn: new TimeSpan(14, 'd'),
+  sessionExpiresIn: new TimeSpan(1, 'h'),
   sessionCookie: {
     attributes: {
       secure: process.env.NODE_ENV === 'production',
     },
   },
-  getUserAttributes({
-    createdAt,
-    email,
-    firstName,
-    lastName,
-    updatedAt,
-    uuid,
-  }: User): User {
-    return {
-      uuid: uuid,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      createdAt: createdAt,
-      updatedAt: updatedAt,
-    };
+  getUserAttributes(user): User {
+    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
+    return { uuid, firstName, lastName, email, createdAt, updatedAt };
+  },
+});
+
+export const luciaLongSession = new Lucia(adapter, {
+  sessionExpiresIn: new TimeSpan(30, 'd'),
+  sessionCookie: {
+    attributes: {
+      secure: process.env.NODE_ENV === 'production',
+    },
+  },
+  getUserAttributes(user): User {
+    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
+    return { uuid, firstName, lastName, email, createdAt, updatedAt };
   },
 });
 
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: DatabaseUserAttributes;
-    DatabaseSessionAttributes: DatabaseSessionAttributes;
+    DatabaseUserAttributes: PrismaUser;
   }
 }
-interface DatabaseUserAttributes extends User {}
-interface DatabaseSessionAttributes extends CreateSession {}
 
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
-): Promise<{ user: User; session: Session } | { user: null; session: null }> {
+): Promise<
+  { user: LuciaUser; session: Session } | { user: null; session: null }
+> {
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {

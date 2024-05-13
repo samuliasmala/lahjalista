@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
@@ -9,19 +9,15 @@ import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { User, UserLoginDetails } from '~/shared/types';
-import { handleLoginError } from '~/utils/handleError';
-import { isEmailValid } from '~/backend/isValidFunctionsBackend';
+import { isEmailValid } from '~/shared/isValidFunctions';
+import { UserLoginDetails } from '~/shared/types';
+import { handleAuthErrors } from '~/utils/handleError';
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user: Partial<User> }>> {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
   if (!cookieData.user) {
     return {
-      props: {
-        user: {},
-      },
+      props: {},
     };
   }
   return {
@@ -60,9 +56,11 @@ export default function Login() {
       }
     } catch (e) {
       console.error(e);
-      setErrorText(handleLoginError(e));
+      setErrorText(handleAuthErrors(e));
     }
   }
+
+  const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
     <main className="bg-white w-full max-w-full h-screen">
@@ -104,21 +102,12 @@ export default function Login() {
                     name="password"
                   />
                   <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
-                    {showPassword ? (
-                      <SvgEyeSlash
-                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
-                        onClick={() => {
-                          setShowPassword((prevValue) => !prevValue);
-                        }}
-                      />
-                    ) : (
-                      <SvgEyeOpen
-                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
-                        onClick={() => {
-                          setShowPassword((prevValue) => !prevValue);
-                        }}
-                      />
-                    )}
+                    <SvgEye
+                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      onClick={() => {
+                        setShowPassword((prevValue) => !prevValue);
+                      }}
+                    />
                   </div>
                 </div>
               </div>

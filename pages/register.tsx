@@ -8,8 +8,7 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import type { CreateUser } from '~/shared/types';
-import { handleRegisterError } from '~/utils/handleError';
+import { handleAuthErrors } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
@@ -43,10 +42,10 @@ export default function Register() {
         firstName: firstName,
         lastName: lastName,
         password: password,
-      } as CreateUser);
+      });
       userCreatedSuccesfully();
     } catch (e) {
-      const errorText = handleRegisterError(e);
+      const errorText = handleAuthErrors(e);
       setRegisterError(errorText);
     }
   }
@@ -180,6 +179,8 @@ export default function Register() {
     return true;
   }
 
+  const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
+
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen">
@@ -244,21 +245,12 @@ export default function Register() {
                     name="password"
                   />
                   <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
-                    {showPassword ? (
-                      <SvgEyeSlash
-                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
-                        onClick={() => {
-                          setShowPassword((prevValue) => !prevValue);
-                        }}
-                      />
-                    ) : (
-                      <SvgEyeOpen
-                        className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
-                        onClick={() => {
-                          setShowPassword((prevValue) => !prevValue);
-                        }}
-                      />
-                    )}
+                    <SvgEye
+                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      onClick={() => {
+                        setShowPassword((prevValue) => !prevValue);
+                      }}
+                    />
                   </div>
                 </div>
                 <ErrorParagraph errorText={errors.password} />
