@@ -1,4 +1,9 @@
 import { Prisma, Gift as PrismaGift, User as PrismaUser } from '@prisma/client';
+export type {
+  Gift as PrismaGift,
+  User as PrismaUser,
+  Session as PrismaSession,
+} from '@prisma/client';
 
 export type Gift = Omit<PrismaGift, 'id' | 'userUUID'>;
 export type CreateGift = Omit<
@@ -24,9 +29,3 @@ export type CreateSession = Omit<
 > & {
   user: Prisma.UserCreateNestedOneWithoutSessionInput;
 };
-
-export type {
-  Gift as PrismaGift,
-  User as PrismaUser,
-  Session as PrismaSession,
-} from '@prisma/client';
