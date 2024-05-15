@@ -18,19 +18,15 @@ export default async function handler(
       throw new HttpError('Invalid request body!', 400);
     }
 
-    const userCreationRequest = await createUser({
+    const userData = await createUser({
       email: email,
       firstName: firstName,
       lastName: lastName,
       password: password,
     });
 
-    const session = await lucia.createSession(userCreationRequest.uuid, {
-      user: {
-        connect: {
-          uuid: userCreationRequest.uuid,
-        },
-      },
+    const session = await lucia.createSession(userData.uuid, {
+      userUUID: userData.uuid,
     });
     res
       .appendHeader(
