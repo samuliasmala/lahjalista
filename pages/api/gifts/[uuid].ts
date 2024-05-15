@@ -85,11 +85,7 @@ async function handlePATCH({
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
-      AND: {
-        user: {
-          uuid: userData.uuid,
-        },
-      },
+      userUUID: userData.uuid,
     },
     data: {
       receiver: newGiftData.receiver,
@@ -118,11 +114,7 @@ async function handlePUT({
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
-      AND: {
-        user: {
-          uuid: userData.uuid,
-        },
-      },
+      userUUID: userData.uuid,
     },
     data: newGiftData,
     select: {
