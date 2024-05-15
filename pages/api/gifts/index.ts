@@ -72,11 +72,7 @@ async function handlePOST(
     data: {
       gift: giftData.gift,
       receiver: giftData.receiver,
-      user: {
-        connect: {
-          uuid: userData.uuid,
-        },
-      },
+      userUUID: userData.uuid,
     },
     select: {
       createdAt: true,
