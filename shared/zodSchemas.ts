@@ -15,6 +15,13 @@ export const createGiftSchema = z.object({
   receiver: z.string().min(1),
 });
 
+// CHECK THIS
+// onko alla oleva rivi tarpeellinen?
+export const updateGiftSchema = z.object({
+  gift: z.string().min(1),
+  receiver: z.string().min(1),
+});
+
 export const userSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
