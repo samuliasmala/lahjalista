@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { giftSchema } from '~/shared/zodSchemas';
+import { updateGiftSchema } from '~/shared/zodSchemas';
 import { validateRequest } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
 
@@ -77,7 +77,13 @@ async function handlePATCH({
   giftUUID,
   userData,
 }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+  const giftData = updateGiftSchema.safeParse(req.body);
+
+  if (!giftData.success) {
+    throw new HttpError('Invalid request body!', 400);
+  }
+
+  const { gift, receiver } = giftData.data;
 
   const updatedGift = await prisma.gift.update({
     where: {
@@ -85,8 +91,8 @@ async function handlePATCH({
       userUUID: userData.uuid,
     },
     data: {
-      receiver: newGiftData.gift,
-      gift: newGiftData.gift,
+      receiver: receiver,
+      gift: gift,
     },
     select: {
       createdAt: true,
@@ -106,14 +112,18 @@ async function handlePUT({
   giftUUID,
   userData,
 }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+  const giftData = updateGiftSchema.safeParse(req.body);
+
+  if (!giftData.success) {
+    throw new HttpError('Invalid request body!', 400);
+  }
 
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
       userUUID: userData.uuid,
     },
-    data: newGiftData,
+    data: giftData.data,
     select: {
       createdAt: true,
       gift: true,
