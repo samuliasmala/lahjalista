@@ -5,6 +5,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { validateRequest } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
+import { createGiftSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -67,12 +68,18 @@ async function handlePOST(
   res: NextApiResponse<Gift>,
   userData: LuciaUser,
 ) {
-  // ZOD HERE
-  const giftData = req.body;
+  const giftData = createGiftSchema.safeParse(req.body);
+
+  if (!giftData.success) {
+    throw new HttpError('Invalid request body!', 400);
+  }
+
+  const { gift, receiver } = giftData.data;
+
   const addedGift = await prisma.gift.create({
     data: {
-      gift: giftData.gift,
-      receiver: giftData.receiver,
+      gift: gift,
+      receiver: receiver,
       userUUID: userData.uuid,
     },
     select: {
