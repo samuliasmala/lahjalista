@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { Prisma } from '@prisma/client';
 import {
   createGiftSchema,
   createSessionSchema,
