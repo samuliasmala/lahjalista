@@ -3,12 +3,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-<<<<<<< HEAD
 import { giftSchema } from '~/shared/zodSchemas';
-=======
 import { validateRequest } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
->>>>>>> antti/login
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -96,8 +93,8 @@ async function handlePATCH({
       },
     },
     data: {
-      receiver: receiver,
-      gift: gift,
+      receiver: newGiftData.gift,
+      gift: newGiftData.gift,
     },
     select: {
       createdAt: true,
