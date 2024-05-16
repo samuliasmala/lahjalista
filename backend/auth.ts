@@ -37,6 +37,7 @@ declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
     DatabaseUserAttributes: PrismaUser;
+    DatabaseSessionAttributes: { userUUID: string };
   }
 }
 

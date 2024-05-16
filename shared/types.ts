@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import {
   createGiftSchema,
   createSessionSchema,
@@ -7,7 +8,12 @@ import {
   userLoginDetailsSchema,
   userSchema,
 } from './zodSchemas';
-import { Prisma } from '@prisma/client';
+
+export type {
+  Gift as PrismaGift,
+  User as PrismaUser,
+  Session as PrismaSession,
+} from '@prisma/client';
 
 export type Gift = z.infer<typeof giftSchema>;
 export type CreateGift = z.infer<typeof createGiftSchema>;
@@ -24,9 +30,3 @@ export type CreateSession = Omit<
 > & {
   user: Prisma.UserCreateNestedOneWithoutSessionInput;
 };
-
-export type {
-  Gift as PrismaGift,
-  User as PrismaUser,
-  Session as PrismaSession,
-} from '@prisma/client';
