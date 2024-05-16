@@ -57,11 +57,7 @@ async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
   const gift = await prisma.gift.findUniqueOrThrow({
     where: {
       uuid: giftUUID,
-      AND: {
-        user: {
-          uuid: userData.uuid,
-        },
-      },
+      userUUID: userData.uuid,
     },
     select: {
       createdAt: true,
