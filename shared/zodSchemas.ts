@@ -39,5 +39,7 @@ export const userLoginDetailsSchema = z.object({
 });
 
 export const createSessionSchema = z.object({
+  createdAt: z.date(),
+  updatedAt: z.date(),
   user: z.custom<Prisma.UserCreateNestedOneWithoutSessionInput>(),
 });

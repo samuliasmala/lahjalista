@@ -23,10 +23,4 @@ export type CreateUser = z.infer<typeof createUserSchema>;
 
 export type UserLoginDetails = z.infer<typeof userLoginDetailsSchema>;
 
-//export type CreateSession = z.infer<typeof createSessionSchema>;
-export type CreateSession = Omit<
-  Prisma.SessionCreateInput,
-  'id' | 'expiresAt' | 'userId'
-> & {
-  user: Prisma.UserCreateNestedOneWithoutSessionInput;
-};
+export type CreateSession = z.infer<typeof createSessionSchema>;
