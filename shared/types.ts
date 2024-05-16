@@ -1,4 +1,5 @@
 import { Prisma, Gift as PrismaGift, User as PrismaUser } from '@prisma/client';
+
 export type {
   Gift as PrismaGift,
   User as PrismaUser,
