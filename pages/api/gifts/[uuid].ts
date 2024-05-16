@@ -58,11 +58,7 @@ async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
   const gift = await prisma.gift.findUniqueOrThrow({
     where: {
       uuid: giftUUID,
-      AND: {
-        user: {
-          uuid: userData.uuid,
-        },
-      },
+      userUUID: userData.uuid,
     },
     select: {
       createdAt: true,
@@ -134,11 +130,7 @@ async function handleDELETE({ res, giftUUID, userData }: HandlerParams) {
   await prisma.gift.delete({
     where: {
       uuid: giftUUID,
-      AND: {
-        user: {
-          uuid: userData.uuid,
-        },
-      },
+      userUUID: userData.uuid,
     },
   });
 
