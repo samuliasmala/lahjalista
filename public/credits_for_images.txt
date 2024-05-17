@@ -1,0 +1,6 @@
+favicon.ico = https://www.flaticon.com/free-icon/giftbox_1139982
+
+eye_open.svg = https://heroicons.com/
+eye_slash.svg = https://heroicons.com/
+user.svg = https://heroicons.com/
+arrow-right-start-on-rectangle.svg = https://heroicons.com/

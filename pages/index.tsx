@@ -1,14 +1,23 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift } from '~/shared/types';
+import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
+import { InferGetServerSidePropsType } from 'next';
+import axios from 'axios';
+import SvgUser from '~/icons/user';
+import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
+import { getServerSideProps } from '~/utils/getServerSideProps';
 
-export default function Home() {
+export { getServerSideProps };
+
+export default function Home({
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [giftData, setGiftData] = useState<Gift[]>([]);
@@ -20,10 +29,10 @@ export default function Home() {
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+  const [showUserWindow, setShowUserWindow] = useState(false);
 
   useEffect(() => {
     console.log('effect');
-
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
@@ -88,12 +97,30 @@ export default function Home() {
 
   return (
     <main className="bg-white w-full max-w-full h-screen">
+      <div className="justify-center flex">
+        <div className="bg-gray-300 sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
+          <div className="text-lg select-none">Lahjaidealista</div>
+          <SvgUser
+            width={32}
+            height={32}
+            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} z-[98]`}
+            onClick={() => setShowUserWindow((prevValue) => !prevValue)}
+          />
+          <UserDetailModal
+            showUserWindow={showUserWindow}
+            user={user}
+            closeUserWindow={() => setShowUserWindow(false)}
+          />
+        </div>
+      </div>
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
           <form onSubmit={(e) => void handleSubmit(e)}>
-            <TitleText>Lahjalistaidea</TitleText>
+            <TitleText className="select-none">Uusi idea</TitleText>
             <div className="pt-4 grid">
-              <label htmlFor="receiver">Saaja</label>
+              <label htmlFor="receiver" className="select-none">
+                Saaja
+              </label>
               <Input
                 onChange={(event) => setNewReceiver(event.target.value)}
                 autoComplete="off"
@@ -107,7 +134,9 @@ export default function Home() {
               )}
             </div>
             <div className="pt-4 grid">
-              <label htmlFor="giftName">Lahja</label>
+              <label htmlFor="giftName" className="select-none">
+                Lahja
+              </label>
               <Input
                 onChange={(event) => setNewGiftName(event.target.value)}
                 autoComplete="off"
@@ -192,4 +221,59 @@ export default function Home() {
       </div>
     </main>
   );
+}
+
+function UserDetailModal({
+  user,
+  showUserWindow,
+  closeUserWindow,
+}: HTMLAttributes<HTMLDivElement> & {
+  user: User;
+  showUserWindow: boolean;
+  closeUserWindow: () => void;
+}) {
+  async function handleLogout() {
+    try {
+      const request = await axios.post('/api/auth/logout');
+      if (request) {
+        window.location.href = '/login';
+      }
+    } catch (e) {
+      console.error(e);
+      window.location.href = '/';
+    }
+  }
+
+  if (user && showUserWindow) {
+    return (
+      <>
+        <div
+          className="fixed top-0 left-0 max-w-full w-full h-full bg-transparent"
+          onClick={() => closeUserWindow()}
+        />
+        <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
+          <p className="pl-3 pt-3 pb-0 font-bold overflow [overflow-wrap:anywhere]">
+            {user.firstName} {user.lastName}
+          </p>
+          <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
+          <div className="pt-2 pl-3 pr-3 pb-4">
+            <div
+              className="bg-black flex items-center h-9 hover:cursor-pointer group/logout"
+              onClick={() => void handleLogout()}
+            >
+              <p className="group-hover/logout:text-gray-500 text-white ml-3">
+                Kirjaudu ulos
+              </p>
+              <SvgArrowRightStartOnRectangle
+                width={28}
+                height={28}
+                className="group-hover/logout:stroke-gray-500 stroke-white ml-3"
+              />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+  return null;
 }

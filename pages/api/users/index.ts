@@ -1,9 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
-import { hash } from 'bcrypt';
 import { handleError } from '~/backend/handleError';
-import { emailRegex } from '~/shared/regexPatterns';
+import { hashPassword } from '~/backend/utils';
+import {
+  isEmailValid,
+  isFirstNameValid,
+  isLastNameValid,
+  isPasswordValid,
+} from '~/shared/isValidFunctions';
 import { HttpError } from '~/backend/HttpError';
 
 const HANDLER: Record<
@@ -50,8 +55,26 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
   const userDetails = req.body as CreateUser;
-  isEmailValid(userDetails.email);
 
+  const addedUser = await createUser({
+    email: userDetails.email.toLowerCase(),
+    firstName: userDetails.firstName,
+    lastName: userDetails.lastName,
+    password: userDetails.password,
+  });
+
+  return res.status(200).json(addedUser);
+}
+
+export async function createUser(userDetails: CreateUser) {
+  if (
+    !isEmailValid(userDetails.email) ||
+    !isFirstNameValid(userDetails.firstName) ||
+    !isLastNameValid(userDetails.lastName) ||
+    !isPasswordValid(userDetails.password)
+  ) {
+    throw new HttpError('Invalid credentials', 400);
+  }
   const password = await hashPassword(userDetails.password);
   const addedUser = await prisma.user.create({
     data: {
@@ -69,23 +92,5 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
       updatedAt: true,
     },
   });
-
-  return res.status(200).json(addedUser);
-}
-
-function isEmailValid(emailAddress: string): boolean {
-  const checkedEmailAddress = emailAddress.toLowerCase().match(emailRegex);
-
-  if (checkedEmailAddress === null) {
-    throw new HttpError('Invalid email!', 400);
-  }
-
-  // email is ready to be used
-  return true;
-}
-
-async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 10;
-  const hashedPassword = await hash(password, saltRounds);
-  return hashedPassword;
+  return addedUser;
 }

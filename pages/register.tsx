@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
@@ -7,22 +8,26 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import { createUser } from '~/utils/apiRequests';
-import { handleUserError } from '~/utils/handleError';
+import { handleAuthErrors } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
+import SvgEyeOpen from '~/icons/eye_open';
+import SvgEyeSlash from '~/icons/eye_slash';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
-export default function Login() {
+export default function Register() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [registerError, setRegisterError] = useState('');
+
   const [errors, setErrors] = useState<ErrorTypes>({});
 
+  const [showPassword, setShowPassword] = useState(false);
   const [isUserCreated, setIsUserCreated] = useState(false);
 
   const router = useRouter();
@@ -31,7 +36,7 @@ export default function Login() {
     try {
       e.preventDefault();
       if (!isAllFieldsValid()) return;
-      await createUser({
+      await axios.post('/api/auth/register', {
         email: email,
         firstName: firstName,
         lastName: lastName,
@@ -39,7 +44,8 @@ export default function Login() {
       });
       userCreatedSuccesfully();
     } catch (e) {
-      handleUserError(e);
+      const errorText = handleAuthErrors(e);
+      setRegisterError(errorText);
     }
   }
 
@@ -48,6 +54,7 @@ export default function Login() {
     setLastName('');
     setEmail('');
     setPassword('');
+    setRegisterError('');
     setIsUserCreated(true);
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
@@ -135,11 +142,18 @@ export default function Login() {
     return true;
   }
 
+  const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
+
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
+            {registerError.length > 0 ? (
+              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+                {registerError}
+              </div>
+            ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
               <div className="pt-5 pl-4 pr-4 flex flex-col">
@@ -183,19 +197,29 @@ export default function Login() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <label className="pt-5">Salasana</label>
-                <Input
-                  value={password}
-                  onChange={(e) => setPassword(e.currentTarget.value)}
-                  className="border border-black"
-                  autoComplete="off"
-                  type="password"
-                  placeholder="************"
-                  name="password"
-                />
+                <div className="flex outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                  <Input
+                    value={password}
+                    onChange={(e) => setPassword(e.currentTarget.value)}
+                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
+                    autoComplete="off"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="************"
+                    name="password"
+                  />
+                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                    <SvgEye
+                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      onClick={() => {
+                        setShowPassword((prevValue) => !prevValue);
+                      }}
+                    />
+                  </div>
+                </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button>Luo käyttäjätunnus</Button>
-                <p className="pt-6 text-xs text-gray-600">
+                <Button className="select-none">Luo käyttäjätunnus</Button>
+                <p className="select-none pt-6 text-xs text-gray-600">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}

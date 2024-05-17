@@ -17,6 +17,7 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     gift      Gift[]
+    Session   Session?
 }
 
 model Gift {
@@ -28,4 +29,14 @@ model Gift {
     updatedAt DateTime @updatedAt
     userUUID  String?
     user      User?    @relation(fields: [userUUID], references: [uuid])
+}
+
+model Session {
+    id        String   @id @default(uuid())
+    userId    String   @unique
+    userUUID  String   @unique
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    user      User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 }
