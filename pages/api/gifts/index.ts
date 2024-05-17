@@ -68,13 +68,9 @@ async function handlePOST(
   res: NextApiResponse<Gift>,
   userData: LuciaUser,
 ) {
-  const giftData = createGiftSchema.safeParse(req.body);
+  const giftData = createGiftSchema.parse(req.body);
 
-  if (!giftData.success) {
-    throw new HttpError('Invalid request body!', 400);
-  }
-
-  const { gift, receiver } = giftData.data;
+  const { gift, receiver } = giftData;
 
   const addedGift = await prisma.gift.create({
     data: {

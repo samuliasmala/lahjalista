@@ -77,13 +77,9 @@ async function handlePATCH({
   giftUUID,
   userData,
 }: HandlerParams<Gift>) {
-  const giftData = updateGiftSchema.safeParse(req.body);
+  const giftData = updateGiftSchema.parse(req.body);
 
-  if (!giftData.success) {
-    throw new HttpError('Invalid request body!', 400);
-  }
-
-  const { gift, receiver } = giftData.data;
+  const { gift, receiver } = giftData;
 
   const updatedGift = await prisma.gift.update({
     where: {
@@ -112,18 +108,14 @@ async function handlePUT({
   giftUUID,
   userData,
 }: HandlerParams<Gift>) {
-  const giftData = updateGiftSchema.safeParse(req.body);
-
-  if (!giftData.success) {
-    throw new HttpError('Invalid request body!', 400);
-  }
+  const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
       userUUID: userData.uuid,
     },
-    data: giftData.data,
+    data: giftData,
     select: {
       createdAt: true,
       gift: true,
