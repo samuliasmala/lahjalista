@@ -8,11 +8,21 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import { handleAuthErrors } from '~/utils/handleError';
+import {
+  handleAuthErrors,
+  handleGeneralError,
+  handleZodError,
+} from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { z } from 'zod';
+import { z, ZodError } from 'zod';
+import {
+  isEmailValid,
+  isFirstNameValid,
+  isLastNameValid,
+  isPasswordValid,
+} from '~/utils/isValidFunctionsFrontend';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -66,118 +76,86 @@ export default function Register() {
     setErrors({});
   }
 
+  function setErrorMessageToUseState(field: ErrorFieldNames, message: string) {
+    setErrors((prevValue) => ({ ...prevValue, [`${field}`]: message }));
+  }
+
   function isAllFieldsValid(): boolean {
+    const firstNameValidation = isFirstNameValid(firstName);
+    const lastNameValidation = isLastNameValid(lastName);
+    const emailValidation = isEmailValid(email);
+    const passwordValidation = isFirstNameValid(firstName);
+
     clearAllErrors();
     let errorFound = false;
-    if (!isFirstNameValid()) errorFound = true;
-    if (!isLastNameValid()) errorFound = true;
-    if (!isEmailValid()) errorFound = true;
-    if (!isPasswordValid()) errorFound = true;
+
+    if (firstNameValidation !== true) {
+      const errorMessage =
+        findCorrectErrorMessage(
+          FIRST_NAME_ERRORS,
+          firstNameValidation.message,
+        ) ?? 'Etunimi on virheellinen';
+      setErrorMessageToUseState('firstName', errorMessage);
+      errorFound = true;
+    }
+
+    if (lastNameValidation !== true) {
+      const errorMessage =
+        findCorrectErrorMessage(LAST_NAME_ERRORS, lastNameValidation.message) ??
+        'Sukunimi on virheellinen';
+      setErrorMessageToUseState('lastName', errorMessage);
+      errorFound = true;
+    }
+    if (emailValidation !== true) {
+      const errorMessage =
+        findCorrectErrorMessage(EMAIL_ERRORS, emailValidation.message) ??
+        'Sähköposti on virheellinen';
+      setErrorMessageToUseState('email', errorMessage);
+      errorFound = true;
+    }
+    if (passwordValidation !== true) {
+      const errorMessage =
+        findCorrectErrorMessage(PASSWORD_ERRORS, passwordValidation.message) ??
+        'Salasana on virheellinen';
+      setErrorMessageToUseState('password', errorMessage);
+      errorFound = true;
+    }
 
     return !errorFound;
   }
 
-  function isFirstNameValid(): boolean {
-    const zodCheck = z.string().min(1).max(128).safeParse(firstName);
-    if (!zodCheck.success) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        firstName: 'Etunimi on pakollinen',
-      }));
-      return false;
-    }
-    return true;
+  function findCorrectErrorMessage<ConstraintType extends object>(
+    constraint: ConstraintType,
+    errorCode: string,
+  ): string | undefined {
+    type KnownFrontEndErrorTexts<Type extends object> = keyof Type;
+    const errorText =
+      constraint[errorCode as KnownFrontEndErrorTexts<typeof constraint>];
+    if (typeof errorText === 'string') return errorText;
+    return;
   }
 
-  function isLastNameValid(): boolean {
-    const zodCheck = z.string().min(1).max(128).safeParse(lastName);
-    if (!zodCheck.success) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        lastName: 'Sukunimi on pakollinen',
-      }));
-      return false;
-    }
-    return true;
-  }
+  const FIRST_NAME_ERRORS = {
+    too_small: 'Etunimi on pakollinen',
+    too_big: 'Etunimi on liian pitkä, maksimipituus on 128 merkkiä',
+  } as const;
 
-  function isEmailValid(): boolean {
-    // Olisiko parempi laittaa suoraan .safeParse(email.toLowerCase())-funktioon?
-    const lowerCasedEmail = email.toLowerCase();
-    const zodCheck = z
-      .string()
-      .min(1, { message: 'lengthError' })
-      .max(128)
-      .regex(emailRegex, { message: 'regexError' })
-      .safeParse(lowerCasedEmail);
+  const LAST_NAME_ERRORS = {
+    too_small: 'Sukunimi on pakollinen',
+    too_big: 'Sukunimi on liian pitkä, maksimipituus on 128 merkkiä',
+  } as const;
 
-    if (!zodCheck.success) {
-      const isLengthErrorFound = zodCheck.error
-        .format()
-        ._errors.includes('lengthError');
+  const EMAIL_ERRORS = {
+    too_small: 'Sähköposti on pakollinen',
+    too_big: 'Sähköposti on liian pitkä, maksimipituus on 128 merkkiä',
+    regex: 'Sähköposti on virheellinen',
+  } as const;
 
-      if (isLengthErrorFound) {
-        setErrors((prevValue) => ({
-          ...prevValue,
-          email: 'Sähköposti on pakollinen',
-        }));
-        return false;
-      }
-
-      const isRegexErrorFound = zodCheck.error
-        .format()
-        ._errors.includes('regexError');
-
-      if (isRegexErrorFound) {
-        setErrors((prevValue) => ({
-          ...prevValue,
-          email: 'Virheellinen sähköposti',
-        }));
-
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function isPasswordValid(): boolean {
-    const zodCheck = z
-      .string()
-      .min(1, { message: 'lengthError' })
-      .max(128)
-      .regex(passwordRegex, { message: 'regexError' })
-      .safeParse(password);
-
-    if (!zodCheck.success) {
-      const isLengthErrorFound = zodCheck.error
-        .format()
-        ._errors.includes('lengthError');
-
-      if (isLengthErrorFound) {
-        setErrors((prevValue) => ({
-          ...prevValue,
-          password: 'Salasana on pakollinen',
-        }));
-        return false;
-      }
-
-      const isRegexErrorFound = zodCheck.error
-        .format()
-        ._errors.includes('regexError');
-
-      if (isRegexErrorFound) {
-        setErrors((prevValue) => ({
-          ...prevValue,
-          password:
-            'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
-        }));
-        return false;
-      }
-    }
-
-    return true;
-  }
+  const PASSWORD_ERRORS = {
+    too_small: 'Salasana on pakollinen',
+    too_big: 'Salasana on liian pitkä, maksimipituus on 128 merkkiä',
+    regex: 'Salasana on virheellinen',
+  } as const;
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
