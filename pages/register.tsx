@@ -8,11 +8,7 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import {
-  handleAuthErrors,
-  handleGeneralError,
-  handleZodError,
-} from '~/utils/handleError';
+import { handleAuthErrors } from '~/utils/handleError';
 import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
@@ -22,7 +18,7 @@ import {
   isFirstNameValid,
   isLastNameValid,
   isPasswordValid,
-} from '~/utils/isValidFunctionsFrontend';
+} from '~/utils/isValidFunctions';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -84,7 +80,7 @@ export default function Register() {
     const firstNameValidation = isFirstNameValid(firstName);
     const lastNameValidation = isLastNameValid(lastName);
     const emailValidation = isEmailValid(email);
-    const passwordValidation = isFirstNameValid(firstName);
+    const passwordValidation = isPasswordValid(password);
 
     clearAllErrors();
     let errorFound = false;
@@ -154,7 +150,8 @@ export default function Register() {
   const PASSWORD_ERRORS = {
     too_small: 'Salasana on pakollinen',
     too_big: 'Salasana on liian pitkä, maksimipituus on 128 merkkiä',
-    regex: 'Salasana on virheellinen',
+    regex:
+      'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
   } as const;
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
