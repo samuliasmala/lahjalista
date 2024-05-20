@@ -9,16 +9,37 @@ import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { handleAuthErrors } from '~/utils/handleError';
-import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { z, ZodError } from 'zod';
 import {
   isEmailValid,
   isFirstNameValid,
   isLastNameValid,
   isPasswordValid,
 } from '~/utils/isValidFunctions';
+
+const FIRST_NAME_ERRORS = {
+  too_small: 'Etunimi on pakollinen',
+  too_big: 'Etunimi on liian pitkä, maksimipituus on 128 merkkiä',
+} as const;
+
+const LAST_NAME_ERRORS = {
+  too_small: 'Sukunimi on pakollinen',
+  too_big: 'Sukunimi on liian pitkä, maksimipituus on 128 merkkiä',
+} as const;
+
+const EMAIL_ERRORS = {
+  too_small: 'Sähköposti on pakollinen',
+  too_big: 'Sähköposti on liian pitkä, maksimipituus on 128 merkkiä',
+  regex: 'Sähköposti on virheellinen',
+} as const;
+
+const PASSWORD_ERRORS = {
+  too_small: 'Salasana on pakollinen',
+  too_big: 'Salasana on liian pitkä, maksimipituus on 128 merkkiä',
+  regex:
+    'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
+} as const;
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -127,32 +148,12 @@ export default function Register() {
     type KnownFrontEndErrorTexts<Type extends object> = keyof Type;
     const errorText =
       constraint[errorCode as KnownFrontEndErrorTexts<typeof constraint>];
-    if (typeof errorText === 'string') return errorText;
+
+    if (typeof errorText === 'string') {
+      return errorText;
+    }
     return;
   }
-
-  const FIRST_NAME_ERRORS = {
-    too_small: 'Etunimi on pakollinen',
-    too_big: 'Etunimi on liian pitkä, maksimipituus on 128 merkkiä',
-  } as const;
-
-  const LAST_NAME_ERRORS = {
-    too_small: 'Sukunimi on pakollinen',
-    too_big: 'Sukunimi on liian pitkä, maksimipituus on 128 merkkiä',
-  } as const;
-
-  const EMAIL_ERRORS = {
-    too_small: 'Sähköposti on pakollinen',
-    too_big: 'Sähköposti on liian pitkä, maksimipituus on 128 merkkiä',
-    regex: 'Sähköposti on virheellinen',
-  } as const;
-
-  const PASSWORD_ERRORS = {
-    too_small: 'Salasana on pakollinen',
-    too_big: 'Salasana on liian pitkä, maksimipituus on 128 merkkiä',
-    regex:
-      'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
-  } as const;
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
