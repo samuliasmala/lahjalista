@@ -15,12 +15,7 @@ export const createGiftSchema = z.object({
   receiver: z.string().min(1),
 });
 
-// CHECK THIS
-// onko alla oleva rivi tarpeellinen?
-export const updateGiftSchema = z.object({
-  gift: z.string().min(1),
-  receiver: z.string().min(1),
-});
+export const updateGiftSchema = createGiftSchema;
 
 export const userSchema = z.object({
   createdAt: z.date(),
@@ -37,6 +32,12 @@ export const createUserSchema = z.object({
   lastName: z.string().min(1).max(128),
   password: z.string().min(1).max(128).regex(passwordRegex),
   Session: z.custom<Prisma.SessionCreateNestedOneWithoutUserInput>().optional(),
+});
+
+export const updateUserSchema = z.object({
+  email: z.string().min(1).max(128).regex(emailRegex),
+  firstName: z.string().min(1).max(128),
+  lastName: z.string().min(1).max(128),
 });
 
 export const userLoginDetailsSchema = z.object({
