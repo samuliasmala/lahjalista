@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
-import { userSchema } from '~/shared/zodSchemas';
+import { updateUserSchema } from '~/shared/zodSchemas';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -59,27 +59,17 @@ async function handleGET({ res, userUUID }: HandlerParams<User>) {
 }
 
 async function handlePATCH({ req, res, userUUID }: HandlerParams<User>) {
-  // CHECK THIS
-  // tämä .pick-tapa vai kokonaan uuden scheman luonti?
-  const userData = userSchema
-    .pick({ email: true, firstName: true, lastName: true })
-    .safeParse(req.body);
+  const userData = updateUserSchema.safeParse(req.body);
 
   if (!userData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
 
-  const { email, firstName, lastName } = userData.data;
-
   const updatedUser = await prisma.user.update({
     where: {
       uuid: userUUID,
     },
-    data: {
-      email: email.toLowerCase(),
-      firstName: firstName,
-      lastName: lastName,
-    },
+    data: userData.data,
     select: {
       uuid: true,
       firstName: true,
@@ -93,27 +83,17 @@ async function handlePATCH({ req, res, userUUID }: HandlerParams<User>) {
 }
 
 async function handlePUT({ req, res, userUUID }: HandlerParams<User>) {
-  // CHECK THIS
-  // tämä .pick-tapa vai kokonaan uuden scheman luonti?
-  const userData = userSchema
-    .pick({ email: true, firstName: true, lastName: true })
-    .safeParse(req.body);
+  const userData = updateUserSchema.safeParse(req.body);
 
   if (!userData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
 
-  const { email, firstName, lastName } = userData.data;
-
   const updatedUser = await prisma.user.update({
     where: {
       uuid: userUUID,
     },
-    data: {
-      email: email.toLowerCase(),
-      firstName: firstName,
-      lastName: lastName,
-    },
+    data: userData.data,
     select: {
       uuid: true,
       firstName: true,
