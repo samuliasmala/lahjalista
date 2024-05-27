@@ -70,12 +70,9 @@ async function handlePOST(
 ) {
   const giftData = createGiftSchema.parse(req.body);
 
-  const { gift, receiver } = giftData;
-
   const addedGift = await prisma.gift.create({
     data: {
-      gift: gift,
-      receiver: receiver,
+      ...giftData,
       userUUID: userData.uuid,
     },
     select: {

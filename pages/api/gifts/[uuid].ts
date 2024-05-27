@@ -79,17 +79,12 @@ async function handlePATCH({
 }: HandlerParams<Gift>) {
   const giftData = updateGiftSchema.parse(req.body);
 
-  const { gift, receiver } = giftData;
-
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
       userUUID: userData.uuid,
     },
-    data: {
-      receiver: receiver,
-      gift: gift,
-    },
+    data: giftData,
     select: {
       createdAt: true,
       gift: true,
