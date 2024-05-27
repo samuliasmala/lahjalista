@@ -1,40 +1,27 @@
 import { z } from 'zod';
 import { emailRegex, passwordRegex } from '../shared/regexPatterns';
 
-export function isFirstNameValid(firstName: string) {
-  const zodCheck = z
-    .string()
-    .min(1, { message: 'too_small' })
-    .max(128, { message: 'too_big' })
-    .safeParse(firstName);
-  return zodCheck.success ? zodCheck.success : zodCheck.error.issues[0];
-}
+export const firstNameZodCheck = z
+  .string()
+  .min(1, 'Etunimi on pakollinen!')
+  .max(128, 'Etunimi on liian pitkä, maksimipituus on 128 merkkiä');
 
-export function isLastNameValid(lastName: string) {
-  const zodCheck = z
-    .string()
-    .min(1, { message: 'too_small' })
-    .max(128, { message: 'too_big' })
-    .safeParse(lastName);
-  return zodCheck.success ? zodCheck.success : zodCheck.error.issues[0];
-}
+export const lastNameZodCheck = z
+  .string()
+  .min(1, 'Sukunimi on pakollinen!')
+  .max(128, 'Sukunimi on liian pitkä, maksimipituus on 128 merkkiä');
 
-export function isEmailValid(email: string) {
-  const zodCheck = z
-    .string()
-    .min(1, { message: 'too_small' })
-    .max(128, { message: 'too_big' })
-    .regex(emailRegex, { message: 'regex' })
-    .safeParse(email.toLowerCase());
-  return zodCheck.success ? zodCheck.success : zodCheck.error.issues[0];
-}
+export const emailZodCheck = z
+  .string()
+  .min(1, 'Sähköposti on pakollinen!')
+  .max(128, 'Sähköposti on liian pitkä, maksimipituus on 128 merkkiä')
+  .regex(emailRegex, 'Sähköposti on virheellinen');
 
-export function isPasswordValid(password: string) {
-  const zodCheck = z
-    .string()
-    .min(1, { message: 'too_small' })
-    .max(128, { message: 'too_big' })
-    .regex(passwordRegex, { message: 'regex' })
-    .safeParse(password);
-  return zodCheck.success ? zodCheck.success : zodCheck.error.issues[0];
-}
+export const passwordZodCheck = z
+  .string()
+  .min(1, 'Salasana on pakollinen!')
+  .max(128, 'Salasana on liian pitkä, maksimipituus on 128 merkkiä')
+  .regex(
+    passwordRegex,
+    'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
+  );
