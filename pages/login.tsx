@@ -130,9 +130,7 @@ export default function Login() {
                   Muista minut
                 </label>
               </div>
-              <Button type="submit" className="bg-emerald-500">
-                Kirjaudu
-              </Button>
+              <Button type="submit">Kirjaudu</Button>
             </form>
             <p className="mt-6 text-xs text-gray-600 text-center">
               Ei ole vielä tunnuksia?{' '}
