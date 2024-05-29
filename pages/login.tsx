@@ -110,7 +110,7 @@ export default function Login() {
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                  <div className="group-hover/password:bg-gray-100 hover:bg-white bg-white flex items-center ">
                     <SvgEye
                       className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
                       onClick={() => {
