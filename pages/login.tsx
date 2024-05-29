@@ -74,8 +74,14 @@ export default function Login() {
         ) : null}
         <div className="w-full flex justify-center">
           <div className="mt-5 flex flex-col">
-            <div className="border rounded-full w-32 h-32 bg-blue-500 self-center">
-              <div className="p-11 pl-8 pt-12 text-white">Lahjalista</div>
+            <div className="self-center">
+              <img src="/images/logo_no_text.png" className="w-32 h-32" />
+              <p className="relative bottom-[47%] left-[19%] font-bold text-sm">
+                LAHJAIDEA
+              </p>
+              <p className="relative text-gray-400 bottom-[50%] left-[30%]">
+                LISTA
+              </p>
             </div>
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="text-center">Kirjaudu sisään</TitleText>
