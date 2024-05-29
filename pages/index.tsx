@@ -7,35 +7,13 @@ import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
-import {
-  GetServerSidePropsContext,
-  GetServerSidePropsResult,
-  InferGetServerSidePropsType,
-} from 'next';
-import { validateRequest } from '~/backend/auth';
+import { InferGetServerSidePropsType } from 'next';
 import axios from 'axios';
-import { useRouter } from 'next/router';
 import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
+import { getServerSideProps } from '~/utils/getServerSideProps';
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user: User }>> {
-  const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      },
-    };
-  }
-  return {
-    props: {
-      user: JSON.parse(JSON.stringify(cookieData.user)) as User,
-    },
-  };
-}
+export { getServerSideProps };
 
 export default function Home({
   user,
@@ -52,8 +30,6 @@ export default function Home({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
   const [showUserWindow, setShowUserWindow] = useState(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     console.log('effect');
@@ -119,11 +95,6 @@ export default function Home({
     setIsAnyKindOfErrorMessage(errorMessage);
   }
 
-  async function handleLogout() {
-    const request = await axios.post('/api/auth/logout');
-    if (request) await router.push('/login').catch((e) => console.error(e));
-  }
-
   return (
     <main className="bg-white w-full max-w-full h-screen">
       <div className="justify-center flex">
@@ -138,7 +109,6 @@ export default function Home({
           <UserDetailModal
             showUserWindow={showUserWindow}
             user={user}
-            handleLogout={handleLogout}
             closeUserWindow={() => setShowUserWindow(false)}
           />
         </div>
@@ -257,13 +227,23 @@ function UserDetailModal({
   user,
   showUserWindow,
   closeUserWindow,
-  handleLogout,
 }: HTMLAttributes<HTMLDivElement> & {
   user: User;
   showUserWindow: boolean;
   closeUserWindow: () => void;
-  handleLogout: () => void | Promise<void>;
 }) {
+  async function handleLogout() {
+    try {
+      const request = await axios.post('/api/auth/logout');
+      if (request) {
+        window.location.href = '/login';
+      }
+    } catch (e) {
+      console.error(e);
+      window.location.href = '/';
+    }
+  }
+
   if (user && showUserWindow) {
     return (
       <>

@@ -17,19 +17,15 @@ export default async function handler(
       .pick({ email: true, firstName: true, lastName: true, password: true })
       .parse(req.body);
 
-    const userCreationRequest = await createUser({
+    const userData = await createUser({
       email: email,
       firstName: firstName,
       lastName: lastName,
       password: password,
     });
 
-    const session = await lucia.createSession(userCreationRequest.uuid, {
-      user: {
-        connect: {
-          uuid: userCreationRequest.uuid,
-        },
-      },
+    const session = await lucia.createSession(userData.uuid, {
+      userUUID: userData.uuid,
     });
     res
       .appendHeader(

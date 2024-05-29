@@ -8,6 +8,12 @@ import {
   userSchema,
 } from './zodSchemas';
 
+export type {
+  Gift as PrismaGift,
+  User as PrismaUser,
+  Session as PrismaSession,
+} from '@prisma/client';
+
 export type Gift = z.infer<typeof giftSchema>;
 export type CreateGift = z.infer<typeof createGiftSchema>;
 
