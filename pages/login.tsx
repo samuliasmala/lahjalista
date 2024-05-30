@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
