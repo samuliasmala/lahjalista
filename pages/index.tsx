@@ -96,9 +96,9 @@ export default function Home({
   }
 
   return (
-    <main className="bg-white w-full max-w-full h-screen">
+    <main className="bg-orange-50 w-full max-w-full h-screen">
       <div className="justify-center flex">
-        <div className="bg-gray-300 sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
+        <div className="bg-rose-200 sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
           <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
             width={32}
@@ -118,22 +118,6 @@ export default function Home({
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText className="select-none">Uusi idea</TitleText>
             <div className="pt-4 grid">
-              <label htmlFor="receiver" className="select-none">
-                Saaja
-              </label>
-              <Input
-                onChange={(event) => setNewReceiver(event.target.value)}
-                autoComplete="off"
-                type="text"
-                placeholder="Matti Meikäläinen"
-                name="receiver"
-                value={newReceiver}
-              />
-              {receiverError && (
-                <div className="text-red-500">Lahjansaaja on pakollinen</div>
-              )}
-            </div>
-            <div className="pt-4 grid">
               <label htmlFor="giftName" className="select-none">
                 Lahja
               </label>
@@ -147,6 +131,22 @@ export default function Home({
               />
               {giftNameError && (
                 <div className="text-red-500">Lahja on pakollinen</div>
+              )}
+            </div>
+            <div className="pt-4 grid">
+              <label htmlFor="receiver" className="select-none">
+                Saaja
+              </label>
+              <Input
+                onChange={(event) => setNewReceiver(event.target.value)}
+                autoComplete="off"
+                type="text"
+                placeholder="Matti Meikäläinen"
+                name="receiver"
+                value={newReceiver}
+              />
+              {receiverError && (
+                <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
             </div>
             <Button type="submit">Lisää</Button>
@@ -164,7 +164,7 @@ export default function Home({
                   key={giftItem.uuid}
                   className="[overflow-wrap:anywhere] hover-target"
                 >
-                  {giftItem.receiver} - {giftItem.gift}
+                  {giftItem.gift} - {giftItem.receiver}
                 </li>
                 <Button
                   key={`${giftItem.uuid}_deletebutton`}
