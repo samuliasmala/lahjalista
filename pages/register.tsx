@@ -182,7 +182,7 @@ export default function Register() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="bg-white w-full max-w-full h-screen">
+    <main className="bg-orange-50 w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
@@ -234,7 +234,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <label className="pt-5">Salasana</label>
-                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
@@ -244,7 +244,7 @@ export default function Register() {
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                  <div className="group-hover/password:bg-gray-100 hover:bg-white bg-white flex items-center ">
                     <SvgEye
                       className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
                       onClick={() => {
