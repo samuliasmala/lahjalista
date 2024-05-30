@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '~/components/Button';
+import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 
 export default function Logout() {
@@ -8,15 +8,7 @@ export default function Logout() {
     <main className="bg-orange-50 w-full max-w-full h-screen ">
       <div className="h-screen w-screen flex flex-col items-center">
         <div className="max-w-80">
-          <div className="pt-16 flex items-center justify-center select-none">
-            <Image
-              alt="logo"
-              src="/images/logo_no_text.png"
-              className="w-32 max-w-max"
-            />
-            <p className="absolute pb-5 font-bold text-sm">LAHJAIDEA</p>
-            <p className="absolute pt-5 text-gray-400">LISTA</p>
-          </div>
+          <Logo />
           <div className="pt-10 flex flex-col items-center">
             <TitleText className="font-bold">Näkemiin!</TitleText>
             <p className="text-center text-sm [overflow-wrap:anywhere] pt-10 text-gray-600">

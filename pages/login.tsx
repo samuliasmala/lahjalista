@@ -7,6 +7,7 @@ import { FormEvent, useState } from 'react';
 import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
+import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
@@ -75,19 +76,7 @@ export default function Login() {
         ) : null}
         <div className="w-full flex justify-center">
           <div className="mt-5 flex flex-col">
-            <div className="self-center select-none">
-              <Image
-                alt="logo"
-                src="/images/logo_no_text.png"
-                className="w-32 h-32"
-              />
-              <p className="relative bottom-[47%] left-[19%] font-bold text-sm">
-                LAHJAIDEA
-              </p>
-              <p className="relative text-gray-400 bottom-[50%] left-[30%]">
-                LISTA
-              </p>
-            </div>
+            <Logo />
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="text-center">Kirjaudu sisään</TitleText>
               <div className="mt-5 flex flex-col">
