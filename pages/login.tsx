@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
@@ -75,7 +76,11 @@ export default function Login() {
         <div className="w-full flex justify-center">
           <div className="mt-5 flex flex-col">
             <div className="self-center select-none">
-              <img src="/images/logo_no_text.png" className="w-32 h-32" />
+              <Image
+                alt="logo"
+                src="/images/logo_no_text.png"
+                className="w-32 h-32"
+              />
               <p className="relative bottom-[47%] left-[19%] font-bold text-sm">
                 LAHJAIDEA
               </p>

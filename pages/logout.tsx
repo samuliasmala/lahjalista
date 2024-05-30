@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
@@ -8,7 +9,11 @@ export default function Logout() {
       <div className="h-screen w-screen flex flex-col items-center">
         <div className="max-w-80">
           <div className="pt-16 flex items-center justify-center select-none">
-            <img src="/images/logo_no_text.png" className="w-32 max-w-max" />
+            <Image
+              alt="logo"
+              src="/images/logo_no_text.png"
+              className="w-32 max-w-max"
+            />
             <p className="absolute pb-5 font-bold text-sm">LAHJAIDEA</p>
             <p className="absolute pt-5 text-gray-400">LISTA</p>
           </div>
