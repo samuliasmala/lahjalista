@@ -2,7 +2,7 @@ import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
-import type { PrismaUser, User } from '~/shared/types';
+import type { User } from '~/shared/types';
 import type { Session, User as LuciaUser } from 'lucia';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
