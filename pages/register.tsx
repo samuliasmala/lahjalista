@@ -11,7 +11,7 @@ import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { handleAuthErrors } from '~/utils/handleError';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { formSchema } from '~/utils/zodChecks';
+import { formSchema } from '~/shared/zodSchemas';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -49,11 +49,12 @@ export default function Register() {
         });
         return;
       }
+      const validatedData = formZodParse.data;
       await axios.post('/api/auth/register', {
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        password: formData.password,
+        email: validatedData.email,
+        firstName: validatedData.firstName,
+        lastName: validatedData.lastName,
+        password: validatedData.password,
       });
       userCreatedSuccesfully();
     } catch (e) {
