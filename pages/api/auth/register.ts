@@ -13,16 +13,9 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const { email, firstName, lastName, password } = createUserSchema
-      .pick({ email: true, firstName: true, lastName: true, password: true })
-      .parse(req.body);
+    const validatedBody = createUserSchema.parse(req.body);
 
-    const userData = await createUser({
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
-    });
+    const userData = await createUser(validatedBody);
 
     const session = await lucia.createSession(userData.uuid, {
       userUUID: userData.uuid,
