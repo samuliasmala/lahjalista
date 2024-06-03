@@ -11,7 +11,7 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
-import { emailZodCheck } from '~/utils/zodChecks';
+import { emailSchema } from '~/shared/zodSchemas';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -40,13 +40,13 @@ export default function Login() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const emailValidation = emailZodCheck.safeParse(email);
+      const emailValidation = emailSchema.safeParse(email);
       if (emailValidation.success === false) {
         setErrorText(emailValidation.error.format()._errors[0] || '');
         return;
       }
       const loginCredentials: UserLoginDetails = {
-        email: email,
+        email: emailValidation.data,
         password: password,
         rememberMe: rememberMe,
       };
