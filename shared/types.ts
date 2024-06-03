@@ -14,13 +14,17 @@ export type {
   Session as PrismaSession,
 } from '@prisma/client';
 
+// GIFT
 export type Gift = z.infer<typeof giftSchema>;
+
 export type CreateGift = z.infer<typeof createGiftSchema>;
 
-// CHECK THIS
+// USER
 export type User = z.infer<typeof getUserSchema>;
+
 export type CreateUser = z.infer<typeof createUserSchema>;
 
 export type UserLoginDetails = z.infer<typeof userLoginDetailsSchema>;
 
+// SESSION
 export type CreateSession = z.infer<typeof createSessionSchema>;
