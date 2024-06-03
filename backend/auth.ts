@@ -15,8 +15,7 @@ export const lucia = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
-    return { uuid, firstName, lastName, email, createdAt, updatedAt };
+    return user;
   },
 });
 
@@ -28,15 +27,14 @@ export const luciaLongSession = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
-    return { uuid, firstName, lastName, email, createdAt, updatedAt };
+    return user;
   },
 });
 
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: PrismaUser;
+    DatabaseUserAttributes: User;
     DatabaseSessionAttributes: { userUUID: string };
   }
 }
