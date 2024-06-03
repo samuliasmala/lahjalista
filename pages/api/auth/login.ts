@@ -24,7 +24,7 @@ export default async function handleR(
 
     if (!userDetailsParse.success) {
       const invalidField =
-        userDetailsParse.error.issues[0].path || 'Email or password';
+        userDetailsParse.error.issues[0].path[0] || 'Email or password';
       throw new HttpError(`${invalidField} field was invalid!`, 400);
     }
     const { email, password, rememberMe } = userDetailsParse.data;
