@@ -1,51 +1,12 @@
-import axios from 'axios';
 import Link from 'next/link';
-import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
-import { CreateFeedback, Feedback } from '~/shared/types';
-import { handleGeneralError } from '~/utils/handleError';
-
-const POSSIBLE_ERRORS = {
-  'feedback text was not valid!': 'Palauteteksti on virheellinen',
-  'feedback text is mandatory!': 'Palauteteksti on pakollinen',
-  'server error!': 'Palvelin virhe',
-  'palvelin virhe!': 'Palvelin virhe',
-  'odottamaton virhe tapahtui!': 'Odottamaton virhe tapahtui',
-} as const;
-
-type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 
 export default function Logout() {
-  const [feedbackText, setFeedbackText] = useState('');
-  const [errorText, setErrorText] = useState('');
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    try {
-      e.preventDefault();
-      const dataToSend: CreateFeedback = { feedbackText: feedbackText };
-      await axios.post('/api/feedback', dataToSend);
-    } catch (e) {
-      console.log(handleGeneralError(e));
-      const errorMessage =
-        POSSIBLE_ERRORS[
-          handleGeneralError(e).toLowerCase() as KnownFrontEndErrorTexts
-        ] || 'Palauteteksti on virheellinen';
-      setErrorText(errorMessage);
-    }
-  }
-
   return (
     <main className="bg-orange-50 w-full max-w-full h-screen ">
       <div className="h-screen w-screen flex flex-col items-center">
-        {errorText.length > 0 ? (
-          <div className="pt-4 flex justify-center ">
-            <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
-              {errorText}
-            </div>
-          </div>
-        ) : null}
         <div className="max-w-80">
           <Logo />
           <div className="pt-10 flex flex-col items-center">
@@ -55,16 +16,9 @@ export default function Logout() {
             </p>
           </div>
           <div className="pt-20">
-            <form
-              className="flex flex-col text-center"
-              onSubmit={(e) => handleSubmit(e)}
-            >
+            <form className="flex flex-col text-center">
               <label className="text-start">Palaute</label>
-              <textarea
-                value={feedbackText}
-                className="border border-black h-32 pl-1 pt-1"
-                onChange={(e) => setFeedbackText(e.currentTarget.value)}
-              />
+              <textarea className="border border-black h-32 pl-1 pt-1" />
               <Button className="p-2" type="submit">
                 Lähetä
               </Button>

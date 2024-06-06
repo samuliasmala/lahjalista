@@ -41,12 +41,3 @@ export const userLoginDetailsSchema = z.object({
 export const createSessionSchema = z.object({
   user: z.custom<Prisma.UserCreateNestedOneWithoutSessionInput>(),
 });
-
-export const feedbackSchema = z.object({
-  uuid: z.string(),
-  feedbackText: z.string().min(1, 'Feedback text is mandatory!'),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-export const createFeedbackSchema = feedbackSchema.pick({ feedbackText: true });
