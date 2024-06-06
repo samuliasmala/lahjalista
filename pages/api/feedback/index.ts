@@ -1,8 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { validateRequest } from '~/backend/auth';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { CreateFeedback, Feedback, User } from '~/shared/types';
+import prisma from '~/prisma';
+import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
-import { handleGeneralError } from '~/utils/handleError';
+import { z } from 'zod';
 
 const HANDLER: Record<
   string,
@@ -12,15 +14,11 @@ const HANDLER: Record<
   POST: handlePOST,
 };
 
-export default async function handler(
+export default async function handleLogout(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
-    if (req.method !== 'POST') {
-      throw new HttpError('Invalid request method!', 405);
-    }
-    // alla oleva ei toimi, koska palaute pyydetään sillon kun käyttäjä on kirjautunut ulos, annetaan koodin kuitenkin olla vielä siinä
     /*
   const { session } = await validateRequest(req, res);
   if (!session) {
@@ -37,15 +35,52 @@ export default async function handler(
       );
     }
   } catch (e) {
-    handleGeneralError(e);
+    return handleError(res, e);
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {}
-
-async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const parse = createFeedbackSchema.parse(req.body);
-  console.log(parse);
+async function handleGET(req: NextApiRequest, res: NextApiResponse) {
+  console.log('GET');
 
   return res.status(200).end();
+}
+
+async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+  const feedbackParse = createFeedbackSchema.safeParse(req.body);
+  if (feedbackParse.success !== true) {
+    return res
+      .status(400)
+      .send(
+        feedbackParse.error.format().feedbackText?._errors[0] ||
+          'Feedback text was not valid!',
+      );
+  }
+  const addedFeedback = await createFeedback(feedbackParse.data);
+  console.log(addedFeedback);
+
+  return res.status(200).json(addedFeedback);
+  /*
+  const { email, firstName, lastName, password } = createUserSchema.parse(
+    req.body,
+  );
+  const addedUser = await createUser({
+    email: email.toLowerCase(),
+    firstName: firstName,
+    lastName: lastName,
+    password: password,
+  });
+  
+  return res.status(200).json(addedUser);
+  */
+}
+
+async function createFeedback(feedback: CreateFeedback) {
+  console.log(feedback.feedbackText, 'asd');
+  const addedFeedback = prisma.feedback.create({
+    data: {
+      feedbackText: feedback.feedbackText,
+    },
+  });
+
+  return addedFeedback;
 }
