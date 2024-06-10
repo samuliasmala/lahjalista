@@ -91,6 +91,9 @@ export default function Home({
 
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
+    if (errorMessage === 'You are unauthorized!') {
+      window.location.href = '/';
+    }
     setIsAnyKindOfError(true);
     setIsAnyKindOfErrorMessage(errorMessage);
   }
@@ -234,10 +237,7 @@ function UserDetailModal({
 }) {
   async function handleLogout() {
     try {
-      const request = await axios.post('/api/auth/logout');
-      if (request) {
-        window.location.href = '/login';
-      }
+      window.location.href = '/logout';
     } catch (e) {
       console.error(e);
       window.location.href = '/';

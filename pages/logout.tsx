@@ -1,7 +1,10 @@
 import axios from 'axios';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
+import { validateRequest } from '~/backend/auth';
+import { createFeedbackSession } from '~/backend/feedback';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
@@ -18,40 +21,83 @@ const POSSIBLE_ERRORS = {
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  console.log('this is logout.tsx');
+  const validatedUser = await validateRequest(context.req, context.res);
+  if (validatedUser.user) {
+    await createFeedbackSession(context, validatedUser.user);
+  }
+  return {
+    props: {},
+  };
+}
+
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
+  const [stopRedirect, setStopRedirect] = useState(false);
+  const [isInitialRenderDone, setIsInitialRenderDone] = useState(false);
 
-  const [clearRouterPushTimeout, setClearRouterPushTimeout] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    logoutUser().catch((e) => {});
     let redirectTimeout: undefined | NodeJS.Timeout;
-    if (clearRouterPushTimeout) {
+    async function addBeforeUnloadEventListener() {
+      await logoutUser();
+    }
+    function clearEventListeners() {
+      window.removeEventListener('beforeunload', addBeforeUnloadEventListener);
+    }
+
+    if (window && isInitialRenderDone) {
+      window.addEventListener('beforeunload', addBeforeUnloadEventListener);
+    }
+    if (stopRedirect) {
       return clearTimeout(redirectTimeout);
     }
-    redirectTimeout = setTimeout(() => {
+    redirectTimeout = setTimeout(async () => {
+      await logoutUser();
+      clearEventListeners();
       router.push('/').catch((e) => console.error(e));
-    }, 60000);
-    return () => {
+    }, 5000);
+
+    setIsInitialRenderDone(true);
+    return function clearFunctions() {
+      if (isInitialRenderDone) {
+        clearEventListeners();
+      }
       clearTimeout(redirectTimeout);
     };
-  }, [clearRouterPushTimeout]);
+  }, [stopRedirect, isInitialRenderDone]);
+
+  async function logoutUser() {
+    try {
+      await axios.post('/api/auth/logout');
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  function handleInternalError(e: unknown) {
+    console.error(e);
+    const errorMessage =
+      POSSIBLE_ERRORS[
+        handleGeneralError(e).toLowerCase() as KnownFrontEndErrorTexts
+      ] || 'Palauteteksti on virheellinen';
+    setErrorText(errorMessage);
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
+      setStopRedirect(true);
       const dataToSend: CreateFeedback = { feedbackText: feedbackText };
       await axios.post('/api/feedback', dataToSend);
       feedbackSent();
     } catch (e) {
-      console.log(e);
-      const errorMessage =
-        POSSIBLE_ERRORS[
-          handleGeneralError(e).toLowerCase() as KnownFrontEndErrorTexts
-        ] || 'Palauteteksti on virheellinen';
-      setErrorText(errorMessage);
+      handleInternalError(e);
     }
   }
 
@@ -59,7 +105,8 @@ export default function Logout() {
     setErrorText('');
     setFeedbackText('');
     setIsFeedbackSent(true);
-    setTimeout(() => {
+    setTimeout(async () => {
+      await logoutUser();
       router.push('/').catch((e) => console.error(e));
     }, 10000);
   }
@@ -94,7 +141,7 @@ export default function Logout() {
                   value={feedbackText}
                   className="border border-black h-32 pl-1 pt-1"
                   onChange={(e) => {
-                    setClearRouterPushTimeout(true);
+                    setStopRedirect(true);
                     setFeedbackText(e.currentTarget.value);
                   }}
                 />
