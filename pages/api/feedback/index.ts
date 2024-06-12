@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateFeedback, Feedback, User } from '~/shared/types';
+import { CreateFeedback } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
-import { z } from 'zod';
 import { deleteFeedbackSession, getFeedbackSession } from '~/backend/feedback';
 
 const HANDLER: Record<
@@ -20,12 +19,6 @@ export default async function handleFeedback(
   res: NextApiResponse,
 ) {
   try {
-    /*
-  const { session } = await validateRequest(req, res);
-  if (!session) {
-    throw new HttpError('Unauthorized', 401);
-  }
-  */
     const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
       await reqHandler(req, res);
@@ -40,7 +33,7 @@ export default async function handleFeedback(
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
+function handleGET(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).send('Not in use yet');
 }
 
@@ -54,7 +47,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
           'Feedback text or UUID code was invalid!',
       );
   }
-  const isFeedbackSessionFound: Boolean =
+  const isFeedbackSessionFound: boolean =
     (await getFeedbackSession(feedbackParse.data.uuid)) === null ? false : true;
 
   if (!isFeedbackSessionFound) {

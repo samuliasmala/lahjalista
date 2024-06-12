@@ -8,7 +8,6 @@ import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
-import axios from 'axios';
 import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
@@ -235,7 +234,7 @@ function UserDetailModal({
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
-  async function handleLogout() {
+  function handleLogout() {
     try {
       window.location.href = '/logout';
     } catch (e) {

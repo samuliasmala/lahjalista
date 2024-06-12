@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
@@ -8,7 +8,7 @@ import { createFeedbackSession } from '~/backend/feedback';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
-import { CreateFeedback, Feedback } from '~/shared/types';
+import { CreateFeedback } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import Cookies from 'js-cookie';
 
@@ -98,7 +98,7 @@ export default function Logout() {
     setErrorText('');
     setFeedbackText('');
     setIsFeedbackSent(true);
-    setTimeout(async () => {
+    setTimeout(() => {
       router.push('/login').catch((e) => console.error(e));
     }, 5000);
   }
@@ -126,7 +126,7 @@ export default function Logout() {
             <div className="pt-20">
               <form
                 className="flex flex-col text-center"
-                onSubmit={(e) => handleSubmit(e)}
+                onSubmit={(e) => void handleSubmit(e)}
               >
                 <label className="text-start">Palaute</label>
                 <textarea
