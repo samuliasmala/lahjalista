@@ -2,7 +2,7 @@ import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
-import type { User } from '~/shared/types';
+import type { PrismaUser, User } from '~/shared/types';
 import type { Session, User as LuciaUser } from 'lucia';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
@@ -15,7 +15,8 @@ export const lucia = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    return user;
+    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
+    return { uuid, firstName, lastName, email, createdAt, updatedAt };
   },
 });
 
@@ -27,14 +28,15 @@ export const luciaLongSession = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    return user;
+    const { uuid, firstName, lastName, email, createdAt, updatedAt } = user;
+    return { uuid, firstName, lastName, email, createdAt, updatedAt };
   },
 });
 
 declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: User;
+    DatabaseUserAttributes: PrismaUser;
     DatabaseSessionAttributes: { userUUID: string };
   }
 }
