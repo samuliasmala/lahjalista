@@ -38,7 +38,7 @@ export default async function handleR(
     });
 
     if (!userData) {
-      throw new HttpError('User was not found in database', 400);
+      throw new HttpError('User was not found in database!', 400);
     }
 
     const isPasswordSame = await verifyPassword(password, userData.password);
