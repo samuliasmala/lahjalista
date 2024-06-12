@@ -24,9 +24,19 @@ export function handleGiftError(e: unknown) {
 }
 
 const FRONT_END_HANDLER = {
+  // line below is only used when trying to register
   'email was not unique!': 'Sähköposti on jo käytössä',
-  'invalid credentials!': 'Sähköposti tai salasana on virheellinen!',
-  'invalid request body!': 'Sähköposti tai salasana on virheellinen',
+
+  // the lines below are used when trying to login
+  'invalid password!': 'Salasana on virheellinen!',
+  'user was not found in database!': 'Sähköpostia ei ole rekistöröity',
+
+  // the lines below most likely will not show up often due to them being errors Zod throws if values are not correct
+  // Because of client-side Zod checks, invalid values should not be possible to be sent. Only possible way should be if user sends the request straight to the API
+  'email field was invalid!': 'Sähköposti on virheellinen',
+  'password field was invalid!': 'Salasana on virheellinen',
+  'email or password field was invalid!':
+    'Sähköposti tai salasana on virheellinen',
 } as const;
 
 type KnownFrontEndErrorTexts = keyof typeof FRONT_END_HANDLER;
