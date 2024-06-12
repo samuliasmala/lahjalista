@@ -2,8 +2,6 @@ import { z } from 'zod';
 import { emailRegex, passwordRegex } from './regexPatterns';
 import { Prisma } from '@prisma/client';
 
-// CHECK THIS
-// pitäisikö siirtää nämä omaan tiedostoon
 const firstNameSchema = z
   .string()
   .min(1, 'Etunimi on pakollinen!')
