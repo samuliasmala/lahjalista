@@ -49,4 +49,7 @@ export const feedbackSchema = z.object({
   updatedAt: z.date(),
 });
 
-export const createFeedbackSchema = feedbackSchema.pick({ feedbackText: true });
+export const createFeedbackSchema = feedbackSchema.pick({
+  feedbackText: true,
+  uuid: true,
+});
