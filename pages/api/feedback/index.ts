@@ -5,6 +5,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
 import { z } from 'zod';
+import { deleteFeedbackSession, getFeedbackSession } from '~/backend/feedback';
 
 const HANDLER: Record<
   string,
@@ -14,7 +15,7 @@ const HANDLER: Record<
   POST: handlePOST,
 };
 
-export default async function handleLogout(
+export default async function handleFeedback(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -40,9 +41,7 @@ export default async function handleLogout(
 }
 
 async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  console.log('GET');
-
-  return res.status(200).end();
+  return res.status(200).send('Not in use yet');
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
@@ -51,31 +50,26 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
     return res
       .status(400)
       .send(
-        feedbackParse.error.format().feedbackText?._errors[0] ||
-          'Feedback text was not valid!',
+        `${feedbackParse.error.issues[0].path[0]} was invalid!` ||
+          'Feedback text or UUID code was invalid!',
       );
   }
-  const addedFeedback = await createFeedback(feedbackParse.data);
-  console.log(addedFeedback);
+  const isFeedbackSessionFound: Boolean =
+    (await getFeedbackSession(feedbackParse.data.uuid)) === null ? false : true;
 
+  if (!isFeedbackSessionFound) {
+    return res.status(400).send('UUID was invalid!');
+  }
+
+  const addedFeedback = await createFeedback(feedbackParse.data);
+
+  if (addedFeedback) {
+    await deleteFeedbackSession(feedbackParse.data.uuid);
+  }
   return res.status(200).json(addedFeedback);
-  /*
-  const { email, firstName, lastName, password } = createUserSchema.parse(
-    req.body,
-  );
-  const addedUser = await createUser({
-    email: email.toLowerCase(),
-    firstName: firstName,
-    lastName: lastName,
-    password: password,
-  });
-  
-  return res.status(200).json(addedUser);
-  */
 }
 
 async function createFeedback(feedback: CreateFeedback) {
-  console.log(feedback.feedbackText, 'asd');
   const addedFeedback = prisma.feedback.create({
     data: {
       feedbackText: feedback.feedbackText,
