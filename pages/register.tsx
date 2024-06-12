@@ -39,23 +39,17 @@ export default function Register() {
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      const formZodParse = formSchema.safeParse(formData);
-      if (formZodParse.success === false) {
+      const validatedForm = formSchema.safeParse(formData);
+      if (validatedForm.success === false) {
         setErrors({
-          firstName: formZodParse.error.format().firstName?._errors[0] || '',
-          lastName: formZodParse.error.format().lastName?._errors[0] || '',
-          email: formZodParse.error.format().email?._errors[0] || '',
-          password: formZodParse.error.format().password?._errors[0] || '',
+          firstName: validatedForm.error.format().firstName?._errors[0] || '',
+          lastName: validatedForm.error.format().lastName?._errors[0] || '',
+          email: validatedForm.error.format().email?._errors[0] || '',
+          password: validatedForm.error.format().password?._errors[0] || '',
         });
         return;
       }
-      const validatedData = formZodParse.data;
-      await axios.post('/api/auth/register', {
-        email: validatedData.email,
-        firstName: validatedData.firstName,
-        lastName: validatedData.lastName,
-        password: validatedData.password,
-      });
+      await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
       const errorText = handleAuthErrors(e);
