@@ -10,9 +10,12 @@ import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback, Feedback } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
+import Cookies from 'js-cookie';
 
 const POSSIBLE_ERRORS = {
-  'feedback text was not valid!': 'Palauteteksti on virheellinen',
+  'feedback was invalid!': 'Palauteteksti on virheellinen',
+  'uuid was invalid!':
+    'Yksilöintitunnus on virheellinen. Kokeile lähettää palaute uudelleen myöhemmin. Pahoittelemme tapahtunutta.',
   'feedback text is mandatory!': 'Palauteteksti on pakollinen',
   'server error!': 'Palvelin virhe',
   'palvelin virhe!': 'Palvelin virhe',
@@ -24,9 +27,15 @@ type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   console.log('this is logout.tsx');
   const validatedUser = await validateRequest(context.req, context.res);
-  if (validatedUser.user) {
-    await createFeedbackSession(context, validatedUser.user);
+  if (!validatedUser.user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
   }
+  await createFeedbackSession(context, validatedUser.user);
   return {
     props: {},
   };
@@ -36,41 +45,14 @@ export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
-  const [stopRedirect, setStopRedirect] = useState(false);
-  const [isInitialRenderDone, setIsInitialRenderDone] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    logoutUser().catch((e) => {});
-    let redirectTimeout: undefined | NodeJS.Timeout;
-    async function addBeforeUnloadEventListener() {
-      await logoutUser();
-    }
-    function clearEventListeners() {
-      window.removeEventListener('beforeunload', addBeforeUnloadEventListener);
-    }
-
-    if (window && isInitialRenderDone) {
-      window.addEventListener('beforeunload', addBeforeUnloadEventListener);
-    }
-    if (stopRedirect) {
-      return clearTimeout(redirectTimeout);
-    }
-    redirectTimeout = setTimeout(async () => {
-      await logoutUser();
-      clearEventListeners();
-      router.push('/').catch((e) => console.error(e));
-    }, 5000);
-
-    setIsInitialRenderDone(true);
-    return function clearFunctions() {
-      if (isInitialRenderDone) {
-        clearEventListeners();
-      }
-      clearTimeout(redirectTimeout);
-    };
-  }, [stopRedirect, isInitialRenderDone]);
+    logoutUser().catch((e) => {
+      console.error(e);
+    });
+  }, []);
 
   async function logoutUser() {
     try {
@@ -85,15 +67,26 @@ export default function Logout() {
     const errorMessage =
       POSSIBLE_ERRORS[
         handleGeneralError(e).toLowerCase() as KnownFrontEndErrorTexts
-      ] || 'Palauteteksti on virheellinen';
+      ] || 'Palauteteksti tai yksilöintitunnus on virheellinen';
     setErrorText(errorMessage);
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      setStopRedirect(true);
-      const dataToSend: CreateFeedback = { feedbackText: feedbackText };
+      if (feedbackText.length <= 0) {
+        return setErrorText('Palauteteksti on pakollinen!');
+      }
+      const feedbackSessionCookie = Cookies.get('feedback-session');
+
+      if (typeof feedbackSessionCookie !== 'string') {
+        throw new Error('UUID was invalid!');
+      }
+      const dataToSend: CreateFeedback = {
+        feedbackText: feedbackText,
+        uuid: feedbackSessionCookie,
+      };
+
       await axios.post('/api/feedback', dataToSend);
       feedbackSent();
     } catch (e) {
@@ -106,9 +99,8 @@ export default function Logout() {
     setFeedbackText('');
     setIsFeedbackSent(true);
     setTimeout(async () => {
-      await logoutUser();
-      router.push('/').catch((e) => console.error(e));
-    }, 10000);
+      router.push('/login').catch((e) => console.error(e));
+    }, 5000);
   }
 
   if (!isFeedbackSent) {
@@ -141,7 +133,6 @@ export default function Logout() {
                   value={feedbackText}
                   className="border border-black h-32 pl-1 pt-1"
                   onChange={(e) => {
-                    setStopRedirect(true);
                     setFeedbackText(e.currentTarget.value);
                   }}
                 />
