@@ -16,7 +16,8 @@ export const emailSchema = z
   .string()
   .min(1, 'Sähköposti on pakollinen!')
   .max(128, 'Sähköposti on liian pitkä, maksimipituus on 128 merkkiä')
-  .regex(emailRegex, 'Sähköposti on virheellinen');
+  .regex(emailRegex, 'Sähköposti on virheellinen')
+  .transform((value) => value.toLowerCase());
 
 const passwordSchema = z
   .string()
@@ -43,7 +44,7 @@ export const createGiftSchema = z.object({
 export const updateGiftSchema = createGiftSchema;
 
 export const userSchema = z.object({
-  email: emailSchema.transform((value) => value.toLowerCase()),
+  email: emailSchema,
   firstName: firstNameSchema,
   lastName: lastNameSchema,
 });
