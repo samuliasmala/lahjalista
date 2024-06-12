@@ -2,6 +2,7 @@ import { Cookie, TimeSpan } from 'lucia';
 import { GetServerSidePropsContext } from 'next';
 import prisma from '~/prisma';
 import { User } from '~/shared/types';
+
 export async function createFeedbackSession(
   context: GetServerSidePropsContext,
   userData: User,
@@ -48,6 +49,24 @@ export async function createFeedbackSession(
     return context.res.setHeader('Set-cookie', appendableCookie);
   }
 
-  console.log('asd');
   return context.res.writeHead(400).end();
+}
+
+export async function deleteFeedbackSession(feedbackSessionUUID: string) {
+  await prisma.feedbackSession.delete({
+    where: {
+      uuid: feedbackSessionUUID,
+    },
+  });
+  return;
+}
+
+export async function getFeedbackSession(feedbackSessionUUID: string) {
+  const feedbackSession = await prisma.feedbackSession.findFirst({
+    where: {
+      uuid: feedbackSessionUUID,
+    },
+  });
+
+  return feedbackSession;
 }
