@@ -9,19 +9,23 @@ import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
 import { handleAuthErrors } from '~/utils/handleError';
-import { emailRegex, passwordRegex } from '~/shared/regexPatterns';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
+import { formSchema } from '~/shared/zodSchemas';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
+const EMPTY_FORM_DATA = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+};
+
 export default function Register() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState(EMPTY_FORM_DATA);
 
   const [registerError, setRegisterError] = useState('');
 
@@ -35,13 +39,18 @@ export default function Register() {
   async function handleRegister(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
-      if (!isAllFieldsValid()) return;
-      await axios.post('/api/auth/register', {
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        password: password,
-      });
+      const validatedForm = formSchema.safeParse(formData);
+      if (validatedForm.success === false) {
+        setErrors({
+          firstName: validatedForm.error.format().firstName?._errors[0] || '',
+          lastName: validatedForm.error.format().lastName?._errors[0] || '',
+          email: validatedForm.error.format().email?._errors[0] || '',
+          password: validatedForm.error.format().password?._errors[0] || '',
+        });
+        return;
+      }
+      setErrors({});
+      await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
       const errorText = handleAuthErrors(e);
@@ -50,96 +59,12 @@ export default function Register() {
   }
 
   function userCreatedSuccesfully() {
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
+    setFormData(EMPTY_FORM_DATA);
     setRegisterError('');
     setIsUserCreated(true);
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
     }, 1000);
-  }
-
-  function clearAllErrors() {
-    setErrors({});
-  }
-
-  function isAllFieldsValid(): boolean {
-    clearAllErrors();
-    let errorFound = false;
-    if (!isFirstNameValid()) errorFound = true;
-    if (!isLastNameValid()) errorFound = true;
-    if (!isEmailValid()) errorFound = true;
-    if (!isPasswordValid()) errorFound = true;
-
-    return !errorFound;
-  }
-
-  function isFirstNameValid(): boolean {
-    if (firstName.length <= 0) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        firstName: 'Etunimi on pakollinen',
-      }));
-      return false;
-    }
-    return true;
-  }
-
-  function isLastNameValid(): boolean {
-    if (lastName.length <= 0) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        lastName: 'Sukunimi on pakollinen',
-      }));
-      return false;
-    }
-    return true;
-  }
-
-  function isEmailValid(): boolean {
-    if (email.length <= 0) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        email: 'Sähköposti on pakollinen',
-      }));
-      return false;
-    }
-    // this should check with regex that there cannot be multiple dots etc
-    const checkedEmailAddress = email.toLowerCase().match(emailRegex);
-
-    if (!checkedEmailAddress) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        email: 'Virheellinen sähköposti',
-      }));
-      return false;
-    }
-
-    return true;
-  }
-
-  function isPasswordValid(): boolean {
-    if (password.length <= 0) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        password: 'Salasana on pakollinen',
-      }));
-      return false;
-    }
-    // TLDR: 8 merkkiä pitkä, vähintään 1 numero, 1 pieni ja iso kirjain sekä yksi erikoismerkki
-    const checkedPassword = password.match(passwordRegex);
-    if (!checkedPassword) {
-      setErrors((prevValue) => ({
-        ...prevValue,
-        password:
-          'Salasanan täytyy olla vähintään 8 merkkiä pitkä, maksimissaan 128 merkkiä pitkä, sekä sisältää vähintään yksi iso kirjain, yksi pieni kirjain, yksi numero ja yksi erikoismerkki!',
-      }));
-      return false;
-    }
-
-    return true;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -156,11 +81,16 @@ export default function Register() {
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
-              <div className="pt-5 pl-4 pr-4 flex flex-col">
+              <div className="pt-5 pl-4 pr-4 flex flex-col max-w-80">
                 <label>Etunimi</label>
                 <Input
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.currentTarget.value)}
+                  value={formData.firstName}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      firstName: e.currentTarget.value,
+                    });
+                  }}
                   className="border border-black"
                   autoComplete="off"
                   type="text"
@@ -172,8 +102,13 @@ export default function Register() {
 
                 <label className="pt-5">Sukunimi</label>
                 <Input
-                  value={lastName}
-                  onChange={(e) => setLastName(e.currentTarget.value)}
+                  value={formData.lastName}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      lastName: e.currentTarget.value,
+                    });
+                  }}
                   className="border border-black"
                   autoComplete="off"
                   type="text"
@@ -185,8 +120,10 @@ export default function Register() {
 
                 <label className="pt-5">Sähköposti</label>
                 <Input
-                  value={email}
-                  onChange={(e) => setEmail(e.currentTarget.value)}
+                  value={formData.email}
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.currentTarget.value });
+                  }}
                   className="border border-black"
                   autoComplete="off"
                   type="text"
@@ -199,8 +136,13 @@ export default function Register() {
                 <label className="pt-5">Salasana</label>
                 <div className="flex outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
                   <Input
-                    value={password}
-                    onChange={(e) => setPassword(e.currentTarget.value)}
+                    value={formData.password}
+                    onChange={(e) => {
+                      setFormData({
+                        ...formData,
+                        password: e.currentTarget.value,
+                      });
+                    }}
                     className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}

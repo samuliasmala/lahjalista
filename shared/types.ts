@@ -1,4 +1,12 @@
-import { Prisma, Gift as PrismaGift, User as PrismaUser } from '@prisma/client';
+import { z } from 'zod';
+import {
+  createGiftSchema,
+  createSessionSchema,
+  createUserSchema,
+  getUserSchema,
+  giftSchema,
+  userLoginDetailsSchema,
+} from './zodSchemas';
 
 export type {
   Gift as PrismaGift,
@@ -6,27 +14,17 @@ export type {
   Session as PrismaSession,
 } from '@prisma/client';
 
-export type Gift = Omit<PrismaGift, 'id' | 'userUUID'>;
-export type CreateGift = Omit<
-  Prisma.GiftCreateInput,
-  'uuid' | 'createdAt' | 'updatedAt' | 'user'
->;
+// GIFT
+export type Gift = z.infer<typeof giftSchema>;
 
-export type User = Omit<PrismaUser, 'id' | 'password'>;
-export type CreateUser = Omit<
-  Prisma.UserCreateInput,
-  'uuid' | 'createdAt' | 'updatedAt' | 'gift'
->;
+export type CreateGift = z.infer<typeof createGiftSchema>;
 
-export type UserLoginDetails = {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-};
+// USER
+export type User = z.infer<typeof getUserSchema>;
 
-export type CreateSession = Omit<
-  Prisma.SessionCreateInput,
-  'id' | 'expiresAt' | 'userId'
-> & {
-  user: Prisma.UserCreateNestedOneWithoutSessionInput;
-};
+export type CreateUser = z.infer<typeof createUserSchema>;
+
+export type UserLoginDetails = z.infer<typeof userLoginDetailsSchema>;
+
+// SESSION
+export type CreateSession = z.infer<typeof createSessionSchema>;

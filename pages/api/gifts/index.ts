@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateGift, Gift } from '~/shared/types';
+import { Gift } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { validateRequest } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
+import { createGiftSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -67,11 +68,11 @@ async function handlePOST(
   res: NextApiResponse<Gift>,
   userData: LuciaUser,
 ) {
-  const giftData = req.body as CreateGift;
+  const giftData = createGiftSchema.parse(req.body);
+
   const addedGift = await prisma.gift.create({
     data: {
-      gift: giftData.gift,
-      receiver: giftData.receiver,
+      ...giftData,
       userUUID: userData.uuid,
     },
     select: {

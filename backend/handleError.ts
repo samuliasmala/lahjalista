@@ -4,6 +4,7 @@ import {
 } from '@prisma/client/runtime/library';
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
+import { ZodError } from 'zod';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
@@ -27,6 +28,10 @@ export function handleError(res: NextApiResponse, e: unknown) {
 
   if (e instanceof PrismaClientValidationError) {
     return res.status(400).send('Invalid request body!');
+  }
+
+  if (e instanceof ZodError) {
+    return res.status(400).json(e);
   }
 
   console.error(e);

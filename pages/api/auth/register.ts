@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import type { CreateUser } from '~/shared/types';
 import { createUser } from '../users';
+import { createUserSchema } from '~/shared/zodSchemas';
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,17 +13,9 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const { email, firstName, lastName, password } = req.body as CreateUser;
-    if (!email || !firstName || !lastName || !password) {
-      throw new HttpError('Invalid request body!', 400);
-    }
+    const validatedBody = createUserSchema.parse(req.body);
 
-    const userData = await createUser({
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
-    });
+    const userData = await createUser(validatedBody);
 
     const session = await lucia.createSession(userData.uuid, {
       userUUID: userData.uuid,

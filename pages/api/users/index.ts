@@ -3,13 +3,8 @@ import { CreateUser, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { hashPassword } from '~/backend/utils';
-import {
-  isEmailValid,
-  isFirstNameValid,
-  isLastNameValid,
-  isPasswordValid,
-} from '~/shared/isValidFunctions';
 import { HttpError } from '~/backend/HttpError';
+import { createUserSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -54,34 +49,31 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
-  const userDetails = req.body as CreateUser;
+  const { email, firstName, lastName, password } = createUserSchema.parse(
+    req.body,
+  );
 
   const addedUser = await createUser({
-    email: userDetails.email.toLowerCase(),
-    firstName: userDetails.firstName,
-    lastName: userDetails.lastName,
-    password: userDetails.password,
+    email: email.toLowerCase(),
+    firstName: firstName,
+    lastName: lastName,
+    password: password,
   });
 
   return res.status(200).json(addedUser);
 }
 
 export async function createUser(userDetails: CreateUser) {
-  if (
-    !isEmailValid(userDetails.email) ||
-    !isFirstNameValid(userDetails.firstName) ||
-    !isLastNameValid(userDetails.lastName) ||
-    !isPasswordValid(userDetails.password)
-  ) {
-    throw new HttpError('Invalid credentials', 400);
-  }
-  const password = await hashPassword(userDetails.password);
+  const { email, firstName, lastName, password } =
+    createUserSchema.parse(userDetails);
+
+  const hashedPassword = await hashPassword(password);
   const addedUser = await prisma.user.create({
     data: {
-      email: userDetails.email.toLowerCase(),
-      firstName: userDetails.firstName,
-      lastName: userDetails.lastName,
-      password: password,
+      email: email.toLowerCase(),
+      firstName: firstName,
+      lastName: lastName,
+      password: hashedPassword,
     },
     select: {
       uuid: true,

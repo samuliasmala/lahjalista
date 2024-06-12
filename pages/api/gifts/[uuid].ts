@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
+import { updateGiftSchema } from '~/shared/zodSchemas';
 import { validateRequest } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
 
@@ -76,17 +77,14 @@ async function handlePATCH({
   giftUUID,
   userData,
 }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+  const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
       userUUID: userData.uuid,
     },
-    data: {
-      receiver: newGiftData.receiver,
-      gift: newGiftData.gift,
-    },
+    data: giftData,
     select: {
       createdAt: true,
       gift: true,
@@ -105,14 +103,14 @@ async function handlePUT({
   giftUUID,
   userData,
 }: HandlerParams<Gift>) {
-  const newGiftData = req.body as Gift;
+  const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {
       uuid: giftUUID,
       userUUID: userData.uuid,
     },
-    data: newGiftData,
+    data: giftData,
     select: {
       createdAt: true,
       gift: true,
