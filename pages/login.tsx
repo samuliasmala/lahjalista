@@ -10,9 +10,9 @@ import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { isEmailValid } from '~/shared/isValidFunctions';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
+import { emailSchema } from '~/shared/zodSchemas';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -41,20 +41,18 @@ export default function Login() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      if (isEmailValid(email)) {
-        if (password.length <= 0) {
-          return setErrorText('Salasana-kenttä ei voi olla tyhjä!');
-        }
-        const loginCredentials: UserLoginDetails = {
-          email: email,
-          password: password,
-          rememberMe: rememberMe,
-        };
-        await axios.post('/api/auth/login', loginCredentials);
-        await router.push('/');
-      } else {
-        setErrorText('Sähköposti ei ole sääntöjen mukainen!');
+      const emailValidation = emailSchema.safeParse(email);
+      if (emailValidation.success === false) {
+        setErrorText(emailValidation.error.format()._errors[0] || '');
+        return;
       }
+      const loginCredentials: UserLoginDetails = {
+        email: emailValidation.data,
+        password: password,
+        rememberMe: rememberMe,
+      };
+      await axios.post('/api/auth/login', loginCredentials);
+      await router.push('/');
     } catch (e) {
       console.error(e);
       setErrorText(handleAuthErrors(e));
