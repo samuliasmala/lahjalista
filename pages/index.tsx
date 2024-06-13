@@ -258,7 +258,7 @@ function UserDetailModal({
           <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="pt-2 pl-3 pr-3 pb-4">
             <div
-              className="bg-black flex items-center h-9 hover:cursor-pointer group/logout"
+              className="bg-emerald-500 rounded-md flex items-center h-9 hover:cursor-pointer group/logout"
               onClick={() => void handleLogout()}
             >
               <p className="group-hover/logout:text-gray-500 text-white ml-3">
