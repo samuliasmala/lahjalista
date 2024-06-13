@@ -25,7 +25,6 @@ const POSSIBLE_ERRORS = {
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  console.log('this is logout.tsx');
   const validatedUser = await validateRequest(context.req, context.res);
   if (!validatedUser.user) {
     return {
