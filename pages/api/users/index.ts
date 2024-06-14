@@ -41,7 +41,10 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res }: HandlerParams<User[]>) {
+async function handleGET({ res, userData }: HandlerParams<User[]>) {
+  if (userData.role !== 'ADMIN') {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
   const users = await prisma.user.findMany({
     select: {
       uuid: true,
