@@ -42,6 +42,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
       email: true,
       createdAt: true,
       updatedAt: true,
+      role: true,
     },
   });
 
@@ -82,6 +83,7 @@ export async function createUser(userDetails: CreateUser) {
       email: true,
       createdAt: true,
       updatedAt: true,
+      role: true,
     },
   });
   return addedUser;

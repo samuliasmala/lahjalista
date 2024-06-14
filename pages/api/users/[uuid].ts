@@ -53,6 +53,7 @@ async function handleGET({ res, userUUID }: HandlerParams<User>) {
       email: true,
       createdAt: true,
       updatedAt: true,
+      role: true,
     },
   });
   return res.status(200).json(user);
@@ -77,6 +78,7 @@ async function handlePATCH({ req, res, userUUID }: HandlerParams<User>) {
       email: true,
       createdAt: true,
       updatedAt: true,
+      role: true,
     },
   });
   return res.status(200).json(updatedUser);
@@ -101,6 +103,7 @@ async function handlePUT({ req, res, userUUID }: HandlerParams<User>) {
       email: true,
       createdAt: true,
       updatedAt: true,
+      role: true,
     },
   });
 
