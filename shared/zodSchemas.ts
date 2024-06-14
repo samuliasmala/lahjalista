@@ -53,6 +53,7 @@ export const getUserSchema = userSchema.extend({
   createdAt: z.date(),
   updatedAt: z.date(),
   uuid: z.string(),
+  role: z.string(),
 });
 
 export const createUserSchema = userSchema.extend({
