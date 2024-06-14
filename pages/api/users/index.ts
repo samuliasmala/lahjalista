@@ -6,10 +6,13 @@ import { hashPassword } from '~/backend/utils';
 import { HttpError } from '~/backend/HttpError';
 import { createUserSchema } from '~/shared/zodSchemas';
 
-const HANDLER: Record<
-  string,
-  (req: NextApiRequest, res: NextApiResponse) => Promise<void>
-> = {
+type HandlerParams<ResponseType = unknown> = {
+  req: NextApiRequest;
+  res: NextApiResponse<ResponseType>;
+  userData: User;
+};
+
+const HANDLER: Record<string, (params: HandlerParams) => Promise<void>> = {
   GET: handleGET,
   POST: handlePOST,
 };
@@ -21,7 +24,7 @@ export default async function handlePrisma(
   try {
     const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
-      await reqHandler(req, res);
+      await reqHandler({ req, res, userData });
     } else {
       throw new HttpError(
         `${req.method} is not a valid method. Only GET and POST requests are valid!`,
@@ -33,7 +36,7 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
+async function handleGET({ res }: HandlerParams<User[]>) {
   const users = await prisma.user.findMany({
     select: {
       uuid: true,
@@ -49,7 +52,7 @@ async function handleGET(req: NextApiRequest, res: NextApiResponse<User[]>) {
   return res.status(200).json(users);
 }
 
-async function handlePOST(req: NextApiRequest, res: NextApiResponse<User>) {
+async function handlePOST({ req, res }: HandlerParams<User>) {
   const { email, firstName, lastName, password } = createUserSchema.parse(
     req.body,
   );
