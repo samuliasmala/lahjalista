@@ -4,11 +4,12 @@ import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
 import { updateUserSchema } from '~/shared/zodSchemas';
+import { validateRequest } from '~/backend/auth';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
   res: NextApiResponse<ResponseType>;
-  userUUID: string;
+  userData: User;
 };
 
 const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
@@ -23,13 +24,16 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
+    const validationRequest = await validateRequest(req, res);
+    if (!validationRequest.session || !validationRequest.user) {
+      throw new HttpError('You are unauthorized!', 401);
+    }
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
       if (typeof req.query.uuid !== 'string') {
         throw new HttpError('Invalid ID', 400);
       }
-      const userUUID = req.query.uuid;
-      await reqHandler({ req, res, userUUID });
+      await reqHandler({ req, res, userData: validationRequest.user });
     } else {
       throw new HttpError(
         `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
@@ -41,10 +45,10 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, userUUID }: HandlerParams<User>) {
+async function handleGET({ res, userData }: HandlerParams<User>) {
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      uuid: userUUID,
+      uuid: userData.uuid,
     },
     select: {
       uuid: true,
@@ -59,18 +63,18 @@ async function handleGET({ res, userUUID }: HandlerParams<User>) {
   return res.status(200).json(user);
 }
 
-async function handlePATCH({ req, res, userUUID }: HandlerParams<User>) {
-  const userData = updateUserSchema.safeParse(req.body);
+async function handlePATCH({ req, res, userData }: HandlerParams<User>) {
+  const updatedUserData = updateUserSchema.safeParse(req.body);
 
-  if (!userData.success) {
+  if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
 
   const updatedUser = await prisma.user.update({
     where: {
-      uuid: userUUID,
+      uuid: userData.uuid,
     },
-    data: userData.data,
+    data: updatedUserData,
     select: {
       uuid: true,
       firstName: true,
@@ -84,18 +88,18 @@ async function handlePATCH({ req, res, userUUID }: HandlerParams<User>) {
   return res.status(200).json(updatedUser);
 }
 
-async function handlePUT({ req, res, userUUID }: HandlerParams<User>) {
-  const userData = updateUserSchema.safeParse(req.body);
+async function handlePUT({ req, res, userData }: HandlerParams<User>) {
+  const updatedUserData = updateUserSchema.safeParse(req.body);
 
-  if (!userData.success) {
+  if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
 
   const updatedUser = await prisma.user.update({
     where: {
-      uuid: userUUID,
+      uuid: userData.uuid,
     },
-    data: userData.data,
+    data: updatedUserData.data,
     select: {
       uuid: true,
       firstName: true,
@@ -110,10 +114,10 @@ async function handlePUT({ req, res, userUUID }: HandlerParams<User>) {
   return res.status(200).json(updatedUser);
 }
 
-async function handleDELETE({ res, userUUID }: HandlerParams) {
+async function handleDELETE({ res, userData }: HandlerParams) {
   await prisma.user.delete({
     where: {
-      uuid: userUUID,
+      uuid: userData.uuid,
     },
   });
 
