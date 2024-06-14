@@ -5,6 +5,7 @@ import { handleError } from '~/backend/handleError';
 import { hashPassword } from '~/backend/utils';
 import { HttpError } from '~/backend/HttpError';
 import { createUserSchema } from '~/shared/zodSchemas';
+import { validateRequest } from '~/backend/auth';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -22,9 +23,13 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
+    const validationRequest = await validateRequest(req, res);
+    if (!validationRequest.session || !validationRequest.user) {
+      throw new HttpError('You are unauthorized!', 401);
+    }
     const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
-      await reqHandler({ req, res, userData });
+      await reqHandler({ req, res, userData: validationRequest.user });
     } else {
       throw new HttpError(
         `${req.method} is not a valid method. Only GET and POST requests are valid!`,
