@@ -5,6 +5,9 @@ import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
 import { updateUserSchema } from '~/shared/zodSchemas';
 import { validateRequest } from '~/backend/auth';
+import { Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
+import { z } from 'zod';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -30,9 +33,6 @@ export default async function handlePrisma(
     }
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      if (typeof req.query.uuid !== 'string') {
-        throw new HttpError('Invalid ID', 400);
-      }
       await reqHandler({ req, res, userData: validationRequest.user });
     } else {
       throw new HttpError(
@@ -45,11 +45,25 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, userData }: HandlerParams<User>) {
+async function handleGET({ req, res, userData }: HandlerParams<User>) {
+  const queryUUID = z.string().safeParse(req.query.uuid);
+  if (!queryUUID.success) {
+    throw new HttpError('Invalid UUID! It should be given as a string!', 400);
+  }
+  const isAdminSearchingSpecificUser =
+    queryUUID.data !== userData.uuid && userData.role === 'ADMIN';
+
+  // uuid value inside databaseSearchParameter variable is just to be a placeholder value
+  // that removes following error: Type '{}' is not assignable to type 'UserWhereUniqueInput'.
+  const databaseSearchParameter: Prisma.UserWhereUniqueInput = { uuid: '' };
+  if (isAdminSearchingSpecificUser) {
+    databaseSearchParameter.uuid = queryUUID.data;
+  } else {
+    databaseSearchParameter.uuid = userData.uuid;
+  }
+
   const user = await prisma.user.findUniqueOrThrow({
-    where: {
-      uuid: userData.uuid,
-    },
+    where: databaseSearchParameter,
     select: {
       uuid: true,
       firstName: true,
