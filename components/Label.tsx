@@ -1,17 +1,12 @@
 import { LabelHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { jost } from '~/utils/fonts';
 
 export function Label({
   className,
   ...rest
-}: LabelHTMLAttributes<HTMLInputElement>) {
+}: LabelHTMLAttributes<HTMLLabelElement>) {
   return (
-    <input
-      className={twMerge(
-        'ps-1 pt-3 pb-3 border border-lines hover:bg-gray-100 rounded-md',
-        className,
-      )}
-      {...rest}
-    />
+    <label className={twMerge(`${jost.className}`, className)} {...rest} />
   );
 }
