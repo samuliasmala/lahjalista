@@ -130,7 +130,7 @@ export default function Login() {
               <Button type="submit">Kirjaudu</Button>
             </form>
             <p className="mt-6 text-xs text-gray-600 text-center">
-              Ei ole vielä tunnuksia?{' '}
+              Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
                 className="underline cursor-pointer hover:text-blue-500"
