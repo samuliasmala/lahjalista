@@ -162,7 +162,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.password} />
 
                 <Button className="select-none">Luo käyttäjätunnus</Button>
-                <p className="select-none pt-6 text-xs text-gray-600">
+                <p className="select-none pt-3 text-xs text-gray-600 text-center">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
