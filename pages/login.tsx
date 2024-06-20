@@ -77,7 +77,9 @@ export default function Login() {
           <div className="mt-5 flex flex-col">
             <Logo />
             <form onSubmit={(e) => void handleSubmit(e)}>
-              <TitleText className={`text-center ${libre_bodoni.className}`}>
+              <TitleText
+                className={`text-center ${libre_bodoni.className} pb-12`}
+              >
                 Kirjaudu sisään
               </TitleText>
               <div className="mt-5 flex flex-col">
