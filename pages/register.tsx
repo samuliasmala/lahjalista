@@ -70,7 +70,7 @@ export default function Register() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="bg-orange-50 w-full max-w-full h-screen">
+    <main className="bg-bgPage w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
