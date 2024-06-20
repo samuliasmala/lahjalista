@@ -74,13 +74,13 @@ export default function Login() {
           </div>
         ) : null}
         <div className="w-full flex justify-center">
-          <div className="mt-5 flex flex-col">
+          <div className="pt-5 flex flex-col">
             <Logo />
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className={`text-center ${libre_bodoni.className}`}>
                 Kirjaudu sisään
               </TitleText>
-              <div className="mt-5 flex flex-col">
+              <div className="pt-12 flex flex-col">
                 <Label>Sähköposti</Label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
@@ -93,13 +93,13 @@ export default function Login() {
                   spellCheck="false"
                 />
               </div>
-              <div className="mt-5 flex flex-col">
+              <div className="pt-6 flex flex-col">
                 <Label>Salasana</Label>
                 <div className="flex rounded-md outline outline-1 border-black bg-white hover:bg-primaryLight has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
-                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-primaryLight"
+                    className="border-0 outline-none group-hover/password:bg-primaryLight"
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
@@ -115,7 +115,7 @@ export default function Login() {
                   </div>
                 </div>
               </div>
-              <div className="flex mt-3 align-middle">
+              <div className="flex pt-4 align-middle">
                 <Label
                   className={`select-none cursor-pointer flex ${jost.className}`}
                 >
