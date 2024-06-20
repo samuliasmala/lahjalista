@@ -12,6 +12,7 @@ import { handleAuthErrors } from '~/utils/handleError';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
+import { Label } from '~/components/Label';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -70,7 +71,7 @@ export default function Register() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="bg-bgPage w-full max-w-full h-screen">
+    <main className="w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
@@ -82,7 +83,7 @@ export default function Register() {
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
               <div className="pt-5 pl-4 pr-4 flex flex-col max-w-80">
-                <label>Etunimi</label>
+                <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
                   onChange={(e) => {
@@ -100,7 +101,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.firstName} />
 
-                <label className="pt-5">Sukunimi</label>
+                <Label className="pt-5">Sukunimi</Label>
                 <Input
                   value={formData.lastName}
                   onChange={(e) => {
@@ -118,7 +119,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.lastName} />
 
-                <label className="pt-5">Sähköposti</label>
+                <Label className="pt-5">Sähköposti</Label>
                 <Input
                   value={formData.email}
                   onChange={(e) => {
@@ -133,7 +134,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.email} />
 
-                <label className="pt-5">Salasana</label>
+                <Label className="pt-5">Salasana</Label>
                 <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
                   <Input
                     value={formData.password}
