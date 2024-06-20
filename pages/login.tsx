@@ -77,9 +77,7 @@ export default function Login() {
           <div className="pt-5 flex flex-col">
             <Logo />
             <form onSubmit={(e) => void handleSubmit(e)}>
-              <TitleText className={`text-center ${libre_bodoni.className}`}>
-                Kirjaudu sisään
-              </TitleText>
+              <TitleText>Kirjaudu sisään</TitleText>
               <div className="pt-12 flex flex-col">
                 <Label>Sähköposti</Label>
                 <Input
