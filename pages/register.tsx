@@ -81,7 +81,7 @@ export default function Register() {
               </div>
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
-              <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
+              <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="pt-5 pl-4 pr-4 flex flex-col max-w-80">
                 <Label>Etunimi</Label>
                 <Input
