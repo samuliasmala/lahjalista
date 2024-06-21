@@ -13,7 +13,7 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
-import { jost, libre_bodoni, roboto_mono } from '~/utils/fonts';
+import { jost } from '~/utils/fonts';
 import { Label } from '~/components/Label';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
