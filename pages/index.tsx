@@ -13,6 +13,7 @@ import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
+import SvgTrashCan from '~/icons/trash_can';
 
 export { getServerSideProps };
 
@@ -99,7 +100,7 @@ export default function Home({
   return (
     <main className="bg-orange-50 w-full max-w-full h-screen">
       <div className="justify-center flex">
-        <div className="bg-primaryLight sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
+        <div className="bg-primaryLight sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-96 w-full relative">
           <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
             width={32}
@@ -117,8 +118,8 @@ export default function Home({
       <div className="justify-center grid">
         <div className="mt-5 pl-8 pr-8">
           <form onSubmit={(e) => void handleSubmit(e)}>
-            <TitleText className="select-none">Uusi idea</TitleText>
-            <div className="pt-4 grid">
+            <TitleText className="select-none text-start">Uusi idea</TitleText>
+            <div className="pt-6 grid">
               <label htmlFor="giftName" className="select-none">
                 Lahja
               </label>
@@ -150,73 +151,74 @@ export default function Home({
                 <div className="text-red-500">Lahjansaaja on pakollinen</div>
               )}
             </div>
-            <Button type="submit">Lisää</Button>
+            <Button type="submit" className="mt-8">
+              Lisää
+            </Button>
           </form>
         </div>
         {giftData.length > 0 && (
-          <div className="pl-8 pr-8 mt-3 w-full max-w-xl">
-            <TitleText>Lahjaideat</TitleText>
-            <div>
-              {giftData.map((giftItem) => (
-                <div
-                  key={`${giftItem.uuid}_divbutton`}
-                  className="animate-opacity"
-                >
-                  <li
-                    key={giftItem.uuid}
-                    className="[overflow-wrap:anywhere] hover-target"
-                  >
-                    {giftItem.gift} - {giftItem.receiver}
+          <div className="pl-8 pr-8 pt-7 sm:max-w-96">
+            <TitleText className="text-start">Lahjaideat</TitleText>
+            {giftData.map((giftItem) => (
+              <div
+                key={`${giftItem.uuid}_divbutton`}
+                className="animate-opacity pt-4 "
+              >
+                <div key={giftItem.uuid} className="grid justify-start">
+                  <p className="col-start-1 [overflow-wrap: anywhere]">
+                    {giftItem.gift} <span className="font-bold">––</span>{' '}
+                    {giftItem.receiver}
+                  </p>
+                  <div className="col-start-2 pl-3">
                     <SvgPencilEdit
-                      key={`${giftItem.uuid}_deletebutton`}
-                      className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
-                      onClick={() => {
-                        setDeleteModalGiftData(giftItem);
-                        setIsDeleteModalOpen(true);
-                      }}
-                      type="button"
-                    />
-                    <Button
                       key={`${giftItem.uuid}_editbutton`}
-                      className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
+                      className="w-6 h-6 align-middle hover:cursor-pointer"
                       onClick={() => {
                         setEditModalGiftData(giftItem);
                         setIsEditModalOpen(true);
                       }}
                       type="button"
-                    >
-                      Muokkaa
-                    </Button>
-                  </li>
-                </div>
-              ))}
-              {isEditModalOpen && editModalGiftData && (
-                <EditModal
-                  gift={editModalGiftData}
-                  refreshGiftList={() => void refreshGiftList()}
-                  setIsModalOpen={setIsEditModalOpen}
-                />
-              )}
-
-              {isDeleteModalOpen && deleteModalGiftData && (
-                <DeleteModal
-                  gift={deleteModalGiftData}
-                  refreshGiftList={() => void refreshGiftList()}
-                  setIsModalOpen={setIsDeleteModalOpen}
-                />
-              )}
-
-              {isAnyKindOfError && (
-                <>
-                  <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
-                    <div className="bg-red-600 text-center p-10 z-[99] w-full" />
-                    <span className="animate-bounce fixed z-[99] text-5xl">
-                      {isAnyKindOfErrorMessage}
-                    </span>
+                    />
                   </div>
-                </>
-              )}
-            </div>
+                  <div className="col-start-3 pl-3">
+                    <SvgTrashCan
+                      key={`${giftItem.uuid}_deletebutton`}
+                      className="w-6 h-6 align-middle hover:cursor-pointer "
+                      onClick={() => {
+                        setDeleteModalGiftData(giftItem);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            {isEditModalOpen && editModalGiftData && (
+              <EditModal
+                gift={editModalGiftData}
+                refreshGiftList={() => void refreshGiftList()}
+                setIsModalOpen={setIsEditModalOpen}
+              />
+            )}
+
+            {isDeleteModalOpen && deleteModalGiftData && (
+              <DeleteModal
+                gift={deleteModalGiftData}
+                refreshGiftList={() => void refreshGiftList()}
+                setIsModalOpen={setIsDeleteModalOpen}
+              />
+            )}
+
+            {isAnyKindOfError && (
+              <>
+                <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
+                  <div className="bg-red-600 text-center p-10 z-[99] w-full" />
+                  <span className="animate-bounce fixed z-[99] text-5xl">
+                    {isAnyKindOfErrorMessage}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
