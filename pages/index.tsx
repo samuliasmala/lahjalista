@@ -103,9 +103,9 @@ export default function Home({
         <div className="bg-primaryLight sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-96 w-full relative">
           <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
-            width={32}
-            height={32}
-            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} z-[98]`}
+            width={24}
+            height={24}
+            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} mr-4 z-[98]`}
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           <UserDetailModal
@@ -171,7 +171,9 @@ export default function Home({
                   </p>
                   <SvgPencilEdit
                     key={`${giftItem.uuid}_editbutton`}
-                    className="w-6 h-6 col-start-2 row-start-1 mr-8 align-middle hover:cursor-pointer trigger-underline justify-self-end"
+                    width={24}
+                    height={24}
+                    className="col-start-2 row-start-1 mr-8 align-middle hover:cursor-pointer trigger-underline justify-self-end"
                     onClick={() => {
                       setEditModalGiftData(giftItem);
                       setIsEditModalOpen(true);
@@ -180,7 +182,9 @@ export default function Home({
 
                   <SvgTrashCan
                     key={`${giftItem.uuid}_deletebutton`}
-                    className="w-6 h-6 col-start-2 row-start-1 align-middle hover:cursor-pointer trigger-line-through justify-self-end"
+                    width={24}
+                    height={24}
+                    className="col-start-2 row-start-1 align-middle hover:cursor-pointer trigger-line-through justify-self-end"
                     onClick={() => {
                       setDeleteModalGiftData(giftItem);
                       setIsDeleteModalOpen(true);
