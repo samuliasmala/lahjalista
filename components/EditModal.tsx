@@ -11,9 +11,9 @@ import { TitleText } from './TitleText';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
-import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
-import { SvgDeclineIcon } from '~/icons/decline_mark_icon';
 import { handleGiftError } from '~/utils/handleError';
+import { jost } from '~/utils/fonts';
+import SvgXClose from '~/icons/x_close';
 
 type EditModal = {
   gift: Gift;
@@ -54,53 +54,46 @@ export function EditModal({
   return (
     <Modal className="sm:w-[26rem]">
       <form onSubmit={(e) => void handleEdit(e)}>
-        <TitleText className="row-start-1 row-end-1 ps-3 font-bold text-lg">
-          Muokkaus
-        </TitleText>
-        <div className="row-start-2 row-end-2 grid mt-1 pt-3">
-          <label className="row-start-1 row-end-1">Saaja</label>
-          <Input
-            className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold"
-            onChange={(e) => setGiftReceiver(e.target.value)}
-            value={giftReceiver}
-            autoComplete="off"
+        <div className="flex flex-row">
+          <TitleText className={`font-medium text-lg p-6 ${jost.className}`}>
+            Muokkaa lahjaideaa
+          </TitleText>
+          <SvgXClose
+            width={24}
+            height={24}
+            className="self-center justify-items-end w-full"
           />
         </div>
-        <div className="row-start-3 row-end-3 grid pt-3">
-          <label className="row-start-1 row-end-1">Lahja</label>
+        <div className="">
+          <label className="">Lahja</label>
           <Input
-            className="row-start-2 row-end-2 ps-3 pt-5 text-lg w-full h-full font-bold border"
+            className="ps-3 pt-5 text-lg w-full h-full font-bold border"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
             autoComplete="off"
           />
         </div>
-        <div className="row-start-4 row-end-4 grid">
+        <div className="mt-1 pt-3">
+          <label className="">Saaja</label>
+          <Input
+            className="ps-3 pt-5 text-lg w-full h-full font-bold"
+            onChange={(e) => setGiftReceiver(e.target.value)}
+            value={giftReceiver}
+            autoComplete="off"
+          />
+        </div>
+        <div className="flex flex-row justify-end ">
           <Button
-            className="relative mt-2 left-24 border border-yellow-500 p-0 row-start-1 row-end-1 col-start-1 col-end-1 w-[66px] h-[66px] "
-            type="submit"
-          >
-            <SvgCheckMarkIcon
-              width={64}
-              height={64}
-              className="bg-gray-300 hover:bg-gray-600 group/checkMarkIcon"
-              circleClassName="fill-black group-hover/checkMarkIcon:fill-yellow-400 "
-              checkMarkClassName="fill-gray-300 group-hover/checkMarkIcon:fill-gray-600"
-            />
-          </Button>
-
-          <Button
-            className="mt-2 border border-yellow-500 relative p-0 row-start-1 row-end-1 col-start-2 col-end-2 w-[66px] h-[66px]"
+            className="w-20 h-8 p-0 bg-white text-black"
+            onClick={() => setIsModalOpen(false)}
             type="button"
           >
-            <SvgDeclineIcon
-              className="bg-gray-300 hover:bg-gray-600 group/declineIcon"
-              circleClassName="fill-black group-hover/declineIcon:fill-yellow-400"
-              width={64}
-              height={64}
-              onClick={() => setIsModalOpen(false)}
-            />
+            Peruuta
+          </Button>
+
+          <Button className="ml-6 w-20 h-8 p-0 m-6" type="submit">
+            Tallenna
           </Button>
         </div>
       </form>
