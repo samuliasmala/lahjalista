@@ -164,14 +164,14 @@ export default function Home({
                 key={`${giftItem.uuid}_divbutton`}
                 className="animate-opacity pt-4 "
               >
-                <div key={giftItem.uuid} className="grid justify-start">
+                <div key={giftItem.uuid} className="grid">
                   <p className="col-start-1 [overflow-wrap: anywhere] hover-target">
                     {giftItem.gift} <span className="font-bold">––</span>{' '}
                     {giftItem.receiver}
                   </p>
                   <SvgPencilEdit
                     key={`${giftItem.uuid}_editbutton`}
-                    className="w-6 h-6 col-start-2 ml-3 trigger-underline align-middle hover:cursor-pointer trigger-underline"
+                    className="w-6 h-6 col-start-2 row-start-1 mr-8 align-middle hover:cursor-pointer trigger-underline justify-self-end"
                     onClick={() => {
                       setEditModalGiftData(giftItem);
                       setIsEditModalOpen(true);
@@ -180,7 +180,7 @@ export default function Home({
 
                   <SvgTrashCan
                     key={`${giftItem.uuid}_deletebutton`}
-                    className="w-6 h-6 col-start-3 ml-3 align-middle hover:cursor-pointer trigger-line-through"
+                    className="w-6 h-6 col-start-2 row-start-1 align-middle hover:cursor-pointer trigger-line-through justify-self-end"
                     onClick={() => {
                       setDeleteModalGiftData(giftItem);
                       setIsDeleteModalOpen(true);
