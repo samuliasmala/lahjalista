@@ -98,7 +98,7 @@ export default function Home({
   return (
     <main className="bg-orange-50 w-full max-w-full h-screen">
       <div className="justify-center flex">
-        <div className="bg-rose-200 sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
+        <div className="bg-primaryLight sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-72 w-full relative">
           <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
             width={32}
@@ -152,72 +152,74 @@ export default function Home({
             <Button type="submit">Lisää</Button>
           </form>
         </div>
-        <div className="pl-8 pr-8 mt-3 w-full max-w-xl">
-          <TitleText>Lahjaideat</TitleText>
-          <div>
-            {giftData.map((giftItem) => (
-              <div
-                key={`${giftItem.uuid}_divbutton`}
-                className="animate-opacity"
-              >
-                <li
-                  key={giftItem.uuid}
-                  className="[overflow-wrap:anywhere] hover-target"
+        {giftData.length > 0 && (
+          <div className="pl-8 pr-8 mt-3 w-full max-w-xl">
+            <TitleText>Lahjaideat</TitleText>
+            <div>
+              {giftData.map((giftItem) => (
+                <div
+                  key={`${giftItem.uuid}_divbutton`}
+                  className="animate-opacity"
                 >
-                  {giftItem.gift} - {giftItem.receiver}
-                </li>
-                <Button
-                  key={`${giftItem.uuid}_deletebutton`}
-                  className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
-                  onClick={() => {
-                    setDeleteModalGiftData(giftItem);
-                    setIsDeleteModalOpen(true);
-                  }}
-                  type="button"
-                >
-                  Poista
-                </Button>
-                <Button
-                  key={`${giftItem.uuid}_editbutton`}
-                  className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
-                  onClick={() => {
-                    setEditModalGiftData(giftItem);
-                    setIsEditModalOpen(true);
-                  }}
-                  type="button"
-                >
-                  Muokkaa
-                </Button>
-              </div>
-            ))}
-            {isEditModalOpen && editModalGiftData && (
-              <EditModal
-                gift={editModalGiftData}
-                refreshGiftList={() => void refreshGiftList()}
-                setIsModalOpen={setIsEditModalOpen}
-              />
-            )}
-
-            {isDeleteModalOpen && deleteModalGiftData && (
-              <DeleteModal
-                gift={deleteModalGiftData}
-                refreshGiftList={() => void refreshGiftList()}
-                setIsModalOpen={setIsDeleteModalOpen}
-              />
-            )}
-
-            {isAnyKindOfError && (
-              <>
-                <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
-                  <div className="bg-red-600 text-center p-10 z-[99] w-full" />
-                  <span className="animate-bounce fixed z-[99] text-5xl">
-                    {isAnyKindOfErrorMessage}
-                  </span>
+                  <li
+                    key={giftItem.uuid}
+                    className="[overflow-wrap:anywhere] hover-target"
+                  >
+                    {giftItem.gift} - {giftItem.receiver}
+                  </li>
+                  <Button
+                    key={`${giftItem.uuid}_deletebutton`}
+                    className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
+                    onClick={() => {
+                      setDeleteModalGiftData(giftItem);
+                      setIsDeleteModalOpen(true);
+                    }}
+                    type="button"
+                  >
+                    Poista
+                  </Button>
+                  <Button
+                    key={`${giftItem.uuid}_editbutton`}
+                    className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
+                    onClick={() => {
+                      setEditModalGiftData(giftItem);
+                      setIsEditModalOpen(true);
+                    }}
+                    type="button"
+                  >
+                    Muokkaa
+                  </Button>
                 </div>
-              </>
-            )}
+              ))}
+              {isEditModalOpen && editModalGiftData && (
+                <EditModal
+                  gift={editModalGiftData}
+                  refreshGiftList={() => void refreshGiftList()}
+                  setIsModalOpen={setIsEditModalOpen}
+                />
+              )}
+
+              {isDeleteModalOpen && deleteModalGiftData && (
+                <DeleteModal
+                  gift={deleteModalGiftData}
+                  refreshGiftList={() => void refreshGiftList()}
+                  setIsModalOpen={setIsDeleteModalOpen}
+                />
+              )}
+
+              {isAnyKindOfError && (
+                <>
+                  <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
+                    <div className="bg-red-600 text-center p-10 z-[99] w-full" />
+                    <span className="animate-bounce fixed z-[99] text-5xl">
+                      {isAnyKindOfErrorMessage}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </main>
   );
