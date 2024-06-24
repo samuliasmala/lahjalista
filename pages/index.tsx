@@ -165,31 +165,27 @@ export default function Home({
                 className="animate-opacity pt-4 "
               >
                 <div key={giftItem.uuid} className="grid justify-start">
-                  <p className="col-start-1 [overflow-wrap: anywhere]">
+                  <p className="col-start-1 [overflow-wrap: anywhere] hover-target">
                     {giftItem.gift} <span className="font-bold">––</span>{' '}
                     {giftItem.receiver}
                   </p>
-                  <div className="col-start-2 pl-3">
-                    <SvgPencilEdit
-                      key={`${giftItem.uuid}_editbutton`}
-                      className="w-6 h-6 align-middle hover:cursor-pointer"
-                      onClick={() => {
-                        setEditModalGiftData(giftItem);
-                        setIsEditModalOpen(true);
-                      }}
-                      type="button"
-                    />
-                  </div>
-                  <div className="col-start-3 pl-3">
-                    <SvgTrashCan
-                      key={`${giftItem.uuid}_deletebutton`}
-                      className="w-6 h-6 align-middle hover:cursor-pointer "
-                      onClick={() => {
-                        setDeleteModalGiftData(giftItem);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    />
-                  </div>
+                  <SvgPencilEdit
+                    key={`${giftItem.uuid}_editbutton`}
+                    className="w-6 h-6 col-start-2 ml-3 trigger-underline align-middle hover:cursor-pointer trigger-underline"
+                    onClick={() => {
+                      setEditModalGiftData(giftItem);
+                      setIsEditModalOpen(true);
+                    }}
+                  />
+
+                  <SvgTrashCan
+                    key={`${giftItem.uuid}_deletebutton`}
+                    className="w-6 h-6 col-start-3 ml-3 align-middle hover:cursor-pointer trigger-line-through"
+                    onClick={() => {
+                      setDeleteModalGiftData(giftItem);
+                      setIsDeleteModalOpen(true);
+                    }}
+                  />
                 </div>
               </div>
             ))}
