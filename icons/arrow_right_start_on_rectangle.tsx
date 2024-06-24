@@ -1,12 +1,11 @@
 import type { SVGProps } from 'react';
-
 const SvgArrowRightStartOnRectangle = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     stroke="currentColor"
     strokeWidth={1.5}
-    className="arrow-right-start-on-rectangle_svg__w-6 arrow-right-start-on-rectangle_svg__h-6"
+    className="arrow_right_start_on_rectangle_svg__w-6 arrow_right_start_on_rectangle_svg__h-6"
     viewBox="0 0 24 24"
     {...props}
   >

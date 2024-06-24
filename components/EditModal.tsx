@@ -11,8 +11,8 @@ import { TitleText } from './TitleText';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
-import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import { SvgDeclineIcon } from '~/icons/DeclineIcon';
+import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
+import { SvgDeclineIcon } from '~/icons/decline_mark_icon';
 import { handleGiftError } from '~/utils/handleError';
 
 type EditModal = {
