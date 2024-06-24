@@ -12,6 +12,7 @@ import axios from 'axios';
 import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
+import SvgPencilEdit from '~/icons/pencil_edit';
 
 export { getServerSideProps };
 
@@ -166,29 +167,27 @@ export default function Home({
                     className="[overflow-wrap:anywhere] hover-target"
                   >
                     {giftItem.gift} - {giftItem.receiver}
+                    <SvgPencilEdit
+                      key={`${giftItem.uuid}_deletebutton`}
+                      className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
+                      onClick={() => {
+                        setDeleteModalGiftData(giftItem);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      type="button"
+                    />
+                    <Button
+                      key={`${giftItem.uuid}_editbutton`}
+                      className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
+                      onClick={() => {
+                        setEditModalGiftData(giftItem);
+                        setIsEditModalOpen(true);
+                      }}
+                      type="button"
+                    >
+                      Muokkaa
+                    </Button>
                   </li>
-                  <Button
-                    key={`${giftItem.uuid}_deletebutton`}
-                    className="m-3 p-0 w-16 h-8 hover:text-red-600 pointer-events-auto trigger-line-through"
-                    onClick={() => {
-                      setDeleteModalGiftData(giftItem);
-                      setIsDeleteModalOpen(true);
-                    }}
-                    type="button"
-                  >
-                    Poista
-                  </Button>
-                  <Button
-                    key={`${giftItem.uuid}_editbutton`}
-                    className="m-3 ml-0 p-0 w-20 h-8 hover:text-yellow-400 trigger-underline"
-                    onClick={() => {
-                      setEditModalGiftData(giftItem);
-                      setIsEditModalOpen(true);
-                    }}
-                    type="button"
-                  >
-                    Muokkaa
-                  </Button>
                 </div>
               ))}
               {isEditModalOpen && editModalGiftData && (
