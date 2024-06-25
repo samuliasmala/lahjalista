@@ -52,9 +52,9 @@ export function EditModal({
     setIsModalOpen(false);
   }
   return (
-    <Modal className="w-80 h-80">
+    <Modal className="max-w-80 max-h-80">
       <form onSubmit={(e) => void handleEdit(e)}>
-        <div className="flex flex-row">
+        <div className="flex flex-row justify-between">
           <TitleText className={`font-medium text-lg p-6 ${jost.className}`}>
             Muokkaa lahjaideaa
           </TitleText>
@@ -62,15 +62,15 @@ export function EditModal({
           <SvgXClose
             width={24}
             height={24}
-            className="self-center hover:cursor-pointer"
+            className="self-center hover:cursor-pointer mr-6 "
             onClick={() => setIsModalOpen(false)}
           />
         </div>
         {/* CHECK THIS, liian monta div-wrapperia?*/}
-        <div className="p-6 pt-0 flex flex-col">
+        <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
-            className="text-lg font-bold border"
+            className="pt-2.5 pb-2.5 text-lg font-bold"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
@@ -78,21 +78,21 @@ export function EditModal({
           />
           <label className="pt-4 pb-1">Saaja</label>
           <Input
-            className="text-lg font-bold"
+            className="pt-2.5 pb-2.5 text-lg font-bold"
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
           />
-          <div className="flex flex-row justify-end pt-8">
+          <div className="flex flex-row justify-end items-center mt-5">
             <Button
-              className="w-20 h-8 p-0 bg-white text-black"
+              className="mt-0 w-20 h-8 p-0 bg-white text-black"
               onClick={() => setIsModalOpen(false)}
               type="button"
             >
               Peruuta
             </Button>
 
-            <Button className="ml-6 w-20 h-8 p-0 mr-6" type="submit">
+            <Button className="ml-6 mr-6 mt-0 w-20 h-8 p-0" type="submit">
               Tallenna
             </Button>
           </div>
