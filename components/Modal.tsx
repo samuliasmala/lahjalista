@@ -15,7 +15,7 @@ export function Modal({
       <div className="absolute z-[99] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
         <div
           className={twMerge(
-            'grid w-96 sm:w-96 bg-bgForms border border-lines rounded-md',
+            'grid w-96 bg-bgForms border border-lines rounded-md',
             className,
           )}
         >

@@ -52,49 +52,50 @@ export function EditModal({
     setIsModalOpen(false);
   }
   return (
-    <Modal className="sm:w-[26rem]">
+    <Modal className="w-80 h-80">
       <form onSubmit={(e) => void handleEdit(e)}>
         <div className="flex flex-row">
           <TitleText className={`font-medium text-lg p-6 ${jost.className}`}>
             Muokkaa lahjaideaa
           </TitleText>
+          {/* Onko tarpeeksi hyvä, vai pitäisikö SvgXClosen classNameen esim ml-[4.5rem] joka olis täysin oikea arvok*/}
           <SvgXClose
             width={24}
             height={24}
-            className="self-center justify-items-end w-full"
+            className="self-center hover:cursor-pointer"
+            onClick={() => setIsModalOpen(false)}
           />
         </div>
-        <div className="">
-          <label className="">Lahja</label>
+        {/* CHECK THIS, liian monta div-wrapperia?*/}
+        <div className="p-6 pt-0 flex flex-col">
+          <label className="pb-1">Lahja</label>
           <Input
-            className="ps-3 pt-5 text-lg w-full h-full font-bold border"
+            className="text-lg font-bold border"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
             autoComplete="off"
           />
-        </div>
-        <div className="mt-1 pt-3">
-          <label className="">Saaja</label>
+          <label className="pt-4 pb-1">Saaja</label>
           <Input
-            className="ps-3 pt-5 text-lg w-full h-full font-bold"
+            className="text-lg font-bold"
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
           />
-        </div>
-        <div className="flex flex-row justify-end ">
-          <Button
-            className="w-20 h-8 p-0 bg-white text-black"
-            onClick={() => setIsModalOpen(false)}
-            type="button"
-          >
-            Peruuta
-          </Button>
+          <div className="flex flex-row justify-end pt-8">
+            <Button
+              className="w-20 h-8 p-0 bg-white text-black"
+              onClick={() => setIsModalOpen(false)}
+              type="button"
+            >
+              Peruuta
+            </Button>
 
-          <Button className="ml-6 w-20 h-8 p-0 m-6" type="submit">
-            Tallenna
-          </Button>
+            <Button className="ml-6 w-20 h-8 p-0 mr-6" type="submit">
+              Tallenna
+            </Button>
+          </div>
         </div>
       </form>
     </Modal>
