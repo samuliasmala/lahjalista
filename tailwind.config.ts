@@ -21,6 +21,7 @@ const config: Config = {
         secondary: '#6A744C', // Green
         lines: '#594F47',
         text: '#BC9288',
+        primaryText: '#404040',
         textWhite: '#FFFFF',
       },
       keyframes: {
