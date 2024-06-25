@@ -7,11 +7,12 @@ import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
-import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
+import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
 import { handleAuthErrors } from '~/utils/handleError';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
+import { Label } from '~/components/Label';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -70,7 +71,7 @@ export default function Register() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="bg-white w-full max-w-full h-screen">
+    <main className="w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
           <div className="pt-5 flex flex-col">
@@ -80,9 +81,9 @@ export default function Register() {
               </div>
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
-              <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
+              <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="pt-5 pl-4 pr-4 flex flex-col max-w-80">
-                <label>Etunimi</label>
+                <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
                   onChange={(e) => {
@@ -100,7 +101,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.firstName} />
 
-                <label className="pt-5">Sukunimi</label>
+                <Label className="pt-5">Sukunimi</Label>
                 <Input
                   value={formData.lastName}
                   onChange={(e) => {
@@ -118,7 +119,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.lastName} />
 
-                <label className="pt-5">Sähköposti</label>
+                <Label className="pt-5">Sähköposti</Label>
                 <Input
                   value={formData.email}
                   onChange={(e) => {
@@ -133,8 +134,8 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.email} />
 
-                <label className="pt-5">Salasana</label>
-                <div className="flex outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline has-[input:focus]:outline-2 has-[input:focus]:rounded">
+                <Label className="pt-5">Salasana</Label>
+                <div className="flex rounded-md outline outline-1 border-black bg-white hover:bg-primaryLight has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -143,15 +144,15 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
+                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-primaryLight"
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-gray-100 hover:bg-white flex items-center ">
+                  <div className="group-hover/password:bg-primaryLight hover:bg-white bg-white flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded rounded-md">
                     <SvgEye
-                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-primary text-lines"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
@@ -161,7 +162,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.password} />
 
                 <Button className="select-none">Luo käyttäjätunnus</Button>
-                <p className="select-none pt-6 text-xs text-gray-600">
+                <p className="select-none pt-3 text-xs text-gray-600 text-center">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}

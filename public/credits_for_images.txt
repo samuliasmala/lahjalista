@@ -4,3 +4,4 @@ eye_open.svg = https://heroicons.com/
 eye_slash.svg = https://heroicons.com/
 user.svg = https://heroicons.com/
 arrow-right-start-on-rectangle.svg = https://heroicons.com/
+logo = https://www.freepik.com/free-vector/flat-wheat-collection_1545231.htm

@@ -6,7 +6,7 @@ const SvgArrowRightStartOnRectangle = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     stroke="currentColor"
     strokeWidth={1.5}
-    className="arrow-right-start-on-rectangle_svg__w-6 arrow-right-start-on-rectangle_svg__h-6"
+    className="arrow_right_start_on_rectangle_svg__w-6 arrow_right_start_on_rectangle_svg__h-6"
     viewBox="0 0 24 24"
     {...props}
   >

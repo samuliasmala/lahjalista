@@ -3,8 +3,8 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
-import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
-import { SvgDeclineIcon } from '~/icons/DeclineIcon';
+import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
+import { SvgDeclineIcon } from '~/icons/decline_mark_icon';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleGiftError } from '~/utils/handleError';
 
