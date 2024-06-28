@@ -97,15 +97,15 @@ export default function Login() {
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
-                    className="border-0 outline-none group-hover/password:bg-primaryLight"
+                    className="border-0 outline-none"
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-primaryLight hover:bg-white bg-white flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded  rounded-md">
+                  <div className="bg-bgForms flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded rounded-md">
                     <SvgEye
-                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-primary text-lines"
+                      className="w-8 h-8 cursor-pointer p-0 text-lines"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
