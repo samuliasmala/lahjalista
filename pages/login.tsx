@@ -74,10 +74,10 @@ export default function Login() {
           </div>
         ) : null}
         <div className="w-full flex justify-center">
-          <div className="pt-5 flex flex-col">
-            <Logo />
+          <div className="flex flex-col">
+            <Logo wrapperClassName="mb-3" />
             <form onSubmit={(e) => void handleSubmit(e)}>
-              <TitleText>Kirjaudu sisään</TitleText>
+              <TitleText className="mt-3">Kirjaudu sisään</TitleText>
               <div className="pt-12 flex flex-col">
                 <Label>Sähköposti</Label>
                 <Input
@@ -125,7 +125,7 @@ export default function Login() {
                   Muista minut
                 </Label>
               </div>
-              <Button type="submit">Kirjaudu</Button>
+              <Button type="submit">Kirjaudu sisään</Button>
             </form>
             <p className="pt-3 text-xs text-gray-600 text-center">
               Ei vielä tunnuksia?{' '}
