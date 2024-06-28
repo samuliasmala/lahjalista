@@ -83,7 +83,7 @@ export default function Login() {
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
                   value={email}
-                  className="border border-black pl-8 pr-0"
+                  className="border border-black pr-0"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"

@@ -55,10 +55,11 @@ export function EditModal({
     <Modal className="max-w-80 max-h-80">
       <form onSubmit={(e) => void handleEdit(e)}>
         <div className="flex flex-row justify-between">
-          <TitleText className={`font-medium text-lg p-6 ${jost.className}`}>
+          <TitleText
+            className={`font-medium text-primaryText text-base m-6 ${jost.className}`}
+          >
             Muokkaa lahjaideaa
           </TitleText>
-          {/* Onko tarpeeksi hyvä, vai pitäisikö SvgXClosen classNameen esim ml-[4.5rem] joka olis täysin oikea arvok*/}
           <SvgXClose
             width={24}
             height={24}
@@ -66,7 +67,6 @@ export function EditModal({
             onClick={() => setIsModalOpen(false)}
           />
         </div>
-        {/* CHECK THIS, liian monta div-wrapperia?*/}
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
