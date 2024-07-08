@@ -92,7 +92,6 @@ export default function Register() {
                       firstName: e.currentTarget.value,
                     });
                   }}
-                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="Matti"
@@ -110,7 +109,6 @@ export default function Register() {
                       lastName: e.currentTarget.value,
                     });
                   }}
-                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="Meikäläinen"
@@ -125,7 +123,6 @@ export default function Register() {
                   onChange={(e) => {
                     setFormData({ ...formData, email: e.currentTarget.value });
                   }}
-                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
@@ -135,7 +132,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <Label className="pt-5">Salasana</Label>
-                <div className="flex rounded-md outline outline-1 border-black bg-white hover:bg-primaryLight has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
+                <div className="flex rounded-md outline outline-1 border-lines has-[input:focus]:outline-2 has-[input:focus]:rounded ">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -144,13 +141,13 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-primaryLight"
+                    className="border-0 outline-none"
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-primaryLight hover:bg-white bg-white flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded rounded-md">
+                  <div className="flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded rounded-md">
                     <SvgEye
                       className="w-8 h-8 cursor-pointer p-0 hover:stroke-primary text-lines"
                       onClick={() => {
