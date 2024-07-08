@@ -92,7 +92,10 @@ export function EditModal({
               Peruuta
             </Button>
 
-            <Button className="ml-6 mr-6 mt-0 w-20 h-8 p-0 text-sm" type="submit">
+            <Button
+              className="ml-6 mr-6 mt-0 w-20 h-8 p-0 text-sm"
+              type="submit"
+            >
               Tallenna
             </Button>
           </div>

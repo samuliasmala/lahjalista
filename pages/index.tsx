@@ -166,8 +166,11 @@ export default function Home({
                 className="animate-opacity pt-4 "
               >
                 <div key={giftItem.uuid} className="grid">
-                  <p className={`col-start-1 [overflow-wrap: anywhere] hover-target ${jost.className}`}>
-                    {giftItem.gift} <span className={`font-bold ${jost.className}`}>–</span>{' '}
+                  <p
+                    className={`col-start-1 [overflow-wrap: anywhere] hover-target ${jost.className}`}
+                  >
+                    {giftItem.gift}{' '}
+                    <span className={`font-bold ${jost.className}`}>–</span>{' '}
                     {giftItem.receiver}
                   </p>
                   <SvgPencilEdit
