@@ -14,6 +14,7 @@ import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangl
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
+import { jost } from '~/utils/fonts';
 
 export { getServerSideProps };
 
@@ -165,8 +166,8 @@ export default function Home({
                 className="animate-opacity pt-4 "
               >
                 <div key={giftItem.uuid} className="grid">
-                  <p className="col-start-1 [overflow-wrap: anywhere] hover-target">
-                    {giftItem.gift} <span className="font-bold">––</span>{' '}
+                  <p className={`col-start-1 [overflow-wrap: anywhere] hover-target ${jost.className}`}>
+                    {giftItem.gift} <span className={`font-bold ${jost.className}`}>–</span>{' '}
                     {giftItem.receiver}
                   </p>
                   <SvgPencilEdit

@@ -52,7 +52,7 @@ export function EditModal({
     setIsModalOpen(false);
   }
   return (
-    <Modal className="max-w-80 max-h-80">
+    <Modal className="max-w-80">
       <form onSubmit={(e) => void handleEdit(e)}>
         <div className="flex flex-row justify-between">
           <TitleText
@@ -70,7 +70,7 @@ export function EditModal({
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
-            className="pt-2.5 pb-2.5 text-lg font-bold"
+            className="pt-2.5 pb-2.5"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
@@ -83,16 +83,16 @@ export function EditModal({
             value={giftReceiver}
             autoComplete="off"
           />
-          <div className="flex flex-row justify-end items-center mt-5">
+          <div className="flex flex-row justify-end items-center mt-8">
             <Button
-              className="mt-0 w-20 h-8 p-0 bg-white text-black"
+              className="mt-0 w-20 h-8 p-0 bg-white text-primaryText text-sm"
               onClick={() => setIsModalOpen(false)}
               type="button"
             >
               Peruuta
             </Button>
 
-            <Button className="ml-6 mr-6 mt-0 w-20 h-8 p-0" type="submit">
+            <Button className="ml-6 mr-6 mt-0 w-20 h-8 p-0 text-sm" type="submit">
               Tallenna
             </Button>
           </div>
