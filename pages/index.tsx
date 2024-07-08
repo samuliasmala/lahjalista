@@ -98,7 +98,7 @@ export default function Home({
   }
 
   return (
-    <main className="bg-orange-50 w-full max-w-full h-screen">
+    <main className="w-full max-w-full h-screen">
       <div className="justify-center flex">
         <div className="bg-primaryLight sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-96 w-full relative">
           <div className="text-lg select-none">Lahjaidealista</div>

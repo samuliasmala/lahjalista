@@ -5,7 +5,7 @@ import { TitleText } from '~/components/TitleText';
 
 export default function Logout() {
   return (
-    <main className="bg-orange-50 w-full max-w-full h-screen ">
+    <main className="w-full max-w-full h-screen ">
       <div className="h-screen w-screen flex flex-col items-center">
         <div className="max-w-80">
           <Logo />
