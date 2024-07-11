@@ -9,3 +9,8 @@
 .hover-target:has(~ .trigger-underline:hover) {
   @apply underline;
 }
+
+
+.input-enlarge-mask-character-size{
+  -webkit-text-stroke-width: 0.1rem;
+}
