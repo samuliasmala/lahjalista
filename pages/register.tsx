@@ -74,15 +74,15 @@ export default function Register() {
     <main className="w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
-          <div className="pt-5 flex flex-col w-72">
+          <div className="mt-14 flex flex-col max-w-72 w-full">
             {registerError.length > 0 ? (
-              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 m-3 rounded [overflow-wrap:anywhere]">
                 {registerError}
               </div>
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
-              <div className="pt-5 pl-4 pr-4 flex flex-col max-w-80">
+              <div className="mt-5 ml-4 mr-4 flex flex-col">
                 <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
@@ -100,7 +100,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.firstName} />
 
-                <Label className="pt-5">Sukunimi</Label>
+                <Label className="mt-5">Sukunimi</Label>
                 <Input
                   value={formData.lastName}
                   onChange={(e) => {
@@ -117,7 +117,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.lastName} />
 
-                <Label className="pt-5">Sähköposti</Label>
+                <Label className="mt-5">Sähköpostiosoite</Label>
                 <Input
                   value={formData.email}
                   onChange={(e) => {
@@ -131,7 +131,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.email} />
 
-                <Label className="pt-5">Salasana</Label>
+                <Label className="mt-5">Salasana</Label>
                 <div className="flex rounded-md outline outline-1 border-lines has-[input:focus]:outline-2 has-[input:focus]:rounded ">
                   <Input
                     value={formData.password}
@@ -141,7 +141,7 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className={`border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-mask-character-size' : ''}`}
+                    className={`border-0 outline-none w-full ${!showPassword && formData.password.length > 0 ? 'input-enlarge-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
@@ -158,8 +158,8 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button className="select-none">Luo käyttäjätunnus</Button>
-                <p className="select-none pt-3 text-xs text-gray-600 text-center">
+                <Button className="select-none mt-8">Luo käyttäjätunnus</Button>
+                <p className="select-none mt-3 text-xs text-gray-600 text-center">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
