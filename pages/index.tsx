@@ -116,11 +116,12 @@ export default function Home({
           />
         </div>
       </div>
-      <div className="justify-center grid">
-        <div className="mt-5 pl-8 pr-8">
+      <div className="flex flex-row justify-center">
+        <div className='max-w-72 w-full'>
+        <div className="mt-12">
           <form onSubmit={(e) => void handleSubmit(e)}>
             <TitleText className="select-none text-start">Uusi idea</TitleText>
-            <div className="pt-6 grid">
+            <div className="mt-6 flex flex-col">
               <label htmlFor="giftName" className="select-none">
                 Lahja
               </label>
@@ -136,7 +137,7 @@ export default function Home({
                 <div className="text-red-500">Lahja on pakollinen</div>
               )}
             </div>
-            <div className="pt-4 grid">
+            <div className="mt-4 flex flex-col">
               <label htmlFor="receiver" className="select-none">
                 Saaja
               </label>
@@ -158,12 +159,12 @@ export default function Home({
           </form>
         </div>
         {giftData.length > 0 && (
-          <div className="pl-8 pr-8 pt-7 sm:max-w-96">
+          <div className="mt-7">
             <TitleText className="text-start">Lahjaideat</TitleText>
             {giftData.map((giftItem) => (
               <div
                 key={`${giftItem.uuid}_divbutton`}
-                className="animate-opacity pt-4 "
+                className="animate-opacity mt-4"
               >
                 <div key={giftItem.uuid} className="grid">
                   <p
@@ -225,6 +226,7 @@ export default function Home({
             )}
           </div>
         )}
+        </div>
       </div>
     </main>
   );
