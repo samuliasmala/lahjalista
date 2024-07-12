@@ -74,7 +74,7 @@ export default function Login() {
           </div>
         ) : null}
         <div className="w-full flex justify-center">
-          <div className="flex flex-col w-72">
+          <div className="flex flex-col max-w-72 w-full">
             <Logo wrapperClassName="mb-3" />
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="mt-3">Kirjaudu sisään</TitleText>
@@ -97,7 +97,7 @@ export default function Login() {
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
-                    className={`border-0 outline-none ${!showPassword && password.length > 0 ? 'input-enlarge-mask-character-size' : ''}`}
+                    className={`border-0 outline-none w-full ${!showPassword && password.length > 0 ? 'input-enlarge-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"

@@ -74,7 +74,7 @@ export default function Register() {
     <main className="w-full max-w-full h-screen">
       <div className="h-screen w-screen">
         <div className="w-full flex justify-center">
-          <div className="pt-5 flex flex-col">
+          <div className="pt-5 flex flex-col w-72">
             {registerError.length > 0 ? (
               <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
                 {registerError}
