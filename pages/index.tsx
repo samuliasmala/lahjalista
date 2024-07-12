@@ -160,7 +160,7 @@ export default function Home({
         </div>
         {giftData.length > 0 && (
           <div className="mt-7">
-            <TitleText className="text-start">Lahjaideat</TitleText>
+            <TitleText className="text-start text-xl">Lahjaideat</TitleText>
             {giftData.map((giftItem) => (
               <div
                 key={`${giftItem.uuid}_divbutton`}
@@ -168,10 +168,10 @@ export default function Home({
               >
                 <div key={giftItem.uuid} className="grid">
                   <p
-                    className={`col-start-1 [overflow-wrap: anywhere] hover-target ${jost.className}`}
+                    className={`col-start-1 [overflow-wrap: anywhere] hover-target text-primaryText ${jost.className}`}
                   >
                     {giftItem.gift}{' '}
-                    <span className={`font-bold ${jost.className}`}>–</span>{' '}
+                    <span className={`${jost.className}`}>-</span>{' '}
                     {giftItem.receiver}
                   </p>
                   <SvgPencilEdit
