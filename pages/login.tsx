@@ -74,7 +74,7 @@ export default function Login() {
           </div>
         ) : null}
         <div className="w-full flex justify-center">
-          <div className="flex flex-col">
+          <div className="flex flex-col w-72">
             <Logo wrapperClassName="mb-3" />
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="mt-3">Kirjaudu sisään</TitleText>
@@ -83,7 +83,7 @@ export default function Login() {
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
                   value={email}
-                  className="border border-black pr-0"
+                  className="border border-lines pr-0"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
@@ -93,7 +93,7 @@ export default function Login() {
               </div>
               <div className="pt-6 flex flex-col">
                 <Label>Salasana</Label>
-                <div className="flex rounded-md outline outline-1 border-black bg-white hover:bg-primaryLight has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
+                <div className="flex rounded-md outline outline-1 border-lines bg-bgForms has-[input:focus]:outline-2 has-[input:focus]:rounded justify-between">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
