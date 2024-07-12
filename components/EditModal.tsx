@@ -63,7 +63,7 @@ export function EditModal({
           <SvgXClose
             width={24}
             height={24}
-            className="self-center hover:cursor-pointer mr-6 "
+            className="self-center hover:cursor-pointer mr-6"
             onClick={() => setIsModalOpen(false)}
           />
         </div>
@@ -78,7 +78,7 @@ export function EditModal({
           />
           <label className="pt-4 pb-1">Saaja</label>
           <Input
-            className="pt-2.5 pb-2.5 text-lg font-bold"
+            className="pt-2.5 pb-2.5 text-lg"
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
