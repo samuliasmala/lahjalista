@@ -258,23 +258,24 @@ function UserDetailModal({
           className="fixed top-0 left-0 max-w-full w-full h-full bg-transparent"
           onClick={() => closeUserWindow()}
         />
-        <div className=" z-[99] bg-white absolute top-12 right-1 w-52 h-auto shadow-md shadow-black outline outline-2">
+        <div className=" z-[99] bg-bgForms absolute top-12 right-1 w-56 h-32 shadow-md shadow-black border-2 border-lines rounded-md">
           <p className="pl-3 pt-3 pb-0 font-bold overflow [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
           <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="pt-2 pl-3 pr-3 pb-4">
+            {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
             <div
-              className="bg-secondary rounded-md flex items-center h-9 hover:cursor-pointer group/logout"
+              className="bg-secondary rounded-md flex items-center h-8 hover:cursor-pointer justify-between"
               onClick={() => void handleLogout()}
             >
-              <p className="group-hover/logout:text-gray-500 text-white ml-3">
+              <p className={`text-white ml-4 mt-2 mb-2 ${jost.className} font-medium text-sm`}>
                 Kirjaudu ulos
               </p>
               <SvgArrowRightStartOnRectangle
-                width={28}
-                height={28}
-                className="group-hover/logout:stroke-gray-500 stroke-white ml-3"
+                width={18}
+                height={18}
+                className="stroke-white ml-3"
               />
             </div>
           </div>
