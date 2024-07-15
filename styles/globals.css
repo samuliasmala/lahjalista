@@ -12,5 +12,5 @@
 
 
 .input-enlarge-mask-character-size{
-  -webkit-text-stroke-width: 0.2rem;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
