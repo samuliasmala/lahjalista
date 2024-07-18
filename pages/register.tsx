@@ -141,7 +141,7 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className={`border-0 outline-none w-full ${!showPassword && formData.password.length > 0 ? 'input-enlarge-mask-character-size' : ''}`}
+                    className={`border-0 outline-none w-full ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
