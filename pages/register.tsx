@@ -13,6 +13,7 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
+import { inter } from '~/utils/fonts';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -82,7 +83,7 @@ export default function Register() {
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
-              <div className="mt-5 ml-4 mr-4 flex flex-col">
+              <div className="mt-5 ml-4 mr-4 flex flex-col w-full">
                 <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
@@ -159,11 +160,11 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.password} />
 
                 <Button className="select-none mt-8">Luo käyttäjätunnus</Button>
-                <p className="select-none mt-3 text-xs text-gray-600 text-center">
+                <p className="select-none mt-3 text-xs text-gray-500 text-center">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
-                    className="underline cursor-pointer hover:text-blue-500"
+                    className={`underline cursor-pointer hover:text-blue-500 ${inter.className}`}
                   >
                     Kirjaudu sisään
                   </Link>

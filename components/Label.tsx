@@ -8,7 +8,7 @@ export function Label({
 }: LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
-      className={twMerge(`${jost.className}, pb-2`, className)}
+      className={twMerge(`${jost.className} mb-2 text-primaryText`, className)}
       {...rest}
     />
   );
