@@ -127,7 +127,9 @@ export default function Login() {
               </div>
               <Button type="submit">Kirjaudu sisään</Button>
             </form>
-            <p className={`mt-4 text-xs text-gray-500 text-center ${jost.className}`}>
+            <p
+              className={`mt-4 text-xs text-gray-500 text-center ${jost.className}`}
+            >
               Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}

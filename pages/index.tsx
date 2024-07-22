@@ -117,115 +117,117 @@ export default function Home({
         </div>
       </div>
       <div className="flex flex-row justify-center">
-        <div className='max-w-72 w-full'>
-        <div className="mt-12">
-          <form onSubmit={(e) => void handleSubmit(e)}>
-            <TitleText className="select-none text-start">Uusi idea</TitleText>
-            <div className="mt-6 flex flex-col">
-              <label htmlFor="giftName" className="select-none">
-                Lahja
-              </label>
-              <Input
-                onChange={(event) => setNewGiftName(event.target.value)}
-                autoComplete="off"
-                type="text"
-                placeholder="Kortti"
-                name="giftName"
-                value={newGiftName}
-              />
-              {giftNameError && (
-                <div className="text-red-500">Lahja on pakollinen</div>
-              )}
-            </div>
-            <div className="mt-4 flex flex-col">
-              <label htmlFor="receiver" className="select-none">
-                Saaja
-              </label>
-              <Input
-                onChange={(event) => setNewReceiver(event.target.value)}
-                autoComplete="off"
-                type="text"
-                placeholder="Matti Meikäläinen"
-                name="receiver"
-                value={newReceiver}
-              />
-              {receiverError && (
-                <div className="text-red-500">Lahjansaaja on pakollinen</div>
-              )}
-            </div>
-            <Button type="submit" className="mt-8">
-              Lisää
-            </Button>
-          </form>
-        </div>
-        {giftData.length > 0 && (
-          <div className="mt-7">
-            <TitleText className="text-start text-xl">Lahjaideat</TitleText>
-            {giftData.map((giftItem) => (
-              <div
-                key={`${giftItem.uuid}_divbutton`}
-                className="animate-opacity mt-4"
-              >
-                <div key={giftItem.uuid} className="grid">
-                  <p
-                    className={`col-start-1 [overflow-wrap: anywhere] hover-target text-primaryText ${jost.className}`}
-                  >
-                    {giftItem.gift}{' '}
-                    <span className={`${jost.className}`}>-</span>{' '}
-                    {giftItem.receiver}
-                  </p>
-                  <SvgPencilEdit
-                    key={`${giftItem.uuid}_editbutton`}
-                    width={24}
-                    height={24}
-                    className="col-start-2 row-start-1 mr-8 align-middle hover:cursor-pointer trigger-underline justify-self-end"
-                    onClick={() => {
-                      setEditModalGiftData(giftItem);
-                      setIsEditModalOpen(true);
-                    }}
-                  />
-
-                  <SvgTrashCan
-                    key={`${giftItem.uuid}_deletebutton`}
-                    width={24}
-                    height={24}
-                    className="col-start-2 row-start-1 align-middle hover:cursor-pointer trigger-line-through justify-self-end"
-                    onClick={() => {
-                      setDeleteModalGiftData(giftItem);
-                      setIsDeleteModalOpen(true);
-                    }}
-                  />
-                </div>
+        <div className="max-w-72 w-full">
+          <div className="mt-12">
+            <form onSubmit={(e) => void handleSubmit(e)}>
+              <TitleText className="select-none text-start">
+                Uusi idea
+              </TitleText>
+              <div className="mt-6 flex flex-col">
+                <label htmlFor="giftName" className="select-none">
+                  Lahja
+                </label>
+                <Input
+                  onChange={(event) => setNewGiftName(event.target.value)}
+                  autoComplete="off"
+                  type="text"
+                  placeholder="Kortti"
+                  name="giftName"
+                  value={newGiftName}
+                />
+                {giftNameError && (
+                  <div className="text-red-500">Lahja on pakollinen</div>
+                )}
               </div>
-            ))}
-            {isEditModalOpen && editModalGiftData && (
-              <EditModal
-                gift={editModalGiftData}
-                refreshGiftList={() => void refreshGiftList()}
-                setIsModalOpen={setIsEditModalOpen}
-              />
-            )}
-
-            {isDeleteModalOpen && deleteModalGiftData && (
-              <DeleteModal
-                gift={deleteModalGiftData}
-                refreshGiftList={() => void refreshGiftList()}
-                setIsModalOpen={setIsDeleteModalOpen}
-              />
-            )}
-
-            {isAnyKindOfError && (
-              <>
-                <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
-                  <div className="bg-red-600 text-center p-10 z-[99] w-full" />
-                  <span className="animate-bounce fixed z-[99] text-5xl">
-                    {isAnyKindOfErrorMessage}
-                  </span>
-                </div>
-              </>
-            )}
+              <div className="mt-4 flex flex-col">
+                <label htmlFor="receiver" className="select-none">
+                  Saaja
+                </label>
+                <Input
+                  onChange={(event) => setNewReceiver(event.target.value)}
+                  autoComplete="off"
+                  type="text"
+                  placeholder="Matti Meikäläinen"
+                  name="receiver"
+                  value={newReceiver}
+                />
+                {receiverError && (
+                  <div className="text-red-500">Lahjansaaja on pakollinen</div>
+                )}
+              </div>
+              <Button type="submit" className="mt-8">
+                Lisää
+              </Button>
+            </form>
           </div>
-        )}
+          {giftData.length > 0 && (
+            <div className="mt-7">
+              <TitleText className="text-start text-xl">Lahjaideat</TitleText>
+              {giftData.map((giftItem) => (
+                <div
+                  key={`${giftItem.uuid}_divbutton`}
+                  className="animate-opacity mt-4"
+                >
+                  <div key={giftItem.uuid} className="grid">
+                    <p
+                      className={`col-start-1 [overflow-wrap: anywhere] hover-target text-primaryText ${jost.className}`}
+                    >
+                      {giftItem.gift}{' '}
+                      <span className={`${jost.className}`}>-</span>{' '}
+                      {giftItem.receiver}
+                    </p>
+                    <SvgPencilEdit
+                      key={`${giftItem.uuid}_editbutton`}
+                      width={24}
+                      height={24}
+                      className="col-start-2 row-start-1 mr-8 align-middle hover:cursor-pointer trigger-underline justify-self-end"
+                      onClick={() => {
+                        setEditModalGiftData(giftItem);
+                        setIsEditModalOpen(true);
+                      }}
+                    />
+
+                    <SvgTrashCan
+                      key={`${giftItem.uuid}_deletebutton`}
+                      width={24}
+                      height={24}
+                      className="col-start-2 row-start-1 align-middle hover:cursor-pointer trigger-line-through justify-self-end"
+                      onClick={() => {
+                        setDeleteModalGiftData(giftItem);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+              {isEditModalOpen && editModalGiftData && (
+                <EditModal
+                  gift={editModalGiftData}
+                  refreshGiftList={() => void refreshGiftList()}
+                  setIsModalOpen={setIsEditModalOpen}
+                />
+              )}
+
+              {isDeleteModalOpen && deleteModalGiftData && (
+                <DeleteModal
+                  gift={deleteModalGiftData}
+                  refreshGiftList={() => void refreshGiftList()}
+                  setIsModalOpen={setIsDeleteModalOpen}
+                />
+              )}
+
+              {isAnyKindOfError && (
+                <>
+                  <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
+                    <div className="bg-red-600 text-center p-10 z-[99] w-full" />
+                    <span className="animate-bounce fixed z-[99] text-5xl">
+                      {isAnyKindOfErrorMessage}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </main>
@@ -271,7 +273,9 @@ function UserDetailModal({
               className="bg-secondary rounded-md flex items-center h-8 hover:cursor-pointer justify-between"
               onClick={() => void handleLogout()}
             >
-              <p className={`text-white ml-4 mt-2 mb-2 ${jost.className} font-medium text-sm`}>
+              <p
+                className={`text-white ml-4 mt-2 mb-2 ${jost.className} font-medium text-sm`}
+              >
                 Kirjaudu ulos
               </p>
               <SvgArrowRightStartOnRectangle
