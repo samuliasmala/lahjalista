@@ -13,7 +13,7 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
-import { jost } from '~/utils/fonts';
+import { inter, jost } from '~/utils/fonts';
 import { Label } from '~/components/Label';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -127,11 +127,11 @@ export default function Login() {
               </div>
               <Button type="submit">Kirjaudu sisään</Button>
             </form>
-            <p className="mt-4 text-xs text-gray-600 text-center">
+            <p className={`mt-4 text-xs text-gray-500 text-center ${jost.className}`}>
               Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
-                className="underline cursor-pointer hover:text-blue-500"
+                className={`underline cursor-pointer hover:text-blue-500 ${inter.className}`}
               >
                 Luo tunnus
               </Link>
