@@ -78,7 +78,7 @@ export function EditModal({
           />
           <label className="pt-4 pb-1">Saaja</label>
           <Input
-            className="pt-2.5 pb-2.5 text-lg"
+            className="pt-2.5 pb-2.5"
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
@@ -93,7 +93,7 @@ export function EditModal({
             </Button>
 
             <Button
-              className="ml-6 mr-6 mt-0 w-20 h-8 p-0 text-sm"
+              className="ml-6 mt-0 w-20 h-8 p-0 text-sm"
               type="submit"
             >
               Tallenna
