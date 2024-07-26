@@ -99,14 +99,14 @@ export default function Home({
   }
 
   return (
-    <main className="w-full max-w-full h-screen">
-      <div className="justify-center flex">
-        <div className="bg-primaryLight sm:pr-0 pr-2 p-3 flex flex-row justify-between sm:w-96 w-full relative">
-          <div className="text-lg select-none">Lahjaidealista</div>
+    <main className="h-screen w-full max-w-full">
+      <div className="flex justify-center">
+        <div className="relative flex w-full flex-row justify-between bg-primaryLight p-3 pr-2 sm:w-96 sm:pr-0">
+          <div className="select-none text-lg">Lahjaidealista</div>
           <SvgUser
             width={24}
             height={24}
-            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} mr-4 z-[98]`}
+            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} z-[98] mr-4`}
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           <UserDetailModal
@@ -117,7 +117,7 @@ export default function Home({
         </div>
       </div>
       <div className="flex flex-row justify-center">
-        <div className="max-w-72 w-full">
+        <div className="w-full max-w-72">
           <div className="mt-12">
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="select-none text-start">
@@ -166,11 +166,11 @@ export default function Home({
               {giftData.map((giftItem) => (
                 <div
                   key={`${giftItem.uuid}_divbutton`}
-                  className="animate-opacity mt-4"
+                  className="mt-4 animate-opacity"
                 >
                   <div key={giftItem.uuid} className="grid">
                     <p
-                      className={`col-start-1 [overflow-wrap: anywhere] hover-target text-primaryText ${jost.className}`}
+                      className={`[overflow-wrap: anywhere] hover-target col-start-1 text-primaryText ${jost.className}`}
                     >
                       {giftItem.gift}{' '}
                       <span className={`${jost.className}`}>-</span>{' '}
@@ -180,7 +180,7 @@ export default function Home({
                       key={`${giftItem.uuid}_editbutton`}
                       width={24}
                       height={24}
-                      className="col-start-2 row-start-1 mr-8 align-middle hover:cursor-pointer trigger-underline justify-self-end"
+                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle hover:cursor-pointer"
                       onClick={() => {
                         setEditModalGiftData(giftItem);
                         setIsEditModalOpen(true);
@@ -191,7 +191,7 @@ export default function Home({
                       key={`${giftItem.uuid}_deletebutton`}
                       width={24}
                       height={24}
-                      className="col-start-2 row-start-1 align-middle hover:cursor-pointer trigger-line-through justify-self-end"
+                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle hover:cursor-pointer"
                       onClick={() => {
                         setDeleteModalGiftData(giftItem);
                         setIsDeleteModalOpen(true);
@@ -218,9 +218,9 @@ export default function Home({
 
               {isAnyKindOfError && (
                 <>
-                  <div className="fixed flex z-[98] justify-center items-center left-0 bottom-0 w-full">
-                    <div className="bg-red-600 text-center p-10 z-[99] w-full" />
-                    <span className="animate-bounce fixed z-[99] text-5xl">
+                  <div className="fixed bottom-0 left-0 z-[98] flex w-full items-center justify-center">
+                    <div className="z-[99] w-full bg-red-600 p-10 text-center" />
+                    <span className="fixed z-[99] animate-bounce text-5xl">
                       {isAnyKindOfErrorMessage}
                     </span>
                   </div>
@@ -259,27 +259,27 @@ function UserDetailModal({
     return (
       <>
         <div
-          className="fixed top-0 left-0 max-w-full w-full h-full bg-transparent"
+          className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
           onClick={() => closeUserWindow()}
         />
-        <div className=" z-[99] bg-bgForms absolute top-12 right-1 w-56 shadow-md shadow-black border-2 border-lines rounded-md">
-          <p className="ml-3 mt-3 mb-0 font-bold overflow [overflow-wrap:anywhere]">
+        <div className=" absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
+          <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
-          <div className="w-full flex justify-center">
+          <div className="flex w-full justify-center">
             {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
             <div
-              className="bg-primary rounded-md flex items-center h-8 hover:cursor-pointer ml-3 mr-3 mt-4 mb-4 max-w-56 w-full justify-center"
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer"
               onClick={() => void handleLogout()}
             >
-              <p className={`text-white ${jost.className} font-medium text-sm`}>
+              <p className={`text-white ${jost.className} text-sm font-medium`}>
                 Kirjaudu ulos
               </p>
               <SvgArrowRightStartOnRectangle
                 width={18}
                 height={18}
-                className="stroke-white ml-2"
+                className="ml-2 stroke-white"
               />
             </div>
           </div>
