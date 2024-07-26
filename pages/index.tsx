@@ -262,7 +262,7 @@ function UserDetailModal({
           className="fixed top-0 left-0 max-w-full w-full h-full bg-transparent"
           onClick={() => closeUserWindow()}
         />
-        <div className=" z-[99] bg-bgForms absolute top-12 right-1 w-56 h-32 shadow-md shadow-black border-2 border-lines rounded-md">
+        <div className=" z-[99] bg-bgForms absolute top-12 right-1 w-56 shadow-md shadow-black border-2 border-lines rounded-md">
           <p className="ml-3 mt-3 mb-0 font-bold overflow [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
