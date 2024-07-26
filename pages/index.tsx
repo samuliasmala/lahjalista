@@ -273,9 +273,7 @@ function UserDetailModal({
               className="bg-primary rounded-md flex items-center h-8 hover:cursor-pointer ml-3 mr-3 mt-4 mb-4 max-w-56 w-full justify-center"
               onClick={() => void handleLogout()}
             >
-              <p
-                className={`text-white ${jost.className} font-medium text-sm`}
-              >
+              <p className={`text-white ${jost.className} font-medium text-sm`}>
                 Kirjaudu ulos
               </p>
               <SvgArrowRightStartOnRectangle
