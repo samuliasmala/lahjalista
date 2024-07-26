@@ -247,7 +247,7 @@ function UserDetailModal({
     try {
       const request = await axios.post('/api/auth/logout');
       if (request) {
-        window.location.href = '/login';
+        window.location.href = '/logout';
       }
     } catch (e) {
       console.error(e);
@@ -263,25 +263,25 @@ function UserDetailModal({
           onClick={() => closeUserWindow()}
         />
         <div className=" z-[99] bg-bgForms absolute top-12 right-1 w-56 h-32 shadow-md shadow-black border-2 border-lines rounded-md">
-          <p className="pl-3 pt-3 pb-0 font-bold overflow [overflow-wrap:anywhere]">
+          <p className="ml-3 mt-3 mb-0 font-bold overflow [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
-          <p className="pl-3 [overflow-wrap:anywhere]">{user.email}</p>
-          <div className="pt-2 pl-3 pr-3 pb-4">
+          <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
+          <div className="w-full flex justify-center">
             {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
             <div
-              className="bg-secondary rounded-md flex items-center h-8 hover:cursor-pointer justify-between"
+              className="bg-primary rounded-md flex items-center h-8 hover:cursor-pointer ml-3 mr-3 mt-4 mb-4 max-w-56 w-full justify-center"
               onClick={() => void handleLogout()}
             >
               <p
-                className={`text-white ml-4 mt-2 mb-2 ${jost.className} font-medium text-sm`}
+                className={`text-white ${jost.className} font-medium text-sm`}
               >
                 Kirjaudu ulos
               </p>
               <SvgArrowRightStartOnRectangle
                 width={18}
                 height={18}
-                className="stroke-white ml-3"
+                className="stroke-white ml-2"
               />
             </div>
           </div>
