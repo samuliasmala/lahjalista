@@ -11,6 +11,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        bgPage: '#FAF6F2',
+        bgForms: '#F7F7F5',
+        primaryDark: '#A3766B', // Rosa dark
+        primary: '#BC9288', // Rosa
+        primaryLight: '#ECD7D2', // Rosa light
+        secondaryDark: '#6A744C', // Green dark
+        secondary: '#6A744C', // Green
+        lines: '#594F47',
+        text: '#BC9288',
+        primaryText: '#404040',
+        textWhite: '#FFFFF',
+      },
       keyframes: {
         rainbowBackGroundColor: {
           '0%': {

@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { jost } from '~/utils/fonts';
 
 export function Button({
   children,
@@ -9,7 +10,7 @@ export function Button({
   return (
     <button
       className={twMerge(
-        'w-full text-s mt-6 p-2 text-white border bg-emerald-500 hover:text-gray-500 rounded-md',
+        `w-full mt-6 p-2 text-white border border-lines bg-primary rounded-md ${jost.className} font-medium text-lg`,
         className,
       )}
       {...rest}
