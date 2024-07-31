@@ -267,10 +267,21 @@ function UserDetailModal({
             {user.firstName} {user.lastName}
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
-          <div className="flex w-full justify-center">
+          <div className="flex flex-col w-full justify-center">
+            <Button className='mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer'>
+            <p className={`text-white ${jost.className} text-sm font-medium`}>
+                Profiili
+              </p>
+              <SvgUser
+                width={18}
+                height={18}
+                className="ml-2"
+                strokeClassName='stroke-white'
+              />
+            </Button>
             {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
-            <div
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer"
+            <Button
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer"
               onClick={() => void handleLogout()}
             >
               <p className={`text-white ${jost.className} text-sm font-medium`}>
@@ -281,7 +292,7 @@ function UserDetailModal({
                 height={18}
                 className="ml-2 stroke-white"
               />
-            </div>
+            </Button>
           </div>
         </div>
       </>
