@@ -268,7 +268,7 @@ function UserDetailModal({
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex flex-col w-full justify-center">
-            <Button className='mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer'>
+            <Button className='mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary'>
             <p className={`text-white ${jost.className} text-sm font-medium`}>
                 Profiili
               </p>
@@ -281,7 +281,7 @@ function UserDetailModal({
             </Button>
             {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
             <Button
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer"
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary"
               onClick={() => void handleLogout()}
             >
               <p className={`text-white ${jost.className} text-sm font-medium`}>
