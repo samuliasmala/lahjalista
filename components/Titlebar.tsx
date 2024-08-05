@@ -21,7 +21,18 @@ export function TitleBar({
   return (
     <div className="flex w-full justify-center">
       <div className="relative flex w-full flex-row justify-between bg-primaryLight p-3 pr-2 sm:w-96 sm:pr-0">
-        <div className="select-none text-lg">Lahjaidealista</div>
+        <div
+          className="select-none text-lg hover:cursor-pointer"
+          onClick={() => {
+            try {
+              window.location.href = '/';
+            } catch (e) {
+              window.location.href = '/';
+            }
+          }}
+        >
+          Lahjaidealista
+        </div>
         <SvgUser
           width={24}
           height={24}
