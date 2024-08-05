@@ -1,11 +1,14 @@
-import { HTMLAttributes, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { Button } from '~/components/Button';
 import { User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
-import axios from 'axios';
-import SvgUser from '~/icons/user';
-import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import { jost } from '~/utils/fonts';
 import { TitleText } from '~/components/TitleText';
@@ -14,6 +17,9 @@ import Image from 'next/image';
 import SvgLocationPin from '~/icons/location_pin';
 import SvgCalendar from '~/icons/calendar';
 import SvgPencilEdit from '~/icons/pencil_edit';
+import { Modal } from '~/components/Modal';
+import SvgXClose from '~/icons/x_close';
+import { Input } from '~/components/Input';
 
 export { getServerSideProps };
 
@@ -26,11 +32,16 @@ export default function Home({
   const [firstName, setFirstName] = useState('John');
   const [lastName, setLastName] = useState('Doe');
   const [email, setEmail] = useState('john.doe@email.com');
+  // most likely unnecessary, but it is here for now
   const [currentDate, setCurrentDate] = useState('31.7.2024');
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     try {
       console.log('effect');
+      setEmail(user.email);
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
     } catch (e) {
       handleError(e);
     }
@@ -61,6 +72,7 @@ export default function Home({
               width={150}
               height={150}
               className="ml-14 mr-14 mt-8 rounded-full"
+              priority={true}
             />
             <div className="items-cen ml-14 mr-14 mt-7 flex flex-col gap-1">
               <p className={`text-lg font-semibold ${jost.className}`}>
@@ -79,9 +91,10 @@ export default function Home({
               </div>
             </div>
             <SvgPencilEdit
+              onClick={() => setShowEditModal(true)}
               width={24}
               height={24}
-              className="mb-3 mr-4 self-end"
+              className="mb-3 mr-4 self-end hover:cursor-pointer"
             />
           </div>
 
@@ -93,8 +106,109 @@ export default function Home({
               </span>
             </div>
           )}
+
+          {showEditModal && (
+            <EditModal
+              handleError={handleError}
+              setShowEditModal={setShowEditModal}
+              userDetails={{
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              }}
+            />
+          )}
         </div>
       </div>
     </main>
+  );
+}
+
+type EditModal = {
+  userDetails: Pick<User, 'email' | 'firstName' | 'lastName'>;
+  setShowEditModal: Dispatch<SetStateAction<boolean>>;
+  handleError: (e: unknown) => void;
+};
+
+function EditModal({ userDetails, setShowEditModal, handleError }: EditModal) {
+  const [email, setEmail] = useState(userDetails.email);
+  const [firstName, setFirstName] = useState(userDetails.firstName);
+  const [lastName, setLastName] = useState(userDetails.lastName);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setShowEditModal(false);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return function clearFunctions() {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [setShowEditModal]);
+
+  async function handleEdit(e: FormEvent<HTMLElement>) {
+    e.preventDefault();
+    try {
+    } catch (e) {
+      handleError(e);
+    }
+    setShowEditModal(false);
+  }
+  return (
+    <Modal className="max-w-80">
+      <form onSubmit={(e) => void handleEdit(e)}>
+        <div className="flex flex-row justify-between">
+          <TitleText
+            className={`m-6 text-base font-medium text-primaryText ${jost.className}`}
+          >
+            Muokkaa käyttäjätietoja
+          </TitleText>
+          <SvgXClose
+            width={24}
+            height={24}
+            className="mr-6 self-center hover:cursor-pointer"
+            onClick={() => setShowEditModal(false)}
+          />
+        </div>
+        <div className="m-6 mt-0 flex flex-col">
+          <label className="pb-1">Etunimi</label>
+          <Input
+            className="pb-2.5 pt-2.5"
+            onChange={(e) => setFirstName(e.target.value)}
+            value={firstName}
+            name="giftName"
+            autoComplete="off"
+          />
+          <label className="pb-1 pt-4">Sukunimi</label>
+          <Input
+            className="pb-2.5 pt-2.5"
+            onChange={(e) => setLastName(e.target.value)}
+            value={lastName}
+            autoComplete="off"
+          />
+          <label className="pb-1 pt-4">Sähköposti</label>
+          <Input
+            className="pb-2.5 pt-2.5"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            autoComplete="off"
+          />
+          <div className="mt-8 flex flex-row items-center justify-end">
+            <Button
+              className="mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText"
+              onClick={() => setShowEditModal(false)}
+              type="button"
+            >
+              Peruuta
+            </Button>
+
+            <Button className="ml-6 mt-0 h-8 w-20 p-0 text-sm" type="submit">
+              Tallenna
+            </Button>
+          </div>
+        </div>
+      </form>
+    </Modal>
   );
 }
