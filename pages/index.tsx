@@ -267,16 +267,26 @@ function UserDetailModal({
             {user.firstName} {user.lastName}
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
-          <div className="flex flex-col w-full justify-center">
-            <Button className='mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary'>
-            <p className={`text-white ${jost.className} text-sm font-medium`}>
+          <div className="flex w-full flex-col justify-center">
+            <Button
+              className="mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary"
+              onClick={() => {
+                try {
+                  window.location.href = '/profile';
+                } catch (e) {
+                  console.error(e);
+                  window.location.href = '/';
+                }
+              }}
+            >
+              <p className={`text-white ${jost.className} text-sm font-medium`}>
                 Profiili
               </p>
               <SvgUser
                 width={18}
                 height={18}
                 className="ml-2"
-                strokeClassName='stroke-white'
+                strokeClassName="stroke-white"
               />
             </Button>
             {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
