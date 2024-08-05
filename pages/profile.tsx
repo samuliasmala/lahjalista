@@ -11,6 +11,9 @@ import { jost } from '~/utils/fonts';
 import { TitleText } from '~/components/TitleText';
 import { TitleBar } from '~/components/Titlebar';
 import Image from 'next/image';
+import SvgLocationPin from '~/icons/location_pin';
+import SvgCalendar from '~/icons/calendar';
+import SvgPencilEdit from '~/icons/pencil_edit';
 
 export { getServerSideProps };
 
@@ -20,6 +23,10 @@ export default function Home({
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [showUserWindow, setShowUserWindow] = useState(false);
+  const [firstName, setFirstName] = useState('John');
+  const [lastName, setLastName] = useState('Doe');
+  const [email, setEmail] = useState('john.doe@email.com');
+  const [currentDate, setCurrentDate] = useState('31.7.2024');
 
   useEffect(() => {
     try {
@@ -44,29 +51,38 @@ export default function Home({
       />
       <div className="flex w-full justify-center">
         <div className="flex w-full flex-col items-center justify-center sm:max-w-96">
-          <TitleText className="ml-7 mt-3 self-start font-normal">
+          <TitleText className="ml-7 mt-5 self-start font-normal text-black">
             Profiili
           </TitleText>
-          <div className="flex flex-row justify-center gap-4 self-start">
+          <div className="mt-6 flex flex-col items-center justify-center rounded-md border border-primary bg-neutral-100">
             <Image
               src={'/images/person.png'}
               alt="person smiling"
               width={150}
               height={150}
-              className="rounded-full"
+              className="ml-14 mr-14 mt-8 rounded-full"
             />
-            <div className="flex flex-col">
-              <p>John Doe</p>
-              <p>john.doe@email.com</p>
+            <div className="items-cen ml-14 mr-14 mt-7 flex flex-col gap-1">
+              <p className={`text-lg font-semibold ${jost.className}`}>
+                {firstName} {lastName}
+              </p>
+              <p className={`${jost.className} text-sm`}>{email}</p>
               <div className="flex">
-                <p>@</p>
-                <p>Location</p>
+                <SvgLocationPin width={20} height={20} />
+                <p className={`ml-1 ${jost.className} text-sm`}>
+                  Location / maybe country?
+                </p>
               </div>
               <div className="flex">
-                <p>#</p>
-                <p>31.7.2024</p>
+                <SvgCalendar width={20} height={20} />
+                <p className={`ml-1 ${jost.className} text-sm`}>31.7.2024</p>
               </div>
             </div>
+            <SvgPencilEdit
+              width={24}
+              height={24}
+              className="mb-3 mr-4 self-end"
+            />
           </div>
 
           {isAnyKindOfError && (
