@@ -20,8 +20,15 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import { Modal } from '~/components/Modal';
 import SvgXClose from '~/icons/x_close';
 import { Input } from '~/components/Input';
+import { updateUser } from '~/utils/apiRequests';
 
 export { getServerSideProps };
+
+const EMPTY_FORM_DATA = {
+  firstName: '',
+  lastName: '',
+  email: '',
+};
 
 export default function Home({
   user,
@@ -29,6 +36,7 @@ export default function Home({
   const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [showUserWindow, setShowUserWindow] = useState(false);
+  const [userDetails, setUserDetails] = useState(EMPTY_FORM_DATA);
   const [firstName, setFirstName] = useState('John');
   const [lastName, setLastName] = useState('Doe');
   const [email, setEmail] = useState('john.doe@email.com');
@@ -39,9 +47,16 @@ export default function Home({
   useEffect(() => {
     try {
       console.log('effect');
+      setUserDetails({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+      /*
       setEmail(user.email);
       setFirstName(user.firstName);
       setLastName(user.lastName);
+      */
     } catch (e) {
       handleError(e);
     }
@@ -74,11 +89,11 @@ export default function Home({
               className="ml-14 mr-14 mt-8 rounded-full"
               priority={true}
             />
-            <div className="items-cen ml-14 mr-14 mt-7 flex flex-col gap-1">
+            <div className="ml-14 mr-14 mt-7 flex flex-col gap-1">
               <p className={`text-lg font-semibold ${jost.className}`}>
-                {firstName} {lastName}
+                {userDetails.firstName} {userDetails.lastName}
               </p>
-              <p className={`${jost.className} text-sm`}>{email}</p>
+              <p className={`${jost.className} text-sm`}>{userDetails.email}</p>
               <div className="flex">
                 <SvgLocationPin width={20} height={20} />
                 <p className={`ml-1 ${jost.className} text-sm`}>
@@ -115,6 +130,7 @@ export default function Home({
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                uuid: user.uuid,
               }}
             />
           )}
@@ -125,7 +141,7 @@ export default function Home({
 }
 
 type EditModal = {
-  userDetails: Pick<User, 'email' | 'firstName' | 'lastName'>;
+  userDetails: Pick<User, 'email' | 'firstName' | 'lastName' | 'uuid'>;
   setShowEditModal: Dispatch<SetStateAction<boolean>>;
   handleError: (e: unknown) => void;
 };
@@ -150,6 +166,11 @@ function EditModal({ userDetails, setShowEditModal, handleError }: EditModal) {
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
+      await updateUser(userDetails.uuid, {
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+      });
     } catch (e) {
       handleError(e);
     }
