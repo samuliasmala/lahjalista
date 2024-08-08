@@ -7,16 +7,18 @@ import { Button } from './Button';
 import { jost } from '~/utils/fonts';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 
+type UserDetails = Pick<User, 'firstName' | 'lastName' | 'email'>;
+
 type TitleBar = {
   setShowUserWindow: Dispatch<SetStateAction<boolean>>;
   showUserWindow: boolean;
-  user: User;
+  userDetails: UserDetails;
 };
 
 export function TitleBar({
   setShowUserWindow,
   showUserWindow,
-  user,
+  userDetails,
 }: TitleBar) {
   return (
     <div className="flex w-full justify-center">
@@ -41,7 +43,7 @@ export function TitleBar({
         />
         <UserDetailModal
           showUserWindow={showUserWindow}
-          user={user}
+          userDetails={userDetails}
           closeUserWindow={() => setShowUserWindow(false)}
         />
       </div>
@@ -50,11 +52,11 @@ export function TitleBar({
 }
 
 export function UserDetailModal({
-  user,
+  userDetails,
   showUserWindow,
   closeUserWindow,
 }: HTMLAttributes<HTMLDivElement> & {
-  user: User;
+  userDetails: UserDetails;
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
@@ -70,7 +72,7 @@ export function UserDetailModal({
     }
   }
 
-  if (user && showUserWindow) {
+  if (userDetails && showUserWindow) {
     return (
       <>
         <div
@@ -79,9 +81,9 @@ export function UserDetailModal({
         />
         <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
           <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
-            {user.firstName} {user.lastName}
+            {userDetails.firstName} {userDetails.lastName}
           </p>
-          <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
+          <p className="ml-3 [overflow-wrap:anywhere]">{userDetails.email}</p>
           <div className="flex w-full flex-col justify-center">
             <Button
               className="mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary"
