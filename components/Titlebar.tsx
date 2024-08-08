@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, HTMLAttributes } from 'react';
 import SvgUser from '~/icons/user';
 import { User } from '~/shared/types';
 import axios from 'axios';
-import { HTMLAttributes } from 'react';
 import { Button } from './Button';
 import { jost } from '~/utils/fonts';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';

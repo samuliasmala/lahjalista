@@ -34,7 +34,7 @@ export function DeleteModal({
       <div className="max-w-80">
         <div className="m-4 mb-0 flex flex-row justify-between">
           <TitleText
-            className={`mt-0 font-medium text-primaryText text-base ${jost.className} `}
+            className={`mt-0 text-base font-medium text-primaryText ${jost.className} `}
           >
             Olet poistamassa lahjaa:
           </TitleText>
@@ -50,9 +50,9 @@ export function DeleteModal({
         >
           {gift.gift} - {gift.receiver}
         </p>
-        <div className="flex flex-row justify-end items-center mt-6">
+        <div className="mt-6 flex flex-row items-center justify-end">
           <Button
-            className={`w-20 h-8 mb-6 mt-0 pt-1 pb-1 pl-4 pr-4 bg-white text-primaryText text-sm ${jost.className}`}
+            className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText ${jost.className}`}
             onClick={() => setIsModalOpen(false)}
             type="button"
           >
@@ -60,7 +60,7 @@ export function DeleteModal({
           </Button>
 
           <Button
-            className={`m-6 mt-0 w-16 h-8 p-0 text-sm ${jost.className}`}
+            className={`m-6 mt-0 h-8 w-16 p-0 text-sm ${jost.className}`}
             onClick={() => void handleDeletion()}
           >
             Poista

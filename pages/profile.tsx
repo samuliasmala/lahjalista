@@ -6,7 +6,6 @@ import {
   useState,
 } from 'react';
 import { Button } from '~/components/Button';
-import { User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
@@ -23,6 +22,8 @@ import { Input } from '~/components/Input';
 import { updateUser } from '~/utils/apiRequests';
 
 export { getServerSideProps };
+
+const currentDate = new Intl.DateTimeFormat('fi-FI').format(new Date());
 
 const EMPTY_FORM_DATA: UserDetails = {
   firstName: '',
@@ -45,10 +46,6 @@ export default function Home({
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [showUserWindow, setShowUserWindow] = useState(false);
   const [userDetails, setUserDetails] = useState(EMPTY_FORM_DATA);
-  // most likely unnecessary, but it is here for now
-  const [currentDate, setCurrentDate] = useState(
-    new Intl.DateTimeFormat('fi-FI').format(new Date()),
-  );
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
@@ -63,7 +60,7 @@ export default function Home({
     } catch (e) {
       handleError(e);
     }
-  }, []);
+  }, [user]);
 
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);

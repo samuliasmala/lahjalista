@@ -5,20 +5,20 @@ import { TitleText } from '~/components/TitleText';
 
 export default function Logout() {
   return (
-    <main className="w-full max-w-full h-screen ">
-      <div className="h-screen w-screen flex flex-col items-center">
+    <main className="h-screen w-full max-w-full ">
+      <div className="flex h-screen w-screen flex-col items-center">
         <div className="max-w-80">
           <Logo />
-          <div className="pt-10 flex flex-col items-center">
+          <div className="flex flex-col items-center pt-10">
             <TitleText className="font-bold">Näkemiin!</TitleText>
-            <p className="text-center text-sm [overflow-wrap:anywhere] pt-10 text-gray-600">
+            <p className="pt-10 text-center text-sm text-gray-600 [overflow-wrap:anywhere]">
               Oli ilo auttaa sinua lahjaideoiden kanssa, nähdään pian uudelleen!
             </p>
           </div>
           <div className="pt-20">
             <form className="flex flex-col text-center">
               <label className="text-start">Palaute</label>
-              <textarea className="border border-black h-32 pl-1 pt-1" />
+              <textarea className="h-32 border border-black pl-1 pt-1" />
               <Button className="p-2" type="submit">
                 Lähetä
               </Button>
@@ -26,7 +26,7 @@ export default function Logout() {
                 Saitko uuden idean?{' '}
                 <Link
                   href={'/login'}
-                  className="underline cursor-pointer hover:text-blue-500"
+                  className="cursor-pointer underline hover:text-blue-500"
                 >
                   Kirjaudu uudelleen
                 </Link>

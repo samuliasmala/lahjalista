@@ -10,7 +10,7 @@ export function TitleText({
   return (
     <div
       className={twMerge(
-        `text-2xl mt-4 ${libre_bodoni.className} text-center font-medium`,
+        `mt-4 text-2xl ${libre_bodoni.className} text-center font-medium`,
         className,
       )}
       {...rest}

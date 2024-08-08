@@ -12,7 +12,7 @@ type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
   res: NextApiResponse<ResponseType>;
   userData: User;
-  queryUUID: string
+  queryUUID: string;
   isAdmin: boolean;
 };
 
@@ -36,10 +36,19 @@ export default async function handlePrisma(
     if (reqHandler) {
       const queryUUID = z.string().safeParse(req.query.uuid);
       if (!queryUUID.success) {
-        throw new HttpError('Invalid UUID! It should be given as a string!', 400);
+        throw new HttpError(
+          'Invalid UUID! It should be given as a string!',
+          400,
+        );
       }
-      const isAdmin = validationRequest.user.role === "ADMIN"
-      await reqHandler({ req, res, userData: validationRequest.user, queryUUID: queryUUID.data, isAdmin });
+      const isAdmin = validationRequest.user.role === 'ADMIN';
+      await reqHandler({
+        req,
+        res,
+        userData: validationRequest.user,
+        queryUUID: queryUUID.data,
+        isAdmin,
+      });
     } else {
       throw new HttpError(
         `${req.method} is not a valid method. GET, PATCH, PUT and DELETE request are valid.`,
@@ -51,10 +60,13 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ req, res, userData, queryUUID, isAdmin }: HandlerParams<User>) {
-
-  const isAdminSearchingSpecificUser =
-    queryUUID !== userData.uuid && isAdmin
+async function handleGET({
+  res,
+  userData,
+  queryUUID,
+  isAdmin,
+}: HandlerParams<User>) {
+  const isAdminSearchingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
   // uuid value inside databaseSearchParameter variable is just to be a placeholder value
   // that removes following error: Type '{}' is not assignable to type 'UserWhereUniqueInput'.
@@ -80,15 +92,23 @@ async function handleGET({ req, res, userData, queryUUID, isAdmin }: HandlerPara
   return res.status(200).json(user);
 }
 
-async function handlePATCH({ req, res, userData, queryUUID, isAdmin }: HandlerParams<User>) {
+async function handlePATCH({
+  req,
+  res,
+  userData,
+  queryUUID,
+  isAdmin,
+}: HandlerParams<User>) {
   const updatedUserData = updateUserSchema.safeParse(req.body);
 
   if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
-  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin
+  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminEditingSpecificUser ? queryUUID : userData.uuid
+  const databaseSearchUUID = isAdminEditingSpecificUser
+    ? queryUUID
+    : userData.uuid;
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -108,15 +128,23 @@ async function handlePATCH({ req, res, userData, queryUUID, isAdmin }: HandlerPa
   return res.status(200).json(updatedUser);
 }
 
-async function handlePUT({ req, res, userData, queryUUID, isAdmin }: HandlerParams<User>) {
+async function handlePUT({
+  req,
+  res,
+  userData,
+  queryUUID,
+  isAdmin,
+}: HandlerParams<User>) {
   const updatedUserData = updateUserSchema.safeParse(req.body);
 
   if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
-  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin
+  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminEditingSpecificUser ? queryUUID : userData.uuid
+  const databaseSearchUUID = isAdminEditingSpecificUser
+    ? queryUUID
+    : userData.uuid;
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -137,10 +165,17 @@ async function handlePUT({ req, res, userData, queryUUID, isAdmin }: HandlerPara
   return res.status(200).json(updatedUser);
 }
 
-async function handleDELETE({ res, userData, queryUUID, isAdmin }: HandlerParams) {
-  const isAdminDeletingSpecificUser = queryUUID !== userData.uuid && isAdmin
+async function handleDELETE({
+  res,
+  userData,
+  queryUUID,
+  isAdmin,
+}: HandlerParams) {
+  const isAdminDeletingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminDeletingSpecificUser ? queryUUID : userData.uuid
+  const databaseSearchUUID = isAdminDeletingSpecificUser
+    ? queryUUID
+    : userData.uuid;
 
   await prisma.user.delete({
     where: {

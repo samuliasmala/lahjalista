@@ -4,10 +4,7 @@ type SVGUser = SVGProps<SVGSVGElement> & {
   strokeClassName?: string;
 };
 
-const SvgUser = ({
-  strokeClassName,
-  ...props
-}: SVGUser) => (
+const SvgUser = ({ strokeClassName, ...props }: SVGUser) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
