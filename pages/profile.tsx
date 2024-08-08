@@ -37,9 +37,6 @@ export default function Home({
   const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [showUserWindow, setShowUserWindow] = useState(false);
   const [userDetails, setUserDetails] = useState(EMPTY_FORM_DATA);
-  const [firstName, setFirstName] = useState('John');
-  const [lastName, setLastName] = useState('Doe');
-  const [email, setEmail] = useState('john.doe@email.com');
   // most likely unnecessary, but it is here for now
   const [currentDate, setCurrentDate] = useState('31.7.2024');
   const [showEditModal, setShowEditModal] = useState(false);
@@ -52,15 +49,10 @@ export default function Home({
         firstName: user.firstName,
         lastName: user.lastName,
       });
-      /*
-      setEmail(user.email);
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
-      */
     } catch (e) {
       handleError(e);
     }
-  }, []);
+  }, [user]);
 
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
@@ -132,6 +124,7 @@ export default function Home({
                 lastName: user.lastName,
                 uuid: user.uuid,
               }}
+              user={user}
             />
           )}
         </div>
@@ -144,9 +137,15 @@ type EditModal = {
   userDetails: Pick<User, 'email' | 'firstName' | 'lastName' | 'uuid'>;
   setShowEditModal: Dispatch<SetStateAction<boolean>>;
   handleError: (e: unknown) => void;
+  user: User;
 };
 
-function EditModal({ userDetails, setShowEditModal, handleError }: EditModal) {
+function EditModal({
+  userDetails,
+  setShowEditModal,
+  handleError,
+  user,
+}: EditModal) {
   const [email, setEmail] = useState(userDetails.email);
   const [firstName, setFirstName] = useState(userDetails.firstName);
   const [lastName, setLastName] = useState(userDetails.lastName);
@@ -171,6 +170,7 @@ function EditModal({ userDetails, setShowEditModal, handleError }: EditModal) {
         firstName: firstName,
         lastName: lastName,
       });
+      user.firstName = firstName;
     } catch (e) {
       handleError(e);
     }
