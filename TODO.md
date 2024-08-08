@@ -10,4 +10,4 @@
 
 TODO:
 
-pages/api/users:lle tarkistus onko käyttäjä "admin" vai ei. Tällä hetkellä kaikki kirjautuneet käyttäjät pystyisivät muokkaamaan käyttäjiä
+Tsekkaus ja korjaus Chromen konsolin issues-kohdan virheille
