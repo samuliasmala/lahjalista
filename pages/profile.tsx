@@ -24,10 +24,18 @@ import { updateUser } from '~/utils/apiRequests';
 
 export { getServerSideProps };
 
-const EMPTY_FORM_DATA = {
+const EMPTY_FORM_DATA: UserDetails = {
   firstName: '',
   lastName: '',
   email: '',
+  uuid: '',
+};
+
+type UserDetails = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  uuid: string;
 };
 
 export default function Home({
@@ -38,7 +46,9 @@ export default function Home({
   const [showUserWindow, setShowUserWindow] = useState(false);
   const [userDetails, setUserDetails] = useState(EMPTY_FORM_DATA);
   // most likely unnecessary, but it is here for now
-  const [currentDate, setCurrentDate] = useState('31.7.2024');
+  const [currentDate, setCurrentDate] = useState(
+    new Intl.DateTimeFormat('fi-FI').format(new Date()),
+  );
   const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
@@ -48,11 +58,12 @@ export default function Home({
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        uuid: user.uuid,
       });
     } catch (e) {
       handleError(e);
     }
-  }, [user]);
+  }, []);
 
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
@@ -65,7 +76,7 @@ export default function Home({
       <TitleBar
         setShowUserWindow={setShowUserWindow}
         showUserWindow={showUserWindow}
-        user={user}
+        userDetails={userDetails}
       />
       <div className="flex w-full justify-center">
         <div className="flex w-full flex-col items-center justify-center sm:max-w-96">
@@ -94,7 +105,9 @@ export default function Home({
               </div>
               <div className="flex">
                 <SvgCalendar width={20} height={20} />
-                <p className={`ml-1 ${jost.className} text-sm`}>31.7.2024</p>
+                <p className={`ml-1 ${jost.className} text-sm`}>
+                  {currentDate}
+                </p>
               </div>
             </div>
             <SvgPencilEdit
@@ -118,13 +131,8 @@ export default function Home({
             <EditModal
               handleError={handleError}
               setShowEditModal={setShowEditModal}
-              userDetails={{
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                uuid: user.uuid,
-              }}
-              user={user}
+              userDetails={userDetails}
+              setUserDetails={setUserDetails}
             />
           )}
         </div>
@@ -134,17 +142,17 @@ export default function Home({
 }
 
 type EditModal = {
-  userDetails: Pick<User, 'email' | 'firstName' | 'lastName' | 'uuid'>;
+  userDetails: UserDetails;
+  setUserDetails: Dispatch<SetStateAction<UserDetails>>;
   setShowEditModal: Dispatch<SetStateAction<boolean>>;
   handleError: (e: unknown) => void;
-  user: User;
 };
 
 function EditModal({
   userDetails,
   setShowEditModal,
   handleError,
-  user,
+  setUserDetails,
 }: EditModal) {
   const [email, setEmail] = useState(userDetails.email);
   const [firstName, setFirstName] = useState(userDetails.firstName);
@@ -170,7 +178,14 @@ function EditModal({
         firstName: firstName,
         lastName: lastName,
       });
-      user.firstName = firstName;
+      setUserDetails((prevValue) => {
+        return {
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          uuid: prevValue.uuid,
+        };
+      });
     } catch (e) {
       handleError(e);
     }
