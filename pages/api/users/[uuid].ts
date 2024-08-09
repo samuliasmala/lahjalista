@@ -68,17 +68,12 @@ async function handleGET({
 }: HandlerParams<User>) {
   const isAdminSearchingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  // uuid value inside databaseSearchParameter variable is just to be a placeholder value
-  // that removes following error: Type '{}' is not assignable to type 'UserWhereUniqueInput'.
-  const databaseSearchParameter: Prisma.UserWhereUniqueInput = { uuid: '' };
-  if (isAdminSearchingSpecificUser) {
-    databaseSearchParameter.uuid = queryUUID;
-  } else {
-    databaseSearchParameter.uuid = userData.uuid;
-  }
+  const databaseSearchUUID = isAdminSearchingSpecificUser ? queryUUID : userData.uuid 
 
   const user = await prisma.user.findUniqueOrThrow({
-    where: databaseSearchParameter,
+    where: {
+      uuid: databaseSearchUUID
+    },
     select: {
       uuid: true,
       firstName: true,
