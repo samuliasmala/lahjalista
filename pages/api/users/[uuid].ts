@@ -5,7 +5,6 @@ import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
 import { updateUserSchema } from '~/shared/zodSchemas';
 import { validateRequest } from '~/backend/auth';
-import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 
 type HandlerParams<ResponseType = unknown> = {
@@ -68,11 +67,13 @@ async function handleGET({
 }: HandlerParams<User>) {
   const isAdminSearchingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminSearchingSpecificUser ? queryUUID : userData.uuid 
+  const databaseSearchUUID = isAdminSearchingSpecificUser
+    ? queryUUID
+    : userData.uuid;
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      uuid: databaseSearchUUID
+      uuid: databaseSearchUUID,
     },
     select: {
       uuid: true,
