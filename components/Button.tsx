@@ -10,7 +10,7 @@ export function Button({
   return (
     <button
       className={twMerge(
-        `w-full mt-6 p-2 text-white border border-lines bg-primary rounded-md ${jost.className} font-medium text-lg`,
+        `mt-6 w-full rounded-md border border-lines bg-primary p-2 text-white ${jost.className} text-lg font-medium`,
         className,
       )}
       {...rest}

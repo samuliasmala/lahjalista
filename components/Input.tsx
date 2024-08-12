@@ -9,7 +9,7 @@ export function Input({
   return (
     <input
       className={twMerge(
-        `pl-2 pt-3 pb-3 border border-lines bg-bgForms rounded-md ${jost.className}`,
+        `rounded-md border border-lines bg-bgForms pb-3 pl-2 pt-3 ${jost.className}`,
         className,
       )}
       {...rest}

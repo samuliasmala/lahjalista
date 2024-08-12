@@ -72,18 +72,18 @@ export default function Register() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="w-full max-w-full h-screen">
+    <main className="h-screen w-full max-w-full">
       <div className="h-screen w-screen">
-        <div className="w-full flex justify-center">
-          <div className="mt-14 flex flex-col max-w-72 w-full">
+        <div className="flex w-full justify-center">
+          <div className="mt-14 flex w-full max-w-72 flex-col">
             {registerError.length > 0 ? (
-              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 m-3 rounded [overflow-wrap:anywhere]">
+              <div className="m-3 max-w-sm rounded border border-red-400 bg-red-100 text-center text-red-700 [overflow-wrap:anywhere]">
                 {registerError}
               </div>
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
-              <div className="mt-5 ml-4 mr-4 flex flex-col w-full">
+              <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
                 <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
@@ -133,7 +133,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <Label className="mt-5">Salasana</Label>
-                <div className="flex rounded-md outline outline-1 border-lines has-[input:focus]:outline-2 has-[input:focus]:rounded ">
+                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2 ">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -142,15 +142,15 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className={`border-0 outline-none w-full ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
+                    className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded rounded-md">
+                  <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
                     <SvgEye
-                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-primary text-lines"
+                      className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
@@ -159,12 +159,12 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button className="select-none mt-8">Luo käyttäjätunnus</Button>
-                <p className="select-none mt-3 text-xs text-gray-500 text-center">
+                <Button className="mt-8 select-none">Luo käyttäjätunnus</Button>
+                <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
-                    className={`underline cursor-pointer hover:text-blue-500 ${inter.className}`}
+                    className={`cursor-pointer underline hover:text-blue-500 ${inter.className}`}
                   >
                     Kirjaudu sisään
                   </Link>
@@ -194,7 +194,7 @@ function ErrorParagraph({
 }: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
   if (typeof errorText !== 'string' || errorText.length <= 0) return null;
   return (
-    <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
+    <p className={twMerge('max-w-xs text-red-600', className)} {...rest}>
       {errorText}
     </p>
   );

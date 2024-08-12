@@ -64,21 +64,21 @@ export default function Login() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className={`bg-bgPage w-full max-w-full h-screen`}>
+    <main className={`h-screen w-full max-w-full bg-bgPage`}>
       <div className="h-screen w-screen">
         {errorText.length > 0 ? (
-          <div className="pt-4 flex justify-center ">
-            <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+          <div className="flex justify-center pt-4 ">
+            <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
               {errorText}
             </div>
           </div>
         ) : null}
-        <div className="w-full flex justify-center">
-          <div className="flex flex-col max-w-72 w-full">
+        <div className="flex w-full justify-center">
+          <div className="flex w-full max-w-72 flex-col">
             <Logo wrapperClassName="mb-3" />
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText className="mt-3">Kirjaudu sisään</TitleText>
-              <div className="pt-12 flex flex-col">
+              <div className="flex flex-col pt-12">
                 <Label>Sähköposti</Label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
@@ -91,21 +91,21 @@ export default function Login() {
                   spellCheck="false"
                 />
               </div>
-              <div className="pt-6 flex flex-col">
+              <div className="flex flex-col pt-6">
                 <Label>Salasana</Label>
-                <div className="flex rounded-md outline outline-1 border-lines bg-bgForms has-[input:focus]:outline-2 has-[input:focus]:rounded justify-between">
+                <div className="flex justify-between rounded-md border-lines bg-bgForms outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
-                    className={`border-0 outline-none w-full ${!showPassword && password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
+                    className={`w-full border-0 outline-none ${!showPassword && password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="bg-bgForms flex items-center has-[input:focus]:outline-2 has-[input:focus]:rounded rounded-md">
+                  <div className="flex items-center rounded-md bg-bgForms has-[input:focus]:rounded has-[input:focus]:outline-2">
                     <SvgEye
-                      className="w-8 h-8 cursor-pointer p-0 text-lines"
+                      className="h-8 w-8 cursor-pointer p-0 text-lines"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
@@ -115,11 +115,11 @@ export default function Login() {
               </div>
               <div className="flex pt-4 align-middle">
                 <Label
-                  className={`select-none cursor-pointer flex ${jost.className}`}
+                  className={`flex cursor-pointer select-none ${jost.className}`}
                 >
                   <input
                     type="checkbox"
-                    className={`mr-2 cursor-pointer w-6 h-6 accent-lines`}
+                    className={`mr-2 h-6 w-6 cursor-pointer accent-lines`}
                     onClick={() => setRememberMe((prevValue) => !prevValue)}
                   />
                   Muista minut
@@ -128,12 +128,12 @@ export default function Login() {
               <Button type="submit">Kirjaudu sisään</Button>
             </form>
             <p
-              className={`mt-4 text-xs text-gray-500 text-center ${jost.className}`}
+              className={`mt-4 text-center text-xs text-gray-500 ${jost.className}`}
             >
               Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
-                className={`underline cursor-pointer hover:text-blue-500 ${inter.className}`}
+                className={`cursor-pointer underline hover:text-blue-500 ${inter.className}`}
               >
                 Luo tunnus
               </Link>

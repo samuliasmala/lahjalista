@@ -17,7 +17,7 @@ export function Logo({
   return (
     <div
       className={twMerge(
-        `mt-16 flex items-center justify-center select-none`,
+        `mt-16 flex select-none items-center justify-center`,
         wrapperClassName,
       )}
     >
@@ -27,11 +27,11 @@ export function Logo({
         priority={true}
         alt="logo"
         src="/images/logo_no_text.png"
-        className={twMerge(`w-32 h-32 max-w-max`, logoBackgroundClassName)}
+        className={twMerge(`h-32 w-32 max-w-max`, logoBackgroundClassName)}
       />
       <p
         className={twMerge(
-          `absolute mb-5 font-bold text-sm`,
+          `absolute mb-5 text-sm font-bold`,
           lahjaideaClassName,
         )}
       >

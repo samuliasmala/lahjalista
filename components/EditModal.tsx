@@ -56,43 +56,43 @@ export function EditModal({
       <form onSubmit={(e) => void handleEdit(e)}>
         <div className="flex flex-row justify-between">
           <TitleText
-            className={`font-medium text-primaryText text-base m-6 ${jost.className}`}
+            className={`m-6 text-base font-medium text-primaryText ${jost.className}`}
           >
             Muokkaa lahjaideaa
           </TitleText>
           <SvgXClose
             width={24}
             height={24}
-            className="self-center hover:cursor-pointer mr-6"
+            className="mr-6 self-center hover:cursor-pointer"
             onClick={() => setIsModalOpen(false)}
           />
         </div>
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
-            className="pt-2.5 pb-2.5"
+            className="pb-2.5 pt-2.5"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
             autoComplete="off"
           />
-          <label className="pt-4 pb-1">Saaja</label>
+          <label className="pb-1 pt-4">Saaja</label>
           <Input
-            className="pt-2.5 pb-2.5"
+            className="pb-2.5 pt-2.5"
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
           />
-          <div className="flex flex-row justify-end items-center mt-8">
+          <div className="mt-8 flex flex-row items-center justify-end">
             <Button
-              className="mt-0 w-20 h-8 p-0 bg-white text-primaryText text-sm"
+              className="mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText"
               onClick={() => setIsModalOpen(false)}
               type="button"
             >
               Peruuta
             </Button>
 
-            <Button className="ml-6 mt-0 w-20 h-8 p-0 text-sm" type="submit">
+            <Button className="ml-6 mt-0 h-8 w-20 p-0 text-sm" type="submit">
               Tallenna
             </Button>
           </div>
