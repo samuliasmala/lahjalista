@@ -49,6 +49,13 @@ export async function validateRequest(
 ): Promise<
   { user: LuciaUser; session: Session } | { user: null; session: null }
 > {
+  if (
+    process.env.NODE_ENV === 'development' &&
+    req.headers['node_env'] === 'development'
+  ) {
+    return await validateDevelopmentRequest(req, res);
+  }
+
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
@@ -71,4 +78,13 @@ export async function validateRequest(
   }
 
   return result;
+}
+
+async function validateDevelopmentRequest(
+  req: IncomingMessage,
+  res: ServerResponse,
+): Promise<
+  { user: LuciaUser; session: Session } | { user: null; session: null }
+> {
+  return await lucia.validateSession(req.headers.authorization ?? '');
 }
