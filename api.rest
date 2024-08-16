@@ -83,3 +83,9 @@ Content-Type: application/json
 
 ###
 DELETE {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+
+###
+GET {{baseUrl}}/users
+Authorization: 547pxtzgo4r9kkas5wy0k4fck5a375yhne7sqz6m
+NODE_ENV: development
+
