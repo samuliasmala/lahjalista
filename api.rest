@@ -3,6 +3,9 @@
 
 @baseUrl = http://localhost:3000/api
 
+@authorization = csukaey6h8t4sxwdt7fhxcxqindj0mzx0pkek43r
+
+
 # GIFT REQUESTS
 
 ###
@@ -46,13 +49,20 @@ DELETE {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
 
 ###
 GET {{baseUrl}}/users
+Authorization: {{authorization}}
+Origin: {{baseUrl}}
 
 ###
 GET {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+Authorization: {{authorization}}
+Origin: {{baseUrl}}
+
 
 ###
 POST {{baseUrl}}/users
 Content-Type: application/json
+Authorization: {{authorization}}
+Origin: {{baseUrl}}
 
 {
   "email": "john.doe@doemail.com",
@@ -62,8 +72,10 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+PATCH {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
 Content-Type: application/json
+Authorization: {{authorization}}
+Origin: {{baseUrl}}
 
 {
   "email": "matti.meikalainen@esimerkkimail.com",
@@ -72,20 +84,19 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+PUT {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
 Content-Type: application/json
+Authorization: {{authorization}}
+Origin: {{baseUrl}}
 
 {
   "email": "matti.meikalainen@esimerkkimail.com",
-  "firstName": "Matti",
+  "firstName": "Mikko",
   "lastName": "Meikäläinen"
 }
 
 ###
-DELETE {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
-
-###
-GET {{baseUrl}}/users
-Authorization: 547pxtzgo4r9kkas5wy0k4fck5a375yhne7sqz6m
-NODE_ENV: development
+DELETE {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
+Authorization: {{authorization}}
+Origin: {{baseUrl}}
 
