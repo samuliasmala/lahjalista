@@ -60,7 +60,7 @@ export const createUserSchema = userSchema.extend({
   password: passwordSchema,
 });
 
-export const updateUserSchema = userSchema;
+export const updateUserSchema = userSchema.partial();
 
 export const userLoginDetailsSchema = createUserSchema
   .pick({ email: true, password: true })
