@@ -51,7 +51,7 @@ export async function validateRequest(
 > {
   if (
     process.env.NODE_ENV === 'development' &&
-    req.headers['node_env'] === 'development'
+    req.headers['user-agent'] === 'vscode-restclient'
   ) {
     return await validateDevelopmentRequest(req, res);
   }
