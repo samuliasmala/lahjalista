@@ -53,7 +53,7 @@ export async function validateRequest(
     process.env.NODE_ENV === 'development' &&
     req.headers['user-agent'] === 'vscode-restclient'
   ) {
-    return await validateDevelopmentRequest(req, res);
+    return await validateDevelopmentRequest(req);
   }
 
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
@@ -82,7 +82,6 @@ export async function validateRequest(
 
 async function validateDevelopmentRequest(
   req: IncomingMessage,
-  res: ServerResponse,
 ): Promise<
   { user: LuciaUser; session: Session } | { user: null; session: null }
 > {
