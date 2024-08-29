@@ -36,7 +36,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [isUserCreated, setIsUserCreated] = useState(false);
 
-  const [isPhoneUser, setIsPhoneUser] = useState(false);
+  const [isUserPhoneUser, setIsUserPhoneUser] = useState(false);
 
   const router = useRouter();
 
@@ -45,7 +45,7 @@ export default function Register() {
       const screenWidth = window.screen.width;
       const screenHeight = window.screen.height;
       if (screenWidth < 768 || screenHeight < 768) {
-        setIsPhoneUser(true);
+        setIsUserPhoneUser(true);
       }
     }
   }, []);
@@ -103,7 +103,7 @@ export default function Register() {
               pauseOnHover
               theme="light"
               transition={Bounce}
-              limit={isPhoneUser ? 1 : 3}
+              limit={isUserPhoneUser ? 1 : 3}
             />
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
