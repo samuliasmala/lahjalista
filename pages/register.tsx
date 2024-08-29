@@ -31,8 +31,6 @@ const EMPTY_FORM_DATA = {
 export default function Register() {
   const [formData, setFormData] = useState(EMPTY_FORM_DATA);
 
-  const [registerError, setRegisterError] = useState('');
-
   const [errors, setErrors] = useState<ErrorTypes>({});
 
   const [showPassword, setShowPassword] = useState(false);
@@ -65,19 +63,16 @@ export default function Register() {
         });
         return;
       }
-      setErrors({});
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
       const errorText = handleAuthErrors(e);
-      setRegisterError(errorText);
       toast(errorText);
     }
   }
 
   function userCreatedSuccesfully() {
     setFormData(EMPTY_FORM_DATA);
-    setRegisterError('');
     setIsUserCreated(true);
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
@@ -105,11 +100,6 @@ export default function Register() {
               transition={Bounce}
               limit={isPhoneUser ? 1 : 3}
             />
-            {registerError.length > 0 ? (
-              <div className="m-3 max-w-sm rounded border border-red-400 bg-red-100 text-center text-red-700 [overflow-wrap:anywhere]">
-                {registerError}
-              </div>
-            ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
