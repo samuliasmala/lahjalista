@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, HTMLAttributes, useState } from 'react';
+import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
@@ -14,6 +14,8 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { inter } from '~/utils/fonts';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -36,9 +38,21 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [isUserCreated, setIsUserCreated] = useState(false);
 
+  const [isPhoneUser, setIsPhoneUser] = useState(false);
+
   const router = useRouter();
 
-  async function handleRegister(e: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    if (window) {
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+      if (screenWidth < 768 || screenHeight < 768) {
+        setIsPhoneUser(true);
+      }
+    }
+  }, []);
+
+  async function handleRegister(e: FormEvent) {
     try {
       e.preventDefault();
       const validatedForm = formSchema.safeParse(formData);
@@ -57,6 +71,7 @@ export default function Register() {
     } catch (e) {
       const errorText = handleAuthErrors(e);
       setRegisterError(errorText);
+      toast(errorText);
     }
   }
 
@@ -76,6 +91,20 @@ export default function Register() {
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="mt-14 flex w-full max-w-72 flex-col">
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+              transition={Bounce}
+              limit={isPhoneUser ? 1 : 3}
+            />
             {registerError.length > 0 ? (
               <div className="m-3 max-w-sm rounded border border-red-400 bg-red-100 text-center text-red-700 [overflow-wrap:anywhere]">
                 {registerError}
