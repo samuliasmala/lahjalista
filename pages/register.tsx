@@ -16,6 +16,7 @@ import { Label } from '~/components/Label';
 import { inter } from '~/utils/fonts';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { isPhoneUser } from '~/utils/isPhoneUser';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -42,11 +43,7 @@ export default function Register() {
 
   useEffect(() => {
     if (window) {
-      const screenWidth = window.screen.width;
-      const screenHeight = window.screen.height;
-      if (screenWidth < 768 || screenHeight < 768) {
-        setIsUserPhoneUser(true);
-      }
+      setIsUserPhoneUser(isPhoneUser(window));
     }
   }, []);
 
