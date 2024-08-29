@@ -86,6 +86,11 @@ export default function Register() {
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="mt-14 flex w-full max-w-72 flex-col">
+            {/* CHECK THIS
+              
+              Kannattaako ToastContainer laittaa esim. _app.tsx tiedostoon, joten sitä ei tarvitstisi merkata joka kerta
+            
+            */}
             <ToastContainer
               position="top-right"
               autoClose={5000}
