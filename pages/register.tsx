@@ -14,8 +14,7 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { inter } from '~/utils/fonts';
-import { Bounce, toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { isPhoneUser } from '~/utils/isPhoneUser';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
@@ -88,6 +87,7 @@ export default function Register() {
               Kannattaako ToastContainer laittaa esim. _app.tsx tiedostoon, joten sitä ei tarvitstisi merkata joka kerta
             
             */}
+            {/*
             <ToastContainer
               position="top-right"
               autoClose={5000}
@@ -102,6 +102,7 @@ export default function Register() {
               transition={Bounce}
               limit={isUserPhoneUser ? 1 : 3}
             />
+            */}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
