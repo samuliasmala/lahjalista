@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import { FormEvent, HTMLAttributes, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
@@ -15,7 +15,6 @@ import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { inter } from '~/utils/fonts';
 import { toast } from 'react-toastify';
-import { isPhoneUser } from '~/utils/isPhoneUser';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -36,15 +35,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [isUserCreated, setIsUserCreated] = useState(false);
 
-  const [isUserPhoneUser, setIsUserPhoneUser] = useState(false);
-
   const router = useRouter();
-
-  useEffect(() => {
-    if (window) {
-      setIsUserPhoneUser(isPhoneUser(window));
-    }
-  }, []);
 
   async function handleRegister(e: FormEvent) {
     try {
