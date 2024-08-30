@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, HTMLAttributes, useState } from 'react';
 import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
@@ -15,6 +15,7 @@ import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { inter, jost } from '~/utils/fonts';
 import { Label } from '~/components/Label';
+import { twMerge } from 'tailwind-merge';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -31,10 +32,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
+type ErrorFieldNames = 'email' | 'password';
+type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+
+  const [errors, setErrors] = useState<ErrorTypes>({});
   const [errorText, setErrorText] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -43,13 +49,48 @@ export default function Login() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
+      setErrors({});
+      let errorFound = false;
+
       const emailValidation = emailSchema.safeParse(email);
       if (emailValidation.success === false) {
-        setErrorText(emailValidation.error.format()._errors[0] || '');
+        setErrors((prevValue) => {
+          return {
+            ...prevValue,
+            email: emailValidation.error.format()._errors[0] || '',
+          };
+        });
+        errorFound = true;
+      }
+
+      if (password.length <= 0) {
+        setErrors((prevValue) => {
+          return {
+            ...prevValue,
+            password: 'Salasana on pakollinen',
+          };
+        });
+        errorFound = true;
+      }
+
+      if (errorFound) {
         return;
       }
+
+      /*
+      CHECK THIS,
+
+      Type 'string | undefined' is not assignable to type 'string'.
+
+      TypeScript huomauttaa tuomoisesta ongelmasta "loginCredentials"-variablen kanssa
+
+      Ongelma ohitettu toistaiseksi laittamalla: || "" 
+
+      Ongelma ei pitäisi olla mahdollinen, errorFound-variablen takia
+      */
+
       const loginCredentials: UserLoginDetails = {
-        email: emailValidation.data,
+        email: emailValidation.data || '',
         password: password,
         rememberMe: rememberMe,
       };
@@ -91,6 +132,7 @@ export default function Login() {
                   spellCheck="false"
                 />
               </div>
+              <ErrorParagraph errorText={errors.email} />
               <div className="flex flex-col pt-6">
                 <Label>Salasana</Label>
                 <div className="flex justify-between rounded-md border-lines bg-bgForms outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
@@ -113,6 +155,7 @@ export default function Login() {
                   </div>
                 </div>
               </div>
+              <ErrorParagraph errorText={errors.password} />
               <div className="flex pt-4 align-middle">
                 <Label
                   className={`flex cursor-pointer select-none ${jost.className}`}
@@ -142,5 +185,22 @@ export default function Login() {
         </div>
       </div>
     </main>
+  );
+}
+
+// CHECK THIS, onko tarpeellinen laittaa "sähköposti / salasana on pakollinen" jos pituus <= 0
+
+// jos on ok, kannattanee tehdä komponentti, koska myös käytössä /pages/register.tsx:ssä
+
+function ErrorParagraph({
+  className,
+  errorText,
+  ...rest
+}: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
+  if (typeof errorText !== 'string' || errorText.length <= 0) return null;
+  return (
+    <p className={twMerge('max-w-xs text-red-600', className)} {...rest}>
+      {errorText}
+    </p>
   );
 }
