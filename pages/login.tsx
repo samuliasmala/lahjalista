@@ -16,6 +16,7 @@ import { emailSchema } from '~/shared/zodSchemas';
 import { inter, jost } from '~/utils/fonts';
 import { Label } from '~/components/Label';
 import { twMerge } from 'tailwind-merge';
+import { toast } from 'react-toastify';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -41,7 +42,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const [errors, setErrors] = useState<ErrorTypes>({});
-  const [errorText, setErrorText] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
@@ -98,7 +99,7 @@ export default function Login() {
       await router.push('/');
     } catch (e) {
       console.error(e);
-      setErrorText(handleAuthErrors(e));
+      toast(handleAuthErrors(e));
     }
   }
 
@@ -107,13 +108,7 @@ export default function Login() {
   return (
     <main className={`h-screen w-full max-w-full bg-bgPage`}>
       <div className="h-screen w-screen">
-        {errorText.length > 0 ? (
-          <div className="flex justify-center pt-4 ">
-            <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
-              {errorText}
-            </div>
-          </div>
-        ) : null}
+        ´
         <div className="flex w-full justify-center">
           <div className="flex w-full max-w-72 flex-col">
             <Logo wrapperClassName="mb-3" />

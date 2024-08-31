@@ -15,6 +15,7 @@ import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import { jost } from '~/utils/fonts';
+import { toast } from 'react-toastify';
 
 export { getServerSideProps };
 
@@ -94,6 +95,7 @@ export default function Home({
 
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
+    toast(errorMessage);
     setIsAnyKindOfError(true);
     setIsAnyKindOfErrorMessage(errorMessage);
   }
