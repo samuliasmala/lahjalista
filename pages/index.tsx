@@ -278,7 +278,7 @@ function UserDetailModal({
               <SvgArrowRightStartOnRectangle
                 width={18}
                 height={18}
-                className="ml-2 stroke-white"
+                className="ml-2"
               />
             </Button>
           </div>
