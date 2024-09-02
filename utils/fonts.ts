@@ -1,4 +1,4 @@
-import { Inter, Jost, Libre_Bodoni, Roboto_Mono } from 'next/font/google';
+import { Inter, Jost, Libre_Bodoni } from 'next/font/google';
 
 export const inter = Inter({
   subsets: ['latin'],
