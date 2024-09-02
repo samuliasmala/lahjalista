@@ -13,7 +13,6 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
-import { inter } from '~/utils/fonts';
 import { Label } from '~/components/Label';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -129,7 +128,7 @@ export default function Login() {
               Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
-                className={`cursor-pointer underline hover:text-blue-500 ${inter.className}`}
+                className={`cursor-pointer underline hover:text-blue-500`}
               >
                 Luo tunnus
               </Link>

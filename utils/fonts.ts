@@ -1,9 +1,4 @@
-import { Inter, Jost, Libre_Bodoni } from 'next/font/google';
-
-export const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-});
+import { Jost, Libre_Bodoni } from 'next/font/google';
 
 export const libre_bodoni = Libre_Bodoni({
   subsets: ['latin'],
