@@ -11,5 +11,3 @@
 ### </IDEOITA>
 
 TODO:
-
-pages/api/users:lle tarkistus onko käyttäjä "admin" vai ei. Tällä hetkellä kaikki kirjautuneet käyttäjät pystyisivät muokkaamaan käyttäjiä
