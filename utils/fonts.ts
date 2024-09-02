@@ -5,11 +5,6 @@ export const inter = Inter({
   display: 'swap',
 });
 
-export const roboto_mono = Roboto_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-});
-
 export const libre_bodoni = Libre_Bodoni({
   subsets: ['latin'],
   display: 'swap',
