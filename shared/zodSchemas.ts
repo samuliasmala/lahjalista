@@ -43,7 +43,7 @@ export const createSessionSchema = z.object({
 });
 
 export const feedbackSchema = z.object({
-  uuid: z.string(),
+  feedbackUUID: z.string(),
   feedbackText: z.string().min(1, 'Feedback text is mandatory!'),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -51,5 +51,5 @@ export const feedbackSchema = z.object({
 
 export const createFeedbackSchema = feedbackSchema.pick({
   feedbackText: true,
-  uuid: true,
+  feedbackUUID: true,
 });

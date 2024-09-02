@@ -26,16 +26,20 @@ export async function createFeedbackSession(
         userUUID: userData.uuid,
       },
     });
-    const appendableCookie = new Cookie('feedback-session', newlyCreated.uuid, {
-      maxAge: 3600,
-    }).serialize();
+    const appendableCookie = new Cookie(
+      'feedback-session',
+      newlyCreated.feedbackSessionUUID,
+      {
+        maxAge: 3600,
+      },
+    ).serialize();
     return context.res.setHeader('Set-cookie', appendableCookie);
   }
 
   if (oldFeedbackSession) {
     await prisma.feedbackSession.update({
       where: {
-        uuid: oldFeedbackSession.uuid,
+        feedbackSessionUUID: oldFeedbackSession.feedbackSessionUUID,
       },
       data: {
         expiresAt: expirationTimeInISOSTRING,
@@ -43,7 +47,7 @@ export async function createFeedbackSession(
     });
     const appendableCookie = new Cookie(
       'feedback-session',
-      oldFeedbackSession.uuid,
+      oldFeedbackSession.feedbackSessionUUID,
       { maxAge: 3600 },
     ).serialize();
     return context.res.setHeader('Set-cookie', appendableCookie);
@@ -55,7 +59,7 @@ export async function createFeedbackSession(
 export async function deleteFeedbackSession(feedbackSessionUUID: string) {
   await prisma.feedbackSession.delete({
     where: {
-      uuid: feedbackSessionUUID,
+      feedbackSessionUUID: feedbackSessionUUID,
     },
   });
   return;
@@ -64,7 +68,7 @@ export async function deleteFeedbackSession(feedbackSessionUUID: string) {
 export async function getFeedbackSession(feedbackSessionUUID: string) {
   const feedbackSession = await prisma.feedbackSession.findFirst({
     where: {
-      uuid: feedbackSessionUUID,
+      feedbackSessionUUID: feedbackSessionUUID,
     },
   });
 

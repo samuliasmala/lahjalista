@@ -50,16 +50,18 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
       );
   }
   const isFeedbackSessionFound: boolean =
-    (await getFeedbackSession(feedbackParse.data.uuid)) === null ? false : true;
+    (await getFeedbackSession(feedbackParse.data.feedbackUUID)) === null
+      ? false
+      : true;
 
   if (!isFeedbackSessionFound) {
-    return res.status(400).send('UUID was invalid!');
+    return res.status(400).send('Feedback UUID was invalid!');
   }
 
   const addedFeedback = await createFeedback(feedbackParse.data);
 
   if (addedFeedback) {
-    await deleteFeedbackSession(feedbackParse.data.uuid);
+    await deleteFeedbackSession(feedbackParse.data.feedbackUUID);
   }
   return res.status(200).json(addedFeedback);
 }

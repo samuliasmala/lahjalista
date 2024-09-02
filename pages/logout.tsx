@@ -83,7 +83,7 @@ export default function Logout() {
       }
       const dataToSend: CreateFeedback = {
         feedbackText: feedbackText,
-        uuid: feedbackSessionCookie,
+        feedbackUUID: feedbackSessionCookie,
       };
 
       await axios.post('/api/feedback', dataToSend);
