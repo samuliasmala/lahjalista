@@ -14,7 +14,6 @@ import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangl
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
-import { jost } from '~/utils/fonts';
 
 export { getServerSideProps };
 
@@ -170,11 +169,9 @@ export default function Home({
                 >
                   <div key={giftItem.uuid} className="grid">
                     <p
-                      className={`[overflow-wrap: anywhere] hover-target col-start-1 text-primaryText ${jost.className}`}
+                      className={`[overflow-wrap: anywhere] hover-target col-start-1 text-primaryText`}
                     >
-                      {giftItem.gift}{' '}
-                      <span className={`${jost.className}`}>-</span>{' '}
-                      {giftItem.receiver}
+                      {giftItem.gift} <span>-</span> {giftItem.receiver}
                     </p>
                     <SvgPencilEdit
                       key={`${giftItem.uuid}_editbutton`}
@@ -272,9 +269,7 @@ function UserDetailModal({
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary"
               onClick={() => void handleLogout()}
             >
-              <p className={`text-white ${jost.className} text-sm font-medium`}>
-                Kirjaudu ulos
-              </p>
+              <p className={`text-sm font-medium text-white`}>Kirjaudu ulos</p>
               <SvgArrowRightStartOnRectangle
                 width={18}
                 height={18}
