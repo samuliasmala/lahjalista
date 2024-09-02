@@ -105,7 +105,7 @@ export default function Home({
           <SvgUser
             width={24}
             height={24}
-            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} z-[98] mr-4`}
+            className={`z-[98] mr-4 cursor-pointer text-stone-600`}
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           <UserDetailModal
@@ -177,7 +177,7 @@ export default function Home({
                       key={`${giftItem.uuid}_editbutton`}
                       width={24}
                       height={24}
-                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle hover:cursor-pointer"
+                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                       onClick={() => {
                         setEditModalGiftData(giftItem);
                         setIsEditModalOpen(true);
@@ -188,7 +188,7 @@ export default function Home({
                       key={`${giftItem.uuid}_deletebutton`}
                       width={24}
                       height={24}
-                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle hover:cursor-pointer"
+                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                       onClick={() => {
                         setDeleteModalGiftData(giftItem);
                         setIsDeleteModalOpen(true);

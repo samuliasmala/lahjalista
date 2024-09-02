@@ -8,7 +8,7 @@ const SvgUser = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="#404040"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
