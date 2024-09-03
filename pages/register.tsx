@@ -7,11 +7,12 @@ import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
-import { SvgCheckMarkIcon } from '~/icons/CheckMarkIcon';
+import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
 import { handleAuthErrors } from '~/utils/handleError';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
+import { Label } from '~/components/Label';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -70,19 +71,19 @@ export default function Register() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="bg-orange-50 w-full max-w-full h-screen">
+    <main className="h-screen w-full max-w-full">
       <div className="h-screen w-screen">
-        <div className="w-full flex justify-center">
-          <div className="pt-5 flex flex-col">
+        <div className="flex w-full justify-center">
+          <div className="mt-14 flex w-full max-w-72 flex-col">
             {registerError.length > 0 ? (
-              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+              <div className="m-3 max-w-sm rounded border border-red-400 bg-red-100 text-center text-red-700 [overflow-wrap:anywhere]">
                 {registerError}
               </div>
             ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
-              <TitleText className="text-center">Luo käyttäjätunnus</TitleText>
-              <div className="pt-5 pl-4 pr-4 flex flex-col max-w-80">
-                <label>Etunimi</label>
+              <TitleText>Luo käyttäjätunnus</TitleText>
+              <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
+                <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
                   onChange={(e) => {
@@ -91,7 +92,6 @@ export default function Register() {
                       firstName: e.currentTarget.value,
                     });
                   }}
-                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="Matti"
@@ -100,7 +100,7 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.firstName} />
 
-                <label className="pt-5">Sukunimi</label>
+                <Label className="mt-5">Sukunimi</Label>
                 <Input
                   value={formData.lastName}
                   onChange={(e) => {
@@ -109,7 +109,6 @@ export default function Register() {
                       lastName: e.currentTarget.value,
                     });
                   }}
-                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="Meikäläinen"
@@ -118,13 +117,12 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.lastName} />
 
-                <label className="pt-5">Sähköposti</label>
+                <Label className="mt-5">Sähköpostiosoite</Label>
                 <Input
                   value={formData.email}
                   onChange={(e) => {
                     setFormData({ ...formData, email: e.currentTarget.value });
                   }}
-                  className="border border-black"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
@@ -133,8 +131,8 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.email} />
 
-                <label className="pt-5">Salasana</label>
-                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
+                <Label className="mt-5">Salasana</Label>
+                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2 ">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -143,15 +141,15 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
+                    className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-gray-100 hover:bg-white bg-white flex items-center ">
+                  <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
                     <SvgEye
-                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
@@ -160,12 +158,12 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button className="select-none">Luo käyttäjätunnus</Button>
-                <p className="select-none pt-6 text-xs text-gray-600">
+                <Button className="mt-8 select-none">Luo käyttäjätunnus</Button>
+                <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
-                    className="underline cursor-pointer hover:text-blue-500"
+                    className={`cursor-pointer underline hover:text-blue-500`}
                   >
                     Kirjaudu sisään
                   </Link>
@@ -195,7 +193,7 @@ function ErrorParagraph({
 }: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
   if (typeof errorText !== 'string' || errorText.length <= 0) return null;
   return (
-    <p className={twMerge('text-red-600 max-w-xs', className)} {...rest}>
+    <p className={twMerge('max-w-xs text-red-600', className)} {...rest}>
       {errorText}
     </p>
   );

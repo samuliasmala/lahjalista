@@ -13,6 +13,7 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
+import { Label } from '~/components/Label';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -62,26 +63,26 @@ export default function Login() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className="bg-orange-50 w-full max-w-full h-screen ">
+    <main className={`h-screen w-full max-w-full bg-bgPage`}>
       <div className="h-screen w-screen">
         {errorText.length > 0 ? (
-          <div className="pt-4 flex justify-center ">
-            <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+          <div className="flex justify-center pt-4 ">
+            <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
               {errorText}
             </div>
           </div>
         ) : null}
-        <div className="w-full flex justify-center">
-          <div className="mt-5 flex flex-col">
-            <Logo />
+        <div className="flex w-full justify-center">
+          <div className="flex w-full max-w-72 flex-col">
+            <Logo wrapperClassName="mb-3" />
             <form onSubmit={(e) => void handleSubmit(e)}>
-              <TitleText className="text-center">Kirjaudu sisään</TitleText>
-              <div className="mt-5 flex flex-col">
-                <label>Sähköposti</label>
+              <TitleText className="mt-3">Kirjaudu sisään</TitleText>
+              <div className="flex flex-col pt-12">
+                <Label>Sähköposti</Label>
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
                   value={email}
-                  className="border border-black pl-8 pr-8"
+                  className="border border-lines pr-0"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
@@ -89,21 +90,21 @@ export default function Login() {
                   spellCheck="false"
                 />
               </div>
-              <div className="mt-5 flex flex-col">
-                <label>Salasana</label>
-                <div className="flex rounded-md outline outline-1 border-black hover:bg-gray-100 has-[input:focus]:outline-2 has-[input:focus]:rounded group/password">
+              <div className="flex flex-col pt-6">
+                <Label>Salasana</Label>
+                <div className="flex justify-between rounded-md border-lines bg-bgForms outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
-                    className="pl-1 pt-3 pb-3 border-0 outline-none group-hover/password:bg-gray-100"
+                    className={`w-full border-0 outline-none ${!showPassword && password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="group-hover/password:bg-gray-100 hover:bg-white bg-white flex items-center ">
+                  <div className="flex items-center rounded-md bg-bgForms has-[input:focus]:rounded has-[input:focus]:outline-2">
                     <SvgEye
-                      className="w-8 h-8 cursor-pointer p-0 hover:stroke-yellow-600 "
+                      className="h-8 w-8 cursor-pointer p-0 text-lines"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
@@ -111,23 +112,23 @@ export default function Login() {
                   </div>
                 </div>
               </div>
-              <div className="flex mt-3 align-middle">
-                <label className="select-none cursor-pointer flex">
+              <div className="flex pt-4 align-middle">
+                <Label className={`flex cursor-pointer select-none`}>
                   <input
                     type="checkbox"
-                    className="mr-2 cursor-pointer w-6 h-6 accent-emerald-500 "
+                    className={`mr-2 h-6 w-6 cursor-pointer accent-lines`}
                     onClick={() => setRememberMe((prevValue) => !prevValue)}
                   />
                   Muista minut
-                </label>
+                </Label>
               </div>
-              <Button type="submit">Kirjaudu</Button>
+              <Button type="submit">Kirjaudu sisään</Button>
             </form>
-            <p className="mt-6 text-xs text-gray-600 text-center">
-              Ei ole vielä tunnuksia?{' '}
+            <p className={`mt-4 text-center text-xs text-gray-500`}>
+              Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
-                className="underline cursor-pointer hover:text-blue-500"
+                className={`cursor-pointer underline hover:text-blue-500`}
               >
                 Luo tunnus
               </Link>

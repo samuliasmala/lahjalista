@@ -4,16 +4,15 @@ const SvgArrowRightStartOnRectangle = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
-    stroke="currentColor"
-    strokeWidth={1.5}
-    className="arrow-right-start-on-rectangle_svg__w-6 arrow-right-start-on-rectangle_svg__h-6"
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 20"
     {...props}
   >
     <path
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+      strokeWidth={2}
+      d="m14 15 5-5m0 0-5-5m5 5H7m0-9H5.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C1 3.28 1 4.12 1 5.8v8.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C3.28 19 4.12 19 5.8 19H7"
     />
   </svg>
 );

@@ -104,20 +104,20 @@ export default function Logout() {
 
   if (!isFeedbackSent) {
     return (
-      <main className="bg-orange-50 w-full max-w-full h-screen ">
-        <div className="h-screen w-screen flex flex-col items-center">
+      <main className="h-screen w-full max-w-full bg-orange-50 ">
+        <div className="flex h-screen w-screen flex-col items-center">
           {errorText.length > 0 ? (
-            <div className="pt-4 flex justify-center ">
-              <div className="max-w-sm text-center bg-red-100 border border-red-400 text-red-700 p-3 rounded [overflow-wrap:anywhere]">
+            <div className="flex justify-center pt-4 ">
+              <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
                 {errorText}
               </div>
             </div>
           ) : null}
           <div className="max-w-80">
             <Logo />
-            <div className="pt-10 flex flex-col items-center">
+            <div className="flex flex-col items-center pt-10">
               <TitleText className="font-bold">Näkemiin!</TitleText>
-              <p className="text-center text-sm [overflow-wrap:anywhere] pt-10 text-gray-600">
+              <p className="pt-10 text-center text-sm text-gray-600 [overflow-wrap:anywhere]">
                 Oli ilo auttaa sinua lahjaideoiden kanssa, nähdään pian
                 uudelleen!
               </p>
@@ -130,7 +130,7 @@ export default function Logout() {
                 <label className="text-start">Palaute</label>
                 <textarea
                   value={feedbackText}
-                  className="border border-black h-32 pl-1 pt-1"
+                  className="h-32 border border-black pl-1 pt-1"
                   onChange={(e) => {
                     setFeedbackText(e.currentTarget.value);
                   }}
@@ -142,7 +142,7 @@ export default function Logout() {
                   Saitko uuden idean?{' '}
                   <Link
                     href={'/login'}
-                    className="underline cursor-pointer hover:text-blue-500"
+                    className="cursor-pointer underline hover:text-blue-500"
                   >
                     Kirjaudu uudelleen
                   </Link>
@@ -155,13 +155,13 @@ export default function Logout() {
     );
   } else {
     return (
-      <main className="bg-orange-50 w-full max-w-full h-screen ">
-        <div className="h-screen w-screen flex flex-col items-center">
+      <main className="h-screen w-full max-w-full bg-orange-50 ">
+        <div className="flex h-screen w-screen flex-col items-center">
           <div className="max-w-80">
             <Logo />
-            <div className="pt-10 flex flex-col items-center">
+            <div className="flex flex-col items-center pt-10">
               <TitleText className="font-bold">Kiitos palautteesta!</TitleText>
-              <p className="text-center text-sm [overflow-wrap:anywhere] pt-10 text-gray-600">
+              <p className="pt-10 text-center text-sm text-gray-600 [overflow-wrap:anywhere]">
                 Oli ilo auttaa sinua lahjaideoiden kanssa, nähdään pian
                 uudelleen!
               </p>

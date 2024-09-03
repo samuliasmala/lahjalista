@@ -31,5 +31,7 @@ export type UserLoginDetails = z.infer<typeof userLoginDetailsSchema>;
 // SESSION
 export type CreateSession = z.infer<typeof createSessionSchema>;
 
+// FEEDBACK
 export type Feedback = z.infer<typeof feedbackSchema>;
+
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
