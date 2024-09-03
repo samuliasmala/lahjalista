@@ -8,7 +8,7 @@ const SvgXClose = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="#594F47"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

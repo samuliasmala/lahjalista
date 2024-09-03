@@ -8,13 +8,13 @@ const SvgTrashCan = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="#594F47"
+      stroke="currentColor"
       strokeWidth={1.5}
       d="M5 5.5h10v12H5z"
       clipRule="evenodd"
     />
     <path
-      stroke="#594F47"
+      stroke="currentColor"
       strokeWidth={1.5}
       d="M2 5.5h16M8 8.5v6M12 8.5v6M8 5.5v-3h4v3"
     />
