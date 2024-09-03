@@ -63,6 +63,7 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
   if (addedFeedback) {
     await deleteFeedbackSession(feedbackParse.data.feedbackUUID);
   }
+
   return res.status(200).json(addedFeedback);
 }
 
@@ -70,6 +71,10 @@ async function createFeedback(feedback: CreateFeedback) {
   const addedFeedback = prisma.feedback.create({
     data: {
       feedbackText: feedback.feedbackText,
+    },
+    select: {
+      feedbackText: true,
+      createdAt: true,
     },
   });
 
