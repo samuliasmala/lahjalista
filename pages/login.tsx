@@ -13,7 +13,6 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
-import { inter, jost } from '~/utils/fonts';
 import { Label } from '~/components/Label';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -114,9 +113,7 @@ export default function Login() {
                 </div>
               </div>
               <div className="flex pt-4 align-middle">
-                <Label
-                  className={`flex cursor-pointer select-none ${jost.className}`}
-                >
+                <Label className={`flex cursor-pointer select-none`}>
                   <input
                     type="checkbox"
                     className={`mr-2 h-6 w-6 cursor-pointer accent-lines`}
@@ -127,13 +124,11 @@ export default function Login() {
               </div>
               <Button type="submit">Kirjaudu sisään</Button>
             </form>
-            <p
-              className={`mt-4 text-center text-xs text-gray-500 ${jost.className}`}
-            >
+            <p className={`mt-4 text-center text-xs text-gray-500`}>
               Ei vielä tunnuksia?{' '}
               <Link
                 href={'/register'}
-                className={`cursor-pointer underline hover:text-blue-500 ${inter.className}`}
+                className={`cursor-pointer underline hover:text-blue-500`}
               >
                 Luo tunnus
               </Link>

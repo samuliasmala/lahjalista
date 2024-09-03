@@ -12,7 +12,6 @@ import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleGiftError } from '~/utils/handleError';
-import { jost } from '~/utils/fonts';
 import SvgXClose from '~/icons/x_close';
 
 type EditModal = {
@@ -55,9 +54,7 @@ export function EditModal({
     <Modal className="max-w-80">
       <form onSubmit={(e) => void handleEdit(e)}>
         <div className="flex flex-row justify-between">
-          <TitleText
-            className={`m-6 text-base font-medium text-primaryText ${jost.className}`}
-          >
+          <TitleText className={`m-6 text-base font-medium text-primaryText`}>
             Muokkaa lahjaideaa
           </TitleText>
           <SvgXClose

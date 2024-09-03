@@ -14,7 +14,6 @@ import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangl
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
-import { jost } from '~/utils/fonts';
 
 export { getServerSideProps };
 
@@ -106,7 +105,7 @@ export default function Home({
           <SvgUser
             width={24}
             height={24}
-            className={`cursor-pointer hover:stroke-yellow-600 ${showUserWindow ? 'stroke-yellow-600' : ''} z-[98] mr-4`}
+            className={`z-[98] mr-4 cursor-pointer text-stone-600`}
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           <UserDetailModal
@@ -170,17 +169,15 @@ export default function Home({
                 >
                   <div key={giftItem.uuid} className="grid">
                     <p
-                      className={`[overflow-wrap: anywhere] hover-target col-start-1 text-primaryText ${jost.className}`}
+                      className={`[overflow-wrap: anywhere] hover-target col-start-1 text-primaryText`}
                     >
-                      {giftItem.gift}{' '}
-                      <span className={`${jost.className}`}>-</span>{' '}
-                      {giftItem.receiver}
+                      {giftItem.gift} <span>-</span> {giftItem.receiver}
                     </p>
                     <SvgPencilEdit
                       key={`${giftItem.uuid}_editbutton`}
                       width={24}
                       height={24}
-                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle hover:cursor-pointer"
+                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                       onClick={() => {
                         setEditModalGiftData(giftItem);
                         setIsEditModalOpen(true);
@@ -191,7 +188,7 @@ export default function Home({
                       key={`${giftItem.uuid}_deletebutton`}
                       width={24}
                       height={24}
-                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle hover:cursor-pointer"
+                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                       onClick={() => {
                         setDeleteModalGiftData(giftItem);
                         setIsDeleteModalOpen(true);
@@ -268,20 +265,17 @@ function UserDetailModal({
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full justify-center">
-            {/* Kannattaisiko olla Button Divin sijaan, koska on klikattava elementti? CHECK THIS*/}
-            <div
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary hover:cursor-pointer"
+            <Button
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary"
               onClick={() => void handleLogout()}
             >
-              <p className={`text-white ${jost.className} text-sm font-medium`}>
-                Kirjaudu ulos
-              </p>
+              <p className={`text-sm font-medium text-white`}>Kirjaudu ulos</p>
               <SvgArrowRightStartOnRectangle
                 width={18}
                 height={18}
-                className="ml-2 stroke-white"
+                className="ml-2"
               />
-            </div>
+            </Button>
           </div>
         </div>
       </>
