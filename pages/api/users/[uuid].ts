@@ -33,19 +33,21 @@ export default async function handlePrisma(
     }
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      const queryUUID = z.string().safeParse(req.query.uuid);
-      if (!queryUUID.success) {
-        throw new HttpError(
-          'Invalid UUID! It should be given as a string!',
-          400,
-        );
+      const queryUUIDParse = z
+        .string({ message: 'Invalid UUID! It should be given as a string!' })
+        .length(36, 'Invalid UUID! It should be 36 characters long!')
+        .safeParse(req.query.uuid);
+
+      if (!queryUUIDParse.success) {
+        throw new HttpError(queryUUIDParse.error.format()._errors[0], 400);
       }
+
       const isAdmin = validationRequest.user.role === 'ADMIN';
       await reqHandler({
         req,
         res,
         userData: validationRequest.user,
-        queryUUID: queryUUID.data,
+        queryUUID: queryUUIDParse.data,
         isAdmin,
       });
     } else {
