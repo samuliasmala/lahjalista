@@ -4,7 +4,7 @@ import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
 import { updateUserSchema } from '~/shared/zodSchemas';
-import { validateRequest } from '~/backend/auth';
+import { requireLogin } from '~/backend/auth';
 import { z } from 'zod';
 
 type HandlerParams<ResponseType = unknown> = {
@@ -27,10 +27,8 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
-    const validationRequest = await validateRequest(req, res);
-    if (!validationRequest.session || !validationRequest.user) {
-      throw new HttpError('You are unauthorized!', 401);
-    }
+    const { user: userData } = await requireLogin(req, res);
+
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
       const queryUUIDParse = z
@@ -42,11 +40,12 @@ export default async function handlePrisma(
         throw new HttpError(queryUUIDParse.error.format()._errors[0], 400);
       }
 
-      const isAdmin = validationRequest.user.role === 'ADMIN';
+      const isAdmin = userData.role === 'ADMIN';
+
       await reqHandler({
         req,
         res,
-        userData: validationRequest.user,
+        userData,
         queryUUID: queryUUIDParse.data,
         isAdmin,
       });
