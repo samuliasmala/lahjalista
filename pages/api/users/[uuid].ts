@@ -67,15 +67,13 @@ async function handleGET({
   queryUUID,
   isAdmin,
 }: HandlerParams<User>) {
-  const isAdminSearchingSpecificUser = queryUUID !== userData.uuid && isAdmin;
-
-  const databaseSearchUUID = isAdminSearchingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
     select: {
       uuid: true,
@@ -102,15 +100,14 @@ async function handlePATCH({
   if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
-  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminEditingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   const updatedUser = await prisma.user.update({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
     data: updatedUserData.data,
     select: {
@@ -138,15 +135,14 @@ async function handlePUT({
   if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
-  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminEditingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   const updatedUser = await prisma.user.update({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
     data: updatedUserData.data,
     select: {
@@ -169,15 +165,13 @@ async function handleDELETE({
   queryUUID,
   isAdmin,
 }: HandlerParams) {
-  const isAdminDeletingSpecificUser = queryUUID !== userData.uuid && isAdmin;
-
-  const databaseSearchUUID = isAdminDeletingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   await prisma.user.delete({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
   });
 
