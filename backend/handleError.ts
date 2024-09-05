@@ -31,7 +31,7 @@ export function handleError(res: NextApiResponse, e: unknown) {
   }
 
   if (e instanceof ZodError) {
-    return res.status(400).json(e);
+    return res.status(400).json(e.format()._errors);
   }
 
   console.error(e);
