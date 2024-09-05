@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
-import { updateUserSchema } from '~/shared/zodSchemas';
+import { updateUserSchema, uuidParseSchema } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
 import { z } from 'zod';
 
@@ -31,14 +31,7 @@ export default async function handlePrisma(
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      const queryUUIDParse = z
-        .string({ message: 'Invalid UUID! It should be given as a string!' })
-        .length(36, 'Invalid UUID! It should be 36 characters long!')
-        .safeParse(req.query.uuid);
-
-      if (!queryUUIDParse.success) {
-        throw new HttpError(queryUUIDParse.error.format()._errors[0], 400);
-      }
+      const queryUUID = uuidParseSchema.parse(req.query.uuid);
 
       const isAdmin = userData.role === 'ADMIN';
 
@@ -46,7 +39,7 @@ export default async function handlePrisma(
         req,
         res,
         userData,
-        queryUUID: queryUUIDParse.data,
+        queryUUID,
         isAdmin,
       });
     } else {
