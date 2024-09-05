@@ -44,14 +44,18 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
 ### Fix to errors
 
-If you get following error `dotenv: not found` while trying to run command 
+If you get following error `dotenv: not found` while trying to run command
+
 ```bash
 npm run prisma
 ```
-make sure you have installed `dotenv` package globally. You can install the `dotenv` package using following command
+
+make sure you have installed the `dotenv-cli` package (it is installed with other packages when using `npm i` or by running the following command `npm i dotenv-cli`).
+
+If you still encounter the error, try to install the `dotenv-cli` package globally using following command
+
 ```bash
 npm install -g dotenv-cli
 ```
