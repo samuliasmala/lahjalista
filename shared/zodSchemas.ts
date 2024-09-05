@@ -78,3 +78,8 @@ export const formSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
+
+// CHECK THIS, onko tarpeellinen
+export const uuidParseSchema = z
+  .string({ message: 'Invalid UUID! It should be given as a string!' })
+  .uuid('UUID pattern was invalid!');
