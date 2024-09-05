@@ -29,6 +29,7 @@ export default async function handlePrisma(
     const { user: userData } = await requireLogin(req, res);
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
+    // CHECK THIS, tähän ZOD
     if (reqHandler) {
       if (typeof req.query.uuid !== 'string') {
         throw new HttpError('Invalid ID', 400);
