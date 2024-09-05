@@ -4,7 +4,7 @@ import {
 } from '@prisma/client/runtime/library';
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
-import { ZodError } from 'zod';
+import { ZodError, ZodIssueCode } from 'zod';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
@@ -31,6 +31,16 @@ export function handleError(res: NextApiResponse, e: unknown) {
   }
 
   if (e instanceof ZodError) {
+    if (e.format()._errors.length === 0) {
+      if (e.errors[0].code === 'invalid_type') {
+        const error = e.errors[0];
+        return res
+          .status(400)
+          .send(
+            `${error.path[0]} is ${error.message}. Received ${error.received} expected ${error.expected}. Zod error code: ${error.code}`,
+          );
+      }
+    }
     return res.status(400).json(e.format()._errors);
   }
 
