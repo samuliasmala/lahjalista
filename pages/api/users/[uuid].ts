@@ -5,7 +5,6 @@ import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
 import { updateUserSchema, uuidParseSchema } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
-import { z } from 'zod';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;

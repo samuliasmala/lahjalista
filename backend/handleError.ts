@@ -4,7 +4,7 @@ import {
 } from '@prisma/client/runtime/library';
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
-import { ZodError, ZodIssueCode } from 'zod';
+import { ZodError } from 'zod';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
