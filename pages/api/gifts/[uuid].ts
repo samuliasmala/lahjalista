@@ -30,10 +30,8 @@ export default async function handlePrisma(
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      // CHECK THIS, kannattaako queryUUID nimetä suoraan giftUUID
-      const queryUUID = uuidParseSchema.parse(req.query.uuid);
+      const giftUUID = uuidParseSchema.parse(req.query.uuid);
 
-      const giftUUID = queryUUID;
       await reqHandler({
         req,
         res,
