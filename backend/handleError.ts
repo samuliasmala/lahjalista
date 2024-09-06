@@ -40,6 +40,7 @@ export function handleError(res: NextApiResponse, e: unknown) {
             `${error.path[0]} is ${error.message}. Received ${error.received} expected ${error.expected}. Zod error code: ${error.code}`,
           );
       }
+      return res.status(400).json(e.errors[0].message);
     }
     return res.status(400).json(e.format()._errors);
   }
