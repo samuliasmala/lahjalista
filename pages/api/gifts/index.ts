@@ -3,7 +3,7 @@ import { Gift } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { validateRequest } from '~/backend/auth';
+import { requireLogin } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
 import { createGiftSchema } from '~/shared/zodSchemas';
 
@@ -24,13 +24,11 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
-    const validationRequest = await validateRequest(req, res);
-    if (!validationRequest.session || !validationRequest.user) {
-      throw new HttpError('You are unauthorized!', 401);
-    }
+    const { user: userData } = await requireLogin(req, res);
+
     const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
-      await reqHandler(req, res, validationRequest.user);
+      await reqHandler(req, res, userData);
     } else {
       throw new HttpError(
         `${req.method} is not a valid method. Only GET and POST requests are valid!`,

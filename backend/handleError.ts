@@ -31,7 +31,18 @@ export function handleError(res: NextApiResponse, e: unknown) {
   }
 
   if (e instanceof ZodError) {
-    return res.status(400).json(e);
+    if (e.format()._errors.length === 0) {
+      if (e.errors[0].code === 'invalid_type') {
+        const error = e.errors[0];
+        return res
+          .status(400)
+          .send(
+            `${error.path[0]} is ${error.message}. Received ${error.received} expected ${error.expected}. Zod error code: ${error.code}`,
+          );
+      }
+      return res.status(400).json(e.errors[0].message);
+    }
+    return res.status(400).json(e.format()._errors);
   }
 
   console.error(e);
