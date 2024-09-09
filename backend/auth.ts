@@ -4,6 +4,8 @@ import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
 import type { PrismaUser, User } from '~/shared/types';
 import type { Session, User as LuciaUser } from 'lucia';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { HttpError } from './HttpError';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -86,4 +88,15 @@ async function validateDevelopmentRequest(
   { user: LuciaUser; session: Session } | { user: null; session: null }
 > {
   return await lucia.validateSession(req.headers.authorization ?? '');
+}
+
+export async function requireLogin(
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<{ user: LuciaUser; session: Session }> {
+  const userDetails = await validateRequest(req, res);
+  if (!userDetails.session || !userDetails.user) {
+    throw new HttpError('You are unauthorized!', 401);
+  }
+  return userDetails;
 }

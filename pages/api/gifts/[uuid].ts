@@ -3,8 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { updateGiftSchema } from '~/shared/zodSchemas';
-import { validateRequest } from '~/backend/auth';
+import { updateGiftSchema, uuidParseSchema } from '~/shared/zodSchemas';
+import { requireLogin } from '~/backend/auth';
 import { User as LuciaUser } from 'lucia';
 
 type HandlerParams<ResponseType = unknown> = {
@@ -26,17 +26,12 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
-    const validationRequest = await validateRequest(req, res);
-    if (!validationRequest.session || !validationRequest.user) {
-      throw new HttpError('You are unauthorized!', 401);
-    }
-    const userData = validationRequest.user;
+    const { user: userData } = await requireLogin(req, res);
+
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      if (typeof req.query.uuid !== 'string') {
-        throw new HttpError('Invalid ID', 400);
-      }
-      const giftUUID = req.query.uuid;
+      const giftUUID = uuidParseSchema.parse(req.query.uuid);
+
       await reqHandler({
         req,
         res,

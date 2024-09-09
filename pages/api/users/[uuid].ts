@@ -3,9 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
-import { updateUserSchema } from '~/shared/zodSchemas';
-import { validateRequest } from '~/backend/auth';
-import { z } from 'zod';
+import { updateUserSchema, uuidParseSchema } from '~/shared/zodSchemas';
+import { requireLogin } from '~/backend/auth';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -27,25 +26,19 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
-    const validationRequest = await validateRequest(req, res);
-    if (!validationRequest.session || !validationRequest.user) {
-      throw new HttpError('You are unauthorized!', 401);
-    }
+    const { user: userData } = await requireLogin(req, res);
+
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      const queryUUID = z.string().safeParse(req.query.uuid);
-      if (!queryUUID.success) {
-        throw new HttpError(
-          'Invalid UUID! It should be given as a string!',
-          400,
-        );
-      }
-      const isAdmin = validationRequest.user.role === 'ADMIN';
+      const queryUUID = uuidParseSchema.parse(req.query.uuid);
+
+      const isAdmin = userData.role === 'ADMIN';
+
       await reqHandler({
         req,
         res,
-        userData: validationRequest.user,
-        queryUUID: queryUUID.data,
+        userData,
+        queryUUID,
         isAdmin,
       });
     } else {
@@ -65,15 +58,13 @@ async function handleGET({
   queryUUID,
   isAdmin,
 }: HandlerParams<User>) {
-  const isAdminSearchingSpecificUser = queryUUID !== userData.uuid && isAdmin;
-
-  const databaseSearchUUID = isAdminSearchingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   const user = await prisma.user.findUniqueOrThrow({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
     select: {
       uuid: true,
@@ -100,15 +91,14 @@ async function handlePATCH({
   if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
-  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminEditingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   const updatedUser = await prisma.user.update({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
     data: updatedUserData.data,
     select: {
@@ -136,15 +126,14 @@ async function handlePUT({
   if (!updatedUserData.success) {
     throw new HttpError('Invalid request body!', 400);
   }
-  const isAdminEditingSpecificUser = queryUUID !== userData.uuid && isAdmin;
 
-  const databaseSearchUUID = isAdminEditingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   const updatedUser = await prisma.user.update({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
     data: updatedUserData.data,
     select: {
@@ -167,15 +156,13 @@ async function handleDELETE({
   queryUUID,
   isAdmin,
 }: HandlerParams) {
-  const isAdminDeletingSpecificUser = queryUUID !== userData.uuid && isAdmin;
-
-  const databaseSearchUUID = isAdminDeletingSpecificUser
-    ? queryUUID
-    : userData.uuid;
+  if (queryUUID !== userData.uuid && !isAdmin) {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
 
   await prisma.user.delete({
     where: {
-      uuid: databaseSearchUUID,
+      uuid: queryUUID,
     },
   });
 
