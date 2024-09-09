@@ -89,7 +89,6 @@ export const createSessionSchema = z.object({
 
 // MISC
 
-// CHECK THIS, onko tarpeellinen
 export const uuidParseSchema = z
   .string({ message: 'Invalid UUID! It should be given as a string!' })
   .uuid('UUID pattern was invalid!');
