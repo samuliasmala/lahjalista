@@ -51,13 +51,6 @@ export async function validateRequest(
 ): Promise<
   { user: LuciaUser; session: Session } | { user: null; session: null }
 > {
-  if (
-    process.env.NODE_ENV === 'development' &&
-    req.headers['user-agent'] === 'vscode-restclient'
-  ) {
-    return await validateDevelopmentRequest(req);
-  }
-
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
