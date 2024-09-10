@@ -4,17 +4,28 @@ import type { NextRequest } from 'next/server';
 
 //eslint-disable-next-line
 export async function middleware(req: NextRequest): Promise<NextResponse> {
-  if (req.method === 'GET') {
-    return NextResponse.next();
-  }
-  const originHeader = req.headers.get('Origin');
-  const hostHeader = req.headers.get('Host');
-  if (
-    !originHeader ||
-    !hostHeader ||
-    !verifyRequestOrigin(originHeader, [hostHeader])
-  ) {
-    return new NextResponse('Middleware error!', { status: 403 });
+  if (process.env.NODE_ENV == 'production') {
+    if (req.method === 'GET') {
+      return NextResponse.next();
+    }
+    const originHeader = req.headers.get('Origin');
+    const hostHeader = req.headers.get('Host');
+    if (
+      !originHeader ||
+      !hostHeader ||
+      !verifyRequestOrigin(originHeader, [hostHeader])
+    ) {
+      const headerErrors = [];
+      !originHeader ? headerErrors.push('Origin header') : '';
+      !hostHeader ? headerErrors.push('Host header') : '';
+      !verifyRequestOrigin(originHeader || '', [hostHeader || ''])
+        ? headerErrors.push('Request origin header')
+        : '';
+      return new NextResponse(
+        `Middleware error!\n\nError: ${headerErrors[0]} was invalid!`,
+        { status: 403 },
+      );
+    }
   }
   return NextResponse.next();
 }
