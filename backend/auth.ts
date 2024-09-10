@@ -75,14 +75,6 @@ export async function validateRequest(
   return result;
 }
 
-async function validateDevelopmentRequest(
-  req: IncomingMessage,
-): Promise<
-  { user: LuciaUser; session: Session } | { user: null; session: null }
-> {
-  return await lucia.validateSession(req.headers.authorization ?? '');
-}
-
 export async function requireLogin(
   req: NextApiRequest,
   res: NextApiResponse,
