@@ -3,13 +3,26 @@
 
 @baseUrl = http://localhost:3000/api
 
+# LOGIN
+
+###
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@doemail.com",
+  "password": "AlwaysHashThePasswordAndNeverUsePlainText",
+  "rememberMe": false
+}
+
+
 # GIFT REQUESTS
 
 ###
 GET {{baseUrl}}/gifts
 
 ###
-GET {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
+GET {{baseUrl}}/gifts/cba86307-8f50-4038-bc79-c05cef4fafc1
 
 ###
 POST {{baseUrl}}/gifts
@@ -50,6 +63,7 @@ GET {{baseUrl}}/users
 ###
 GET {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
 
+
 ###
 POST {{baseUrl}}/users
 Content-Type: application/json
@@ -62,7 +76,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+PATCH {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
 Content-Type: application/json
 
 {
@@ -72,14 +86,15 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+PUT {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
 Content-Type: application/json
 
 {
   "email": "matti.meikalainen@esimerkkimail.com",
-  "firstName": "Matti",
+  "firstName": "Mikko",
   "lastName": "Meikäläinen"
 }
 
 ###
-DELETE {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+DELETE {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
+

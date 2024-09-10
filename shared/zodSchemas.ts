@@ -73,8 +73,6 @@ export const createUserSchema = userSchema.extend({
   password: passwordSchema,
 });
 
-export const updateUserSchema = userSchema;
-
 export const userLoginDetailsSchema = createUserSchema
   .pick({ email: true, password: true })
   .extend({ rememberMe: z.boolean() });
@@ -89,7 +87,6 @@ export const createSessionSchema = z.object({
 
 // MISC
 
-// CHECK THIS, onko tarpeellinen
 export const uuidParseSchema = z
   .string({ message: 'Invalid UUID! It should be given as a string!' })
   .uuid('UUID pattern was invalid!');
