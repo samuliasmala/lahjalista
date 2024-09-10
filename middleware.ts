@@ -2,12 +2,9 @@ import { verifyRequestOrigin } from 'lucia';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-//eslint-disable-next-line
+//eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(req: NextRequest): Promise<NextResponse> {
   if (process.env.NODE_ENV == 'production') {
-    if (req.method === 'GET') {
-      return NextResponse.next();
-    }
     const originHeader = req.headers.get('Origin');
     const hostHeader = req.headers.get('Host');
     if (
