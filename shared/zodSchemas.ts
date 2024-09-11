@@ -97,7 +97,6 @@ export const feedbackSchema = z.object({
 
 export const createFeedbackSchema = feedbackSchema.pick({
   feedbackText: true,
-  feedbackUUID: true,
 });
 
 // MISC
