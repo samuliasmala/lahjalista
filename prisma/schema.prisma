@@ -13,18 +13,18 @@ enum Role {
 }
 
 model User {
-    id              Int              @id @default(autoincrement())
-    uuid            String           @unique @default(uuid())
-    firstName       String
-    lastName        String
-    email           String           @unique
-    password        String
-    role            Role             @default(USER)
-    createdAt       DateTime         @default(now())
-    updatedAt       DateTime         @updatedAt
-    gift            Gift[]
-    Session         Session?
-    FeedbackSession FeedbackSession?
+    id        Int       @id @default(autoincrement())
+    uuid      String    @unique @default(uuid())
+    firstName String
+    lastName  String
+    email     String    @unique
+    password  String
+    role      Role      @default(USER)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    gift      Gift[]
+    Session   Session?
+    Feedback  Feedback?
 }
 
 model Gift {
@@ -52,16 +52,8 @@ model Feedback {
     feedbackID   Int      @id @default(autoincrement())
     feedbackUUID String   @unique @default(uuid())
     feedbackText String
+    userUUID     String   @unique
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
-}
-
-model FeedbackSession {
-    feedbackSessionID   Int      @id @default(autoincrement())
-    feedbackSessionUUID String   @unique @default(uuid())
-    userUUID            String   @unique
-    expiresAt           DateTime
-    createdAt           DateTime @default(now())
-    updatedAt           DateTime @updatedAt
-    user                User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+    user         User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 }
