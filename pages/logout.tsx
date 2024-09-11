@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSidePropsContext, InferGetStaticPropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
@@ -11,6 +11,8 @@ import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import Cookies from 'js-cookie';
+import { User } from 'lucia';
+import { getUserSchema } from '~/shared/zodSchemas';
 
 const POSSIBLE_ERRORS = {
   'feedback was invalid!': 'Palauteteksti on virheellinen',
@@ -35,12 +37,23 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
   await createFeedbackSession(context, validatedUser.user);
+  const returnThis = getUserSchema.safeParse(validatedUser.user);
+  if (returnThis.error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
+  }
   return {
-    props: {},
+    props: { user: JSON.parse(JSON.stringify(returnThis.data)) as User },
   };
 }
 
-export default function Logout() {
+export default function Logout({
+  user,
+}: InferGetStaticPropsType<typeof getServerSideProps>) {
   const [feedbackText, setFeedbackText] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
@@ -55,7 +68,9 @@ export default function Logout() {
 
   async function logoutUser() {
     try {
+      console.log(user);
       await axios.post('/api/auth/logout');
+      console.log(user);
     } catch (e) {
       console.error(e);
     }
