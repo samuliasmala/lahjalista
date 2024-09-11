@@ -17,9 +17,26 @@ export const lucia = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
-      user;
-    return { uuid, firstName, lastName, email, createdAt, updatedAt, role };
+    const {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    } = user;
+    return {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    };
   },
 });
 
@@ -31,9 +48,26 @@ export const luciaLongSession = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
-      user;
-    return { uuid, firstName, lastName, email, createdAt, updatedAt, role };
+    const {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    } = user;
+    return {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    };
   },
 });
 
