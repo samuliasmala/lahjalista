@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
@@ -6,8 +7,8 @@ import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
+import { getServerSideProps } from '~/utils/getServerSideProps';
 import { handleGeneralError } from '~/utils/handleError';
-import Cookies from 'js-cookie';
 
 const POSSIBLE_ERRORS = {
   'feedback was invalid!': 'Palauteteksti on virheellinen',
@@ -20,6 +21,9 @@ const POSSIBLE_ERRORS = {
 } as const;
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
+
+// CHECK THIS, tämä estää pääsyn /logout-sivulle URL:n kautta
+export { getServerSideProps };
 
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
@@ -57,14 +61,9 @@ export default function Logout() {
       if (feedbackText.length <= 0) {
         return setErrorText('Palauteteksti on pakollinen!');
       }
-      const feedbackSessionCookie = Cookies.get('feedback-session');
 
-      if (typeof feedbackSessionCookie !== 'string') {
-        throw new Error('UUID was invalid!');
-      }
       const dataToSend: CreateFeedback = {
-        feedbackText: feedbackText,
-        feedbackUUID: feedbackSessionCookie,
+        feedbackText,
       };
 
       await axios.post('/api/feedback', dataToSend);
