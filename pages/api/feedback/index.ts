@@ -51,31 +51,9 @@ async function handlePOST(
   res: NextApiResponse,
   userData: User,
 ) {
-  const feedbackParse = createFeedbackSchema.safeParse(req.body);
-  if (feedbackParse.success !== true) {
-    return res
-      .status(400)
-      .send(
-        `${feedbackParse.error.issues[0].path[0]} was invalid!` ||
-          'Feedback text or UUID code was invalid!',
-      );
-  }
-  const isFeedbackSessionFound: boolean =
-    (await getFeedbackSession(feedbackParse.data.feedbackUUID)) === null
-      ? false
-      : true;
+  const parsedFeedback = createFeedbackSchema.parse(req.body);
 
-  if (!isFeedbackSessionFound) {
-    return res.status(400).send('Feedback UUID was invalid!');
-  }
-
-  const addedFeedback = await createFeedback(feedbackParse.data);
-
-  if (addedFeedback) {
-    await deleteFeedbackSession(feedbackParse.data.feedbackUUID);
-  }
-
-  return res.status(200).json(addedFeedback);
+  return res.status(200).json('Success!');
 }
 
 async function createFeedback(feedback: CreateFeedback) {
