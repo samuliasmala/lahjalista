@@ -111,3 +111,13 @@ Content-Type: application/json
 ###
 DELETE {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
 
+
+# FEEDBACK
+
+###
+POST {{baseUrl}}/feedback
+Content-Type: application/json
+
+{
+  "feedbackText": "Hello world!"
+}
