@@ -16,11 +16,15 @@ export default async function handler(
     if (!session) {
       throw new HttpError('Unauthorized', 401);
     }
+
+    // CHECK THIS, ei poisteta cookieta?
+    /*
     await lucia.invalidateSession(session.id);
     res
       .setHeader('Set-Cookie', lucia.createBlankSessionCookie().serialize())
       .status(200)
       .end();
+    */
 
     await prisma.user.update({
       where: {
@@ -30,6 +34,7 @@ export default async function handler(
         isLoggedIn: false,
       },
     });
+    return res.status(200).end();
   } catch (e) {
     return handleError(res, e);
   }
