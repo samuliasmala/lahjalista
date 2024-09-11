@@ -1,6 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { validateRequest } from '~/backend/auth';
 import { User } from '~/shared/types';
+import { getUserSchema } from '~/shared/zodSchemas';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -14,9 +15,19 @@ export async function getServerSideProps(
       },
     };
   }
+  const returnThis = getUserSchema.safeParse(cookieData.user);
+  if (returnThis.error) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    };
+  }
+
   return {
     props: {
-      user: JSON.parse(JSON.stringify(cookieData.user)) as User,
+      user: JSON.parse(JSON.stringify(returnThis.data)) as User,
     },
   };
 }
