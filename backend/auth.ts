@@ -117,7 +117,7 @@ export async function requireLogin(
   if (
     !userDetails.session ||
     !userDetails.user ||
-    !userDetails.user.isLoggedIn === false
+    !userDetails.user.isLoggedIn
   ) {
     throw new HttpError('You are unauthorized!', 401);
   }
