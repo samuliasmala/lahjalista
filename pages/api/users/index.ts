@@ -52,6 +52,7 @@ async function handleGET({ res, userData }: HandlerParams<User[]>) {
       createdAt: true,
       updatedAt: true,
       role: true,
+      isLoggedIn: true,
     },
   });
 
@@ -84,6 +85,8 @@ export async function createUser(userDetails: CreateUser) {
       firstName: firstName,
       lastName: lastName,
       password: hashedPassword,
+      // CHECK THIS, voiko laittaa suoraan isLoggedIn: true
+      isLoggedIn: true,
     },
     select: {
       uuid: true,
@@ -93,6 +96,7 @@ export async function createUser(userDetails: CreateUser) {
       createdAt: true,
       updatedAt: true,
       role: true,
+      isLoggedIn: true,
     },
   });
   return addedUser;
