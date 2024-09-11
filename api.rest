@@ -15,6 +15,19 @@ Content-Type: application/json
   "rememberMe": false
 }
 
+# REGISTER
+
+###
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "john.doe@doemail.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "password": "Password123!"
+}
+
 
 # GIFT REQUESTS
 
