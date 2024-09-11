@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { lucia, validateRequest } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
+import prisma from '~/prisma';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +12,7 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const { session } = await validateRequest(req, res);
+    const { session, user: userData } = await validateRequest(req, res);
     if (!session) {
       throw new HttpError('Unauthorized', 401);
     }
@@ -20,6 +21,15 @@ export default async function handler(
       .setHeader('Set-Cookie', lucia.createBlankSessionCookie().serialize())
       .status(200)
       .end();
+
+    await prisma.user.update({
+      where: {
+        uuid: userData.uuid,
+      },
+      data: {
+        isLoggedIn: false,
+      },
+    });
   } catch (e) {
     return handleError(res, e);
   }
