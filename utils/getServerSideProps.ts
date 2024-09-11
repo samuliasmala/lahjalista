@@ -20,7 +20,8 @@ export async function getServerSideProps(
     return {
       redirect: {
         permanent: false,
-        destination: '/login',
+        // CHECK THIS, laitettu väliaikaisesti redirectaamaan /error-sivulle. /login-sivu rikkoi pahasti
+        destination: '/error',
       },
     };
   }
