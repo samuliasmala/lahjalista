@@ -14,7 +14,7 @@ CREATE TABLE "Feedback" (
 CREATE UNIQUE INDEX "Feedback_feedbackUUID_key" ON "Feedback"("feedbackUUID");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Feedback_userUUID_key" ON "Feedback"("userUUID");
+-- CREATE UNIQUE INDEX "Feedback_userUUID_key" ON "Feedback"("userUUID");
 
 -- AddForeignKey
 ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;
