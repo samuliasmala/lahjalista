@@ -36,9 +36,7 @@ export default function Logout() {
 
   async function logoutUser() {
     try {
-      console.log(user);
       await axios.post('/api/auth/logout');
-      console.log(user);
     } catch (e) {
       console.error(e);
     }
