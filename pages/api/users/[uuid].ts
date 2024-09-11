@@ -154,6 +154,7 @@ async function handlePUT({
       createdAt: true,
       updatedAt: true,
       role: true,
+      isLoggedIn: true,
     },
   });
 
