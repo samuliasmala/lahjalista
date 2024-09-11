@@ -52,16 +52,14 @@ async function handlePOST(
   userData: User,
 ) {
   const parsedFeedback = createFeedbackSchema.parse(req.body);
-  const createdFeedback = await createFeedback(parsedFeedback, userData);
 
-  return res.status(200).json(createdFeedback);
+  return res.status(200).json('Success!');
 }
 
-async function createFeedback(feedback: CreateFeedback, userData: User) {
+async function createFeedback(feedback: CreateFeedback) {
   const addedFeedback = prisma.feedback.create({
     data: {
       feedbackText: feedback.feedbackText,
-      userUUID: userData.uuid,
     },
     select: {
       feedbackText: true,
