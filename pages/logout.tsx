@@ -12,12 +12,12 @@ import { handleGeneralError } from '~/utils/handleError';
 
 const POSSIBLE_ERRORS = {
   'feedback was invalid!': 'Palauteteksti on virheellinen',
-  'uuid was invalid!':
-    'Yksilöintitunnus on virheellinen. Kokeile lähettää palaute uudelleen myöhemmin. Pahoittelemme tapahtunutta.',
   'feedback text is mandatory!': 'Palauteteksti on pakollinen',
   'server error!': 'Palvelin virhe',
   'palvelin virhe!': 'Palvelin virhe',
   'odottamaton virhe tapahtui!': 'Odottamaton virhe tapahtui',
+  'you are unauthorized!':
+    'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen antaaksesi palautteen',
 } as const;
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
