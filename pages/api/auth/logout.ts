@@ -34,7 +34,7 @@ export default async function handler(
         isLoggedIn: false,
       },
     });
-    return res.status(200).end();
+    res.status(200).end();
   } catch (e) {
     return handleError(res, e);
   }
