@@ -13,18 +13,19 @@ enum Role {
 }
 
 model User {
-    id        Int       @id @default(autoincrement())
-    uuid      String    @unique @default(uuid())
-    firstName String
-    lastName  String
-    email     String    @unique
-    password  String
-    role      Role      @default(USER)
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    gift      Gift[]
-    Session   Session?
-    Feedback  Feedback?
+    id         Int       @id @default(autoincrement())
+    uuid       String    @unique @default(uuid())
+    firstName  String
+    lastName   String
+    email      String    @unique
+    password   String
+    role       Role      @default(USER)
+    createdAt  DateTime  @default(now())
+    updatedAt  DateTime  @updatedAt
+    isLoggedIn Boolean
+    gift       Gift[]
+    Session    Session?
+    Feedback   Feedback?
 }
 
 model Gift {
