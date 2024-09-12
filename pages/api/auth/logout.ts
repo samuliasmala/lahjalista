@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { lucia, validateRequest } from '~/backend/auth';
+import { validateRequest } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import prisma from '~/prisma';

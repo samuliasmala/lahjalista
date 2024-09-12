@@ -3,11 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
-import {
-  getUserSchema,
-  userSchema,
-  uuidParseSchema,
-} from '~/shared/zodSchemas';
+import { userSchema, uuidParseSchema } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
 
 type HandlerParams<ResponseType = unknown> = {

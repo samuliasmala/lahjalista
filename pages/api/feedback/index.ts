@@ -38,11 +38,7 @@ export default async function handleFeedback(
 // tämä alla oleva rivi lisätty, jotta "@typescript-eslint/require-await"-virheen pystyi ohittamaan väliaikaisesti
 // handleGET-funktio laitetaan toimimaan myöhemmässä vaiheessa
 // eslint-disable-next-line
-async function handleGET(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  userData: User,
-) {
+async function handleGET(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).send('Not in use yet');
 }
 
