@@ -52,8 +52,7 @@ export default function Register() {
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
-      const errorText = handleAuthErrors(e);
-      toast(errorText);
+      toast(handleAuthErrors(e));
     }
   }
 
