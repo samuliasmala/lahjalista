@@ -1,4 +1,3 @@
-import { Inter } from 'next/font/google';
 import '~/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -6,8 +5,7 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 import { isPhoneUser } from '~/utils/isPhoneUser';
 import { useEffect, useState } from 'react';
-
-const inter = Inter({ subsets: ['latin'] });
+import { jost } from '~/utils/fonts';
 
 // CHECK THIS, onko tässä tiedostossa mitään järkeä?
 
@@ -20,7 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <div className={`${inter.className}`}>
+    <div className={`${jost.className}`}>
       <Head>
         <meta
           name="viewport"

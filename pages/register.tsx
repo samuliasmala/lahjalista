@@ -13,7 +13,6 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
-import { inter } from '~/utils/fonts';
 import { toast } from 'react-toastify';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
@@ -177,7 +176,7 @@ export default function Register() {
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
-                    className={`cursor-pointer underline hover:text-blue-500 ${inter.className}`}
+                    className={`cursor-pointer underline hover:text-blue-500`}
                   >
                     Kirjaudu sisään
                   </Link>

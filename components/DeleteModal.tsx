@@ -5,7 +5,6 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleGiftError } from '~/utils/handleError';
-import { jost } from '~/utils/fonts';
 import SvgXClose from '~/icons/x_close';
 
 type DeleteModal = {
@@ -33,9 +32,7 @@ export function DeleteModal({
     <Modal className="w-80">
       <div className="max-w-80">
         <div className="m-4 mb-0 flex flex-row justify-between">
-          <TitleText
-            className={`mt-0 text-base font-medium text-primaryText ${jost.className} `}
-          >
+          <TitleText className={`mt-0 text-base font-medium text-primaryText`}>
             Olet poistamassa lahjaa:
           </TitleText>
           <SvgXClose
@@ -46,13 +43,13 @@ export function DeleteModal({
           />
         </div>
         <p
-          className={`ml-4 mt-5 text-primaryText ${jost.className} text-base [overflow-wrap:anywhere]`}
+          className={`ml-4 mt-5 text-base  text-primaryText [overflow-wrap:anywhere]`}
         >
           {gift.gift} - {gift.receiver}
         </p>
         <div className="mt-6 flex flex-row items-center justify-end">
           <Button
-            className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText ${jost.className}`}
+            className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText`}
             onClick={() => setIsModalOpen(false)}
             type="button"
           >
@@ -60,7 +57,7 @@ export function DeleteModal({
           </Button>
 
           <Button
-            className={`m-6 mt-0 h-8 w-16 p-0 text-sm ${jost.className}`}
+            className={`m-6 mt-0 h-8 w-16 p-0 text-sm`}
             onClick={() => void handleDeletion()}
           >
             Poista
