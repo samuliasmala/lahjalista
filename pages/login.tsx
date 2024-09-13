@@ -57,7 +57,9 @@ export default function Login() {
         setErrors((prevValue) => {
           return {
             ...prevValue,
-            email: emailValidation.error.format()._errors[0] || '',
+            email:
+              emailValidation.error.format()._errors[0] ||
+              'Virheellinen sähköposti',
           };
         });
         errorFound = true;
@@ -82,7 +84,7 @@ export default function Login() {
 
       Type 'string | undefined' is not assignable to type 'string'.
 
-      TypeScript huomauttaa tuomoisesta ongelmasta "loginCredentials"-variablen kanssa
+      TypeScript huomauttaa tuommsoisesta ongelmasta "loginCredentials"-variablen kanssa
 
       Ongelma ohitettu toistaiseksi laittamalla: || "" 
 
@@ -177,10 +179,6 @@ export default function Login() {
     </main>
   );
 }
-
-// CHECK THIS, onko tarpeellinen laittaa "sähköposti / salasana on pakollinen" jos pituus <= 0
-
-// jos on ok, kannattanee tehdä komponentti, koska myös käytössä /pages/register.tsx:ssä
 
 function ErrorParagraph({
   className,
