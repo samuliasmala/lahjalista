@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE "User" ADD COLUMN     "isLoggedIn" BOOLEAN NOT NULL;
+ALTER TABLE "User" ADD COLUMN     "isLoggedIn" BOOLEAN NOT NULL DEFAULT FALSE;
