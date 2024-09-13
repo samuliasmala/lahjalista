@@ -46,7 +46,7 @@ export function EditModal({
     try {
       await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
-      toast(handleGiftError(e));
+      toast(handleGiftError(e), { type: 'error' });
     }
     refreshGiftList();
     setIsModalOpen(false);

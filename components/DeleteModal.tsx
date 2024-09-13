@@ -23,7 +23,7 @@ export function DeleteModal({
     try {
       await deleteGift(gift.uuid);
     } catch (e) {
-      toast(handleGiftError(e));
+      toast(handleGiftError(e), { type: 'error' });
     }
     refreshGiftList();
     setIsModalOpen(false);

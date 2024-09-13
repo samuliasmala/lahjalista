@@ -94,7 +94,7 @@ export default function Home({
     if (errorMessage === 'You are unauthorized!') {
       window.location.href = '/';
     }
-    toast(errorMessage);
+    toast(errorMessage, { type: 'error' });
   }
 
   return (

@@ -100,7 +100,7 @@ export default function Login() {
       await router.push('/');
     } catch (e) {
       console.error(e);
-      toast(handleAuthErrors(e));
+      toast(handleAuthErrors(e), { type: 'error' });
     }
   }
 

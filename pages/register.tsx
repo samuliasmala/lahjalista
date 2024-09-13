@@ -52,7 +52,7 @@ export default function Register() {
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
-      toast(handleAuthErrors(e));
+      toast(handleAuthErrors(e), { type: 'error' });
     }
   }
 
