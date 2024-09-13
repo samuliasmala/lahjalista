@@ -21,8 +21,6 @@ export { getServerSideProps };
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [isAnyKindOfError, setIsAnyKindOfError] = useState(false);
-  const [isAnyKindOfErrorMessage, setIsAnyKindOfErrorMessage] = useState('');
   const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
@@ -95,8 +93,6 @@ export default function Home({
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
     toast(errorMessage);
-    setIsAnyKindOfError(true);
-    setIsAnyKindOfErrorMessage(errorMessage);
   }
 
   return (
@@ -213,17 +209,6 @@ export default function Home({
                   refreshGiftList={() => void refreshGiftList()}
                   setIsModalOpen={setIsDeleteModalOpen}
                 />
-              )}
-
-              {isAnyKindOfError && (
-                <>
-                  <div className="fixed bottom-0 left-0 z-[98] flex w-full items-center justify-center">
-                    <div className="z-[99] w-full bg-red-600 p-10 text-center" />
-                    <span className="fixed z-[99] animate-bounce text-5xl">
-                      {isAnyKindOfErrorMessage}
-                    </span>
-                  </div>
-                </>
               )}
             </div>
           )}
