@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user) {
+  if (!cookieData.user || !cookieData.user.isLoggedIn) {
     return {
       props: {},
     };

@@ -17,9 +17,26 @@ export const lucia = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
-      user;
-    return { uuid, firstName, lastName, email, createdAt, updatedAt, role };
+    const {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    } = user;
+    return {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    };
   },
 });
 
@@ -31,9 +48,26 @@ export const luciaLongSession = new Lucia(adapter, {
     },
   },
   getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
-      user;
-    return { uuid, firstName, lastName, email, createdAt, updatedAt, role };
+    const {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    } = user;
+    return {
+      uuid,
+      firstName,
+      lastName,
+      email,
+      createdAt,
+      updatedAt,
+      role,
+      isLoggedIn,
+    };
   },
 });
 
@@ -80,7 +114,11 @@ export async function requireLogin(
   res: NextApiResponse,
 ): Promise<{ user: LuciaUser; session: Session }> {
   const userDetails = await validateRequest(req, res);
-  if (!userDetails.session || !userDetails.user) {
+  if (
+    !userDetails.session ||
+    !userDetails.user ||
+    !userDetails.user.isLoggedIn
+  ) {
     throw new HttpError('You are unauthorized!', 401);
   }
   return userDetails;

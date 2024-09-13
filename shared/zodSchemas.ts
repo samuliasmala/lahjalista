@@ -67,6 +67,7 @@ export const getUserSchema = userSchema.extend({
   updatedAt: z.date(),
   uuid: z.string(),
   role: z.string(),
+  isLoggedIn: z.boolean(),
 });
 
 export const createUserSchema = userSchema.extend({
@@ -83,6 +84,19 @@ export const createSessionSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   user: z.custom<Prisma.UserCreateNestedOneWithoutSessionInput>(),
+});
+
+// FEEDBACK
+
+export const feedbackSchema = z.object({
+  feedbackUUID: z.string(),
+  feedbackText: z.string().min(1, 'Feedback text is mandatory!'),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const createFeedbackSchema = feedbackSchema.pick({
+  feedbackText: true,
 });
 
 // MISC

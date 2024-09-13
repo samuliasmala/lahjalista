@@ -8,7 +8,6 @@ import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
-import axios from 'axios';
 import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
@@ -91,7 +90,11 @@ export default function Home({
   }
 
   function handleError(e: unknown) {
-    toast(handleGeneralError(e));
+    const errorMessage = handleGeneralError(e);
+    if (errorMessage === 'You are unauthorized!') {
+      window.location.href = '/';
+    }
+    toast(errorMessage);
   }
 
   return (
@@ -226,12 +229,9 @@ function UserDetailModal({
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
-  async function handleLogout() {
+  function handleLogout() {
     try {
-      const request = await axios.post('/api/auth/logout');
-      if (request) {
-        window.location.href = '/logout';
-      }
+      window.location.href = '/logout';
     } catch (e) {
       console.error(e);
       window.location.href = '/';

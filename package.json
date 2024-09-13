@@ -18,7 +18,7 @@
     "start-json-server": "json-server -p3001 --watch db.json",
     "prepush": "next lint --max-warnings=0 && npm run check-types",
     "svgr": "svgr --out-dir icons --typescript --jsx-runtime automatic --no-dimensions --silent --filename-case snake --ignore-existing --no-index -- public/images/icons",
-    "migrate": "npm run prisma migrate deploy",
+    "migrate": "npm run prisma migrate deploy && prisma generate",
     "migrate:prod": "if [ \"$VERCEL_ENV\" = \"production\" ]; then npm run prisma migrate deploy; fi",
     "prisma": "dotenv -c .env.local -- prisma"
   },
