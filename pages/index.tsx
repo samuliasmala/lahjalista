@@ -91,8 +91,7 @@ export default function Home({
   }
 
   function handleError(e: unknown) {
-    const errorMessage = handleGeneralError(e);
-    toast(errorMessage);
+    toast(handleGeneralError(e));
   }
 
   return (
