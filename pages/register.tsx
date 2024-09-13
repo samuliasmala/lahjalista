@@ -72,27 +72,6 @@ export default function Register() {
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="mt-14 flex w-full max-w-72 flex-col">
-            {/* CHECK THIS
-              
-              Kannattaako ToastContainer laittaa esim. _app.tsx tiedostoon, joten sitä ei tarvitstisi merkata joka kerta
-            
-            */}
-            {/*
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              transition={Bounce}
-              limit={isUserPhoneUser ? 1 : 3}
-            />
-            */}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
