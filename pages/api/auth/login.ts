@@ -64,6 +64,7 @@ export default async function handleR(
 
     const session = await lucia.createSession(userData.uuid, {
       userUUID: userData.uuid,
+      isLoggedIn: true,
     });
 
     res
