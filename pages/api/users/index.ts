@@ -23,7 +23,6 @@ export default async function handlePrisma(
   res: NextApiResponse,
 ) {
   try {
-    // CHECK THIS, laita isLoggedIn check tähän TAI requireLogin-funktioon
     const { user: userData } = await requireLogin(req, res);
 
     const reqHandler = req.method !== undefined && HANDLER[req.method];
@@ -53,7 +52,6 @@ async function handleGET({ res, userData }: HandlerParams<User[]>) {
       createdAt: true,
       updatedAt: true,
       role: true,
-      isLoggedIn: true,
     },
   });
 
@@ -89,8 +87,6 @@ export async function createUser(userDetails: CreateUser) {
       firstName: firstName,
       lastName: lastName,
       password: hashedPassword,
-      // CHECK THIS, voiko laittaa suoraan isLoggedIn: true
-      isLoggedIn: true,
     },
     select: {
       uuid: true,
@@ -100,7 +96,6 @@ export async function createUser(userDetails: CreateUser) {
       createdAt: true,
       updatedAt: true,
       role: true,
-      isLoggedIn: true,
     },
   });
   return addedUser;

@@ -67,7 +67,6 @@ export const getUserSchema = userSchema.extend({
   updatedAt: z.date(),
   uuid: z.string(),
   role: z.string(),
-  isLoggedIn: z.boolean(),
 });
 
 export const createUserSchema = userSchema.extend({

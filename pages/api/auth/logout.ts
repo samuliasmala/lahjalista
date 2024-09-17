@@ -26,14 +26,6 @@ export default async function handler(
       .end();
     */
 
-    await prisma.user.update({
-      where: {
-        uuid: userData.uuid,
-      },
-      data: {
-        isLoggedIn: false,
-      },
-    });
     res.status(200).end();
   } catch (e) {
     return handleError(res, e);

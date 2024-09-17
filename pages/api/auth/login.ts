@@ -47,15 +47,6 @@ export default async function handleR(
       throw new HttpError('Invalid password!', 400);
     }
 
-    await prisma.user.update({
-      where: {
-        uuid: userData.uuid,
-      },
-      data: {
-        isLoggedIn: true,
-      },
-    });
-
     const sessionExists = await prisma.session.findUnique({
       where: { userUUID: userData.uuid },
     });
