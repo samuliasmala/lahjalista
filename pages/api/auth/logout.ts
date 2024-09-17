@@ -12,7 +12,7 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const { session, user: userData } = await validateRequest(req, res);
+    const { session } = await validateRequest(req, res);
     if (!session) {
       throw new HttpError('Unauthorized', 401);
     }
