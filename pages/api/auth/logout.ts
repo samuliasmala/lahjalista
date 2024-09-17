@@ -17,15 +17,6 @@ export default async function handler(
       throw new HttpError('Unauthorized', 401);
     }
 
-    // CHECK THIS, ei poisteta cookieta?
-    /*
-    await lucia.invalidateSession(session.id);
-    res
-      .setHeader('Set-Cookie', lucia.createBlankSessionCookie().serialize())
-      .status(200)
-      .end();
-    */
-
     res.status(200).end();
   } catch (e) {
     return handleError(res, e);
