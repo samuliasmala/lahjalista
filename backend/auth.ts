@@ -3,7 +3,7 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
 import type { PrismaUser, User } from '~/shared/types';
-import type { Session, User as LuciaUser } from 'lucia';
+import type { Session as LuciaSession, User as LuciaUser } from 'lucia';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
 
@@ -15,6 +15,10 @@ export const lucia = new Lucia(adapter, {
     attributes: {
       secure: process.env.NODE_ENV === 'production',
     },
+  },
+  getSessionAttributes(session) {
+    const { isLoggedIn } = session;
+    return { isLoggedIn };
   },
   getUserAttributes(user): User {
     const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
@@ -38,6 +42,10 @@ export const luciaLongSession = new Lucia(adapter, {
       secure: process.env.NODE_ENV === 'production',
     },
   },
+  getSessionAttributes(session) {
+    const { isLoggedIn } = session;
+    return { isLoggedIn };
+  },
   getUserAttributes(user): User {
     const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
       user;
@@ -57,7 +65,7 @@ declare module 'lucia' {
   interface Register {
     Lucia: typeof lucia;
     DatabaseUserAttributes: PrismaUser;
-    DatabaseSessionAttributes: { userUUID: string };
+    DatabaseSessionAttributes: { userUUID: string; isLoggedIn: boolean };
   }
 }
 
@@ -65,7 +73,7 @@ export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
 ): Promise<
-  { user: LuciaUser; session: Session } | { user: null; session: null }
+  { user: LuciaUser; session: LuciaSession } | { user: null; session: null }
 > {
   const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
@@ -94,7 +102,7 @@ export async function validateRequest(
 export async function requireLogin(
   req: NextApiRequest,
   res: NextApiResponse,
-): Promise<{ user: LuciaUser; session: Session }> {
+): Promise<{ user: LuciaUser; session: LuciaSession }> {
   const userDetails = await validateRequest(req, res);
   if (!userDetails.session || !userDetails.user) {
     throw new HttpError('You are unauthorized!', 401);
