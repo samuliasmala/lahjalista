@@ -72,9 +72,9 @@ async function checkIfSessionValid(
   req: NextApiRequest,
   res: NextApiResponse,
 ): Promise<{ user: User; session: Session }> {
-  const userDetails = await validateRequest(req, res);
-  if (!userDetails.session || !userDetails.user) {
+  const userData = await validateRequest(req, res);
+  if (!userData.session || !userData.user) {
     throw new HttpError('You are unauthorized!', 401);
   }
-  return userDetails;
+  return userData;
 }
