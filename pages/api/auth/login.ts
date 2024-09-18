@@ -47,21 +47,25 @@ export default async function handleR(
       throw new HttpError('Invalid password!', 400);
     }
 
-    const sessionExists = await prisma.session.findUnique({
-      where: { userUUID: userData.uuid },
-    });
+    const userAuthSession = lucia.readSessionCookie(req.headers.cookie ?? '');
 
-    if (sessionExists) {
-      res
-        .appendHeader(
-          'Set-cookie',
-          lucia.createSessionCookie(sessionExists.id).serialize(),
-        )
-        .status(200)
-        .end();
-      return;
+    if (userAuthSession) {
+      const sessionExists = await prisma.session.findUnique({
+        where: { id: userAuthSession },
+      });
+
+      if (sessionExists) {
+        await logUserIn(sessionExists.id);
+        res
+          .appendHeader(
+            'Set-cookie',
+            lucia.createSessionCookie(sessionExists.id).serialize(),
+          )
+          .status(200)
+          .end();
+        return;
+      }
     }
-
     const session = await lucia.createSession(userData.uuid, {
       userUUID: userData.uuid,
       isLoggedIn: true,
@@ -78,4 +82,14 @@ export default async function handleR(
   } catch (e) {
     return handleError(res, e);
   }
+}
+
+async function logUserIn(sessionId: string) {
+  await prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      isLoggedIn: true,
+    },
+  });
+  return;
 }

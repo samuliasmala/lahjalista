@@ -17,7 +17,15 @@ export default async function handler(
       throw new HttpError('Unauthorized', 401);
     }
 
+    await prisma.session.update({
+      where: { id: session.id },
+      data: {
+        isLoggedIn: false,
+      },
+    });
+
     res.status(200).end();
+    return;
   } catch (e) {
     return handleError(res, e);
   }
