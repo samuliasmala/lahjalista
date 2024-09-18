@@ -23,7 +23,7 @@ model User {
     createdAt DateTime   @default(now())
     updatedAt DateTime   @updatedAt
     gift      Gift[]
-    Session   Session?
+    Session   Session[]
     Feedback  Feedback[]
 }
 
@@ -40,8 +40,8 @@ model Gift {
 
 model Session {
     id         String   @id @default(uuid())
-    userId     String   @unique
-    userUUID   String   @unique
+    userId     String
+    userUUID   String
     expiresAt  DateTime
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
