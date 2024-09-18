@@ -7,7 +7,7 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<{ user: User }>> {
   const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user) {
+  if (!cookieData.user || !cookieData.session.isLoggedIn) {
     return {
       redirect: {
         permanent: false,

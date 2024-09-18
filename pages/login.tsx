@@ -17,7 +17,7 @@ import { Label } from '~/components/Label';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user) {
+  if (!cookieData.user || !cookieData.session.isLoggedIn) {
     return {
       props: {},
     };
