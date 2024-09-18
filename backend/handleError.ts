@@ -27,10 +27,12 @@ export function handleError(res: NextApiResponse, e: unknown) {
   }
 
   if (e instanceof PrismaClientValidationError) {
+    console.error(e);
     return res.status(400).send('Invalid request body!');
   }
 
   if (e instanceof ZodError) {
+    console.error(e);
     return res.status(400).json(e.issues);
   }
 
