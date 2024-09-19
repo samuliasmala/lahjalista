@@ -66,7 +66,7 @@ export default function Login() {
     <main className={`h-screen w-full max-w-full bg-bgPage`}>
       <div className="h-screen w-screen">
         {errorText.length > 0 ? (
-          <div className="flex justify-center pt-4 ">
+          <div className="flex justify-center pt-4">
             <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
               {errorText}
             </div>
