@@ -31,20 +31,6 @@ export default function Logout() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    logoutUser().catch((e) => {
-      console.error(e);
-    });
-  }, []);
-
-  async function logoutUser() {
-    try {
-      await axios.post('/api/auth/logout');
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   function handleInternalError(e: unknown) {
     console.error(e);
     const errorMessage =
