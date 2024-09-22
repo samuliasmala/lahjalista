@@ -104,7 +104,11 @@ export async function requireLogin(
   res: NextApiResponse,
 ): Promise<{ user: LuciaUser; session: LuciaSession }> {
   const userDetails = await validateRequest(req, res);
-  if (!userDetails.session || !userDetails.user) {
+  if (
+    !userDetails.session ||
+    !userDetails.user ||
+    !userDetails.session.isLoggedIn
+  ) {
     throw new HttpError('You are unauthorized!', 401);
   }
   return userDetails;
