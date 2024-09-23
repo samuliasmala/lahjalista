@@ -1,4 +1,3 @@
-import { User } from 'lucia';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 import { luciaLongSession, lucia as luciaShortSession } from '~/backend/auth';
@@ -51,14 +50,13 @@ export default async function loginHandler(
 
     const userAuthCookie = lucia.readSessionCookie(req.headers.cookie ?? '');
 
-    let sessionId: string;
     let existingSession: Session | null = null;
     if (userAuthCookie) {
       existingSession = await prisma.session.findUnique({
         where: { id: userAuthCookie },
       });
     }
-    sessionId = await logUserIn(existingSession, userData.uuid);
+    const sessionId = await logUserIn(existingSession, userData.uuid);
 
     res
       .appendHeader(
