@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
-import { requireLogin, validateRequest } from '~/backend/auth';
+import { validateRequest } from '~/backend/auth';
 import { User } from '~/shared/types';
 import { getUserSchema } from '~/shared/zodSchemas';
 
@@ -17,13 +17,13 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<{ user: User }>> {
   const cookieData = await validateRequest(context.req, context.res);
-  if (await requireLogin(context.req, context.res)) {
+  if (!cookieData.user || !cookieData.session.isLoggedIn) {
     if (
       context.req.url === '/login' ||
       context.req.url?.includes('/login.json')
     ) {
       return {
-        props: { user: EMPTY_USER_OBJECT },
+        props: { user: JSON.parse(JSON.stringify(EMPTY_USER_OBJECT)) as User },
       };
     }
 
