@@ -1,13 +1,22 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
-import { validateRequest } from '~/backend/auth';
+import { requireLogin, validateRequest } from '~/backend/auth';
 import { User } from '~/shared/types';
 import { getUserSchema } from '~/shared/zodSchemas';
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user: User }>> {
+): Promise<GetServerSidePropsResult<{ user: User } | {}>> {
   const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user || !cookieData.session.isLoggedIn) {
+  if (await requireLogin(context.req, context.res)) {
+    if (
+      context.req.url === '/login' ||
+      context.req.url?.includes('/login.json')
+    ) {
+      return {
+        props: {},
+      };
+    }
+
     return {
       redirect: {
         permanent: false,
