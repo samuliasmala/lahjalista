@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';

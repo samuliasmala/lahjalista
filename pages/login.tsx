@@ -1,9 +1,7 @@
 import axios from 'axios';
-import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { requireLogin, validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Logo } from '~/components/Logo';
