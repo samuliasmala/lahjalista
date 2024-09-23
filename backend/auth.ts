@@ -100,8 +100,8 @@ export async function validateRequest(
 }
 
 export async function requireLogin(
-  req: NextApiRequest,
-  res: NextApiResponse,
+  req: NextApiRequest | IncomingMessage,
+  res: NextApiResponse | ServerResponse,
 ): Promise<{ user: LuciaUser; session: LuciaSession }> {
   const userDetails = await validateRequest(req, res);
   if (
