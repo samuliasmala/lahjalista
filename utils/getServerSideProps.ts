@@ -3,9 +3,19 @@ import { requireLogin, validateRequest } from '~/backend/auth';
 import { User } from '~/shared/types';
 import { getUserSchema } from '~/shared/zodSchemas';
 
+const EMPTY_USER_OBJECT: User = {
+  email: '',
+  firstName: '',
+  lastName: '',
+  createdAt: new Date(0),
+  updatedAt: new Date(0),
+  uuid: '',
+  role: '',
+};
+
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<{ user: User } | {}>> {
+): Promise<GetServerSidePropsResult<{ user: User }>> {
   const cookieData = await validateRequest(context.req, context.res);
   if (await requireLogin(context.req, context.res)) {
     if (
@@ -13,7 +23,7 @@ export async function getServerSideProps(
       context.req.url?.includes('/login.json')
     ) {
       return {
-        props: {},
+        props: { user: EMPTY_USER_OBJECT },
       };
     }
 
