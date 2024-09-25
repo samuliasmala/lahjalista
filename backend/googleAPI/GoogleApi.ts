@@ -32,30 +32,41 @@ export class GoogleApiSheets
   implements GoogleApiSheets_type
 {
   sheetsVersion?: string | undefined;
+  spreadsheetId?: string | undefined;
 
   initialize({
     sheetsVersion,
     auth,
+    spreadsheetId,
   }: {
     sheetsVersion?: 'v4';
     auth?: GoogleAuth<JSONClient>;
+    spreadsheetId?: string;
   }) {
     this.sheetsVersion = sheetsVersion;
     this.auth = auth;
+    this.spreadsheetId = spreadsheetId;
     return this;
   }
 
-  findSpecificRows({
-    fromColumn,
-    fromRow,
-    toColumn,
-    toRow,
-  }: {
-    fromColumn: string;
-    fromRow: number | 'all';
-    toColumn: string;
-    toRow: number | 'all';
-  }) {
+  findSpecificRows(
+    props: {
+      fromColumn: string;
+      fromRow: number | 'all';
+      toColumn: string;
+      toRow: number | 'all';
+    } & GoogleApiSheets_type,
+  ) {
+    console.log(this.spreadsheetId);
+    console.log(
+      'this.spreadsheetId:',
+      this.spreadsheetId,
+      '\n\nprops.spreadsheetId:',
+      props.spreadsheetId,
+    );
+    this.spreadsheetId = props.spreadsheetId ?? this.spreadsheetId;
+    console.log(this.spreadsheetId);
+    /*
     console.log(
       fromColumn,
       fromRow,
@@ -63,7 +74,9 @@ export class GoogleApiSheets
       toRow,
       this.pathToKeyFile,
       this.auth,
+      this.spreadsheetId,
     );
+    */
     return this;
   }
 }

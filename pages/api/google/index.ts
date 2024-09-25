@@ -28,6 +28,8 @@ const SCOPES = [
 
 const PATH_TO_KEY_FILE = 'steady-scope-436117-p2-f407b01106c9.json';
 
+const SPREADSHEET_ID = '1mjyeqn3MpaT8mFEN4yHbtOQFK9_KAeCElSaftviKPXE';
+
 export default async function handleFunction(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -64,10 +66,23 @@ export default async function handleFunction(
   const googleApiSheets = new GoogleApiSheets().initialize({
     auth: authentication.auth,
     sheetsVersion: 'v4',
+    spreadsheetId: SPREADSHEET_ID,
   });
 
+  console.log(
+    googleApiSheets.findSpecificRows({
+      fromColumn: 'A',
+      fromRow: 1,
+      toColumn: 'C',
+      toRow: 'all',
+      spreadsheetId: 'abcdefghijklm',
+    }),
+    'asdasd',
+  );
+  /*
   console.log('------\n\n\n\n', googleApiSheets, '\n\n\n\n-----');
   console.log('-----\n\n\n\n', authentication, '\n\n\n\n------');
+  */
   res.status(200).send('Kaikki ok!');
   return;
 }
