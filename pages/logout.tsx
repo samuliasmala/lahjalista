@@ -6,7 +6,6 @@ import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
-import { getServerSideProps } from '~/utils/getServerSideProps';
 import { handleGeneralError } from '~/utils/handleError';
 
 const POSSIBLE_ERRORS = {
@@ -20,9 +19,6 @@ const POSSIBLE_ERRORS = {
 } as const;
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
-
-// CHECK THIS, tämä estää pääsyn /logout-sivulle URL:n kautta
-export { getServerSideProps };
 
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
