@@ -5,6 +5,7 @@ import {
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
 import { ZodError } from 'zod';
+import { AxiosError } from 'axios';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
@@ -33,7 +34,14 @@ export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof ZodError) {
     return res.status(400).json(e.issues);
   }
+  if (e instanceof AxiosError) {
+    console.error(e.response?.data);
+    return res.status(500).send('Axios Server error!');
+  }
 
-  console.error(e);
+  if (e instanceof Error) {
+    return res.status(400).send(e.message);
+  }
+
   return res.status(500).send('Server error!');
 }
