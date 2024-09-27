@@ -12,9 +12,23 @@ import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
-import { getServerSideProps } from './logout';
+import { validateRequest } from '~/backend/auth';
+import { GetServerSidePropsContext } from 'next';
 
-export { getServerSideProps };
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookieData = await validateRequest(context.req, context.res);
+  if (!cookieData.user || !cookieData.session.isLoggedIn) {
+    return {
+      props: {},
+    };
+  }
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/',
+    },
+  };
+}
 
 export default function Login() {
   const [email, setEmail] = useState('');
