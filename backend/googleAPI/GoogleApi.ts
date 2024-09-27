@@ -1,7 +1,7 @@
 import { GoogleAuth } from 'google-auth-library';
 import { GoogleApiAuthentication_type, GoogleApiSheets_type } from './types';
 import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
-import { google } from 'googleapis';
+import { google, sheets_v4 } from 'googleapis';
 
 export class GoogleApiAuthentication implements GoogleApiAuthentication_type {
   pathToKeyFile?: string | undefined;
@@ -17,12 +17,12 @@ export class GoogleApiAuthentication implements GoogleApiAuthentication_type {
   }) {
     this.pathToKeyFile = pathToKeyFile;
     this.scopes = scopes;
-    const auth = new google.auth.GoogleAuth({
+
+    this.auth = new google.auth.GoogleAuth({
       keyFile: pathToKeyFile,
       scopes: scopes,
     });
-    //console.log('\n\n\n\n', await auth.getClient(), '\n\n\n\n\n');
-    this.auth = auth;
+
     return this;
   }
 }
@@ -31,25 +31,50 @@ export class GoogleApiSheets
   extends GoogleApiAuthentication
   implements GoogleApiSheets_type
 {
-  sheetsVersion?: string | undefined;
+  sheetsVersion?: 'v4' | undefined;
   spreadsheetId?: string | undefined;
+  sheets?: sheets_v4.Sheets | undefined;
+  sheetName?: string | undefined;
+  feedback?: string;
+  UUID?: string;
+  date?: string;
 
-  initialize({
-    sheetsVersion,
-    auth,
-    spreadsheetId,
-  }: {
-    sheetsVersion?: 'v4';
+  constructor(props?: {
+    sheetVersion?: 'v4';
     auth?: GoogleAuth<JSONClient>;
     spreadsheetId?: string;
+    sheetName?: string;
   }) {
-    this.sheetsVersion = sheetsVersion;
-    this.auth = auth;
-    this.spreadsheetId = spreadsheetId;
+    super();
+    this.auth = props?.auth;
+    this.spreadsheetId = props?.spreadsheetId;
+    this.sheetName = props?.sheetName;
+
+    this.sheets = google.sheets({
+      version: 'v4',
+      auth: props?.auth,
+    });
+  }
+
+  initialize(props: {
+    sheetsVersion: 'v4';
+    auth?: GoogleAuth<JSONClient>;
+    spreadsheetId?: string;
+    sheetName?: string;
+  }) {
+    this.auth = props.auth;
+    this.spreadsheetId = props.spreadsheetId;
+    this.sheetName = props.sheetName;
+
+    this.sheets = google.sheets({
+      version: props.sheetsVersion,
+      auth: props.auth,
+    });
+
     return this;
   }
 
-  findSpecificRows(
+  async findSpecificRows(
     props: {
       fromColumn: string;
       fromRow: number | 'all';
@@ -57,26 +82,47 @@ export class GoogleApiSheets
       toRow: number | 'all';
     } & GoogleApiSheets_type,
   ) {
-    console.log(this.spreadsheetId);
-    console.log(
-      'this.spreadsheetId:',
-      this.spreadsheetId,
-      '\n\nprops.spreadsheetId:',
-      props.spreadsheetId,
-    );
-    this.spreadsheetId = props.spreadsheetId ?? this.spreadsheetId;
-    console.log(this.spreadsheetId);
-    /*
-    console.log(
-      fromColumn,
-      fromRow,
-      toColumn,
-      toRow,
-      this.pathToKeyFile,
-      this.auth,
-      this.spreadsheetId,
-    );
-    */
+    this._isSheetsInitialized();
+
+    const response = await this.sheets?.spreadsheets.values.get({
+      spreadsheetId: this.spreadsheetId,
+      range: `Palautteet!A:C`,
+    });
+
+    console.log(response?.data.values);
     return this;
+  }
+
+  async appendData(props: { feedback?: string; UUID?: string; date?: string }) {
+    this.feedback = props.feedback;
+    this.UUID = props.UUID;
+    this.date = props.date;
+
+    this._isSheetsInitialized();
+    this._isSheetsRequestBodyGiven();
+
+    await this.sheets?.spreadsheets.values.append({
+      auth: this.auth,
+      spreadsheetId: this.spreadsheetId,
+      range: 'Palautteet!A1:C1',
+      requestBody: {
+        majorDimension: 'ROWS',
+        values: [[props.feedback, props.UUID, props.date]],
+      },
+      valueInputOption: 'USER_ENTERED',
+    });
+  }
+
+  _isSheetsInitialized() {
+    if (!this.sheets || !this.sheets.context._options.auth)
+      throw new Error(
+        'GoogleApiSheets instance must be initialized before calling Google API',
+      );
+  }
+
+  _isSheetsRequestBodyGiven() {
+    if (!this.feedback || !this.UUID || !this.date) {
+      throw new Error('Request body was not valid!');
+    }
   }
 }
