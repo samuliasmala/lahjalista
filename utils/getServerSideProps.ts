@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
-import { validateRequest } from '~/backend/auth';
+import { lucia, validateRequest } from '~/backend/auth';
+import { logOutUser } from '~/pages/api/auth/logout';
 import { User } from '~/shared/types';
 import { getUserSchema } from '~/shared/zodSchemas';
 
@@ -21,11 +22,13 @@ export async function getServerSideProps(
   }
   const returnThis = getUserSchema.safeParse(cookieData.user);
   if (returnThis.error) {
+    await logOutUser(cookieData.session.id);
+    await lucia.invalidateSession(cookieData.session.id);
+
     return {
       redirect: {
-        permanent: false,
-        // CHECK THIS, laitettu väliaikaisesti redirectaamaan /error-sivulle. /login-sivu rikkoi pahasti
-        destination: '/error',
+        permanent: true,
+        destination: '/login',
       },
     };
   }
