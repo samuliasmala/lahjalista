@@ -40,28 +40,33 @@ export default async function handleFunction(
 }
 
 async function handleDataAppending(req: NextApiRequest, res: NextApiResponse) {
-  const parsedFeedback = feedbackSchema
-    .pick({ feedbackText: true, feedbackUUID: true })
-    .extend({ feedbackDate: z.string() })
-    .parse(req.body);
+  try {
+    const parsedFeedback = feedbackSchema
+      .pick({ feedbackText: true, feedbackUUID: true })
+      .extend({ feedbackDate: z.string() })
+      .parse(req.body);
 
-  const authentication = await new GoogleApiAuthentication().authenticate({
-    pathToKeyFile: PATH_TO_KEY_FILE,
-    scopes: SCOPES,
-  });
+    const authentication = await new GoogleApiAuthentication().authenticate({
+      pathToKeyFile: PATH_TO_KEY_FILE,
+      scopes: SCOPES,
+    });
 
-  const googleApiSheets = new GoogleApiSheets().initialize({
-    auth: authentication.auth,
-    sheetsVersion: 'v4',
-    spreadsheetId: SPREADSHEET_ID,
-    sheetName: 'Palautteet',
-  });
+    const googleApiSheets = new GoogleApiSheets().initialize({
+      auth: authentication.auth,
+      sheetsVersion: 'v4',
+      spreadsheetId: SPREADSHEET_ID,
+      sheetName: 'Palautteet',
+    });
 
-  await googleApiSheets.appendData({
-    date: parsedFeedback.feedbackDate,
-    feedback: parsedFeedback.feedbackText,
-    UUID: parsedFeedback.feedbackUUID,
-  });
+    await googleApiSheets.appendData({
+      date: parsedFeedback.feedbackDate,
+      feedback: parsedFeedback.feedbackText,
+      UUID: parsedFeedback.feedbackUUID,
+    });
 
-  res.status(200).send('Request sent succesfully!');
+    res.status(200).send('Request sent succesfully!');
+  } catch (e) {
+    console.error(e);
+    return handleError(res, e);
+  }
 }
