@@ -6,7 +6,7 @@ import {
 import { z } from 'zod';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { createFeedbackSchema } from '~/shared/zodSchemas';
+import { feedbackSchema } from '~/shared/zodSchemas';
 
 const SCOPES = [
   'https://www.googleapis.com/auth/drive.file',
@@ -51,7 +51,8 @@ export default async function handleFunction(
 }
 
 async function handleDataAppending(req: NextApiRequest, res: NextApiResponse) {
-  const parsedFeedback = createFeedbackSchema
+  const parsedFeedback = feedbackSchema
+    .pick({ feedbackText: true, feedbackUUID: true })
     .extend({ feedbackDate: z.string() })
     .parse(req.body);
 
