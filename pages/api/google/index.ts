@@ -32,17 +32,6 @@ export default async function handleFunction(
       );
     }
 
-    //await googleApiSheets.findSpecificRows({});
-    /*
-    await googleApiSheets.findSpecificRows({
-      fromColumn: 'A',
-      fromRow: 1,
-      toColumn: 'C',
-      toRow: 'all',
-      spreadsheetId: 'abcdefghijklm',
-    });
-    /*
-  */
     res.status(200).send('Kaikki ok!');
     return;
   } catch (e) {
