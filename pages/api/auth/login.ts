@@ -56,7 +56,11 @@ export default async function loginHandler(
         where: { id: userAuthCookie },
       });
     }
-    const sessionId = await logUserIn(existingSession, userData.uuid);
+    const sessionId = await logUserIn(
+      existingSession,
+      userData.uuid,
+      rememberMe,
+    );
 
     res
       .appendHeader(
@@ -71,7 +75,13 @@ export default async function loginHandler(
   }
 }
 
-async function logUserIn(existingSession: Session | null, userUUID: string) {
+async function logUserIn(
+  existingSession: Session | null,
+  userUUID: string,
+  rememberMe: boolean,
+) {
+  const lucia = rememberMe ? luciaLongSession : luciaShortSession;
+
   // If the existing session was found update it to be logged in
   if (existingSession) {
     await prisma.session.update({
@@ -82,7 +92,7 @@ async function logUserIn(existingSession: Session | null, userUUID: string) {
   }
 
   // Create a new session if the existing session was not found
-  const newSession = await luciaShortSession.createSession(userUUID, {
+  const newSession = await lucia.createSession(userUUID, {
     userUUID: userUUID,
     isLoggedIn: true,
   });
