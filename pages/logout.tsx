@@ -1,44 +1,24 @@
 import axios from 'axios';
-import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
-import { validateRequest } from '~/backend/auth';
-import { createFeedbackSession } from '~/backend/feedback';
+import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
-import Cookies from 'js-cookie';
 
 const POSSIBLE_ERRORS = {
   'feedback was invalid!': 'Palauteteksti on virheellinen',
-  'uuid was invalid!':
-    'Yksilöintitunnus on virheellinen. Kokeile lähettää palaute uudelleen myöhemmin. Pahoittelemme tapahtunutta.',
   'feedback text is mandatory!': 'Palauteteksti on pakollinen',
   'server error!': 'Palvelin virhe',
   'palvelin virhe!': 'Palvelin virhe',
   'odottamaton virhe tapahtui!': 'Odottamaton virhe tapahtui',
+  'you are unauthorized!':
+    'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen antaaksesi palautteen',
 } as const;
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const validatedUser = await validateRequest(context.req, context.res);
-  if (!validatedUser.user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/',
-      },
-    };
-  }
-  await createFeedbackSession(context, validatedUser.user);
-  return {
-    props: {},
-  };
-}
 
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
@@ -46,20 +26,6 @@ export default function Logout() {
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    logoutUser().catch((e) => {
-      console.error(e);
-    });
-  }, []);
-
-  async function logoutUser() {
-    try {
-      await axios.post('/api/auth/logout');
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   function handleInternalError(e: unknown) {
     console.error(e);
@@ -76,14 +42,9 @@ export default function Logout() {
       if (feedbackText.length <= 0) {
         return setErrorText('Palauteteksti on pakollinen!');
       }
-      const feedbackSessionCookie = Cookies.get('feedback-session');
 
-      if (typeof feedbackSessionCookie !== 'string') {
-        throw new Error('UUID was invalid!');
-      }
       const dataToSend: CreateFeedback = {
-        feedbackText: feedbackText,
-        feedbackUUID: feedbackSessionCookie,
+        feedbackText,
       };
 
       await axios.post('/api/feedback', dataToSend);

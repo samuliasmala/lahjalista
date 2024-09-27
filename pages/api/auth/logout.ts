@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { lucia, validateRequest } from '~/backend/auth';
+import { validateRequest } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
+import prisma from '~/prisma';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,12 +16,23 @@ export default async function handler(
     if (!session) {
       throw new HttpError('Unauthorized', 401);
     }
-    await lucia.invalidateSession(session.id);
-    res
-      .setHeader('Set-Cookie', lucia.createBlankSessionCookie().serialize())
-      .status(200)
-      .end();
+
+    await logOutUser(session.id);
+
+    res.status(200).end();
+    return;
   } catch (e) {
     return handleError(res, e);
   }
+}
+
+export async function logOutUser(sessionId: string) {
+  await prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      isLoggedIn: false,
+    },
+  });
+
+  return true;
 }

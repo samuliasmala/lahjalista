@@ -73,19 +73,29 @@ export const createUserSchema = userSchema.extend({
   password: passwordSchema,
 });
 
-export const updateUserSchema = userSchema;
-
 export const userLoginDetailsSchema = createUserSchema
   .pick({ email: true, password: true })
   .extend({ rememberMe: z.boolean() });
 
 // SESSION
 
+export const getSessionSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  userUUID: z.string(),
+  expiresAt: z.date(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  isLoggedIn: z.boolean(),
+});
+
 export const createSessionSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   user: z.custom<Prisma.UserCreateNestedOneWithoutSessionInput>(),
 });
+
+// FEEDBACK
 
 export const feedbackSchema = z.object({
   feedbackUUID: z.string(),
@@ -96,12 +106,10 @@ export const feedbackSchema = z.object({
 
 export const createFeedbackSchema = feedbackSchema.pick({
   feedbackText: true,
-  feedbackUUID: true,
 });
 
 // MISC
 
-// CHECK THIS, onko tarpeellinen
 export const uuidParseSchema = z
   .string({ message: 'Invalid UUID! It should be given as a string!' })
   .uuid('UUID pattern was invalid!');

@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
-import { updateUserSchema, uuidParseSchema } from '~/shared/zodSchemas';
+import { userSchema, uuidParseSchema } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
 
 type HandlerParams<ResponseType = unknown> = {
@@ -61,7 +61,7 @@ async function handleGET({
   if (queryUUID !== userData.uuid && !isAdmin) {
     throw new HttpError("You don't have privileges to do that!", 403);
   }
-
+  // CHECK THIS, voisiko requesteista palauttaa kaikki tiedot ja karsia EI HALUTTAVAT Zodilla?
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       uuid: queryUUID,
@@ -76,6 +76,18 @@ async function handleGET({
       role: true,
     },
   });
+
+  // CHECK THIS, kuta kuinkin tähän tapaan:
+  /*
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      uuid: queryUUID,
+    },
+  });
+  const parsedUser = getUserSchema.parse(user);
+  console.log(parsedUser);
+  return res.status(200).json(parsedUser);
+  */
   return res.status(200).json(user);
 }
 
@@ -86,11 +98,7 @@ async function handlePATCH({
   queryUUID,
   isAdmin,
 }: HandlerParams<User>) {
-  const updatedUserData = updateUserSchema.safeParse(req.body);
-
-  if (!updatedUserData.success) {
-    throw new HttpError('Invalid request body!', 400);
-  }
+  const updatedUserData = userSchema.partial().parse(req.body);
 
   if (queryUUID !== userData.uuid && !isAdmin) {
     throw new HttpError("You don't have privileges to do that!", 403);
@@ -100,7 +108,7 @@ async function handlePATCH({
     where: {
       uuid: queryUUID,
     },
-    data: updatedUserData.data,
+    data: updatedUserData,
     select: {
       uuid: true,
       firstName: true,
@@ -121,11 +129,7 @@ async function handlePUT({
   queryUUID,
   isAdmin,
 }: HandlerParams<User>) {
-  const updatedUserData = updateUserSchema.safeParse(req.body);
-
-  if (!updatedUserData.success) {
-    throw new HttpError('Invalid request body!', 400);
-  }
+  const updatedUserData = userSchema.parse(req.body);
 
   if (queryUUID !== userData.uuid && !isAdmin) {
     throw new HttpError("You don't have privileges to do that!", 403);
@@ -135,7 +139,7 @@ async function handlePUT({
     where: {
       uuid: queryUUID,
     },
-    data: updatedUserData.data,
+    data: updatedUserData,
     select: {
       uuid: true,
       firstName: true,
