@@ -17,16 +17,22 @@ export default async function handler(
       throw new HttpError('Unauthorized', 401);
     }
 
-    await prisma.session.update({
-      where: { id: session.id },
-      data: {
-        isLoggedIn: false,
-      },
-    });
+    await logOutUser(session.id);
 
     res.status(200).end();
     return;
   } catch (e) {
     return handleError(res, e);
   }
+}
+
+export async function logOutUser(sessionId: string) {
+  await prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      isLoggedIn: false,
+    },
+  });
+
+  return true;
 }
