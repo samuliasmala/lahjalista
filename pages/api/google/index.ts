@@ -39,7 +39,10 @@ export default async function handleFunction(
   }
 }
 
-async function handleDataAppending(req: NextApiRequest, res: NextApiResponse) {
+export async function handleDataAppending(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
     const parsedFeedback = feedbackSchema
       .pick({ feedbackText: true, feedbackUUID: true })
