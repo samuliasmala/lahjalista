@@ -27,10 +27,7 @@ export class GoogleApiAuthentication implements GoogleApiAuthentication_type {
   }
 }
 
-export class GoogleApiSheets
-  extends GoogleApiAuthentication
-  implements GoogleApiSheets_type
-{
+export class GoogleApiSheets extends GoogleApiAuthentication {
   sheetsVersion?: 'v4' | undefined;
   spreadsheetId?: string | undefined;
   sheets?: sheets_v4.Sheets | undefined;
@@ -74,19 +71,17 @@ export class GoogleApiSheets
     return this;
   }
 
-  async findSpecificRows(
-    props: {
-      fromColumn: string;
-      fromRow: number | 'all';
-      toColumn: string;
-      toRow: number | 'all';
-    } & GoogleApiSheets_type,
-  ) {
+  async findSpecificRows(props: {
+    fromColumn: string;
+    fromRow: number | 'all';
+    toColumn: string;
+    toRow: number | 'all';
+  }) {
     this._isSheetsInitialized();
 
     const response = await this.sheets?.spreadsheets.values.get({
       spreadsheetId: this.spreadsheetId,
-      range: `Palautteet!A:C`,
+      range: `${this.sheetName}!${props.fromColumn}${props.fromRow === 'all' ? 9999999 : props.fromRow}:${props.toColumn}${props.toRow === 'all' ? 999999 : props.toRow}`,
     });
 
     console.log(response?.data.values);
@@ -108,7 +103,7 @@ export class GoogleApiSheets
     await this.sheets?.spreadsheets.values.append({
       auth: this.auth,
       spreadsheetId: this.spreadsheetId,
-      range: 'Palautteet!A1:C1',
+      range: `${this.sheetName}!A:C`,
       requestBody: {
         majorDimension: 'ROWS',
         values: [[props.feedback, props.userUUID, props.date]],
