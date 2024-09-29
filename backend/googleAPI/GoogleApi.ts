@@ -36,7 +36,7 @@ export class GoogleApiSheets
   sheets?: sheets_v4.Sheets | undefined;
   sheetName?: string | undefined;
   feedback?: string;
-  UUID?: string;
+  userUUID?: string;
   date?: string;
 
   constructor(props?: {
@@ -93,9 +93,13 @@ export class GoogleApiSheets
     return this;
   }
 
-  async appendData(props: { feedback?: string; UUID?: string; date?: string }) {
+  async appendData(props: {
+    feedback?: string;
+    userUUID?: string;
+    date?: string;
+  }) {
     this.feedback = props.feedback;
-    this.UUID = props.UUID;
+    this.userUUID = props.userUUID;
     this.date = props.date;
 
     this._isSheetsInitialized();
@@ -107,7 +111,7 @@ export class GoogleApiSheets
       range: 'Palautteet!A1:C1',
       requestBody: {
         majorDimension: 'ROWS',
-        values: [[props.feedback, props.UUID, props.date]],
+        values: [[props.feedback, props.userUUID, props.date]],
       },
       valueInputOption: 'USER_ENTERED',
     });
@@ -121,7 +125,7 @@ export class GoogleApiSheets
   }
 
   _isSheetsRequestBodyGiven() {
-    if (!this.feedback || !this.UUID || !this.date) {
+    if (!this.feedback || !this.userUUID || !this.date) {
       throw new Error('Request body was not valid!');
     }
   }
