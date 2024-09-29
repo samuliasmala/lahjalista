@@ -3,10 +3,7 @@ import {
   GoogleApiAuthentication,
   GoogleApiSheets,
 } from '~/backend/googleAPI/GoogleApi';
-import { z } from 'zod';
-import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { feedbackSchema } from '~/shared/zodSchemas';
 
 const SCOPES = [
   'https://www.googleapis.com/auth/drive.file',
@@ -22,33 +19,14 @@ export default async function handleFunction(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  try {
-    if (req.method === 'POST') {
-      await handleDataAppending(req, res);
-    } else {
-      throw new HttpError(
-        `${req.method} is not a valid method. Only POST requests are valid!`,
-        405,
-      );
-    }
-
-    res.status(200).send('Kaikki ok!');
-    return;
-  } catch (e) {
-    return handleError(res, e);
-  }
+  throw new HttpError(`This API endpoint is not currently in use!`, 405);
 }
 
-export async function handleDataAppending(
-  req: NextApiRequest,
+export async function handleDataSendingToGoogleSheets(
   res: NextApiResponse,
+  requiredData: { feedbackText: string; userUUID: string },
 ) {
   try {
-    const parsedFeedback = feedbackSchema
-      .pick({ feedbackText: true, feedbackUUID: true })
-      .extend({ feedbackDate: z.string() })
-      .parse(req.body);
-
     const authentication = await new GoogleApiAuthentication().authenticate({
       pathToKeyFile: PATH_TO_KEY_FILE,
       scopes: SCOPES,
@@ -62,14 +40,13 @@ export async function handleDataAppending(
     });
 
     await googleApiSheets.appendData({
-      date: parsedFeedback.feedbackDate,
-      feedback: parsedFeedback.feedbackText,
-      UUID: parsedFeedback.feedbackUUID,
+      date: new Date().toLocaleDateString('fi-FI'),
+      feedback: requiredData.feedbackText,
+      userUUID: requiredData.userUUID,
     });
 
     res.status(200).send('Request sent succesfully!');
   } catch (e) {
-    console.error(e);
-    return handleError(res, e);
+    //console.error(e);
   }
 }
