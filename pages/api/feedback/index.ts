@@ -6,6 +6,7 @@ import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
 import { Session, User } from 'lucia';
 import { validateRequest } from '~/backend/auth';
+import { handleDataSendingToGoogleSheets } from '../google';
 
 const HANDLER: Record<
   string,
@@ -49,6 +50,10 @@ async function handlePOST(
 ) {
   const parsedFeedback = createFeedbackSchema.parse(req.body);
   const createdFeedback = await createFeedback(parsedFeedback, userData);
+  await handleDataSendingToGoogleSheets(res, {
+    feedbackText: parsedFeedback.feedbackText,
+    userUUID: userData.uuid,
+  });
 
   return res.status(200).json(createdFeedback);
 }
