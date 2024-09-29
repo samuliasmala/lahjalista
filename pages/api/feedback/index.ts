@@ -6,7 +6,7 @@ import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
 import { Session, User } from 'lucia';
 import { validateRequest } from '~/backend/auth';
-import { handleDataSendingToGoogleSheets } from '../google';
+import { handleDataSendingToGoogleSheets } from '~/backend/googleAPI/ownApiFunctions';
 
 const HANDLER: Record<
   string,
