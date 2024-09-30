@@ -35,6 +35,7 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
   userUUID?: string;
   date?: string;
 
+  // constructor and initialize method should be exactly same thing
   constructor(props?: {
     sheetVersion?: 'v4';
     auth?: GoogleAuth<JSONClient>;
