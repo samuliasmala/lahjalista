@@ -1,10 +1,9 @@
 import { GoogleAuth } from 'google-auth-library';
-import { GoogleApiAuthentication_type, GoogleApiSheets_type } from './types';
 import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
 import { google, sheets_v4 } from 'googleapis';
 
-export class GoogleApiAuthentication implements GoogleApiAuthentication_type {
-  pathToKeyFile?: string | undefined;
+export class GoogleApiAuthentication {
+  pathToKeyFile?: string;
   scopes?: string[];
   auth?: GoogleAuth<JSONClient>;
 
@@ -28,10 +27,10 @@ export class GoogleApiAuthentication implements GoogleApiAuthentication_type {
 }
 
 export class GoogleApiSheets extends GoogleApiAuthentication {
-  sheetsVersion?: 'v4' | undefined;
-  spreadsheetId?: string | undefined;
-  sheets?: sheets_v4.Sheets | undefined;
-  sheetName?: string | undefined;
+  sheetsVersion?: 'v4';
+  spreadsheetId?: string;
+  sheets?: sheets_v4.Sheets;
+  sheetName?: string;
   feedback?: string;
   userUUID?: string;
   date?: string;
