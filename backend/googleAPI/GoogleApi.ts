@@ -31,16 +31,13 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
   spreadsheetId?: string;
   sheets?: sheets_v4.Sheets;
   sheetName?: string;
-  feedback?: string;
-  userUUID?: string;
-  date?: string;
 
   // constructor and initialize method should be exactly same thing
   constructor(props?: {
-    sheetVersion?: 'v4';
-    auth?: GoogleAuth<JSONClient>;
-    spreadsheetId?: string;
-    sheetName?: string;
+    sheetVersion: 'v4';
+    auth: GoogleAuth<JSONClient>;
+    spreadsheetId: string;
+    sheetName: string;
   }) {
     super();
     this.auth = props?.auth;
@@ -55,9 +52,9 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
 
   initialize(props: {
     sheetsVersion: 'v4';
-    auth?: GoogleAuth<JSONClient>;
-    spreadsheetId?: string;
-    sheetName?: string;
+    auth: GoogleAuth<JSONClient>;
+    spreadsheetId: string;
+    sheetName: string;
   }) {
     this.auth = props.auth;
     this.spreadsheetId = props.spreadsheetId;
@@ -89,16 +86,11 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
   }
 
   async appendData(props: {
-    feedback?: string;
-    userUUID?: string;
-    date?: string;
+    feedback: string;
+    userUUID: string;
+    date: string;
   }) {
-    this.feedback = props.feedback;
-    this.userUUID = props.userUUID;
-    this.date = props.date;
-
     this._isSheetsInitialized();
-    this._isSheetsRequestBodyGiven();
 
     await this.sheets?.spreadsheets.values.append({
       auth: this.auth,
@@ -117,11 +109,5 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
       throw new Error(
         'GoogleApiSheets instance must be initialized before calling Google API',
       );
-  }
-
-  _isSheetsRequestBodyGiven() {
-    if (!this.feedback || !this.userUUID || !this.date) {
-      throw new Error('Request body was not valid!');
-    }
   }
 }
