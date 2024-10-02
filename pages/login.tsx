@@ -109,7 +109,6 @@ export default function Login() {
   return (
     <main className={`h-screen w-full max-w-full bg-bgPage`}>
       <div className="h-screen w-screen">
-        ´
         <div className="flex w-full justify-center">
           <div className="flex w-full max-w-72 flex-col">
             <Logo wrapperClassName="mb-3" />
