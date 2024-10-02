@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, HTMLAttributes, useState } from 'react';
@@ -16,10 +15,11 @@ import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { twMerge } from 'tailwind-merge';
 import { toast } from 'react-toastify';
+import { GetServerSidePropsContext } from 'next';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
-  if (!cookieData.user || !cookieData.user.isLoggedIn) {
+  if (!cookieData.user || !cookieData.session.isLoggedIn) {
     return {
       props: {},
     };

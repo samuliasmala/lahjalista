@@ -1,12 +1,11 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
-import { getServerSideProps } from '~/utils/getServerSideProps';
 import { handleGeneralError } from '~/utils/handleError';
 
 const POSSIBLE_ERRORS = {
@@ -21,29 +20,12 @@ const POSSIBLE_ERRORS = {
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 
-// CHECK THIS, tämä estää pääsyn /logout-sivulle URL:n kautta
-export { getServerSideProps };
-
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    logoutUser().catch((e) => {
-      console.error(e);
-    });
-  }, []);
-
-  async function logoutUser() {
-    try {
-      await axios.post('/api/auth/logout');
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   function handleInternalError(e: unknown) {
     console.error(e);

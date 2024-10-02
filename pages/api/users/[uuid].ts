@@ -74,7 +74,6 @@ async function handleGET({
       createdAt: true,
       updatedAt: true,
       role: true,
-      isLoggedIn: true,
     },
   });
 
@@ -118,7 +117,6 @@ async function handlePATCH({
       createdAt: true,
       updatedAt: true,
       role: true,
-      isLoggedIn: true,
     },
   });
   return res.status(200).json(updatedUser);
@@ -150,7 +148,6 @@ async function handlePUT({
       createdAt: true,
       updatedAt: true,
       role: true,
-      isLoggedIn: true,
     },
   });
 

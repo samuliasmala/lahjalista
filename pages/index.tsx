@@ -14,6 +14,7 @@ import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export { getServerSideProps };
 
@@ -229,8 +230,9 @@ function UserDetailModal({
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
-  function handleLogout() {
+  async function handleLogout() {
     try {
+      await axios.post('/api/auth/logout');
       window.location.href = '/logout';
     } catch (e) {
       console.error(e);
@@ -240,7 +242,7 @@ function UserDetailModal({
 
   if (user && showUserWindow) {
     return (
-      <>
+      <div>
         <div
           className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
           onClick={() => closeUserWindow()}
@@ -264,7 +266,7 @@ function UserDetailModal({
             </Button>
           </div>
         </div>
-      </>
+      </div>
     );
   }
   return null;

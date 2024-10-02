@@ -12,30 +12,27 @@ export default async function handler(
     if (req.method !== 'POST') {
       throw new HttpError('Invalid request method!', 405);
     }
-    const { session, user: userData } = await validateRequest(req, res);
+    const { session } = await validateRequest(req, res);
     if (!session) {
       throw new HttpError('Unauthorized', 401);
     }
 
-    // CHECK THIS, ei poisteta cookieta?
-    /*
-    await lucia.invalidateSession(session.id);
-    res
-      .setHeader('Set-Cookie', lucia.createBlankSessionCookie().serialize())
-      .status(200)
-      .end();
-    */
+    await logOutUser(session.id);
 
-    await prisma.user.update({
-      where: {
-        uuid: userData.uuid,
-      },
-      data: {
-        isLoggedIn: false,
-      },
-    });
     res.status(200).end();
+    return;
   } catch (e) {
     return handleError(res, e);
   }
+}
+
+export async function logOutUser(sessionId: string) {
+  await prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      isLoggedIn: false,
+    },
+  });
+
+  return true;
 }

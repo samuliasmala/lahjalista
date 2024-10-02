@@ -67,7 +67,6 @@ export const getUserSchema = userSchema.extend({
   updatedAt: z.date(),
   uuid: z.string(),
   role: z.string(),
-  isLoggedIn: z.boolean(),
 });
 
 export const createUserSchema = userSchema.extend({
@@ -79,6 +78,16 @@ export const userLoginDetailsSchema = createUserSchema
   .extend({ rememberMe: z.boolean() });
 
 // SESSION
+
+export const getSessionSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  userUUID: z.string(),
+  expiresAt: z.date(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  isLoggedIn: z.boolean(),
+});
 
 export const createSessionSchema = z.object({
   createdAt: z.date(),
