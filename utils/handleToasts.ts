@@ -1,24 +1,5 @@
 import { toast } from 'react-toastify';
 
-export function addToastTimerReset(toastId: number, document: Document) {
-  setTimeout(() => {
-    document
-      .getElementById(toastId.toString())
-      ?.addEventListener('mouseenter', () => {
-        toast.update(toastId, {
-          progress: 1,
-        });
-      });
-    document
-      .getElementById(toastId.toString())
-      ?.addEventListener('mouseleave', () => {
-        toast.update(toastId, {
-          progress: 0,
-        });
-      });
-  }, 1);
-}
-
 function generateToastID() {
   return checkIsIdOccupied(randomId());
 }
@@ -33,7 +14,6 @@ function randomId() {
     randomString += charSet.substring(randomPosition, randomPosition + 1);
   }
 
-  //return Math.floor(Math.random() * 100000000);
   return randomString;
 }
 
@@ -56,7 +36,6 @@ export function handleErrorToast(errorText: string) {
       toastId: generatedToastID,
       onOpen: () => {
         setTimeout(() => {
-          console.log('Done');
           document
             .getElementById(generatedToastID)
             ?.addEventListener('mouseenter', () => {
@@ -79,4 +58,23 @@ export function handleErrorToast(errorText: string) {
     console.error(e);
     return e;
   }
+}
+
+function addToastTimerReset(toastId: number, document: Document) {
+  setTimeout(() => {
+    document
+      .getElementById(toastId.toString())
+      ?.addEventListener('mouseenter', () => {
+        toast.update(toastId, {
+          progress: 1,
+        });
+      });
+    document
+      .getElementById(toastId.toString())
+      ?.addEventListener('mouseleave', () => {
+        toast.update(toastId, {
+          progress: 0,
+        });
+      });
+  }, 1);
 }
