@@ -7,6 +7,7 @@ import { createFeedbackSchema } from '~/shared/zodSchemas';
 import { Session, User } from 'lucia';
 import { validateRequest } from '~/backend/auth';
 import { handleDataSendingToGoogleSheets } from '~/backend/googleAPI/ownApiFunctions';
+import { sendFeedbackToGoogleSheets } from '~/backend/googleAPI/GoogleApiFunctionsNotClass';
 
 const HANDLER: Record<
   string,
@@ -53,7 +54,7 @@ async function handlePOST(
 
   // Code below should be okay to use void. Await would stop code here and it will not return any kind of error.
   // So .then or .catch should not be needed
-  void handleDataSendingToGoogleSheets({
+  void sendFeedbackToGoogleSheets({
     feedbackText: parsedFeedback.feedbackText,
     userUUID: userData.uuid,
   });
