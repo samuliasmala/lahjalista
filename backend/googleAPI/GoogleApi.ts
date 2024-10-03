@@ -7,7 +7,7 @@ export class GoogleApiAuthentication {
   scopes?: string[];
   auth?: GoogleAuth<JSONClient>;
 
-  async authenticate({
+  authenticate({
     pathToKeyFile,
     scopes,
   }: {
