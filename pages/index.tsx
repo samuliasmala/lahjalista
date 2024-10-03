@@ -14,6 +14,7 @@ import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
+import React from 'react';
 
 export { getServerSideProps };
 
