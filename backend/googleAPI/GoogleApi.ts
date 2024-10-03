@@ -3,9 +3,9 @@ import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
 import { google, sheets_v4 } from 'googleapis';
 
 export class GoogleApiAuthentication {
-  pathToKeyFile?: string;
-  scopes?: string[];
-  auth?: GoogleAuth<JSONClient>;
+  pathToKeyFile: string;
+  scopes: string[];
+  auth: GoogleAuth<JSONClient>;
 
   authenticate({
     pathToKeyFile,
@@ -32,6 +32,8 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
   sheets?: sheets_v4.Sheets;
   sheetName?: string;
 
+  // left the constructor here still, if this is better way to do than initialize-method
+  /*
   // constructor and initialize method should be exactly same thing
   constructor(props?: {
     sheetVersion: 'v4';
@@ -49,6 +51,7 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
       auth: props?.auth,
     });
   }
+*/
 
   initialize(props: {
     sheetsVersion: 'v4';
@@ -56,6 +59,8 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
     spreadsheetId: string;
     sheetName: string;
   }) {
+    this._isAuthenticated();
+
     this.auth = props.auth;
     this.spreadsheetId = props.spreadsheetId;
     this.sheetName = props.sheetName;
@@ -75,6 +80,7 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
     toRow: number | 'all';
   }) {
     this._isSheetsInitialized();
+    this._isAuthenticated();
 
     const response = await this.sheets?.spreadsheets.values.get({
       spreadsheetId: this.spreadsheetId,
@@ -91,6 +97,7 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
     date: string;
   }) {
     this._isSheetsInitialized();
+    this._isAuthenticated();
 
     await this.sheets?.spreadsheets.values.append({
       auth: this.auth,
@@ -108,6 +115,13 @@ export class GoogleApiSheets extends GoogleApiAuthentication {
     if (!this.sheets || !this.sheets.context._options.auth)
       throw new Error(
         'GoogleApiSheets instance must be initialized before calling Google API',
+      );
+  }
+
+  _isAuthenticated() {
+    if (!this.auth)
+      throw new Error(
+        'You have to be authenticated before using Google API. Use GoogleApiAuthentication.authenticate to do that',
       );
   }
 }
