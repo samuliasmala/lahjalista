@@ -3,16 +3,19 @@ import { JSONClient } from 'google-auth-library/build/src/auth/googleauth';
 import { google, sheets_v4 } from 'googleapis';
 
 export class GoogleApiAuthentication {
-  pathToKeyFile: string;
-  scopes: string[];
-  auth: GoogleAuth<JSONClient>;
+  // added default values to these two. Exclamation mark would be another one
+  // throwing same error because GoogleApiAuthentication does not have a constructor
+  pathToKeyFile: string = '';
+  scopes: string[] = [];
+  // auth can have exclamation mark due to we have a check for it
+  auth!: GoogleAuth<JSONClient>;
 
   authenticate({
     pathToKeyFile,
     scopes,
   }: {
-    pathToKeyFile?: string;
-    scopes?: string[];
+    pathToKeyFile: string;
+    scopes: string[];
   }) {
     this.pathToKeyFile = pathToKeyFile;
     this.scopes = scopes;
@@ -27,10 +30,12 @@ export class GoogleApiAuthentication {
 }
 
 export class GoogleApiSheets extends GoogleApiAuthentication {
-  sheetsVersion?: 'v4';
-  spreadsheetId?: string;
-  sheets?: sheets_v4.Sheets;
-  sheetName?: string;
+  sheetsVersion: 'v4' = 'v4';
+  // exclamation marks added so can bypass following error for now:
+  // property 'spreadsheetId' has no initializer and is not definitely assigned in the constructor.
+  spreadsheetId!: string;
+  sheets!: sheets_v4.Sheets;
+  sheetName!: string;
 
   // left the constructor here still, if this is better way to do than initialize-method
   /*
