@@ -15,7 +15,7 @@ export async function handleDataSendingToGoogleSheets(requiredData: {
   userUUID: string;
 }) {
   try {
-    const authentication = await new GoogleApiAuthentication().authenticate({
+    const authentication = new GoogleApiAuthentication().authenticate({
       pathToKeyFile: PATH_TO_KEY_FILE,
       scopes: SCOPES,
     });

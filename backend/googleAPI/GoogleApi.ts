@@ -30,9 +30,9 @@ export class GoogleApiAuthentication {
 }
 
 export class GoogleApiSheets extends GoogleApiAuthentication {
-  sheetsVersion: 'v4' = 'v4';
   // exclamation marks added so can bypass following error for now:
   // property 'spreadsheetId' has no initializer and is not definitely assigned in the constructor.
+  sheetsVersion!: 'v4';
   spreadsheetId!: string;
   sheets!: sheets_v4.Sheets;
   sheetName!: string;

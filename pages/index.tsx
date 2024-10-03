@@ -1,4 +1,4 @@
-import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -14,7 +14,6 @@ import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
-import React from 'react';
 
 export { getServerSideProps };
 
