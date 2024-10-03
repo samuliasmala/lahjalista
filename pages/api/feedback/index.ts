@@ -53,7 +53,7 @@ async function handlePOST(
 
   // Code below should be okay to use void. Await would stop code here and it will not return any kind of error.
   // So .then or .catch should not be needed
-  void handleDataSendingToGoogleSheets(res, {
+  void handleDataSendingToGoogleSheets({
     feedbackText: parsedFeedback.feedbackText,
     userUUID: userData.uuid,
   });

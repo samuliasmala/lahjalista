@@ -1,4 +1,3 @@
-import { NextApiResponse } from 'next';
 import { GoogleApiAuthentication, GoogleApiSheets } from './GoogleApi';
 
 const SCOPES = [
@@ -11,10 +10,10 @@ const PATH_TO_KEY_FILE =
 
 const SPREADSHEET_ID = '1mjyeqn3MpaT8mFEN4yHbtOQFK9_KAeCElSaftviKPXE';
 
-export async function handleDataSendingToGoogleSheets(
-  res: NextApiResponse,
-  requiredData: { feedbackText: string; userUUID: string },
-) {
+export async function handleDataSendingToGoogleSheets(requiredData: {
+  feedbackText: string;
+  userUUID: string;
+}) {
   try {
     const authentication = await new GoogleApiAuthentication().authenticate({
       pathToKeyFile: PATH_TO_KEY_FILE,
@@ -34,8 +33,8 @@ export async function handleDataSendingToGoogleSheets(
       userUUID: requiredData.userUUID,
     });
 
-    res.status(200).send('Request sent succesfully!');
+    return;
   } catch (e) {
-    //console.error(e);
+    console.error(e);
   }
 }
