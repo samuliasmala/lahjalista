@@ -6,6 +6,7 @@ import { Button } from './Button';
 import { jost } from '~/utils/fonts';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import React from 'react';
+import Link from 'next/link';
 
 type UserDetails = Pick<User, 'firstName' | 'lastName' | 'email' | 'role'>;
 
@@ -94,17 +95,8 @@ function AdminPanelButton({ userDetails }: { userDetails: UserDetails }) {
   }
 
   return (
-    <Button
-      className="mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-black"
-      onClick={() => {
-        try {
-          window.location.href = '/admin';
-        } catch (e) {
-          console.error(e);
-          window.location.href = '/';
-        }
-      }}
-    >
+    <Button className="relative mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-black">
+      <Link href={'/admin'} className="absolute h-full w-full" />
       <p className={`text-sm font-medium text-white`}>Ylläpito</p>
       <SvgUser width={18} height={18} className="ml-2" />
     </Button>
