@@ -13,7 +13,7 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
-import { toast } from 'react-toastify';
+import { handleErrorToast } from '~/utils/handleToasts';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -52,7 +52,7 @@ export default function Register() {
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
-      toast(handleAuthErrors(e), { type: 'error' });
+      handleErrorToast(handleAuthErrors(e));
     }
   }
 
