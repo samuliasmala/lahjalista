@@ -6,6 +6,7 @@ import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
 import { Session, User } from 'lucia';
 import { validateRequest } from '~/backend/auth';
+import { sendFeedbackToGoogleSheets } from '~/backend/googleAPI/GoogleApiFunctionsNotClass';
 
 const HANDLER: Record<
   string,
@@ -49,6 +50,13 @@ async function handlePOST(
 ) {
   const parsedFeedback = createFeedbackSchema.parse(req.body);
   const createdFeedback = await createFeedback(parsedFeedback, userData);
+
+  // Code below should be okay to use void. Await would stop code here and it will not return any kind of error.
+  // So .then or .catch should not be needed
+  void sendFeedbackToGoogleSheets({
+    feedbackText: parsedFeedback.feedbackText,
+    userUUID: userData.uuid,
+  });
 
   return res.status(200).json(createdFeedback);
 }
