@@ -1,7 +1,5 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
@@ -21,7 +19,7 @@ export default function Home({
 
   useEffect(() => {
     console.log(user);
-    if (user.role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       router.push('/');
     }
   }, []);
@@ -43,12 +41,18 @@ export default function Home({
       />
       <div className="flex flex-row justify-center">
         <div className="w-full max-w-72">
-          <Button className="relative">
-            <Link href={'/admin/feedback'} className="absolute h-full w-full" />
-            Palautteet
-          </Button>
+          <FeedbackButton />
         </div>
       </div>
     </main>
+  );
+}
+
+function FeedbackButton() {
+  return (
+    <Button className="relative">
+      <Link href={'/admin/feedback'} className="absolute h-full w-full" />
+      Palautteet
+    </Button>
   );
 }
