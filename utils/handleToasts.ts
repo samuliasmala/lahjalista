@@ -50,22 +50,3 @@ export function handleErrorToast(errorText: string) {
     return e;
   }
 }
-
-function addToastTimerReset(toastId: number, document: Document) {
-  setTimeout(() => {
-    document
-      .getElementById(toastId.toString())
-      ?.addEventListener('mouseenter', () => {
-        toast.update(toastId, {
-          progress: 1,
-        });
-      });
-    document
-      .getElementById(toastId.toString())
-      ?.addEventListener('mouseleave', () => {
-        toast.update(toastId, {
-          progress: 0,
-        });
-      });
-  }, 1);
-}
