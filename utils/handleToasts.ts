@@ -5,16 +5,7 @@ function generateToastID() {
 }
 
 function randomId() {
-  const charSet =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let randomString = '';
-  const randomLength = Math.floor(Math.random() * (100 - 75) + 75);
-  for (let x = 0; x < randomLength; x++) {
-    const randomPosition = Math.floor(Math.random() * charSet.length);
-    randomString += charSet.substring(randomPosition, randomPosition + 1);
-  }
-
-  return randomString;
+  return Math.floor(Math.random() * 100000000).toString();
 }
 
 function checkIsIdOccupied(toastId: string) {
