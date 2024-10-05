@@ -58,10 +58,10 @@ async function handleGET({ res, userData }: HandlerParams<User[]>) {
   return res.status(200).json(users);
 }
 
-// CHECK THIS, voiko tämän poistaa / lisätä, että ei käytössä? Tiliä ei voi luoda, koska ei ole kirjautunut sisään
-// Rekistöröityminen tapahtuu /pages/api/auth/register.ts:n kautta
-// /pages/api/auth/register.ts käyttä createUser-funktiota alempana
-async function handlePOST({ req, res }: HandlerParams<User>) {
+async function handlePOST({ req, res, userData }: HandlerParams<User>) {
+  if (userData.role !== 'ADMIN') {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
   const { email, firstName, lastName, password } = createUserSchema.parse(
     req.body,
   );
