@@ -18,9 +18,12 @@ export default function Home({
   const router = useRouter();
 
   useEffect(() => {
-    console.log(user);
-    if (!user || user.role !== 'ADMIN') {
-      router.push('/');
+    try {
+      if (!user || user.role !== 'ADMIN') {
+        router.push('/');
+      }
+    } catch (e) {
+      handleError(e);
     }
   }, []);
 
