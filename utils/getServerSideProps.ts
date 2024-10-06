@@ -35,6 +35,10 @@ export async function getServerSideProps(
 
   return {
     props: {
+      // getStaticProps can only return plain objects (i.e., objects with
+      // primitive values). This is why we use JSON.parse and JSON.stringify
+      // to convert the object to a plain object (specifically here we convert
+      // the user.createdAt Date object to a string).
       user: JSON.parse(JSON.stringify(returnThis.data)) as User,
     },
   };
