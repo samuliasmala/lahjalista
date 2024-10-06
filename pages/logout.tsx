@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
@@ -8,7 +8,6 @@ import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
-import { getUserSchema } from '~/shared/zodSchemas';
 import { handleGeneralError } from '~/utils/handleError';
 
 const POSSIBLE_ERRORS = {
@@ -25,7 +24,6 @@ type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
-  // jos user tai session ei löydy, käyttäjä oletettavasti ei ole kirjautunut
   if (!cookieData.user || !cookieData.session) {
     return {
       redirect: {
@@ -34,7 +32,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-  // jos user ja session löytyy, mutta käyttäjä on kirjautunut, ohjataan etusivulle
   if (cookieData.session.isLoggedIn) {
     return {
       redirect: {
@@ -43,29 +40,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-  // poistetaan kentät mitä ei haluta käyttäjälle antaa (oikeastaan ID-kenttä, kertoo käyttäjämäärän)
-  const parsedUser = getUserSchema.safeParse(cookieData.user);
-  // jos syystä X tulee virhe, ohjataan käyttäjä takaisin kirjautumissivulle (vai olisiko parempi siirtää takaisin etusivulle?)
-  if (parsedUser.error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      },
-    };
-  }
-  // jos kaikki meni onnistuneesti (ei ole kirjautunut sisään, session ja käyttäjä löytyivät), voidaan käyttäjä ohjata sivulle
-  // palautetaan karsittu käyttäjädata
   return {
-    props: {
-      user: JSON.parse(JSON.stringify(parsedUser.data)),
-    },
+    props: {},
   };
 }
 
-export default function Logout({
-  user,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
   const [errorText, setErrorText] = useState('');
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
