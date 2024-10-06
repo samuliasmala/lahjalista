@@ -11,3 +11,6 @@
 ### </IDEOITA>
 
 TODO:
+
+Laitetaan nappulat yms käyttämään tanstack-kirjastoa
+https://www.npmjs.com/package/@tanstack/react-query
