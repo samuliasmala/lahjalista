@@ -90,10 +90,10 @@ export default function Logout() {
 
   if (!isFeedbackSent) {
     return (
-      <main className="h-screen w-full max-w-full bg-orange-50 ">
+      <main className="h-screen w-full max-w-full bg-orange-50">
         <div className="flex h-screen w-screen flex-col items-center">
           {errorText.length > 0 ? (
-            <div className="flex justify-center pt-4 ">
+            <div className="flex justify-center pt-4">
               <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
                 {errorText}
               </div>
@@ -141,7 +141,7 @@ export default function Logout() {
     );
   } else {
     return (
-      <main className="h-screen w-full max-w-full bg-orange-50 ">
+      <main className="h-screen w-full max-w-full bg-orange-50">
         <div className="flex h-screen w-screen flex-col items-center">
           <div className="max-w-80">
             <Logo />
