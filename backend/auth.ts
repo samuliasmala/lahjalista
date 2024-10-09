@@ -104,8 +104,29 @@ export async function requireLogin(
   res: NextApiResponse,
 ): Promise<{ user: LuciaUser; session: LuciaSession }> {
   const userDetails = await validateRequest(req, res);
-  if (!userDetails.session || !userDetails.user) {
+  if (
+    !userDetails.session ||
+    !userDetails.user ||
+    !userDetails.session.isLoggedIn
+  ) {
     throw new HttpError('You are unauthorized!', 401);
   }
   return userDetails;
+}
+
+/**
+ * Checks for a valid user and session, **REGARDLESS** of login status
+ *
+ * **ATTENTION**: the user **DOES NOT** need to be logged in for this function to validate request
+ */
+
+export async function checkIfSessionValid(
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<{ user: User; session: LuciaSession }> {
+  const userData = await validateRequest(req, res);
+  if (!userData.session || !userData.user) {
+    throw new HttpError('You are unauthorized!', 401);
+  }
+  return userData;
 }

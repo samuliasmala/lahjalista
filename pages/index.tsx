@@ -13,6 +13,7 @@ import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangl
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
+import axios from 'axios';
 
 export { getServerSideProps };
 
@@ -242,8 +243,9 @@ function UserDetailModal({
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
-  function handleLogout() {
+  async function handleLogout() {
     try {
+      await axios.post('/api/auth/logout');
       window.location.href = '/logout';
     } catch (e) {
       console.error(e);
@@ -258,7 +260,7 @@ function UserDetailModal({
           className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
           onClick={() => closeUserWindow()}
         />
-        <div className=" absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
+        <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
           <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>

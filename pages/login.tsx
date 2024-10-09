@@ -1,9 +1,7 @@
 import axios from 'axios';
-import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Logo } from '~/components/Logo';
@@ -14,6 +12,8 @@ import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
+import { validateRequest } from '~/backend/auth';
+import { GetServerSidePropsContext } from 'next';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);

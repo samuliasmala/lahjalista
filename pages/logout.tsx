@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
-import { getServerSideProps } from '~/utils/getServerSideProps';
 import { handleGeneralError } from '~/utils/handleError';
 
 const POSSIBLE_ERRORS = {
@@ -21,8 +22,28 @@ const POSSIBLE_ERRORS = {
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
 
-// CHECK THIS, tämä estää pääsyn /logout-sivulle URL:n kautta
-export { getServerSideProps };
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookieData = await validateRequest(context.req, context.res);
+  if (!cookieData.user || !cookieData.session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    };
+  }
+  if (cookieData.session.isLoggedIn) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}
 
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
@@ -30,20 +51,6 @@ export default function Logout() {
   const [isFeedbackSent, setIsFeedbackSent] = useState(false);
 
   const router = useRouter();
-
-  useEffect(() => {
-    logoutUser().catch((e) => {
-      console.error(e);
-    });
-  }, []);
-
-  async function logoutUser() {
-    try {
-      await axios.post('/api/auth/logout');
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   function handleInternalError(e: unknown) {
     console.error(e);

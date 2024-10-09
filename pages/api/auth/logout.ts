@@ -14,19 +14,26 @@ export default async function handler(
     }
     const { session } = await validateRequest(req, res);
     if (!session) {
-      throw new HttpError('Unauthorized', 401);
+      res.status(200).end();
+      return;
     }
 
-    await prisma.session.update({
-      where: { id: session.id },
-      data: {
-        isLoggedIn: false,
-      },
-    });
+    await logOutUser(session.id);
 
     res.status(200).end();
     return;
   } catch (e) {
     return handleError(res, e);
   }
+}
+
+export async function logOutUser(sessionId: string) {
+  await prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      isLoggedIn: false,
+    },
+  });
+
+  return true;
 }

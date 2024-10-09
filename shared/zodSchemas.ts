@@ -79,6 +79,16 @@ export const userLoginDetailsSchema = createUserSchema
 
 // SESSION
 
+export const getSessionSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  userUUID: z.string(),
+  expiresAt: z.date(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  isLoggedIn: z.boolean(),
+});
+
 export const createSessionSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
