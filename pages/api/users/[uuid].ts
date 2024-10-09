@@ -61,7 +61,6 @@ async function handleGET({
   if (queryUUID !== userData.uuid && !isAdmin) {
     throw new HttpError("You don't have privileges to do that!", 403);
   }
-
   const user = await prisma.user.findUniqueOrThrow({
     where: {
       uuid: queryUUID,
@@ -76,6 +75,7 @@ async function handleGET({
       role: true,
     },
   });
+
   return res.status(200).json(user);
 }
 

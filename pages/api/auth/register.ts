@@ -19,6 +19,7 @@ export default async function handler(
 
     const session = await lucia.createSession(userData.uuid, {
       userUUID: userData.uuid,
+      isLoggedIn: true,
     });
     res
       .appendHeader(

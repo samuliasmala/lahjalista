@@ -1,8 +1,11 @@
 import { z } from 'zod';
 import {
+  createFeedbackSchema,
   createGiftSchema,
   createSessionSchema,
   createUserSchema,
+  feedbackSchema,
+  getSessionSchema,
   getUserSchema,
   giftSchema,
   userLoginDetailsSchema,
@@ -27,4 +30,11 @@ export type CreateUser = z.infer<typeof createUserSchema>;
 export type UserLoginDetails = z.infer<typeof userLoginDetailsSchema>;
 
 // SESSION
+export type Session = z.infer<typeof getSessionSchema>;
+
 export type CreateSession = z.infer<typeof createSessionSchema>;
+
+// FEEDBACK
+export type Feedback = z.infer<typeof feedbackSchema>;
+
+export type CreateFeedback = z.infer<typeof createFeedbackSchema>;

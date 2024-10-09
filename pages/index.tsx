@@ -8,12 +8,12 @@ import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
-import axios from 'axios';
 import SvgUser from '~/icons/user';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
+import axios from 'axios';
 
 export { getServerSideProps };
 
@@ -93,6 +93,9 @@ export default function Home({
 
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
+    if (errorMessage === 'You are unauthorized!') {
+      window.location.href = '/';
+    }
     setIsAnyKindOfError(true);
     setIsAnyKindOfErrorMessage(errorMessage);
   }
@@ -242,10 +245,8 @@ function UserDetailModal({
 }) {
   async function handleLogout() {
     try {
-      const request = await axios.post('/api/auth/logout');
-      if (request) {
-        window.location.href = '/logout';
-      }
+      await axios.post('/api/auth/logout');
+      window.location.href = '/logout';
     } catch (e) {
       console.error(e);
       window.location.href = '/';
@@ -259,7 +260,7 @@ function UserDetailModal({
           className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
           onClick={() => closeUserWindow()}
         />
-        <div className=" absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
+        <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
           <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
