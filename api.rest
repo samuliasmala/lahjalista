@@ -31,11 +31,13 @@ Content-Type: application/json
 
 # GIFT REQUESTS
 
+@giftUUID = cba86307-8f50-4038-bc79-c05cef4fafc1
+
 ###
 GET {{baseUrl}}/gifts
 
 ###
-GET {{baseUrl}}/gifts/cba86307-8f50-4038-bc79-c05cef4fafc1
+GET {{baseUrl}}/gifts/{{giftUUID}}
 
 ###
 POST {{baseUrl}}/gifts
@@ -47,7 +49,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
+PATCH {{baseUrl}}/gifts/{{giftUUID}}
 Content-Type: application/json
 
 {
@@ -56,7 +58,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
+PUT {{baseUrl}}/gifts/{{giftUUID}}
 Content-Type: application/json
 
 {
@@ -65,16 +67,18 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{baseUrl}}/gifts/e7051758-f907-4ebf-bcaf-5b26b3198409
+DELETE {{baseUrl}}/gifts/{{giftUUID}}
 
 
 # USER REQUESTS
+
+@userUUID = 26ab195c-5f56-4831-bedd-07725e8012ff
 
 ###
 GET {{baseUrl}}/users
 
 ###
-GET {{baseUrl}}/users/26ab195c-5f56-4831-bedd-07725e8012ff
+GET {{baseUrl}}/users/{{userUUID}}
 
 
 ###
@@ -89,7 +93,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
+PATCH {{baseUrl}}/users/{{userUUID}}
 Content-Type: application/json
 
 {
@@ -99,7 +103,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
+PUT {{baseUrl}}/users/{{userUUID}}
 Content-Type: application/json
 
 {
@@ -109,7 +113,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{baseUrl}}/users/80934be5-6bb8-4861-8e92-8df8a1dca713
+DELETE {{baseUrl}}/users/{{userUUID}}
 
 
 # FEEDBACK

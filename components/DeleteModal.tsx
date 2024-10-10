@@ -43,7 +43,7 @@ export function DeleteModal({
           />
         </div>
         <p
-          className={`ml-4 mt-5 text-base  text-primaryText [overflow-wrap:anywhere]`}
+          className={`ml-4 mt-5 text-base text-primaryText [overflow-wrap:anywhere]`}
         >
           {gift.gift} - {gift.receiver}
         </p>
