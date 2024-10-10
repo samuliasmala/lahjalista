@@ -4,6 +4,7 @@ import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
+import { sendFeedbackToGoogleSheets } from '~/backend/googleAPI/GoogleApiFunctionsNotClass';
 import { checkIfSessionValid } from '~/backend/auth';
 
 const HANDLER: Record<
@@ -48,6 +49,13 @@ async function handlePOST(
 ) {
   const parsedFeedback = createFeedbackSchema.parse(req.body);
   const createdFeedback = await createFeedback(parsedFeedback, userData);
+
+  // Code below should be okay to use void. Await would stop code here and it will not return any kind of error.
+  // So .then or .catch should not be needed
+  void sendFeedbackToGoogleSheets({
+    feedbackText: parsedFeedback.feedbackText,
+    userUUID: userData.uuid,
+  });
 
   return res.status(200).json(createdFeedback);
 }
