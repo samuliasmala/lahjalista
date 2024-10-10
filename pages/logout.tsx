@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
@@ -19,6 +21,29 @@ const POSSIBLE_ERRORS = {
 } as const;
 
 type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const cookieData = await validateRequest(context.req, context.res);
+  if (!cookieData.user || !cookieData.session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    };
+  }
+  if (cookieData.session.isLoggedIn) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}
 
 export default function Logout() {
   const [feedbackText, setFeedbackText] = useState('');
@@ -65,10 +90,10 @@ export default function Logout() {
 
   if (!isFeedbackSent) {
     return (
-      <main className="h-screen w-full max-w-full bg-orange-50 ">
+      <main className="h-screen w-full max-w-full bg-orange-50">
         <div className="flex h-screen w-screen flex-col items-center">
           {errorText.length > 0 ? (
-            <div className="flex justify-center pt-4 ">
+            <div className="flex justify-center pt-4">
               <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
                 {errorText}
               </div>
@@ -116,7 +141,7 @@ export default function Logout() {
     );
   } else {
     return (
-      <main className="h-screen w-full max-w-full bg-orange-50 ">
+      <main className="h-screen w-full max-w-full bg-orange-50">
         <div className="flex h-screen w-screen flex-col items-center">
           <div className="max-w-80">
             <Logo />
