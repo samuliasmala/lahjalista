@@ -123,7 +123,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <Label className="mt-5">Salasana</Label>
-                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2 ">
+                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
