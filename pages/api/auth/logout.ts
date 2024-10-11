@@ -14,7 +14,8 @@ export default async function handler(
     }
     const { session } = await validateRequest(req, res);
     if (!session) {
-      throw new HttpError('Unauthorized', 401);
+      res.status(200).end();
+      return;
     }
 
     await logOutUser(session.id);
