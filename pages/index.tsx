@@ -1,4 +1,4 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
