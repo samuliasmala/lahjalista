@@ -93,31 +93,27 @@ export default function Home({
 
   function PageNavigator() {
     const [whatToRender, setWhatToRender] = useState<number[]>([]);
+    const [isFirstPage, setIsFirstPage] = useState(false);
+    const [isLastPage, setIsLastPage] = useState(false);
     const isMount = useRef(false);
 
     useEffect(() => {
       if (!isMount.current) {
+        // checks if user is in the first page
+        currentPage === 1 ? setIsFirstPage(true) : null;
+        // checks if user is in thelast page
+        currentPage === totalPages ? setIsLastPage(true) : null;
         const newWhatToRender = [
           ...(currentPage - 1 > 0 ? [currentPage - 1] : []),
           ...(currentPage - 2 > 0 ? [currentPage - 2] : []),
-          ...(currentPage + 1 < totalPages ? [currentPage + 1] : []),
-          ...(currentPage + 2 < totalPages ? [currentPage + 2] : []),
+          ...(currentPage + 1 <= totalPages ? [currentPage + 1] : []),
+          ...(currentPage + 2 <= totalPages ? [currentPage + 2] : []),
         ];
-        /*
-        // backwards numbers
-        currentPage - 1 > 0 ? secondArray.push(currentPage - 1) : null;
-        currentPage - 2 > 0 ? secondArray.push(currentPage - 2) : null;
-        // forward numbers
-        currentPage + 1 >= totalPages
-          ? null
-          : secondArray.push(currentPage + 1);
-        currentPage + 2 >= totalPages
-          ? null
-          : secondArray.push(currentPage + 2);
-          */
-        console.log(newWhatToRender);
+        //console.log(newWhatToRender);
         setWhatToRender((prevValue) => {
-          return [...prevValue].concat(newWhatToRender);
+          return [...prevValue]
+            .concat([...newWhatToRender, currentPage])
+            .sort((a, b) => a - b);
         });
 
         isMount.current = true;
@@ -125,35 +121,70 @@ export default function Home({
     }, []);
 
     return (
-      <div className="mt-4 flex justify-center">
-        <Button
-          className="text-md m-0 mr-4 h-auto w-auto p-0"
-          onClick={() =>
-            setCurrentPage((prevValue) => {
-              return prevValue - 1 >= 1 ? prevValue - 1 : 1;
-            })
-          }
-        >
-          {'<'} Edellinen
-        </Button>
-        {whatToRender.map((x, index) => {
-          return (
-            <div className="border-4" key={index}>
-              {x}
-            </div>
-          );
-        })}
-        <div>Current page: {currentPage}</div>
-        <Button
-          className="text-md m-0 ml-4 h-auto w-auto p-0"
-          onClick={() =>
-            setCurrentPage((prevValue) => {
-              return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
-            })
-          }
-        >
-          Seuraava {'>'}
-        </Button>
+      <div>
+        <div className="mt-4 flex">
+          {isFirstPage ? null : (
+            <Button
+              className="text-md m-0 mr-4 h-auto w-auto p-0"
+              onClick={() =>
+                setCurrentPage((prevValue) => {
+                  return prevValue - 1 >= 1 ? prevValue - 1 : 1;
+                })
+              }
+            >
+              {'<'} Edellinen
+            </Button>
+          )}
+          {whatToRender.map((x, index) => {
+            return (
+              <div
+                className={`border-4 ${x === currentPage ? 'bg-red-500' : null}`}
+                key={index}
+              >
+                {x}
+              </div>
+            );
+          })}
+          {isLastPage ? null : (
+            <Button
+              className="text-md m-0 ml-4 h-auto w-auto p-0"
+              onClick={() =>
+                setCurrentPage((prevValue) => {
+                  return prevValue + 1 <= totalPages
+                    ? prevValue + 1
+                    : totalPages;
+                })
+              }
+            >
+              Seuraava {'>'}
+            </Button>
+          )}
+        </div>
+        <div>
+          <div className="mt-5">
+            Current page:
+            <span>
+              <select
+                onChange={(e) => {
+                  setCurrentPage(Number(e.target.value) || 1);
+                }}
+                defaultValue={currentPage}
+              >
+                {feedbacks.map((_, index) => {
+                  if (index <= totalPages) {
+                    return (
+                      <option value={index} key={index}>
+                        {index}
+                      </option>
+                    );
+                  }
+                  return null;
+                })}
+              </select>
+            </span>
+            / {totalPages}{' '}
+          </div>
+        </div>
       </div>
     );
 
