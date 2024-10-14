@@ -79,18 +79,6 @@ export default function Login() {
         return;
       }
 
-      /*
-      CHECK THIS,
-
-      Type 'string | undefined' is not assignable to type 'string'.
-
-      TypeScript huomauttaa tuommsoisesta ongelmasta "loginCredentials"-variablen kanssa
-
-      Ongelma ohitettu toistaiseksi laittamalla: || "" 
-
-      Ongelma ei pitäisi olla mahdollinen, errorFound-variablen takia
-      */
-
       const loginCredentials: UserLoginDetails = {
         email: emailValidation.data || '',
         password: password,
