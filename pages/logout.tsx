@@ -11,18 +11,6 @@ import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
 import { handleGeneralError } from '~/utils/handleError';
 
-const POSSIBLE_ERRORS = {
-  'feedback was invalid!': 'Palauteteksti on virheellinen!',
-  'feedback text is mandatory!': 'Palauteteksti on pakollinen!',
-  'server error!': 'Palvelin virhe!',
-  'palvelin virhe!': 'Palvelin virhe!',
-  'odottamaton virhe tapahtui!': 'Odottamaton virhe tapahtui!',
-  'you are unauthorized!':
-    'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen antaaksesi palautteen!',
-} as const;
-
-type KnownFrontEndErrorTexts = keyof typeof POSSIBLE_ERRORS;
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
   if (!cookieData.user || !cookieData.session) {
@@ -52,15 +40,6 @@ export default function Logout() {
 
   const router = useRouter();
 
-  function handleInternalError(e: unknown) {
-    console.error(e);
-    const errorMessage =
-      POSSIBLE_ERRORS[
-        handleGeneralError(e).toLowerCase() as KnownFrontEndErrorTexts
-      ] || 'Palauteteksti tai yksilöintitunnus on virheellinen';
-    return errorMessage;
-  }
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
@@ -75,7 +54,7 @@ export default function Logout() {
       await axios.post('/api/feedback', dataToSend);
       feedbackSent();
     } catch (e) {
-      toast(handleInternalError(e), { type: 'error' });
+      toast(handleGeneralError(e), { type: 'error' });
     }
   }
 
