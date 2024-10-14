@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, HTMLAttributes, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
