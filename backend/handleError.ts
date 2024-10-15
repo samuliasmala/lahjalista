@@ -36,14 +36,6 @@ export function handleError(res: NextApiResponse, e: unknown) {
     console.error(e);
     return res.status(400).json(e.issues);
   }
-  if (e instanceof AxiosError) {
-    console.error(e.response?.data);
-    return res.status(500).send('Axios Server error!');
-  }
-
-  if (e instanceof Error) {
-    return res.status(400).send(e.message);
-  }
-
+  console.error(e);
   return res.status(500).send('Server error!');
 }
