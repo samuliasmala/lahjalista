@@ -50,11 +50,11 @@ async function handlePOST(
   const parsedFeedback = createFeedbackSchema.parse(req.body);
   const createdFeedback = await createFeedback(parsedFeedback, userData);
 
-  // Code below should be okay to use void. Await would stop code here and it will not return any kind of error.
-  // So .then or .catch should not be needed
-  void sendFeedbackToGoogleSheets({
+  sendFeedbackToGoogleSheets({
     feedbackText: parsedFeedback.feedbackText,
     userUUID: userData.uuid,
+  }).catch((e) => {
+    console.error(e);
   });
 
   return res.status(200).json(createdFeedback);
