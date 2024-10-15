@@ -4,7 +4,7 @@ import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
-import { sendFeedbackToGoogleSheets } from '~/backend/googleAPI/GoogleAPI';
+import { sendFeedbackToGoogleSheets } from '~/backend/GoogleAPI';
 import { checkIfSessionValid } from '~/backend/auth';
 
 const HANDLER: Record<
