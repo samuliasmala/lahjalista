@@ -2,6 +2,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Logo } from '~/components/Logo';
@@ -12,8 +13,9 @@ import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
-import { validateRequest } from '~/backend/auth';
+import { toast } from 'react-toastify';
 import { GetServerSidePropsContext } from 'next';
+import { ErrorParagraph } from '~/components/ErrorParagraph';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -30,11 +32,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
+type ErrorFieldNames = 'email' | 'password';
+type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [errorText, setErrorText] = useState('');
+
+  const [errors, setErrors] = useState<ErrorTypes>({});
+
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
@@ -42,13 +49,38 @@ export default function Login() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
+      setErrors({});
+      let errorFound = false;
+
       const emailValidation = emailSchema.safeParse(email);
       if (emailValidation.success === false) {
-        setErrorText(emailValidation.error.format()._errors[0] || '');
+        setErrors((prevValue) => {
+          return {
+            ...prevValue,
+            email:
+              emailValidation.error.format()._errors[0] ||
+              'Virheellinen sähköposti',
+          };
+        });
+        errorFound = true;
+      }
+
+      if (password.length <= 0) {
+        setErrors((prevValue) => {
+          return {
+            ...prevValue,
+            password: 'Salasana on pakollinen',
+          };
+        });
+        errorFound = true;
+      }
+
+      if (errorFound) {
         return;
       }
+
       const loginCredentials: UserLoginDetails = {
-        email: emailValidation.data,
+        email: emailValidation.data || '',
         password: password,
         rememberMe: rememberMe,
       };
@@ -56,7 +88,7 @@ export default function Login() {
       await router.push('/');
     } catch (e) {
       console.error(e);
-      setErrorText(handleAuthErrors(e));
+      toast(handleAuthErrors(e), { type: 'error' });
     }
   }
 
@@ -65,13 +97,6 @@ export default function Login() {
   return (
     <main className={`h-screen w-full max-w-full bg-bgPage`}>
       <div className="h-screen w-screen">
-        {errorText.length > 0 ? (
-          <div className="flex justify-center pt-4">
-            <div className="max-w-sm rounded border border-red-400 bg-red-100 p-3 text-center text-red-700 [overflow-wrap:anywhere]">
-              {errorText}
-            </div>
-          </div>
-        ) : null}
         <div className="flex w-full justify-center">
           <div className="flex w-full max-w-72 flex-col">
             <Logo wrapperClassName="mb-3" />
@@ -90,6 +115,7 @@ export default function Login() {
                   spellCheck="false"
                 />
               </div>
+              <ErrorParagraph errorText={errors.email} />
               <div className="flex flex-col pt-6">
                 <Label>Salasana</Label>
                 <div className="flex justify-between rounded-md border-lines bg-bgForms outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
@@ -112,6 +138,7 @@ export default function Login() {
                   </div>
                 </div>
               </div>
+              <ErrorParagraph errorText={errors.password} />
               <div className="flex pt-4 align-middle">
                 <Label className={`flex cursor-pointer select-none`}>
                   <input
