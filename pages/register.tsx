@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, HTMLAttributes, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
@@ -13,6 +12,8 @@ import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
+import { toast } from 'react-toastify';
+import { ErrorParagraph } from '~/components/ErrorParagraph';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -28,8 +29,6 @@ const EMPTY_FORM_DATA = {
 export default function Register() {
   const [formData, setFormData] = useState(EMPTY_FORM_DATA);
 
-  const [registerError, setRegisterError] = useState('');
-
   const [errors, setErrors] = useState<ErrorTypes>({});
 
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +36,7 @@ export default function Register() {
 
   const router = useRouter();
 
-  async function handleRegister(e: FormEvent<HTMLFormElement>) {
+  async function handleRegister(e: FormEvent) {
     try {
       e.preventDefault();
       const validatedForm = formSchema.safeParse(formData);
@@ -50,18 +49,15 @@ export default function Register() {
         });
         return;
       }
-      setErrors({});
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
-      const errorText = handleAuthErrors(e);
-      setRegisterError(errorText);
+      toast(handleAuthErrors(e), { type: 'error' });
     }
   }
 
   function userCreatedSuccesfully() {
     setFormData(EMPTY_FORM_DATA);
-    setRegisterError('');
     setIsUserCreated(true);
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
@@ -75,11 +71,6 @@ export default function Register() {
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="mt-14 flex w-full max-w-72 flex-col">
-            {registerError.length > 0 ? (
-              <div className="m-3 max-w-sm rounded border border-red-400 bg-red-100 text-center text-red-700 [overflow-wrap:anywhere]">
-                {registerError}
-              </div>
-            ) : null}
             <form onSubmit={(e) => void handleRegister(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
@@ -183,18 +174,5 @@ export default function Register() {
         </div>
       </div>
     </main>
-  );
-}
-
-function ErrorParagraph({
-  className,
-  errorText,
-  ...rest
-}: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
-  if (typeof errorText !== 'string' || errorText.length <= 0) return null;
-  return (
-    <p className={twMerge('max-w-xs text-red-600', className)} {...rest}>
-      {errorText}
-    </p>
   );
 }
