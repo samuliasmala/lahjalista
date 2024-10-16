@@ -5,7 +5,6 @@ import {
 import { NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
 import { ZodError } from 'zod';
-import { AxiosError } from 'axios';
 
 export function handleError(res: NextApiResponse, e: unknown) {
   if (e instanceof HttpError) {
