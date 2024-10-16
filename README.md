@@ -1,12 +1,12 @@
 # Table of contents
 
-[Getting Started]()
-[Google API and Google Spreadsheets Setup]()
-[Troubleshooting Errors]()
+- [Getting Started](README.md#getting-started)
+- [Google API and Google Spreadsheets Setup](README.md#google-api-and-google-spreadsheets-setup)
+- [Troubleshooting Errors](README.md#troubleshooting-errors)
 
 ## Getting Started
 
-### Pre-Push Linting
+### Lint before pushing
 
 To prevent code with linter errors from reaching the repository, enable a pre-push script that runs linters before pushing:
 
@@ -29,7 +29,7 @@ $ git push --no-verify
    DATABASE_URL="postgresql://johndoe:JohnDoeDoesPostgres@localhost:5432/johnDB?schema=public"
    ```
 
-   - `johnDB` in the URL can be named as desired. Prisma will create a new database if it doesn't exist.
+   - `johnDB` in the DATABASE_URL can be named as desired. Prisma will create a new database if it doesn't exist.
 
 ### Running Migrations
 
@@ -43,7 +43,7 @@ After this step, your database is ready to go!
 
 ### Google API Setup
 
-**Note:** To send feedback to Google Sheets, you'll need a Google Account and follow these steps. If you don't require this functionality, remove the following line from `/pages/api/feedback/index.ts`:
+**Note:** To send feedback to Google Sheets, you'll need a Google Account and [follow these steps](README.md#google-api-and-google-spreadsheets-setup). **If you don't require this functionality, remove the following line from `/pages/api/feedback/index.ts`:**
 
 ```ts
 sendFeedbackToGoogleSheets({
@@ -77,19 +77,19 @@ Here are some additional resources from Google Cloud to explore, or you can foll
 - Creating a Project: [https://developers.google.com/workspace/guides/create-project](https://developers.google.com/workspace/guides/create-project)
 - Service Accounts: [https://cloud.google.com/iam/docs/service-accounts-create](https://cloud.google.com/iam/docs/service-accounts-create)
 
-### Create a Project
+### 1. Create a Project
 
 1. Go to [https://console.cloud.google.com/projectcreate](https://console.cloud.google.com/projectcreate) and create a new project.
 2. Choose a Project ID freely; you don't need to assign it to an organization.
 
-### Create a Service Account
+### 2. Create a Service Account
 
 1. Navigate to "IAM & Admin" -> "Service Accounts" or [https://console.cloud.google.com/iam-admin/serviceaccounts](https://console.cloud.google.com/iam-admin/serviceaccounts).
 2. Click "Create service account" in the top bar.
 3. Fill in the "Service account detail" fields. Only `Service account ID` is mandatory.
 4. Click "Done" after completing the details. Access grants for the Service Account aren't required at this stage.
 
-### Create a Service Account Key
+### 3. Create a Service Account Key
 
 1. Click the three dots next to the Service Account you just created and select "Manage keys."
 2. Click "ADD KEY" -> "Create new key" -> "JSON" -> "Create."
@@ -101,23 +101,23 @@ Here are some additional resources from Google Cloud to explore, or you can foll
 
 **Important:** You won't be able to retrieve the JSON file again, so keep it secure. If you lose it, you'll need to create a new key for the Service Account.
 
-### Enable Google Sheets API
+### 4. Enable Google Sheets API
 
 Go to [https://console.cloud.google.com/apis/api/sheets.googleapis.com/](https://console.cloud.google.com/apis/api/sheets.googleapis.com/) and enable the API. It might take a few minutes for the API to become active.
 
-### Set Up Google Spreadsheets
+### 5. Set Up Google Spreadsheets
 
 1. Create a new spreadsheet. The name can be chosen freely.
 2. Change the Sheet's name from the bottom to `Palautteet`.
 3. The API appends A|B|C rows, so it might be a good idea to give headers to the values. For example: Cell A1: `Palaute`, cell B1: `Yksilöintitunnus`, cell C1: `Päivämäärä`.
 
-### Sharing the Spreadsheet with the Service Account
+### 6. Sharing the Spreadsheet with the Service Account
 
 1. Click "Share" in the top right corner of the spreadsheet.
 2. Add the project's email address (found in the downloaded JSON file under `client_email`) to the sharing list.
 3. Grant the Service Account "Editor" privileges.
 
-### Configuring .env Variables
+### 7. Configuring .env Variables
 
 The last step is to modify two values in the `.env` file:
 
@@ -125,11 +125,6 @@ The last step is to modify two values in the `.env` file:
 - **GOOGLE_SERVICE_ACCOUNT_JSON_FILE:** Set this value to the filename of the JSON file you downloaded earlier (e.g., `google_service_account-arctic-diode-438812-b5-7338724a2dea.json`).
 
 After making these changes, save the `.env` file.
-
-### Set Up Google Spreadsheets
-
-1. Create a new spreadsheet; the name is customizable.
-2. Change the Sheet's
 
 ## Troubleshooting Errors
 
