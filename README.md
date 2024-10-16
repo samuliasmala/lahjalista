@@ -1,40 +1,60 @@
+# Table of contents
+
+[Getting Started]()
+[Google API and Google Spreadsheets Setup]()
+[Troubleshooting Errors]()
+
 ## Getting Started
 
-### Lint before pushing
+### Pre-Push Linting
 
-To prevent code with linter errors going to repository enable a prepush script which runs linters before pushing the code:
+To prevent code with linter errors from reaching the repository, enable a pre-push script that runs linters before pushing:
 
 ```bash
 $ git config --local core.hooksPath .githooks/
 ```
 
-To skip prepush hook use `--no-verify` option:
+If you need to bypass the pre-push hook for a specific push, you can use the `--no-verify` option:
 
 ```bash
 $ git push --no-verify
 ```
 
-### Setting the environment variables
+### Setting Environment Variables
 
-Create `.env` file using `.env.example` as a template.
+1. **Create a `.env` file:** Use `.env.example` as a template.
+2. **Set the DATABASE_URL variable:** Modify this variable to reflect your database user's details. Here's an example format:
 
-Change the DATABASE_URL variable to match your database user's details.
+   ```
+   DATABASE_URL="postgresql://johndoe:JohnDoeDoesPostgres@localhost:5432/johnDB?schema=public"
+   ```
 
-For example: `DATABASE_URL="postgresql://johndoe:JohnDoeDoesPostgres@localhost:5432/johnDB?schema=public"`
+   - `johnDB` in the URL can be named as desired. Prisma will create a new database if it doesn't exist.
 
-`johnDB` in DATABASE_URL can be named whatever wanted. Prisma will make a new database if it does not exist.
+### Running Migrations
 
-### Run the migratiation
-
-Run the migrations:
+Run the migrations to set up the database schema:
 
 ```bash
 npx prisma migrate deploy
 ```
 
-after this, the database is set up!
+After this step, your database is ready to go!
 
-### Start development server
+### Google API Setup
+
+**Note:** To send feedback to Google Sheets, you'll need a Google Account and follow these steps. If you don't require this functionality, remove the following line from `/pages/api/feedback/index.ts`:
+
+```ts
+sendFeedbackToGoogleSheets({
+  feedbackText: parsedFeedback.feedbackText,
+  userUUID: userData.uuid,
+}).catch((e) => {
+  console.error(e);
+});
+```
+
+### Starting Development Server
 
 Run the development server:
 
@@ -42,22 +62,89 @@ Run the development server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser to view the application.
 
-### Fix to errors
+## Google API and Google Spreadsheets Setup
 
-If you get following error `dotenv: not found` while trying to run command
+**Prerequisites:**
 
-```bash
-npm run prisma
-```
+- A Google Account
 
-make sure you have installed the `dotenv-cli` package (it is installed with other packages when using `npm i` or by running the following command `npm i dotenv-cli`).
+### Google Cloud Resources
 
-If you still encounter the error, try to install the `dotenv-cli` package globally using following command
+Here are some additional resources from Google Cloud to explore, or you can follow the guide below:
+
+- Creating a Project: [https://developers.google.com/workspace/guides/create-project](https://developers.google.com/workspace/guides/create-project)
+- Service Accounts: [https://cloud.google.com/iam/docs/service-accounts-create](https://cloud.google.com/iam/docs/service-accounts-create)
+
+### Create a Project
+
+1. Go to [https://console.cloud.google.com/projectcreate](https://console.cloud.google.com/projectcreate) and create a new project.
+2. Choose a Project ID freely; you don't need to assign it to an organization.
+
+### Create a Service Account
+
+1. Navigate to "IAM & Admin" -> "Service Accounts" or [https://console.cloud.google.com/iam-admin/serviceaccounts](https://console.cloud.google.com/iam-admin/serviceaccounts).
+2. Click "Create service account" in the top bar.
+3. Fill in the "Service account detail" fields. Only `Service account ID` is mandatory.
+4. Click "Done" after completing the details. Access grants for the Service Account aren't required at this stage.
+
+### Create a Service Account Key
+
+1. Click the three dots next to the Service Account you just created and select "Manage keys."
+2. Click "ADD KEY" -> "Create new key" -> "JSON" -> "Create."
+3. Save the downloaded JSON file to your project's root directory. Prepend `google_service_account-` to the filename before saving. For example:
+
+   ```
+   google_service_account-arctic-diode-438812-b5-7338724a2dea.json
+   ```
+
+**Important:** You won't be able to retrieve the JSON file again, so keep it secure. If you lose it, you'll need to create a new key for the Service Account.
+
+### Enable Google Sheets API
+
+Go to [https://console.cloud.google.com/apis/api/sheets.googleapis.com/](https://console.cloud.google.com/apis/api/sheets.googleapis.com/) and enable the API. It might take a few minutes for the API to become active.
+
+### Set Up Google Spreadsheets
+
+1. Create a new spreadsheet. The name can be chosen freely.
+2. Change the Sheet's name from the bottom to `Palautteet`.
+3. The API appends A|B|C rows, so it might be a good idea to give headers to the values. For example: Cell A1: `Palaute`, cell B1: `Yksilöintitunnus`, cell C1: `Päivämäärä`.
+
+### Sharing the Spreadsheet with the Service Account
+
+1. Click "Share" in the top right corner of the spreadsheet.
+2. Add the project's email address (found in the downloaded JSON file under `client_email`) to the sharing list.
+3. Grant the Service Account "Editor" privileges.
+
+### Configuring .env Variables
+
+The last step is to modify two values in the `.env` file:
+
+- **SPREADSHEET_ID:** Replace the placeholder with the actual ID of your Google Sheet. You can find the ID in the spreadsheet's URL.
+- **GOOGLE_SERVICE_ACCOUNT_JSON_FILE:** Set this value to the filename of the JSON file you downloaded earlier (e.g., `google_service_account-arctic-diode-438812-b5-7338724a2dea.json`).
+
+After making these changes, save the `.env` file.
+
+### Set Up Google Spreadsheets
+
+1. Create a new spreadsheet; the name is customizable.
+2. Change the Sheet's
+
+## Troubleshooting Errors
+
+**Error: `dotenv: not found`**
+
+- Ensure you've installed the `dotenv-cli` package. It's usually installed with other dependencies when using `npm i`. If not, use:
+
+  ```bash
+  npm i dotenv-cli
+  ```
+
+If you still encounter the error, try installing `dotenv-cli` globally:
 
 ```bash
 npm install -g dotenv-cli
 ```
 
-If you're using Linux, you most likely will need root access level to install the package globally
+**Note:** You might need root access for global installation on Linux.
