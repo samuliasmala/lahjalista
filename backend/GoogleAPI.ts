@@ -1,14 +1,10 @@
 import { google } from 'googleapis';
 
-const SCOPES = [
-  'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/spreadsheets',
-];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
-const PATH_TO_KEY_FILE =
-  'backend/googleAPI/serviceAccountData/steady-scope-436117-p2-f407b01106c9.json';
+const PATH_TO_KEY_FILE = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_FILE;
 
-const SPREADSHEET_ID = '1mjyeqn3MpaT8mFEN4yHbtOQFK9_KAeCElSaftviKPXE';
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
 const AUTHENTICATION = new google.auth.GoogleAuth({
   keyFile: PATH_TO_KEY_FILE,
@@ -20,7 +16,7 @@ const SHEETS = google.sheets({
   auth: AUTHENTICATION,
 });
 
-// same as appendData method
+// CHECK THIS, lisää käyttäjän UUID:n eikä muuta, onko ok?
 export async function sendFeedbackToGoogleSheets(props: {
   feedbackText: string;
   userUUID: string;
