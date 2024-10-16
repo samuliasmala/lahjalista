@@ -9,9 +9,7 @@
 /coverage
 
 # service account data
-**/serviceAccountData/*
-!**/serviceAccountData/.gitkeep
-
+google_service_account*.json
 
 # next.js
 /.next/
