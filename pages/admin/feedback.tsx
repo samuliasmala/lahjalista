@@ -74,14 +74,13 @@ export default function Home({
     //console.log(currentFeedbacks, feedbacks);
     if (feedbacks.length > 0) {
       return (
-        <div>
+        <div className="w-full">
           {currentFeedbacks.map((x, index) => (
-            <div key={index}>
-              <p>
-                {x.feedbackText}
-                <span> {x.feedbackID}</span>
-              </p>
-              <p>####################################</p>
+            <div
+              className="mb-4 whitespace-pre-line border-b-4 [overflow-wrap:anywhere]"
+              key={index}
+            >
+              <p>{x.feedbackText}</p>
             </div>
           ))}
           <PageNavigator />
@@ -121,7 +120,7 @@ export default function Home({
     }, []);
 
     return (
-      <div>
+      <div className="sticky bottom-5">
         <div className="mt-4 flex">
           {isFirstPage ? null : (
             <Button
@@ -135,16 +134,7 @@ export default function Home({
               {'<'} Edellinen
             </Button>
           )}
-          {whatToRender.map((x, index) => {
-            return (
-              <div
-                className={`border-4 ${x === currentPage ? 'bg-red-500' : null}`}
-                key={index}
-              >
-                {x}
-              </div>
-            );
-          })}
+          <PageNumberBox />
           {isLastPage ? null : (
             <Button
               className="text-md m-0 ml-4 h-auto w-auto p-0"
@@ -171,7 +161,7 @@ export default function Home({
                 defaultValue={currentPage}
               >
                 {feedbacks.map((_, index) => {
-                  if (index <= totalPages) {
+                  if (index <= totalPages && index > 0) {
                     return (
                       <option value={index} key={index}>
                         {index}
@@ -189,7 +179,16 @@ export default function Home({
     );
 
     function PageNumberBox() {
-      return <div className="border-4">Placeholder</div>;
+      return whatToRender.map((x, index) => {
+        return (
+          <div
+            className={`border-4 pl-1 pr-1 pt-1 ${x === currentPage ? 'bg-red-500' : null}`}
+            key={index}
+          >
+            {x}
+          </div>
+        );
+      });
     }
   }
 }
