@@ -58,9 +58,10 @@ export default function Home({
         showUserWindow={showUserWindow}
         userDetails={user}
       />
-      <div className="flex flex-row justify-center">
-        <div className="w-full max-w-72">
+      <div className="flex h-full flex-row justify-center">
+        <div className="h-full w-full max-w-72">
           <FeedbackParagraph />
+          <PageNavigator />
         </div>
       </div>
     </main>
@@ -83,7 +84,6 @@ export default function Home({
               <p>{x.feedbackText}</p>
             </div>
           ))}
-          <PageNavigator />
         </div>
       );
     }
@@ -91,68 +91,28 @@ export default function Home({
   }
 
   function PageNavigator() {
-    const [whatToRender, setWhatToRender] = useState<number[]>([]);
-    const [isFirstPage, setIsFirstPage] = useState(false);
-    const [isLastPage, setIsLastPage] = useState(false);
     const isMount = useRef(false);
 
     useEffect(() => {
       if (!isMount.current) {
-        // checks if user is in the first page
-        currentPage === 1 ? setIsFirstPage(true) : null;
-        // checks if user is in thelast page
-        currentPage === totalPages ? setIsLastPage(true) : null;
-        const newWhatToRender = [
-          ...(currentPage - 1 > 0 ? [currentPage - 1] : []),
-          ...(currentPage - 2 > 0 ? [currentPage - 2] : []),
-          ...(currentPage + 1 <= totalPages ? [currentPage + 1] : []),
-          ...(currentPage + 2 <= totalPages ? [currentPage + 2] : []),
-        ];
-        //console.log(newWhatToRender);
-        setWhatToRender((prevValue) => {
-          return [...prevValue]
-            .concat([...newWhatToRender, currentPage])
-            .sort((a, b) => a - b);
-        });
-
         isMount.current = true;
       }
     }, []);
 
     return (
-      <div className="sticky bottom-5">
+      <div className="sticky align-bottom">
         <div className="mt-4 flex">
-          {isFirstPage ? null : (
-            <Button
-              className="text-md m-0 mr-4 h-auto w-auto p-0"
-              onClick={() =>
-                setCurrentPage((prevValue) => {
-                  return prevValue - 1 >= 1 ? prevValue - 1 : 1;
-                })
-              }
-            >
-              {'<'} Edellinen
-            </Button>
-          )}
-          <PageNumberBox />
-          {isLastPage ? null : (
-            <Button
-              className="text-md m-0 ml-4 h-auto w-auto p-0"
-              onClick={() =>
-                setCurrentPage((prevValue) => {
-                  return prevValue + 1 <= totalPages
-                    ? prevValue + 1
-                    : totalPages;
-                })
-              }
-            >
-              Seuraava {'>'}
-            </Button>
-          )}
-        </div>
-        <div>
-          <div className="mt-5">
-            Current page:
+          <Button
+            className="text-md m-0 mr-4 h-auto w-auto p-0"
+            onClick={() =>
+              setCurrentPage((prevValue) => {
+                return prevValue - 1 >= 1 ? prevValue - 1 : 1;
+              })
+            }
+          >
+            {'<'} Edellinen
+          </Button>
+          <div>
             <span>
               <select
                 onChange={(e) => {
@@ -174,21 +134,18 @@ export default function Home({
             </span>
             / {totalPages}{' '}
           </div>
+          <Button
+            className="text-md m-0 ml-4 h-auto w-auto p-0"
+            onClick={() =>
+              setCurrentPage((prevValue) => {
+                return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
+              })
+            }
+          >
+            Seuraava {'>'}
+          </Button>
         </div>
       </div>
     );
-
-    function PageNumberBox() {
-      return whatToRender.map((x, index) => {
-        return (
-          <div
-            className={`border-4 pl-1 pr-1 pt-1 ${x === currentPage ? 'bg-red-500' : null}`}
-            key={index}
-          >
-            {x}
-          </div>
-        );
-      });
-    }
   }
 }
