@@ -1,11 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CreateFeedback } from '~/shared/types';
+import { CreateFeedback, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
-import { Session, User } from 'lucia';
-import { validateRequest } from '~/backend/auth';
+import { checkIfSessionValid } from '~/backend/auth';
 
 const HANDLER: Record<
   string,
@@ -66,15 +65,4 @@ async function createFeedback(feedback: CreateFeedback, userData: User) {
   });
 
   return addedFeedback;
-}
-
-async function checkIfSessionValid(
-  req: NextApiRequest,
-  res: NextApiResponse,
-): Promise<{ user: User; session: Session }> {
-  const userData = await validateRequest(req, res);
-  if (!userData.session || !userData.user) {
-    throw new HttpError('You are unauthorized!', 401);
-  }
-  return userData;
 }

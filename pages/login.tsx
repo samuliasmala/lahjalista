@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, HTMLAttributes, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
@@ -13,9 +13,9 @@ import { UserLoginDetails } from '~/shared/types';
 import { handleAuthErrors } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
-import { twMerge } from 'tailwind-merge';
 import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { ErrorParagraph } from '~/components/ErrorParagraph';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -78,18 +78,6 @@ export default function Login() {
       if (errorFound) {
         return;
       }
-
-      /*
-      CHECK THIS,
-
-      Type 'string | undefined' is not assignable to type 'string'.
-
-      TypeScript huomauttaa tuommsoisesta ongelmasta "loginCredentials"-variablen kanssa
-
-      Ongelma ohitettu toistaiseksi laittamalla: || "" 
-
-      Ongelma ei pitäisi olla mahdollinen, errorFound-variablen takia
-      */
 
       const loginCredentials: UserLoginDetails = {
         email: emailValidation.data || '',
@@ -176,18 +164,5 @@ export default function Login() {
         </div>
       </div>
     </main>
-  );
-}
-
-function ErrorParagraph({
-  className,
-  errorText,
-  ...rest
-}: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
-  if (typeof errorText !== 'string' || errorText.length <= 0) return null;
-  return (
-    <p className={twMerge('max-w-xs text-red-600', className)} {...rest}>
-      {errorText}
-    </p>
   );
 }
