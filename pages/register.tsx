@@ -1,8 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, HTMLAttributes, useState } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
@@ -14,6 +13,7 @@ import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { ErrorParagraph } from '~/components/ErrorParagraph';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -174,18 +174,5 @@ export default function Register() {
         </div>
       </div>
     </main>
-  );
-}
-
-function ErrorParagraph({
-  className,
-  errorText,
-  ...rest
-}: HTMLAttributes<HTMLParagraphElement> & { errorText: string | undefined }) {
-  if (typeof errorText !== 'string' || errorText.length <= 0) return null;
-  return (
-    <p className={twMerge('max-w-xs text-red-600', className)} {...rest}>
-      {errorText}
-    </p>
   );
 }

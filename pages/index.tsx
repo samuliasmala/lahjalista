@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '~/components/Input';
@@ -157,7 +157,7 @@ export default function Home({
                 >
                   <div key={giftItem.uuid} className="grid">
                     <p
-                      className={`[overflow-wrap: anywhere] hover-target col-start-1 text-primaryText`}
+                      className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
                     >
                       {giftItem.gift} <span>-</span> {giftItem.receiver}
                     </p>
