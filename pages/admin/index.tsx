@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
@@ -44,18 +44,23 @@ export default function Home({
       />
       <div className="flex flex-row justify-center">
         <div className="w-full max-w-72">
-          <FeedbackButton />
+          <AdminPageButtons href="/admin/feedback" buttonText="Palautteet" />
         </div>
       </div>
     </main>
   );
 }
 
-function FeedbackButton() {
+function AdminPageButtons({
+  href,
+  buttonText,
+}: {
+  href: string;
+  buttonText: string;
+}) {
   return (
-    <Button className="relative">
-      <Link href={'/admin/feedback'} className="absolute h-full w-full" />
-      Palautteet
-    </Button>
+    <Link href={href}>
+      <Button>{buttonText}</Button>
+    </Link>
   );
 }
