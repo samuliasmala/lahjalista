@@ -93,7 +93,7 @@ Here are some additional resources from Google Cloud to explore, or you can foll
 
 1. Click the three dots next to the Service Account you just created and select "Manage keys."
 2. Click "ADD KEY" -> "Create new key" -> "JSON" -> "Create."
-3. Save the downloaded JSON file to your project's root directory. Prepend `google_service_account-` to the filename before saving. For example:
+3. Save the downloaded JSON file into your project, for example inside the root directory (the file can be saved anywhere inside the project, just remember to set the path in `.env` file). Prepend `google_service_account-` to the filename before saving to ignore it from git. For example:
 
    ```
    google_service_account-arctic-diode-438812-b5-7338724a2dea.json
@@ -109,7 +109,7 @@ Go to [https://console.cloud.google.com/apis/api/sheets.googleapis.com/](https:/
 
 1. Create a new spreadsheet. The name can be chosen freely.
 2. Change the Sheet's name from the bottom to `Palautteet`.
-3. The API appends A|B|C rows, so it might be a good idea to give headers to the values. For example: Cell A1: `Palaute`, cell B1: `Yksilöintitunnus`, cell C1: `Päivämäärä`.
+3. The API appends A|B|C rows, so it might be a good idea to give headers to the values. For example: Cell A1: `Palaute`, cell B1: `Palautteen antaja`, cell C1: `Päivämäärä`.
 
 ### 6. Sharing the Spreadsheet with the Service Account
 
@@ -122,7 +122,7 @@ Go to [https://console.cloud.google.com/apis/api/sheets.googleapis.com/](https:/
 The last step is to modify two values in the `.env` file:
 
 - **SPREADSHEET_ID:** Replace the placeholder with the actual ID of your Google Sheet. You can find the ID in the spreadsheet's URL.
-- **GOOGLE_SERVICE_ACCOUNT_JSON_FILE:** Set this value to the filename of the JSON file you downloaded earlier (e.g., `google_service_account-arctic-diode-438812-b5-7338724a2dea.json`).
+- **GOOGLE_SERVICE_ACCOUNT_JSON_FILE:** Set this value to the filename (if it was not placed inside the root folder, set the file's path. More details in `.env.example`) of the JSON file you downloaded earlier (e.g., `google_service_account-arctic-diode-438812-b5-7338724a2dea.json`).
 
 After making these changes, save the `.env` file.
 
