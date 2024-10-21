@@ -1,4 +1,5 @@
 import { google } from 'googleapis';
+import { User } from '~/shared/types';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -16,19 +17,22 @@ const SHEETS = google.sheets({
   auth: AUTHENTICATION,
 });
 
-// CHECK THIS, lisää käyttäjän UUID:n eikä muuta, onko ok?
-export async function sendFeedbackToGoogleSheets(props: {
+export async function sendFeedbackToGoogleSheets({
+  feedbackText,
+  userDetails,
+}: {
   feedbackText: string;
-  userUUID: string;
+  userDetails: User;
 }) {
   const date = `${new Date().toLocaleDateString('fi-FI')} ${new Date().toTimeString()}`;
+  const feedbackGiverDetails = `${userDetails.firstName} ${userDetails.lastName}\n${userDetails.email}`;
   await SHEETS.spreadsheets.values.append({
     auth: AUTHENTICATION,
     spreadsheetId: SPREADSHEET_ID,
     range: `Palautteet!A:C`,
     requestBody: {
       majorDimension: 'ROWS',
-      values: [[props.feedbackText, props.userUUID, date]],
+      values: [[feedbackText, feedbackGiverDetails, date]],
     },
     valueInputOption: 'USER_ENTERED',
   });

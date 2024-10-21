@@ -52,7 +52,7 @@ async function handlePOST(
 
   sendFeedbackToGoogleSheets({
     feedbackText: parsedFeedback.feedbackText,
-    userUUID: userData.uuid,
+    userDetails: userData,
   }).catch((e) => {
     console.error(e);
   });
