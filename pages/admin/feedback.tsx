@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/Button';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
@@ -19,6 +19,9 @@ export default function Home({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [showUserWindow, setShowUserWindow] = useState(false);
+  const [visibleHeight, setVisibleHeight] = useState<number>(0);
+  const [scrolledDistance, setScrolledDistance] = useState<number>(190);
+  const isMount = useRef(false);
 
   const router = useRouter();
 
@@ -43,6 +46,23 @@ export default function Home({
     void fetchFeedbacks();
   }, []);
 
+  useEffect(() => {
+    console.log(window.innerHeight);
+    setVisibleHeight(window.innerHeight);
+    const handleResize = function () {
+      console.log(window.scrollY);
+      console.log(window.scrollX);
+      console.log(window.innerHeight);
+      //setScrolledDistance(window.scrollY);
+      //setVisibleHeight(window.innerHeight);
+    };
+    window.addEventListener('scroll', handleResize);
+
+    return function clearEventListeners() {
+      window.removeEventListener('scroll', handleResize);
+    };
+  }, []);
+
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
     if (errorMessage === 'You are unauthorized!') {
@@ -53,23 +73,32 @@ export default function Home({
 
   return (
     <main className="h-screen w-full max-w-full">
-      <TitleBar
-        setShowUserWindow={setShowUserWindow}
-        showUserWindow={showUserWindow}
-        userDetails={user}
-      />
-      <div className="flex h-full flex-row justify-center">
-        <div className="h-full w-full max-w-72">
-          <FeedbackParagraph />
-          <PageNavigator />
+      <div className="flex min-h-screen flex-col">
+        <TitleBar
+          setShowUserWindow={setShowUserWindow}
+          showUserWindow={showUserWindow}
+          userDetails={user}
+        />
+        <div className="flex flex-col">
+          <div className="w-full max-w-72 self-center">
+            <FeedbackParagraph />
+          </div>
         </div>
+        <Footer>
+          <PageNavigator />
+        </Footer>
       </div>
     </main>
   );
 
   function FeedbackParagraph() {
-    const startNumber = currentPage === 1 ? 0 : (currentPage - 1) * 5;
-    const endNumber = currentPage === 1 ? 5 : startNumber + 5;
+    const howManyFeedbacksPerPage = 5;
+    const startNumber =
+      currentPage === 1 ? 0 : (currentPage - 1) * howManyFeedbacksPerPage;
+    const endNumber =
+      currentPage === 1
+        ? howManyFeedbacksPerPage
+        : startNumber + howManyFeedbacksPerPage;
     //console.log(startNumber, endNumber);
     const currentFeedbacks = feedbacks.slice(startNumber, endNumber);
     //console.log(currentFeedbacks, feedbacks);
@@ -78,7 +107,7 @@ export default function Home({
         <div className="w-full">
           {currentFeedbacks.map((x, index) => (
             <div
-              className="mb-4 whitespace-pre-line border-b-4 [overflow-wrap:anywhere]"
+              className="mb-4 whitespace-pre-line border-4 [overflow-wrap:anywhere]"
               key={index}
             >
               <p>{x.feedbackText}</p>
@@ -91,60 +120,58 @@ export default function Home({
   }
 
   function PageNavigator() {
-    const isMount = useRef(false);
-
-    useEffect(() => {
-      if (!isMount.current) {
-        isMount.current = true;
-      }
-    }, []);
-
     return (
-      <div className="sticky align-bottom">
-        <div className="mt-4 flex">
-          <Button
-            className="text-md m-0 mr-4 h-auto w-auto p-0"
-            onClick={() =>
-              setCurrentPage((prevValue) => {
-                return prevValue - 1 >= 1 ? prevValue - 1 : 1;
-              })
-            }
-          >
-            {'<'} Edellinen
-          </Button>
-          <div>
-            <span>
-              <select
-                onChange={(e) => {
-                  setCurrentPage(Number(e.target.value) || 1);
-                }}
-                defaultValue={currentPage}
-              >
-                {feedbacks.map((_, index) => {
-                  if (index <= totalPages && index > 0) {
-                    return (
-                      <option value={index} key={index}>
-                        {index}
-                      </option>
-                    );
-                  }
-                  return null;
-                })}
-              </select>
-            </span>
-            / {totalPages}{' '}
-          </div>
-          <Button
-            className="text-md m-0 ml-4 h-auto w-auto p-0"
-            onClick={() =>
-              setCurrentPage((prevValue) => {
-                return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
-              })
-            }
-          >
-            Seuraava {'>'}
-          </Button>
+      <div className="flex h-full w-full items-center justify-center">
+        <Button
+          className="text-md m-0 mr-4 h-10 w-24 p-0"
+          onClick={() =>
+            setCurrentPage((prevValue) => {
+              return prevValue - 1 >= 1 ? prevValue - 1 : 1;
+            })
+          }
+        >
+          {'<'} Edellinen
+        </Button>
+        <div>
+          <span>
+            <select
+              onChange={(e) => {
+                setCurrentPage(Number(e.target.value) || 1);
+              }}
+              defaultValue={currentPage}
+            >
+              {feedbacks.map((_, index) => {
+                if (index <= totalPages && index > 0) {
+                  return (
+                    <option value={index} key={index}>
+                      {index}
+                    </option>
+                  );
+                }
+                return null;
+              })}
+            </select>
+          </span>
+          / {totalPages}{' '}
         </div>
+        <Button
+          className="text-md m-0 ml-4 h-10 w-24 p-0"
+          onClick={() =>
+            setCurrentPage((prevValue) => {
+              return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
+            })
+          }
+        >
+          Seuraava {'>'}
+        </Button>
+      </div>
+    );
+  }
+
+  function Footer({ children }: { children?: ReactNode }) {
+    return (
+      <div className="sticky bottom-0 mt-auto h-24 w-full self-center bg-primaryLight sm:w-96">
+        {children}
       </div>
     );
   }
