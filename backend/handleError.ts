@@ -35,7 +35,6 @@ export function handleError(res: NextApiResponse, e: unknown) {
     console.error(e);
     return res.status(400).json(e.issues);
   }
-
   console.error(e);
   return res.status(500).send('Server error!');
 }
