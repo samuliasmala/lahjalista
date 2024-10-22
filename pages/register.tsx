@@ -49,6 +49,7 @@ export default function Register() {
         });
         return;
       }
+      setErrors({});
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
