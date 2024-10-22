@@ -4,7 +4,7 @@ import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
-import { handleGiftError } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 import SvgXClose from '~/icons/x_close';
 import { toast } from 'react-toastify';
 
@@ -23,7 +23,7 @@ export function DeleteModal({
     try {
       await deleteGift(gift.uuid);
     } catch (e) {
-      toast(handleGiftError(e), { type: 'error' });
+      toast(handleError(e), { type: 'error' });
     }
     refreshGiftList();
     setIsModalOpen(false);

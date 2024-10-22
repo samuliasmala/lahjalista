@@ -9,7 +9,7 @@ import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
-import { handleGeneralError } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -54,7 +54,7 @@ export default function Logout() {
       await axios.post('/api/feedback', dataToSend);
       feedbackSent();
     } catch (e) {
-      toast(handleGeneralError(e), { type: 'error' });
+      toast(handleError(e), { type: 'error' });
     }
   }
 
