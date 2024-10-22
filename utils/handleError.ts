@@ -39,9 +39,11 @@ export function handleError(e: unknown) {
 
     if (isAxiosError(e)) {
       const knownErrorText =
-        FRONT_END_POSSIBLE_ERRORS[
-          e.response?.data.toLocaleLowerCase() as KnownFrontEndErrorTexts
-        ];
+        e.response?.data && typeof e.response.data === 'string'
+          ? FRONT_END_POSSIBLE_ERRORS[
+              e.response.data.toLocaleLowerCase() as KnownFrontEndErrorTexts
+            ]
+          : null;
 
       if (knownErrorText) {
         console.error(knownErrorText);
