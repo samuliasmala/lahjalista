@@ -3,7 +3,6 @@ import {
   ReactNode,
   SetStateAction,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import { Button } from '~/components/Button';
@@ -12,7 +11,6 @@ import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Feedback } from '@prisma/client';
@@ -26,9 +24,6 @@ export default function Home({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [showUserWindow, setShowUserWindow] = useState(false);
-  const [visibleHeight, setVisibleHeight] = useState<number>(0);
-  const [scrolledDistance, setScrolledDistance] = useState<number>(190);
-  const isMount = useRef(false);
 
   const router = useRouter();
 
