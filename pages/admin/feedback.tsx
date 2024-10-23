@@ -153,7 +153,7 @@ function PageNavigator({
             onChange={(e) => {
               setCurrentPage(Number(e.target.value) || 1);
             }}
-            defaultValue={currentPage}
+            value={currentPage}
           >
             {feedbacks.map((_, index) => {
               if (index <= totalPages && index > 0) {
