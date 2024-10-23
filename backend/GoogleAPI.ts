@@ -1,12 +1,25 @@
-import { JWTInput } from 'google-auth-library';
 import { google } from 'googleapis';
 import { User } from '~/shared/types';
+import { z } from 'zod';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
 const PATH_TO_KEY_FILE = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_FILE;
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+
+const jwtInputSchema = z.object({
+  type: z.string().optional(),
+  client_email: z.string().email().optional(),
+  private_key: z.string().optional(),
+  private_key_id: z.string().optional(),
+  project_id: z.string().optional(),
+  client_id: z.string().optional(),
+  client_secret: z.string().optional(),
+  refresh_token: z.string().optional(),
+  quota_project_id: z.string().optional(),
+  universe_domain: z.string().optional(),
+});
 
 export async function sendFeedbackToGoogleSheets({
   feedbackText,
@@ -16,17 +29,29 @@ export async function sendFeedbackToGoogleSheets({
   userDetails: User;
 }) {
   try {
-    const AUTHENTICATION = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
-      ? new google.auth.GoogleAuth({
-          credentials: JSON.parse(
-            process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS,
-          ) as JWTInput,
-          scopes: SCOPES,
-        })
-      : new google.auth.GoogleAuth({
-          keyFile: PATH_TO_KEY_FILE,
-          scopes: SCOPES,
-        });
+    const credentialsEnvParse = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
+      ? jwtInputSchema.safeParse(
+          JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS),
+        )
+      : null;
+
+    if (credentialsEnvParse?.success === false) {
+      console.error(
+        'Environment variable: GOOGLE_SERVICE_ACCOUNT_CREDENTIALS is invalid!',
+      );
+    }
+
+    const credentialsOrKeyFile =
+      credentialsEnvParse && credentialsEnvParse.success
+        ? {
+            credentials: credentialsEnvParse.data,
+          }
+        : { keyFile: PATH_TO_KEY_FILE };
+
+    const AUTHENTICATION = new google.auth.GoogleAuth({
+      ...credentialsOrKeyFile,
+      scopes: SCOPES,
+    });
 
     const SHEETS = google.sheets({
       version: 'v4',
