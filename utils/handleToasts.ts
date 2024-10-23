@@ -1,46 +1,19 @@
 import { toast } from 'react-toastify';
 
-function generateToastID() {
-  return checkIsIdOccupied(randomId());
-}
-
-function randomId() {
-  return Math.floor(Math.random() * 100000000).toString();
-}
-
-function checkIsIdOccupied(toastId: string) {
-  if (document.getElementById(toastId.toString()) !== null) {
-    return checkIsIdOccupied(randomId());
-  }
-  return toastId;
-}
-
 export function handleErrorToast(errorText: string) {
   try {
-    const generatedToastID = generateToastID();
-    if (!document) {
-      return;
-    }
-
-    toast(errorText, {
+    const toastId = toast(errorText, {
       type: 'error',
-      toastId: generatedToastID,
+      toastId: window.crypto.randomUUID(),
       onOpen: () => {
         setTimeout(() => {
-          document
-            .getElementById(generatedToastID)
-            ?.addEventListener('mouseenter', () => {
-              toast.update(generatedToastID, {
-                progress: 1,
-              });
-            });
-          document
-            .getElementById(generatedToastID)
-            ?.addEventListener('mouseleave', () => {
-              toast.update(generatedToastID, {
-                progress: 0,
-              });
-            });
+          const toastEl = document.getElementById(toastId.toString());
+          toastEl?.addEventListener('mouseenter', () => {
+            toast.update(toastId, { progress: 1 });
+          });
+          toastEl?.addEventListener('mouseleave', () => {
+            toast.update(toastId, { progress: 0 });
+          });
         }, 1);
       },
     });
