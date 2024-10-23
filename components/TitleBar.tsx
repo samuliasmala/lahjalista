@@ -1,11 +1,9 @@
-import { Dispatch, SetStateAction, HTMLAttributes } from 'react';
+import React, { Dispatch, SetStateAction, HTMLAttributes } from 'react';
 import SvgUser from '~/icons/user';
 import { User } from '~/shared/types';
 import axios from 'axios';
 import { Button } from './Button';
-import { jost } from '~/utils/fonts';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
-import React from 'react';
 import Link from 'next/link';
 
 type UserDetails = Pick<User, 'firstName' | 'lastName' | 'email' | 'role'>;

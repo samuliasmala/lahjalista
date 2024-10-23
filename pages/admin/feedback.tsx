@@ -29,7 +29,8 @@ export default function Home({
 
   useEffect(() => {
     if (!user || user.role !== 'ADMIN') {
-      router.push('/');
+      router.push('/').catch((e) => console.error(e));
+      return;
     }
     async function fetchFeedbacks() {
       try {
