@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# service account data
+google_service_account*.json
+
 # next.js
 /.next/
 /out/
