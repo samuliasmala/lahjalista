@@ -1,4 +1,11 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Button } from '~/components/Button';
 import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
@@ -46,23 +53,6 @@ export default function Home({
     void fetchFeedbacks();
   }, []);
 
-  useEffect(() => {
-    console.log(window.innerHeight);
-    setVisibleHeight(window.innerHeight);
-    const handleResize = function () {
-      console.log(window.scrollY);
-      console.log(window.scrollX);
-      console.log(window.innerHeight);
-      //setScrolledDistance(window.scrollY);
-      //setVisibleHeight(window.innerHeight);
-    };
-    window.addEventListener('scroll', handleResize);
-
-    return function clearEventListeners() {
-      window.removeEventListener('scroll', handleResize);
-    };
-  }, []);
-
   function handleError(e: unknown) {
     const errorMessage = handleGeneralError(e);
     if (errorMessage === 'You are unauthorized!') {
@@ -81,98 +71,122 @@ export default function Home({
         />
         <div className="flex flex-col">
           <div className="w-full max-w-72 self-center">
-            <FeedbackParagraph />
+            <FeedbackParagraph
+              currentPage={currentPage}
+              feedbacks={feedbacks}
+            />
           </div>
         </div>
         <Footer>
-          <PageNavigator />
+          <PageNavigator
+            currentPage={currentPage}
+            feedbacks={feedbacks}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+          />
         </Footer>
       </div>
     </main>
   );
+}
 
-  function FeedbackParagraph() {
-    const howManyFeedbacksPerPage = 5;
-    const startNumber =
-      currentPage === 1 ? 0 : (currentPage - 1) * howManyFeedbacksPerPage;
-    const endNumber =
-      currentPage === 1
-        ? howManyFeedbacksPerPage
-        : startNumber + howManyFeedbacksPerPage;
-    //console.log(startNumber, endNumber);
-    const currentFeedbacks = feedbacks.slice(startNumber, endNumber);
-    //console.log(currentFeedbacks, feedbacks);
-    if (feedbacks.length > 0) {
-      return (
-        <div className="w-full">
-          {currentFeedbacks.map((x, index) => (
-            <div
-              className="mb-4 whitespace-pre-line border-4 [overflow-wrap:anywhere]"
-              key={index}
-            >
-              <p>{x.feedbackText}</p>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  }
-
-  function PageNavigator() {
+function FeedbackParagraph({
+  currentPage,
+  feedbacks,
+}: {
+  currentPage: number;
+  feedbacks: Feedback[];
+}) {
+  const howManyFeedbacksPerPage = 5;
+  const startNumber =
+    currentPage === 1 ? 0 : (currentPage - 1) * howManyFeedbacksPerPage;
+  const endNumber =
+    currentPage === 1
+      ? howManyFeedbacksPerPage
+      : startNumber + howManyFeedbacksPerPage;
+  //console.log(startNumber, endNumber);
+  const currentFeedbacks = feedbacks.slice(startNumber, endNumber);
+  //console.log(currentFeedbacks, feedbacks);
+  if (feedbacks.length > 0) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <Button
-          className="text-md m-0 mr-4 h-10 w-24 p-0"
-          onClick={() =>
-            setCurrentPage((prevValue) => {
-              return prevValue - 1 >= 1 ? prevValue - 1 : 1;
-            })
-          }
-        >
-          {'<'} Edellinen
-        </Button>
-        <div>
-          <span>
-            <select
-              onChange={(e) => {
-                setCurrentPage(Number(e.target.value) || 1);
-              }}
-              defaultValue={currentPage}
-            >
-              {feedbacks.map((_, index) => {
-                if (index <= totalPages && index > 0) {
-                  return (
-                    <option value={index} key={index}>
-                      {index}
-                    </option>
-                  );
-                }
-                return null;
-              })}
-            </select>
-          </span>
-          / {totalPages}{' '}
-        </div>
-        <Button
-          className="text-md m-0 ml-4 h-10 w-24 p-0"
-          onClick={() =>
-            setCurrentPage((prevValue) => {
-              return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
-            })
-          }
-        >
-          Seuraava {'>'}
-        </Button>
+      <div className="w-full">
+        {currentFeedbacks.map((x, index) => (
+          <div
+            className="mb-4 whitespace-pre-line border-4 [overflow-wrap:anywhere]"
+            key={index}
+          >
+            <p>{x.feedbackText}</p>
+          </div>
+        ))}
       </div>
     );
   }
+  return null;
+}
 
-  function Footer({ children }: { children?: ReactNode }) {
-    return (
-      <div className="sticky bottom-0 mt-auto h-24 w-full self-center bg-primaryLight sm:w-96">
-        {children}
+function PageNavigator({
+  setCurrentPage,
+  currentPage,
+  feedbacks,
+  totalPages,
+}: {
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
+  feedbacks: Feedback[];
+  totalPages: number;
+}) {
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <Button
+        className="text-md m-0 mr-4 h-10 w-24 p-0"
+        onClick={() =>
+          setCurrentPage((prevValue) => {
+            return prevValue - 1 >= 1 ? prevValue - 1 : 1;
+          })
+        }
+      >
+        {'<'} Edellinen
+      </Button>
+      <div>
+        <span>
+          <select
+            onChange={(e) => {
+              setCurrentPage(Number(e.target.value) || 1);
+            }}
+            defaultValue={currentPage}
+          >
+            {feedbacks.map((_, index) => {
+              if (index <= totalPages && index > 0) {
+                return (
+                  <option value={index} key={index}>
+                    {index}
+                  </option>
+                );
+              }
+              return null;
+            })}
+          </select>
+        </span>
+        / {totalPages}{' '}
       </div>
-    );
-  }
+      <Button
+        className="text-md m-0 ml-4 h-10 w-24 p-0"
+        onClick={() =>
+          setCurrentPage((prevValue) => {
+            return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
+          })
+        }
+      >
+        Seuraava {'>'}
+      </Button>
+    </div>
+  );
+}
+
+function Footer({ children }: { children?: ReactNode }) {
+  return (
+    <div className="sticky bottom-0 mt-auto h-24 w-full self-center bg-primaryLight sm:w-96">
+      {children}
+    </div>
+  );
 }
