@@ -9,16 +9,16 @@ const PATH_TO_KEY_FILE = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_FILE;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
 const jwtInputSchema = z.object({
-  type: z.string().optional(),
-  client_email: z.string().email().optional(),
-  private_key: z.string().optional(),
-  private_key_id: z.string().optional(),
-  project_id: z.string().optional(),
-  client_id: z.string().optional(),
-  client_secret: z.string().optional(),
-  refresh_token: z.string().optional(),
-  quota_project_id: z.string().optional(),
-  universe_domain: z.string().optional(),
+  type: z.string(),
+  client_email: z.string().email(),
+  private_key: z.string(),
+  private_key_id: z.string(),
+  project_id: z.string(),
+  client_id: z.string(),
+  client_secret: z.string(),
+  refresh_token: z.string(),
+  quota_project_id: z.string(),
+  universe_domain: z.string(),
 });
 
 export async function sendFeedbackToGoogleSheets({
