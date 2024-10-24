@@ -38,7 +38,7 @@ export function handleErrorToast(errorText: string) {
                     toast.update(toastId, { progress: 0 });
                   });
                   observer.disconnect();
-                  return;
+                  break;
                 }
               }
             }
