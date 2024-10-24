@@ -5,26 +5,14 @@ export function handleErrorToast(errorText: string) {
     const toastId = toast(errorText, {
       type: 'error',
       toastId: window.crypto.randomUUID(),
-      /*
-      onOpen: () => {
-        setTimeout(() => {
-          const toastEl = document.getElementById(toastId.toString());
-          toastEl?.addEventListener('mouseenter', () => {
-            toast.update(toastId, { progress: 1 });
-          });
-          toastEl?.addEventListener('mouseleave', () => {
-            toast.update(toastId, { progress: 0 });
-          });
-        }, 1);
-      },
-      */
     });
 
     const observer = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
-        // Check if the added nodes contain an element with the desired ID
         mutation.addedNodes.forEach((node) => {
+          // check if node is an HTMLElement which unlock a usage of node.children
           if (node instanceof HTMLElement) {
+            // if there are more than 1 toast, this should be working
             if (node.id === toastId.toString()) {
               node.addEventListener('mouseenter', () => {
                 toast.update(toastId, { progress: 1 });
@@ -36,17 +24,20 @@ export function handleErrorToast(errorText: string) {
               return;
             }
 
+            // the first toast seems to be always foundable using this for-loop
             for (let x = 0; x < node.children.length; x++) {
               const childNode = node.children[x];
               if (childNode.id === toastId.toString()) {
+                // checking if childNode is an HTMLElement so correct event listener list will be shown
+                // in theory this might not be needed but added for now
                 if (childNode instanceof HTMLElement) {
-                  childNode.addEventListener('mouseenter', (e) => {
+                  childNode.addEventListener('mouseenter', () => {
                     toast.update(toastId, { progress: 1 });
                   });
                   childNode.addEventListener('mouseleave', () => {
                     toast.update(toastId, { progress: 0 });
                   });
-                  observer.disconnect(); // Optionally stop observing once the element is found
+                  observer.disconnect();
                   return;
                 }
               }
