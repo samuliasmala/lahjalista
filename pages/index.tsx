@@ -13,8 +13,8 @@ import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangl
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
-import { toast } from 'react-toastify';
 import axios from 'axios';
+import { handleErrorToast } from '~/utils/handleToasts';
 
 export { getServerSideProps };
 
@@ -95,7 +95,7 @@ export default function Home({
     if (errorMessage === 'You are unauthorized!') {
       window.location.href = '/';
     }
-    toast(errorMessage, { type: 'error' });
+    handleErrorToast(errorMessage);
   }
 
   return (
