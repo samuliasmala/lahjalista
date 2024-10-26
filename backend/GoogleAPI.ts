@@ -26,7 +26,6 @@ export async function sendFeedbackToGoogleSheets({
 }) {
   try {
     const credentialsOrKeyFile = getGoogleCredentials();
-    console.log(credentialsOrKeyFile);
     if (credentialsOrKeyFile === null) {
       console.log(
         'No valid Google credentials found in env variables, skipping sending feedback to Google Sheets!',
