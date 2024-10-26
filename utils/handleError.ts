@@ -42,7 +42,7 @@ export function handleError(e: unknown) {
   console.error(e);
   if (isAxiosError(e)) {
     if (e.response?.status === 401) {
-      Router.push('/login');
+      Router.push('/login').catch((e) => console.error(e));
       return 'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!';
     }
     const knownErrorText =
