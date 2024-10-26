@@ -34,40 +34,39 @@ const FRONT_END_POSSIBLE_ERRORS = {
 type KnownFrontEndErrorTexts = keyof typeof FRONT_END_POSSIBLE_ERRORS;
 
 export function handleError(e: unknown) {
-  if (e instanceof Error) {
-    console.log(e.message);
-
-    if (isAxiosError(e)) {
-      const knownErrorText =
-        e.response?.data && typeof e.response.data === 'string'
-          ? FRONT_END_POSSIBLE_ERRORS[
-              e.response.data.toLocaleLowerCase() as KnownFrontEndErrorTexts
-            ]
-          : null;
-
-      if (knownErrorText) {
-        console.error(knownErrorText);
-        return knownErrorText;
-      }
-
-      console.error('Unexpected error occured!');
-      console.error('Unexpected error: ', e.response?.data);
-      return 'Palvelin virhe!';
-    }
-
+  if (e instanceof Error === false) {
+    console.error(e);
+    return 'Tuntematon virhe!';
+  }
+  console.error(e);
+  if (isAxiosError(e)) {
     const knownErrorText =
-      FRONT_END_POSSIBLE_ERRORS[
-        e.message.toLocaleLowerCase() as KnownFrontEndErrorTexts
-      ];
+      e.response?.data && typeof e.response.data === 'string'
+        ? FRONT_END_POSSIBLE_ERRORS[
+            e.response.data.toLocaleLowerCase() as KnownFrontEndErrorTexts
+          ]
+        : null;
 
     if (knownErrorText) {
       console.error(knownErrorText);
       return knownErrorText;
     }
 
-    console.error(e);
-    return 'Palvelin virhe!';
+    console.error('Unexpected error occured!');
+    console.error('Unexpected error: ', e.response?.data);
+    return 'Palvelinvirhe!';
   }
+
+  const knownErrorText =
+    FRONT_END_POSSIBLE_ERRORS[
+      e.message.toLocaleLowerCase() as KnownFrontEndErrorTexts
+    ];
+
+  if (knownErrorText) {
+    console.error(knownErrorText);
+    return knownErrorText;
+  }
+
   console.error(e);
-  return 'Tuntematon virhe!';
+  return 'Palvelinvirhe!';
 }
