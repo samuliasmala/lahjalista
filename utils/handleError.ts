@@ -1,4 +1,5 @@
 import { isAxiosError } from 'axios';
+import Router from 'next/router';
 
 const FRONT_END_POSSIBLE_ERRORS = {
   // General errors
@@ -40,6 +41,10 @@ export function handleError(e: unknown) {
   }
   console.error(e);
   if (isAxiosError(e)) {
+    if (e.response?.status === 401) {
+      Router.push('/login');
+      return 'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!';
+    }
     const knownErrorText =
       e.response?.data && typeof e.response.data === 'string'
         ? FRONT_END_POSSIBLE_ERRORS[
