@@ -11,11 +11,9 @@ export function handleErrorToast(errorText: string) {
       const addedToast = document.getElementById(toastId.toString());
       if (addedToast) {
         addedToast.addEventListener('mouseenter', () => {
-          console.log('Mouse enter');
           toast.update(toastId, { progress: 1 });
         });
         addedToast.addEventListener('mouseleave', () => {
-          console.log('Mouse out');
           toast.update(toastId, { progress: 0 });
         });
         observer.disconnect();
