@@ -1,12 +1,21 @@
-import { JWTInput } from 'google-auth-library';
 import { google } from 'googleapis';
 import { User } from '~/shared/types';
+import { z } from 'zod';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
 const PATH_TO_KEY_FILE = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_FILE;
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+
+const jwtInputSchema = z.object({
+  type: z.string(),
+  project_id: z.string(),
+  private_key_id: z.string(),
+  private_key: z.string(),
+  client_email: z.string().email(),
+  client_id: z.string(),
+});
 
 export async function sendFeedbackToGoogleSheets({
   feedbackText,
@@ -16,17 +25,17 @@ export async function sendFeedbackToGoogleSheets({
   userDetails: User;
 }) {
   try {
-    const AUTHENTICATION = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
-      ? new google.auth.GoogleAuth({
-          credentials: JSON.parse(
-            process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS,
-          ) as JWTInput,
-          scopes: SCOPES,
-        })
-      : new google.auth.GoogleAuth({
-          keyFile: PATH_TO_KEY_FILE,
-          scopes: SCOPES,
-        });
+    const credentialsOrKeyFile = getGoogleCredentials();
+    if (credentialsOrKeyFile === null) {
+      console.log(
+        'No valid Google credentials found in env variables, skipping sending feedback to Google Sheets!',
+      );
+      return;
+    }
+    const AUTHENTICATION = new google.auth.GoogleAuth({
+      ...credentialsOrKeyFile,
+      scopes: SCOPES,
+    });
 
     const SHEETS = google.sheets({
       version: 'v4',
@@ -48,4 +57,26 @@ export async function sendFeedbackToGoogleSheets({
   } catch (e) {
     console.error(e);
   }
+}
+
+function getGoogleCredentials() {
+  // GOOGLE_SERVICE_ACCOUNT_CREDENTIALS is prioritized over PATH_TO_KEY_FILE
+  if (process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS) {
+    const credentialsEnvParse = jwtInputSchema.safeParse(
+      JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS),
+    );
+
+    if (credentialsEnvParse.success === true)
+      return { credentials: credentialsEnvParse.data };
+
+    console.error(
+      'Environment variable: GOOGLE_SERVICE_ACCOUNT_CREDENTIALS is invalid!',
+      credentialsEnvParse.error,
+    );
+    return null;
+  }
+
+  if (PATH_TO_KEY_FILE) return { keyFile: PATH_TO_KEY_FILE };
+
+  return null;
 }
