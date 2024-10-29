@@ -30,19 +30,12 @@ export function DeleteModal({
   }
 
   return (
-    <Modal className="w-80">
+    <Modal
+      className="max-w-80"
+      closeModal={() => setIsModalOpen(false)}
+      title="Poista lahja:"
+    >
       <div className="max-w-80">
-        <div className="m-4 mb-0 flex flex-row justify-between">
-          <TitleText className={`mt-0 text-base font-medium text-primaryText`}>
-            Olet poistamassa lahjaa:
-          </TitleText>
-          <SvgXClose
-            width={24}
-            height={24}
-            className="self-center hover:cursor-pointer"
-            onClick={() => setIsModalOpen(false)}
-          />
-        </div>
         <p
           className={`ml-4 mt-5 text-base text-primaryText [overflow-wrap:anywhere]`}
         >

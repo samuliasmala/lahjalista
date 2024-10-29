@@ -29,18 +29,6 @@ export function EditModal({
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        setIsModalOpen(false);
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown);
-    return function clearFunctions() {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [refreshGiftList, setIsModalOpen]);
-
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
@@ -52,19 +40,12 @@ export function EditModal({
     setIsModalOpen(false);
   }
   return (
-    <Modal className="max-w-80">
+    <Modal
+      title="Muokkaa lahjaideaa:"
+      closeModal={() => setIsModalOpen(false)}
+      className="max-w-80"
+    >
       <form onSubmit={(e) => void handleEdit(e)}>
-        <div className="flex flex-row justify-between">
-          <TitleText className={`m-6 text-base font-medium text-primaryText`}>
-            Muokkaa lahjaideaa
-          </TitleText>
-          <SvgXClose
-            width={24}
-            height={24}
-            className="mr-6 self-center hover:cursor-pointer"
-            onClick={() => setIsModalOpen(false)}
-          />
-        </div>
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
