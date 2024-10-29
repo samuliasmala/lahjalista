@@ -11,7 +11,7 @@ import { TitleText } from './TitleText';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
-import { handleGiftError } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 import SvgXClose from '~/icons/x_close';
 import { handleErrorToast } from '~/utils/handleToasts';
 
@@ -46,7 +46,7 @@ export function EditModal({
     try {
       await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
-      handleErrorToast(handleGiftError(e));
+      handleErrorToast(handleError(e));
     }
     refreshGiftList();
     setIsModalOpen(false);

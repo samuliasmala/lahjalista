@@ -7,7 +7,7 @@ import { Input } from '~/components/Input';
 import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
-import { handleAuthErrors } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { formSchema } from '~/shared/zodSchemas';
@@ -49,10 +49,11 @@ export default function Register() {
         });
         return;
       }
+      setErrors({});
       await axios.post('/api/auth/register', validatedForm.data);
       userCreatedSuccesfully();
     } catch (e) {
-      handleErrorToast(handleAuthErrors(e));
+      handleErrorToast(handleError(e));
     }
   }
 

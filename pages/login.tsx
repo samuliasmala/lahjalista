@@ -10,7 +10,7 @@ import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
 import { UserLoginDetails } from '~/shared/types';
-import { handleAuthErrors } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { GetServerSidePropsContext } from 'next';
@@ -88,7 +88,7 @@ export default function Login() {
       await router.push('/');
     } catch (e) {
       console.error(e);
-      handleErrorToast(handleAuthErrors(e));
+      handleErrorToast(handleError(e));
     }
   }
 
