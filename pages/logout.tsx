@@ -3,13 +3,13 @@ import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { toast } from 'react-toastify';
 import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { CreateFeedback } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
+import { handleErrorToast } from '~/utils/handleToasts';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -54,7 +54,7 @@ export default function Logout() {
       await axios.post('/api/feedback', dataToSend);
       feedbackSent();
     } catch (e) {
-      toast(handleError(e), { type: 'error' });
+      handleErrorToast(handleError(e));
     }
   }
 
