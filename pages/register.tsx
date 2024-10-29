@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
-import { Modal } from '~/components/Modal';
 import { TitleText } from '~/components/TitleText';
 import { SvgCheckMarkIcon } from '~/icons/check_mark_icon';
 import { handleError } from '~/utils/handleError';
@@ -164,13 +163,22 @@ export default function Register() {
             </form>
           </div>
           {isUserCreated ? (
-            <Modal>
-              <SvgCheckMarkIcon
-                className="bg-green-300"
-                circleClassName="fill-green-500"
-                checkMarkClassName="fill-black-500"
-              />
-            </Modal>
+            <>
+              <div className="fixed left-0 top-0 z-[98] h-full w-full bg-black opacity-20" />
+              <div className="absolute left-[50%] top-[50%] z-[99] translate-x-[-50%] translate-y-[-50%]">
+                <div
+                  className={
+                    'grid w-96 rounded-md border border-lines bg-bgForms'
+                  }
+                >
+                  <SvgCheckMarkIcon
+                    className="bg-green-300"
+                    circleClassName="fill-green-500"
+                    checkMarkClassName="fill-black-500"
+                  />
+                </div>
+              </div>
+            </>
           ) : null}
         </div>
       </div>
