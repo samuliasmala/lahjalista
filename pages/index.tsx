@@ -13,8 +13,8 @@ import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangl
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
-import { toast } from 'react-toastify';
 import axios from 'axios';
+import { handleErrorToast } from '~/utils/handleToasts';
 
 export { getServerSideProps };
 
@@ -39,7 +39,7 @@ export default function Home({
         const gifts = await getAllGifts();
         setGiftData(gifts);
       } catch (e) {
-        toast(handleError(e), { type: 'error' });
+        handleErrorToast(handleError(e));
       }
     }
     void fetchGifts();
@@ -78,7 +78,7 @@ export default function Home({
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
-      toast(handleError(e), { type: 'error' });
+      handleErrorToast(handleError(e));
     }
   }
 
@@ -86,7 +86,7 @@ export default function Home({
     try {
       setGiftData(await getAllGifts());
     } catch (e) {
-      toast(handleError(e), { type: 'error' });
+      handleErrorToast(handleError(e));
     }
   }
 

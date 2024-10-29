@@ -13,7 +13,7 @@ import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import SvgXClose from '~/icons/x_close';
-import { toast } from 'react-toastify';
+import { handleErrorToast } from '~/utils/handleToasts';
 
 type EditModal = {
   gift: Gift;
@@ -46,7 +46,7 @@ export function EditModal({
     try {
       await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
-      toast(handleError(e), { type: 'error' });
+      handleErrorToast(handleError(e));
     }
     refreshGiftList();
     setIsModalOpen(false);

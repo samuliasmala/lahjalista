@@ -13,8 +13,8 @@ import { UserLoginDetails } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
-import { toast } from 'react-toastify';
 import { GetServerSidePropsContext } from 'next';
+import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -88,7 +88,7 @@ export default function Login() {
       await router.push('/');
     } catch (e) {
       console.error(e);
-      toast(handleError(e), { type: 'error' });
+      handleErrorToast(handleError(e));
     }
   }
 
