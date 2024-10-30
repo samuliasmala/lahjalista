@@ -25,7 +25,7 @@ export function Modal({
     return function clearFunctions() {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [closeModal]);
 
   return createPortal(
     <>

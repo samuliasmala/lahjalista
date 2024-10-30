@@ -1,18 +1,10 @@
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
-import { TitleText } from './TitleText';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
-import SvgXClose from '~/icons/x_close';
 import { handleErrorToast } from '~/utils/handleToasts';
 
 type EditModal = {
