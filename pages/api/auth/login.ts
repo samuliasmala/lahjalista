@@ -48,19 +48,7 @@ export default async function loginHandler(
       throw new HttpError('Invalid password!', 400);
     }
 
-    const userAuthCookie = lucia.readSessionCookie(req.headers.cookie ?? '');
-
-    let existingSession: Session | null = null;
-    if (userAuthCookie) {
-      existingSession = await prisma.session.findUnique({
-        where: { id: userAuthCookie },
-      });
-    }
-    const sessionId = await logUserIn(
-      existingSession,
-      userData.uuid,
-      rememberMe,
-    );
+    const sessionId = await logUserIn(userData.uuid, rememberMe);
 
     res
       .appendHeader(
@@ -75,23 +63,9 @@ export default async function loginHandler(
   }
 }
 
-async function logUserIn(
-  existingSession: Session | null,
-  userUUID: string,
-  rememberMe: boolean,
-) {
+async function logUserIn(userUUID: string, rememberMe: boolean) {
   const lucia = rememberMe ? luciaLongSession : luciaShortSession;
 
-  // If the existing session was found update it to be logged in
-  if (existingSession) {
-    await prisma.session.update({
-      where: { id: existingSession.id },
-      data: { isLoggedIn: true },
-    });
-    return existingSession.id;
-  }
-
-  // Create a new session if the existing session was not found
   const newSession = await lucia.createSession(userUUID, {
     userUUID: userUUID,
     isLoggedIn: true,
