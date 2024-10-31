@@ -1,11 +1,9 @@
-import { TitleText } from './TitleText';
 import { Dispatch, SetStateAction } from 'react';
 import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
-import SvgXClose from '~/icons/x_close';
 import { handleErrorToast } from '~/utils/handleToasts';
 
 type DeleteModal = {

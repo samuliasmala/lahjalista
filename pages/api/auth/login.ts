@@ -5,7 +5,6 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { verifyPassword } from '~/backend/utils';
 import prisma from '~/prisma';
-import { Session } from '~/shared/types';
 import { userLoginDetailsSchema } from '~/shared/zodSchemas';
 
 export default async function loginHandler(
