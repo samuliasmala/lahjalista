@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { luciaLongSession, lucia as luciaShortSession } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
+import { deleteExpiredSessionsLoop } from '~/backend/utils';
 import { verifyPassword } from '~/backend/utils';
 import prisma from '~/prisma';
 import { userLoginDetailsSchema } from '~/shared/zodSchemas';
@@ -46,6 +47,9 @@ export default async function loginHandler(
     if (!isPasswordSame) {
       throw new HttpError('Invalid password!', 400);
     }
+
+    // starts a interval that deletes expired sessions every 24 hours
+    deleteExpiredSessionsLoop();
 
     const sessionId = await logUserIn(userData.uuid, rememberMe);
 
