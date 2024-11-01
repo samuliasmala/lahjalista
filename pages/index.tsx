@@ -86,7 +86,12 @@ export default function Home({
     try {
       setGiftData(await getAllGifts());
     } catch (e) {
-      handleErrorToast(handleError(e));
+      if (
+        handleError(e) !==
+        'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
+      ) {
+        handleErrorToast(handleError(e));
+      }
     }
   }
 
