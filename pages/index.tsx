@@ -22,7 +22,7 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export { getServerSideProps };
 
@@ -34,11 +34,27 @@ export default function Home({
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+
   const [showUserWindow, setShowUserWindow] = useState(false);
+
+  const giftQuery = useQuery({
+    queryKey: ['loadingGifts'],
+    queryFn: async () => await fetchGifts(),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retry: false,
+  });
+
+  async function fetchGifts() {
+    try {
+      const gifts = await getAllGifts();
+      setGiftData(gifts);
+      return gifts;
+    } catch (e) {
+      handleErrorToast(handleError(e));
+      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
+    }
+  }
 
   useEffect(() => {
     console.log('effect');
@@ -84,7 +100,7 @@ export default function Home({
 
       const createdGift = await createGift(newGift);
       const updatedGiftList = giftData.concat(createdGift);
-
+      console.log(createdGift, updatedGiftList);
       setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
@@ -95,7 +111,9 @@ export default function Home({
 
   async function refreshGiftList() {
     try {
-      setGiftData(await getAllGifts());
+      const gifts = await getAllGifts();
+      console.log(gifts);
+      setGiftData(gifts);
     } catch (e) {
       if (
         handleError(e) !==
@@ -163,30 +181,22 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button type="submit" className="mt-8">
+              <Button
+                type="submit"
+                className={`mt-8 ${giftQuery.isFetching || giftQuery.isError ? 'cursor-not-allowed bg-red-500' : null}`}
+                disabled={
+                  giftQuery.isFetching || giftQuery.isError ? true : false
+                }
+              >
                 Lisää
               </Button>
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
           <GiftList
-            /*
-                    This is a horrific looking component 
-                    This has to be rewritten
-          
-                    CHECK THIS: rewrite GiftList component
-                  
-                  */
-            setGiftData={setGiftData}
-            deleteModalGiftData={deleteModalGiftData}
-            editModalGiftData={editModalGiftData}
-            isDeleteModalOpen={isDeleteModalOpen}
-            isEditModalOpen={isEditModalOpen}
+            giftQuery={giftQuery}
+            giftData={giftData}
             refreshGiftList={refreshGiftList}
-            setDeleteModalGiftData={setDeleteModalGiftData}
-            setEditModalGiftData={setEditModalGiftData}
-            setIsDeleteModalOpen={setIsDeleteModalOpen}
-            setIsEditModalOpen={setIsEditModalOpen}
           />
         </div>
       </div>
@@ -195,50 +205,19 @@ export default function Home({
 }
 
 function GiftList({
-  setGiftData,
-  setEditModalGiftData,
-  setIsEditModalOpen,
-  setDeleteModalGiftData,
-  setIsDeleteModalOpen,
-  isEditModalOpen,
-  editModalGiftData,
-  isDeleteModalOpen,
-  deleteModalGiftData,
+  giftQuery,
+  giftData,
   refreshGiftList,
 }: {
-  setGiftData: React.Dispatch<Gift[]>;
-  setEditModalGiftData: React.Dispatch<Gift | undefined>;
-  setIsEditModalOpen: React.Dispatch<SetStateAction<boolean>>;
-  setDeleteModalGiftData: React.Dispatch<Gift | undefined>;
-  setIsDeleteModalOpen: React.Dispatch<SetStateAction<boolean>>;
-  isEditModalOpen: boolean;
-  editModalGiftData: Gift | undefined;
-  isDeleteModalOpen: boolean;
-  deleteModalGiftData: Gift | undefined;
+  giftQuery: UseQueryResult<Gift[], Error>;
+  giftData: Gift[];
   refreshGiftList: () => void;
 }) {
-  async function fetchGifts() {
-    try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
-      return gifts;
-    } catch (e) {
-      handleErrorToast(handleError(e));
-      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
-    }
-  }
-  const {
-    data: giftData,
-    isPending,
-    isFetching,
-    error,
-  } = useQuery({
-    queryKey: ['loadingGifts'],
-    queryFn: async () => await fetchGifts(),
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    retry: false,
-  });
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+  const { isPending, isFetching, error } = giftQuery;
 
   if (isPending || isFetching)
     return (
