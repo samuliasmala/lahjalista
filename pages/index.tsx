@@ -240,7 +240,10 @@ function GiftList({
     retry: false,
   });
 
-  if (isPending || isFetching) return <p className="mt-4">Loading....</p>;
+  if (isPending || isFetching)
+    return (
+      <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
+    );
 
   if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
 
