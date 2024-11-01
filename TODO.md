@@ -14,11 +14,3 @@ TODO:
 
 Laitetaan nappulat yms käyttämään tanstack-kirjastoa
 https://www.npmjs.com/package/@tanstack/react-query
-
-Korjaa DeleteModal.tsx ja EditModal.tsx:n "Toast-ongelma". Näyttää 2 Toastia, jos tulee 401 error (ei ole kirjautunut).
-
-Korjausidea: Lisätään tarkistus oliko virhe 401.
-
-Jos kyllä: ei laiteta Toastia.
-
-Jos ei: laitetaan Toast
