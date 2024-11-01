@@ -10,14 +10,10 @@ import { handleErrorToast } from '~/utils/handleToasts';
 type EditModal = {
   gift: Gift;
   refreshGiftList: () => void;
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 };
 
-export function EditModal({
-  gift,
-  refreshGiftList,
-  setIsModalOpen,
-}: EditModal) {
+export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
@@ -29,12 +25,12 @@ export function EditModal({
       handleErrorToast(handleError(e));
     }
     refreshGiftList();
-    setIsModalOpen(false);
+    closeModal();
   }
   return (
     <Modal
       className="max-w-80"
-      closeModal={() => setIsModalOpen(false)}
+      closeModal={() => closeModal()}
       title="Muokkaa lahjaideaa:"
     >
       <form onSubmit={(e) => void handleEdit(e)}>
@@ -57,7 +53,7 @@ export function EditModal({
           <div className="mt-8 flex flex-row items-center justify-end">
             <Button
               className="mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText"
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => closeModal()}
               type="button"
             >
               Peruuta
