@@ -12,5 +12,4 @@
 
 TODO:
 
-Laitetaan nappulat yms käyttämään tanstack-kirjastoa
-https://www.npmjs.com/package/@tanstack/react-query
+Jos tulee virhe vaikka lahjoja hakiessa, ehkä jokin nappula olisi hyvä tehdä, jolla voisi mahdollisesti kokeilla hakea uudestaan lahjoja
