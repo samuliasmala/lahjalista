@@ -24,8 +24,10 @@ export async function deleteExpiredSessionsLoop() {
   if (loopInterval === undefined) {
     // run delete function immediately, otherwise would need to wait 24 hours for the first run
     await lucia.deleteExpiredSessions();
-    loopInterval = setInterval(async () => {
-      await lucia.deleteExpiredSessions();
+    loopInterval = setInterval(() => {
+      lucia.deleteExpiredSessions().catch((e) => {
+        console.error(e);
+      });
     }, timeoutTime);
   }
 }
