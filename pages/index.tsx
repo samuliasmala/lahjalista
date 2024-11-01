@@ -1,4 +1,11 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  FormEvent,
+  HTMLAttributes,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -15,6 +22,7 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { useQuery } from '@tanstack/react-query';
 
 export { getServerSideProps };
 
@@ -34,15 +42,18 @@ export default function Home({
 
   useEffect(() => {
     console.log('effect');
+    /*
     async function fetchGifts() {
       try {
         const gifts = await getAllGifts();
-        setGiftData(gifts);
+        console.log(gifts);
+        //setGiftData(gifts);
       } catch (e) {
         handleErrorToast(handleError(e));
       }
     }
     void fetchGifts();
+    */
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
@@ -157,64 +168,139 @@ export default function Home({
               </Button>
             </form>
           </div>
-          {giftData.length > 0 && (
-            <div className="mt-7">
-              <TitleText className="text-start text-xl">Lahjaideat</TitleText>
-              {giftData.map((giftItem) => (
-                <div
-                  key={`${giftItem.uuid}_divbutton`}
-                  className="mt-4 animate-opacity"
-                >
-                  <div key={giftItem.uuid} className="grid">
-                    <p
-                      className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
-                    >
-                      {giftItem.gift} <span>-</span> {giftItem.receiver}
-                    </p>
-                    <SvgPencilEdit
-                      key={`${giftItem.uuid}_editbutton`}
-                      width={24}
-                      height={24}
-                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
-                      onClick={() => {
-                        setEditModalGiftData(giftItem);
-                        setIsEditModalOpen(true);
-                      }}
-                    />
-
-                    <SvgTrashCan
-                      key={`${giftItem.uuid}_deletebutton`}
-                      width={24}
-                      height={24}
-                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
-                      onClick={() => {
-                        setDeleteModalGiftData(giftItem);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-              {isEditModalOpen && editModalGiftData && (
-                <EditModal
-                  gift={editModalGiftData}
-                  refreshGiftList={() => void refreshGiftList()}
-                  setIsModalOpen={setIsEditModalOpen}
-                />
-              )}
-
-              {isDeleteModalOpen && deleteModalGiftData && (
-                <DeleteModal
-                  gift={deleteModalGiftData}
-                  refreshGiftList={() => void refreshGiftList()}
-                  setIsModalOpen={setIsDeleteModalOpen}
-                />
-              )}
-            </div>
-          )}
+          <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
+          <GiftList
+            /*
+                    This is a horrific looking component 
+                    This has to be rewritten
+          
+                    CHECK THIS: rewrite GiftList component
+                  
+                  */
+            setGiftData={setGiftData}
+            deleteModalGiftData={deleteModalGiftData}
+            editModalGiftData={editModalGiftData}
+            isDeleteModalOpen={isDeleteModalOpen}
+            isEditModalOpen={isEditModalOpen}
+            refreshGiftList={refreshGiftList}
+            setDeleteModalGiftData={setDeleteModalGiftData}
+            setEditModalGiftData={setEditModalGiftData}
+            setIsDeleteModalOpen={setIsDeleteModalOpen}
+            setIsEditModalOpen={setIsEditModalOpen}
+          />
         </div>
       </div>
     </main>
+  );
+}
+
+function GiftList({
+  setGiftData,
+  setEditModalGiftData,
+  setIsEditModalOpen,
+  setDeleteModalGiftData,
+  setIsDeleteModalOpen,
+  isEditModalOpen,
+  editModalGiftData,
+  isDeleteModalOpen,
+  deleteModalGiftData,
+  refreshGiftList,
+}: {
+  setGiftData: React.Dispatch<Gift[]>;
+  setEditModalGiftData: React.Dispatch<Gift | undefined>;
+  setIsEditModalOpen: React.Dispatch<SetStateAction<boolean>>;
+  setDeleteModalGiftData: React.Dispatch<Gift | undefined>;
+  setIsDeleteModalOpen: React.Dispatch<SetStateAction<boolean>>;
+  isEditModalOpen: boolean;
+  editModalGiftData: Gift | undefined;
+  isDeleteModalOpen: boolean;
+  deleteModalGiftData: Gift | undefined;
+  refreshGiftList: () => void;
+}) {
+  async function fetchGifts() {
+    try {
+      const gifts = await getAllGifts();
+      setGiftData(gifts);
+      return gifts;
+    } catch (e) {
+      handleErrorToast(handleError(e));
+      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
+    }
+  }
+  const {
+    data: giftData,
+    isPending,
+    isFetching,
+    error,
+  } = useQuery({
+    queryKey: ['loadingGifts'],
+    queryFn: async () => await fetchGifts(),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retry: false,
+  });
+
+  if (isPending || isFetching) return <p className="mt-4">Loading....</p>;
+
+  if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
+
+  return (
+    <div>
+      {giftData.length > 0 && (
+        <div>
+          {giftData.map((giftItem) => (
+            <div
+              key={`${giftItem.uuid}_divbutton`}
+              className="mt-4 animate-opacity"
+            >
+              <div key={giftItem.uuid} className="grid">
+                <p
+                  className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
+                >
+                  {giftItem.gift} <span>-</span> {giftItem.receiver}
+                </p>
+                <SvgPencilEdit
+                  key={`${giftItem.uuid}_editbutton`}
+                  width={24}
+                  height={24}
+                  className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
+                  onClick={() => {
+                    setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
+                  }}
+                />
+
+                <SvgTrashCan
+                  key={`${giftItem.uuid}_deletebutton`}
+                  width={24}
+                  height={24}
+                  className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
+                  onClick={() => {
+                    setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+          {isEditModalOpen && editModalGiftData && (
+            <EditModal
+              gift={editModalGiftData}
+              refreshGiftList={() => void refreshGiftList()}
+              setIsModalOpen={setIsEditModalOpen}
+            />
+          )}
+
+          {isDeleteModalOpen && deleteModalGiftData && (
+            <DeleteModal
+              gift={deleteModalGiftData}
+              refreshGiftList={() => void refreshGiftList()}
+              setIsModalOpen={setIsDeleteModalOpen}
+            />
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
