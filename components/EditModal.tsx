@@ -33,9 +33,9 @@ export function EditModal({
   }
   return (
     <Modal
-      title="Muokkaa lahjaideaa:"
-      closeModal={() => setIsModalOpen(false)}
       className="max-w-80"
+      closeModal={() => setIsModalOpen(false)}
+      title="Muokkaa lahjaideaa:"
     >
       <form onSubmit={(e) => void handleEdit(e)}>
         <div className="m-6 mt-0 flex flex-col">

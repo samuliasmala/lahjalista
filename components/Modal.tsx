@@ -1,8 +1,9 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 import { TitleText } from './TitleText';
 import SvgXClose from '~/icons/x_close';
+import { useKeyPress } from '~/utils/hooks/useKeyPress';
 
 export function Modal({
   children,
@@ -15,18 +16,7 @@ export function Modal({
   children: ReactNode;
   className?: string;
 }) {
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        closeModal();
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown);
-    return function clearFunctions() {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [closeModal]);
-
+  useKeyPress('Escape', () => closeModal());
   return createPortal(
     <>
       <div className="fixed left-0 top-0 z-[98] h-full w-full bg-black opacity-20" />
