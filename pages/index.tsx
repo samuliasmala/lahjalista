@@ -1,11 +1,4 @@
-import React, {
-  Dispatch,
-  FormEvent,
-  HTMLAttributes,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -196,7 +189,7 @@ export default function Home({
           <GiftList
             giftQuery={giftQuery}
             giftData={giftData}
-            refreshGiftList={refreshGiftList}
+            refreshGiftList={() => void refreshGiftList()}
           />
         </div>
       </div>
