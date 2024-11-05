@@ -11,28 +11,31 @@
 }
 
 /* Used everywhere where password inputs are */
-.input-enlarge-password-mask-character-size{
+.input-enlarge-password-mask-character-size {
   font-family: Arial, Helvetica, sans-serif !important;
 }
 
-
 /* Used when loading gifts inside /pages/index.tsx */
 .loading-dots:after {
-      display: inline-block;
-      animation: dotty steps(1,end) 5s infinite;
-      content: '';
-    }
-    
-    @keyframes dotty {
-        0%   { content: '.'; }
-        10%   { content: '..'; }
-        20%   { content: '...'; }
-        30%   { content: '....'; }
-        40%   { content: '.....'; }
-        50%   { content: '......'; }
-        60%   { content: '.......'; }
-        70%   { content: '........'; }
-        80%   { content: '.........'; }
-        90%   { content: '..........'; }
-        100% { content: ''; }
-      }
+  display: inline-block;
+  animation: dotty steps(1, end) 5s infinite;
+  content: '';
+}
+
+@keyframes dotty {
+  0% {
+    content: '';
+  }
+  25% {
+    content: '.';
+  }
+  50% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
+  100% {
+    content: '';
+  }
+}
