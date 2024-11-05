@@ -18,7 +18,7 @@
 /* Used when loading gifts inside /pages/index.tsx */
 .loading-dots:after {
   display: inline-block;
-  animation: dotty steps(1, end) 5s infinite;
+  animation: dotty steps(1, end) 1s infinite;
   content: '';
 }
 
