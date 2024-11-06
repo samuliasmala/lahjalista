@@ -16,6 +16,7 @@ import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 
 export { getServerSideProps };
 
@@ -284,13 +285,21 @@ function UserDetailModal({
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
+  const router = useRouter();
+
+  const logoutQuery = useQuery({
+    queryKey: ['logoutQuery'],
+    enabled: false,
+    queryFn: () => handleLogout(),
+  });
+
   async function handleLogout() {
     try {
       await axios.post('/api/auth/logout');
-      window.location.href = '/logout';
+      router.push('/logout');
     } catch (e) {
       console.error(e);
-      window.location.href = '/';
+      router.push('/').catch((e) => console.error(e));
     }
   }
 
@@ -309,7 +318,7 @@ function UserDetailModal({
           <div className="flex w-full justify-center">
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary"
-              onClick={() => void handleLogout()}
+              onClick={() => void logoutQuery.refetch()}
             >
               <p className={`text-sm font-medium text-white`}>Kirjaudu ulos</p>
               <SvgArrowRightStartOnRectangle
