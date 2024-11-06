@@ -36,8 +36,6 @@ export async function createGift(newObject: CreateGift) {
  * @param newObject should be given parts of Gift object type that are wanted to be updated
  */
 export async function updateGift(uuid: string, newObject: Partial<Gift>) {
-  console.log('updateGift called');
-  await new Promise((r) => setTimeout(r, 1000));
   return (await axios.patch(`${giftsBaseUrl}/${uuid}`, newObject)).data as Gift;
 }
 
@@ -46,8 +44,6 @@ export async function updateGift(uuid: string, newObject: Partial<Gift>) {
  * @param uuid should be given the id of the gift that is wanted to be deleted
  */
 export async function deleteGift(uuid: string) {
-  console.log('deleteGift called');
-  await new Promise((r) => setTimeout(r, 1000));
   await axios.delete(`${giftsBaseUrl}/${uuid}`);
   return;
 }
