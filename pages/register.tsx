@@ -13,6 +13,7 @@ import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
+import { useQuery } from '@tanstack/react-query';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -35,6 +36,12 @@ export default function Register() {
 
   const router = useRouter();
 
+  const registerQuery = useQuery({
+    queryKey: ['registerQuery'],
+    enabled: false,
+    queryFn: () => handleRegister(),
+  });
+
   async function handleSubmit(e: FormEvent) {
     try {
       e.preventDefault();
@@ -49,8 +56,7 @@ export default function Register() {
         return;
       }
       setErrors({});
-      await axios.post('/api/auth/register', validatedForm.data);
-      userCreatedSuccesfully();
+      await registerQuery.refetch();
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -62,6 +68,16 @@ export default function Register() {
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
     }, 1000);
+  }
+
+  async function handleRegister() {
+    try {
+      await axios.post('/api/auth/register', formData);
+      userCreatedSuccesfully();
+    } catch (e) {
+      handleErrorToast(handleError(e));
+    }
+    return 'registerQuery';
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -149,7 +165,19 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button className="mt-8 select-none">Luo käyttäjätunnus</Button>
+                {registerQuery.isFetching ? (
+                  <Button
+                    className="mt-8 cursor-not-allowed select-none"
+                    disabled
+                  >
+                    Luodaan käyttäjätunnusta
+                    <span className="loading-dots absolute" />
+                  </Button>
+                ) : (
+                  <Button className="mt-8 select-none">
+                    Luo käyttäjätunnus
+                  </Button>
+                )}
                 <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}
                   <Link
