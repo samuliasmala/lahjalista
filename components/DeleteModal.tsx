@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';

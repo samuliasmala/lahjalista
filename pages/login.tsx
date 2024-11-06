@@ -86,7 +86,7 @@ export default function Login() {
         return;
       }
 
-      loginQuery.refetch();
+      await loginQuery.refetch();
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
