@@ -16,6 +16,7 @@ import { Label } from '~/components/Label';
 import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
+import { useQuery } from '@tanstack/react-query';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -45,6 +46,12 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+
+  const loginQuery = useQuery({
+    queryKey: ['loginQuery'],
+    enabled: false,
+    queryFn: async () => handleLogin({ email, password, rememberMe }),
+  });
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -79,17 +86,24 @@ export default function Login() {
         return;
       }
 
-      const loginCredentials: UserLoginDetails = {
-        email: emailValidation.data || '',
-        password: password,
-        rememberMe: rememberMe,
-      };
+      loginQuery.refetch();
+    } catch (e) {
+      console.error(e);
+      handleErrorToast(handleError(e));
+    }
+  }
+
+  async function handleLogin(loginCredentials: UserLoginDetails) {
+    try {
       await axios.post('/api/auth/login', loginCredentials);
       await router.push('/');
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
     }
+    // useQuery requires a return that IS NOT undefined
+    // more: https://github.com/TanStack/query/discussions/4457
+    return 'loginQuery';
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -149,7 +163,18 @@ export default function Login() {
                   Muista minut
                 </Label>
               </div>
-              <Button type="submit">Kirjaudu sisään</Button>
+              {loginQuery.isFetching ? (
+                <Button
+                  type="submit"
+                  className="cursor-not-allowed bg-red-500"
+                  disabled
+                >
+                  Kirjaudutaan sisään
+                  <span className="loading-dots absolute" />
+                </Button>
+              ) : (
+                <Button type="submit">Kirjaudu sisään</Button>
+              )}
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>
               Ei vielä tunnuksia?{' '}
