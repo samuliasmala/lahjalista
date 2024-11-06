@@ -17,6 +17,7 @@ import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
+import SvgSpinner from '~/icons/spinner';
 
 export { getServerSideProps };
 
@@ -296,11 +297,12 @@ function UserDetailModal({
   async function handleLogout() {
     try {
       await axios.post('/api/auth/logout');
-      router.push('/logout');
+      await router.push('/logout');
     } catch (e) {
       console.error(e);
       router.push('/').catch((e) => console.error(e));
     }
+    return 'logoutQuery';
   }
 
   if (user && showUserWindow) {
@@ -317,15 +319,24 @@ function UserDetailModal({
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full justify-center">
             <Button
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary"
+              className={`mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary ${logoutQuery.isFetching ? 'cursor-not-allowed bg-red-600' : ''}`}
               onClick={() => void logoutQuery.refetch()}
+              disabled={logoutQuery.isFetching ? true : false}
             >
-              <p className={`text-sm font-medium text-white`}>Kirjaudu ulos</p>
-              <SvgArrowRightStartOnRectangle
-                width={18}
-                height={18}
-                className="ml-2"
-              />
+              <p className="text-sm font-medium text-white">Kirjaudu ulos</p>
+              {logoutQuery.isFetching ? (
+                <SvgSpinner
+                  width={18}
+                  height={18}
+                  className="ml-2 animate-spin text-white"
+                />
+              ) : (
+                <SvgArrowRightStartOnRectangle
+                  width={18}
+                  height={18}
+                  className="ml-2"
+                />
+              )}
             </Button>
           </div>
         </div>
