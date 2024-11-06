@@ -5,6 +5,7 @@ import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { toast } from 'react-toastify';
 
 type DeleteModal = {
   gift: Gift;
@@ -19,12 +20,13 @@ export function DeleteModal({
 }: DeleteModal) {
   async function handleDeletion() {
     try {
+      closeModal();
+      toast('Test', { type: 'info' });
       await deleteGift(gift.uuid);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
     refreshGiftList();
-    closeModal();
   }
 
   return (
