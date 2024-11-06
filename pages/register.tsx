@@ -35,7 +35,7 @@ export default function Register() {
 
   const router = useRouter();
 
-  async function handleRegister(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     try {
       e.preventDefault();
       const validatedForm = formSchema.safeParse(formData);
@@ -71,7 +71,7 @@ export default function Register() {
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="mt-14 flex w-full max-w-72 flex-col">
-            <form onSubmit={(e) => void handleRegister(e)}>
+            <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
                 <Label>Etunimi</Label>
