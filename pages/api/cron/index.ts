@@ -1,19 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { lucia } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
+import { HttpError } from '~/backend/HttpError';
 
-let time: number = 0;
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    if (req.method === 'GET') {
-      if (time === 0) {
-        time = new Date().getTime();
-      }
-      return res.status(200).send(time);
+    if (req.method !== 'GET') {
+      throw new HttpError('Invalid HTTP request method!', 405);
     }
 
+    const authHeader = req.headers.authorization;
+
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      throw new HttpError('Unauthorized!', 401);
+    }
+
+    // if authHeader was correct we can delete expired sessions
+
+    await lucia.deleteExpiredSessions();
     res.status(200).end();
-    return;
   } catch (e) {
     return handleError(res, e);
   }
