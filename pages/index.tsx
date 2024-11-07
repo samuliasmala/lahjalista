@@ -32,12 +32,25 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const giftQuery = useQuery({
+  const fetchGiftsQuery = useQuery({
     queryKey: ['loadingGifts'],
     queryFn: async () => await fetchGifts(),
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
     retry: false,
+  });
+
+  const addGiftQuery = useQuery({
+    queryKey: ['addingGifts'],
+    enabled: false,
+    queryFn: async () => {
+      try {
+        return await createGift({ gift: newGiftName, receiver: newReceiver });
+      } catch (e) {
+        handleErrorToast(handleError(e));
+        return 'error';
+      }
+    },
   });
 
   async function fetchGifts() {
@@ -93,9 +106,16 @@ export default function Home({
         gift: newGiftName,
       };
 
-      const createdGift = await createGift(newGift);
-      const updatedGiftList = giftData.concat(createdGift);
-      console.log(createdGift, updatedGiftList);
+      const createdGift = await addGiftQuery.refetch();
+
+      if (createdGift.data === 'error' || !createdGift.data) {
+        setNewGiftName('');
+        setNewReceiver('');
+        return;
+      }
+
+      const updatedGiftList = giftData.concat(createdGift.data);
+
       setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
@@ -178,18 +198,31 @@ export default function Home({
               </div>
               <Button
                 type="submit"
-                className={`mt-8 ${giftQuery.isFetching || giftQuery.isError ? 'cursor-not-allowed bg-red-500' : null}`}
+                className={`mt-8 ${fetchGiftsQuery.isFetching || fetchGiftsQuery.isError || addGiftQuery.isFetching ? 'cursor-not-allowed bg-red-500' : null}`}
                 disabled={
-                  giftQuery.isFetching || giftQuery.isError ? true : false
+                  fetchGiftsQuery.isFetching ||
+                  fetchGiftsQuery.isError ||
+                  addGiftQuery.isFetching
+                    ? true
+                    : false
                 }
               >
                 Lisää
+                {addGiftQuery.isFetching ? (
+                  <span className="absolute p-1">
+                    <SvgSpinner
+                      width={18}
+                      height={18}
+                      className="animate-spin text-black"
+                    />
+                  </span>
+                ) : null}
               </Button>
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
           <GiftList
-            giftQuery={giftQuery}
+            giftQuery={fetchGiftsQuery}
             giftData={giftData}
             refreshGiftList={() => void refreshGiftList()}
           />
