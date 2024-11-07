@@ -20,7 +20,6 @@ export function DeleteModal({
   async function handleDeletion() {
     try {
       closeModal();
-      toast('Test', { type: 'info' });
       await deleteGift(gift.uuid);
     } catch (e) {
       handleErrorToast(handleError(e));
