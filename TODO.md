@@ -8,6 +8,8 @@
 
 # Jokin sivu (esimerkiksi asetuksiin), joka näyttää kaikki aktiiviset (miksei epäaktiiviset) Sessionit. Myöskin Sessionin poistomahdollisuus voitaisiin lisätä
 
+# Enter-näppäimellä EditModalin ja DeleteModalin hyväksyminen
+
 ### </IDEOITA>
 
 TODO:
