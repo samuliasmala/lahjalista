@@ -5,6 +5,7 @@ import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
 
 type DeleteModal = {
   gift: Gift;
@@ -17,13 +18,19 @@ export function DeleteModal({
   refreshGiftList,
   closeModal,
 }: DeleteModal) {
+  const deleteGiftQuery = useQuery({
+    queryKey: ['deletingGift'],
+    enabled: false,
+    queryFn: () => handleDeletion(),
+  });
+
   async function handleDeletion() {
     try {
-      closeModal();
       await deleteGift(gift.uuid);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
+    closeModal();
     refreshGiftList();
   }
 
@@ -41,7 +48,7 @@ export function DeleteModal({
         </p>
         <div className="mt-6 flex flex-row items-center justify-end">
           <Button
-            className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText`}
+            className={`mb-6 mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText`}
             onClick={() => closeModal()}
             type="button"
           >
@@ -49,7 +56,7 @@ export function DeleteModal({
           </Button>
 
           <Button
-            className={`m-6 mt-0 h-8 w-16 p-0 text-sm`}
+            className={`m-6 mt-0 h-8 w-20 p-0 text-sm`}
             onClick={() => void handleDeletion()}
           >
             Poista
