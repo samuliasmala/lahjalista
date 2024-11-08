@@ -224,7 +224,7 @@ export default function Home({
           <GiftList
             giftQuery={fetchGiftsQuery}
             giftData={giftData}
-            refreshGiftList={() => void refreshGiftList()}
+            refreshGiftList={refreshGiftList}
           />
         </div>
       </div>
@@ -239,7 +239,7 @@ function GiftList({
 }: {
   giftQuery: UseQueryResult<Gift[], Error>;
   giftData: Gift[];
-  refreshGiftList: () => void;
+  refreshGiftList: () => Promise<void>;
 }) {
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
@@ -293,7 +293,7 @@ function GiftList({
             <EditModal
               closeModal={() => setEditModalGiftData(undefined)}
               gift={editModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              refreshGiftList={refreshGiftList}
             />
           )}
 
@@ -301,7 +301,7 @@ function GiftList({
             <DeleteModal
               closeModal={() => setDeleteModalGiftData(undefined)}
               gift={deleteModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              refreshGiftList={refreshGiftList}
             />
           )}
         </div>
