@@ -6,10 +6,11 @@ import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
+import SvgSpinner from '~/icons/spinner';
 
 type DeleteModal = {
   gift: Gift;
-  refreshGiftList: () => void;
+  refreshGiftList: () => Promise<void>;
   closeModal: () => void;
 };
 
@@ -32,6 +33,7 @@ export function DeleteModal({
     }
     closeModal();
     refreshGiftList();
+    return 'deletingGift';
   }
 
   return (
@@ -54,13 +56,25 @@ export function DeleteModal({
           >
             Peruuta
           </Button>
-
-          <Button
-            className={`m-6 mt-0 h-8 w-20 p-0 text-sm`}
-            onClick={() => void handleDeletion()}
-          >
-            Poista
-          </Button>
+          {deleteGiftQuery.isFetching ? (
+            <Button
+              className={`m-6 mt-0 h-8 w-28 cursor-not-allowed bg-red-500 p-0 text-sm`}
+              disabled
+              onClick={() => void deleteGiftQuery.refetch()}
+            >
+              Poista
+              <span className="absolute ml-2">
+                <SvgSpinner width={18} height={18} className="animate-spin" />
+              </span>
+            </Button>
+          ) : (
+            <Button
+              className={`m-6 mt-0 h-8 w-20 p-0 text-sm`}
+              onClick={() => void deleteGiftQuery.refetch()}
+            >
+              Poista
+            </Button>
+          )}
         </div>
       </div>
     </Modal>

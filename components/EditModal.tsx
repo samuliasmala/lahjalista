@@ -6,10 +6,11 @@ import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 type EditModal = {
   gift: Gift;
-  refreshGiftList: () => void;
+  refreshGiftList: () => Promise<void>;
   closeModal: () => void;
 };
 
@@ -17,14 +18,22 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
+  const editGiftQuery = useMutation({
+    mutationFn: (gitfData: { receiver: string; gift: string }) =>
+      updateGift(gift.uuid, gitfData),
+  });
+
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
-      await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
+      await editGiftQuery.mutateAsync({
+        receiver: giftReceiver,
+        gift: giftName,
+      });
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    refreshGiftList();
+    await refreshGiftList();
     closeModal();
   }
   return (
