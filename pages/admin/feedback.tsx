@@ -14,6 +14,7 @@ import { TitleBar } from '~/components/TitleBar';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Feedback } from '@prisma/client';
+import { useKeyPress } from '~/utils/hooks/useKeyPress';
 
 export { getServerSideProps };
 
@@ -26,6 +27,18 @@ export default function Home({
   const [showUserWindow, setShowUserWindow] = useState(false);
 
   const router = useRouter();
+
+  useKeyPress('ArrowRight', () => {
+    setCurrentPage((currentPageNumber) =>
+      calculatePageSwitch(currentPageNumber, totalPages, 'plus'),
+    );
+  });
+
+  useKeyPress('ArrowLeft', () => {
+    setCurrentPage((currentPageNumber) =>
+      calculatePageSwitch(currentPageNumber, totalPages, 'minus'),
+    );
+  });
 
   useEffect(() => {
     if (!user || user.role !== 'ADMIN') {
@@ -86,6 +99,17 @@ export default function Home({
   );
 }
 
+function calculatePageSwitch(
+  currentPage: number,
+  totalPages: number,
+  plusOrMinus: 'plus' | 'minus',
+): number {
+  if (plusOrMinus === 'plus')
+    return currentPage + 1 <= totalPages ? currentPage + 1 : 1;
+
+  return currentPage - 1 >= 1 ? currentPage - 1 : totalPages;
+}
+
 function FeedbackParagraph({
   currentPage,
   feedbacks,
@@ -136,8 +160,8 @@ function PageNavigator({
       <Button
         className="text-md m-0 mr-4 h-10 w-24 p-0"
         onClick={() =>
-          setCurrentPage((prevValue) => {
-            return prevValue - 1 >= 1 ? prevValue - 1 : 1;
+          setCurrentPage((currentPage) => {
+            return calculatePageSwitch(currentPage, totalPages, 'minus');
           })
         }
       >
@@ -168,8 +192,8 @@ function PageNavigator({
       <Button
         className="text-md m-0 ml-4 h-10 w-24 p-0"
         onClick={() =>
-          setCurrentPage((prevValue) => {
-            return prevValue + 1 <= totalPages ? prevValue + 1 : totalPages;
+          setCurrentPage((currentPage) => {
+            return calculatePageSwitch(currentPage, totalPages, 'plus');
           })
         }
       >
