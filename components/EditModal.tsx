@@ -20,16 +20,9 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
   const [giftName, setGiftName] = useState(gift.gift);
 
   const editGiftQuery = useMutation({
-    mutationFn: async (gitfData: { receiver: string; gift: string }) =>
-      await updateGift(gift.uuid, gitfData),
-  });
-
-  const refreshGiftListQuery = useQuery({
-    queryKey: ['refreshingGiftList'],
-    enabled: false,
-    queryFn: async () => {
+    mutationFn: async (gitfData: { receiver: string; gift: string }) => {
+      await updateGift(gift.uuid, gitfData);
       await refreshGiftList();
-      return 'refreshGiftList';
     },
   });
 
@@ -43,7 +36,6 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    await refreshGiftListQuery.refetch();
     closeModal();
   }
 
@@ -78,7 +70,7 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
             >
               Peruuta
             </Button>
-            {editGiftQuery.isPending || refreshGiftListQuery.isFetching ? (
+            {editGiftQuery.isPending ? (
               <Button
                 className="ml-6 mt-0 h-8 w-28 cursor-not-allowed bg-red-500 p-0 pl-4 text-start text-sm"
                 type="submit"
