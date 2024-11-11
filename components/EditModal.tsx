@@ -7,6 +7,7 @@ import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import SvgSpinner from '~/icons/spinner';
 
 type EditModal = {
   gift: Gift;
@@ -19,8 +20,17 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
   const [giftName, setGiftName] = useState(gift.gift);
 
   const editGiftQuery = useMutation({
-    mutationFn: (gitfData: { receiver: string; gift: string }) =>
-      updateGift(gift.uuid, gitfData),
+    mutationFn: async (gitfData: { receiver: string; gift: string }) =>
+      await updateGift(gift.uuid, gitfData),
+  });
+
+  const refreshGiftListQuery = useQuery({
+    queryKey: ['refreshingGiftList'],
+    enabled: false,
+    queryFn: async () => {
+      await refreshGiftList();
+      return 'refreshGiftList';
+    },
   });
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
@@ -33,9 +43,10 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    await refreshGiftList();
+    await refreshGiftListQuery.refetch();
     closeModal();
   }
+
   return (
     <Modal
       className="max-w-80"
@@ -67,10 +78,22 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
             >
               Peruuta
             </Button>
-
-            <Button className="ml-6 mt-0 h-8 w-20 p-0 text-sm" type="submit">
-              Tallenna
-            </Button>
+            {editGiftQuery.isPending || refreshGiftListQuery.isFetching ? (
+              <Button
+                className="ml-6 mt-0 h-8 w-28 cursor-not-allowed bg-red-500 p-0 pl-4 text-start text-sm"
+                type="submit"
+                disabled
+              >
+                Tallenna
+                <span className="absolute">
+                  <SvgSpinner className="ml-2 size-5 animate-spin" />
+                </span>
+              </Button>
+            ) : (
+              <Button className="ml-6 mt-0 h-8 w-20 p-0 text-sm" type="submit">
+                Tallenna
+              </Button>
+            )}
           </div>
         </div>
       </form>
