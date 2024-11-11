@@ -127,7 +127,6 @@ export default function Home({
   async function refreshGiftList() {
     try {
       const gifts = await getAllGifts();
-      console.log(gifts);
       setGiftData(gifts);
     } catch (e) {
       if (
