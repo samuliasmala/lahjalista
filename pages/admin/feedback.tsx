@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { Button } from '~/components/Button';
-import { handleGeneralError } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import { handleErrorToast } from '~/utils/handleToasts';
@@ -56,15 +56,18 @@ export default function Home({
         // Rounds up the value, eg. 21 feedbacks / 5 = 4.2 -> 5
         setTotalPages(Math.ceil(fetchedFeedbacks.length / 5));
       } catch (e) {
-        handleError(e);
+        handleInternalError(e);
       }
     }
     void fetchFeedbacks();
   }, []);
 
-  function handleError(e: unknown) {
-    const errorMessage = handleGeneralError(e);
-    if (errorMessage === 'You are unauthorized!') {
+  function handleInternalError(e: unknown) {
+    const errorMessage = handleError(e);
+    if (
+      errorMessage ===
+      'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
+    ) {
       window.location.href = '/';
     }
     handleErrorToast(errorMessage);
