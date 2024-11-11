@@ -22,7 +22,10 @@ export function DeleteModal({
   const deleteGiftQuery = useQuery({
     queryKey: ['deletingGift'],
     enabled: false,
-    queryFn: () => handleDeletion(),
+    queryFn: async () => {
+      await handleDeletion();
+      return 'deletingGift';
+    },
   });
 
   async function handleDeletion() {
@@ -31,9 +34,8 @@ export function DeleteModal({
     } catch (e) {
       handleErrorToast(handleError(e));
     }
+    await refreshGiftList();
     closeModal();
-    refreshGiftList();
-    return 'deletingGift';
   }
 
   return (
