@@ -1,18 +1,10 @@
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
-import { TitleText } from './TitleText';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
-import { handleGiftError } from '~/utils/handleError';
-import SvgXClose from '~/icons/x_close';
+import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
 
 type EditModal = {
@@ -29,42 +21,23 @@ export function EditModal({
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        setIsModalOpen(false);
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown);
-    return function clearFunctions() {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [refreshGiftList, setIsModalOpen]);
-
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
       await updateGift(gift.uuid, { receiver: giftReceiver, gift: giftName });
     } catch (e) {
-      handleErrorToast(handleGiftError(e));
+      handleErrorToast(handleError(e));
     }
     refreshGiftList();
     setIsModalOpen(false);
   }
   return (
-    <Modal className="max-w-80">
+    <Modal
+      className="max-w-80"
+      closeModal={() => setIsModalOpen(false)}
+      title="Muokkaa lahjaideaa:"
+    >
       <form onSubmit={(e) => void handleEdit(e)}>
-        <div className="flex flex-row justify-between">
-          <TitleText className={`m-6 text-base font-medium text-primaryText`}>
-            Muokkaa lahjaideaa
-          </TitleText>
-          <SvgXClose
-            width={24}
-            height={24}
-            className="mr-6 self-center hover:cursor-pointer"
-            onClick={() => setIsModalOpen(false)}
-          />
-        </div>
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input

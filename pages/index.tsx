@@ -6,7 +6,7 @@ import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
-import { handleGeneralError } from '~/utils/handleError';
+import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
 import SvgPencilEdit from '~/icons/pencil_edit';
@@ -37,7 +37,7 @@ export default function Home({
         const gifts = await getAllGifts();
         setGiftData(gifts);
       } catch (e) {
-        handleError(e);
+        handleErrorToast(handleError(e));
       }
     }
     void fetchGifts();
@@ -76,7 +76,7 @@ export default function Home({
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
-      handleError(e);
+      handleErrorToast(handleError(e));
     }
   }
 
@@ -84,16 +84,8 @@ export default function Home({
     try {
       setGiftData(await getAllGifts());
     } catch (e) {
-      handleError(e);
+      handleErrorToast(handleError(e));
     }
-  }
-
-  function handleError(e: unknown) {
-    const errorMessage = handleGeneralError(e);
-    if (errorMessage === 'You are unauthorized!') {
-      window.location.href = '/';
-    }
-    handleErrorToast(errorMessage);
   }
 
   return (
