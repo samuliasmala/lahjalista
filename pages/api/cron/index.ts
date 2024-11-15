@@ -20,6 +20,7 @@ export default async function handler(
 
     // if authHeader was correct we can delete expired sessions
 
+    console.log('Cron job activated! Deleting expired sessions...');
     await lucia.deleteExpiredSessions();
     res.status(200).end();
   } catch (e) {
