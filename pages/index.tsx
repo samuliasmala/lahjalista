@@ -5,7 +5,7 @@ import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift, User } from '~/shared/types';
+import { Gift, User } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import SvgUser from '~/icons/user';
@@ -66,18 +66,6 @@ export default function Home({
 
   useEffect(() => {
     console.log('effect');
-    /*
-    async function fetchGifts() {
-      try {
-        const gifts = await getAllGifts();
-        console.log(gifts);
-        //setGiftData(gifts);
-      } catch (e) {
-        handleErrorToast(handleError(e));
-      }
-    }
-    void fetchGifts();
-    */
   }, []);
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
@@ -100,11 +88,6 @@ export default function Home({
       if (errorFound) {
         return;
       }
-
-      const newGift: CreateGift = {
-        receiver: newReceiver,
-        gift: newGiftName,
-      };
 
       const createdGift = await addGiftQuery.refetch();
 

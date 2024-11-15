@@ -4,7 +4,6 @@ import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 

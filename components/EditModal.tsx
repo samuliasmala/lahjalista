@@ -6,7 +6,7 @@ import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 
 type EditModal = {

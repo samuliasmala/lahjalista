@@ -14,6 +14,7 @@ Credits: https://www.svgrepo.com/svg/310005/spinner-ios
 */
 
 import type { SVGProps } from 'react';
+
 const SvgSpinner = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
     <path
