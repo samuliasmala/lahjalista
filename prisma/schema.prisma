@@ -25,6 +25,23 @@ model User {
     gift      Gift[]
     Session   Session[]
     Feedback  Feedback[]
+    Person    Person[]
+}
+
+model Person {
+    id            Int            @id @default(autoincrement())
+    uuid          String         @unique @default(uuid())
+    name          String
+    sendReminders Boolean
+    // map:in käyttö napattu täältä https://github.com/prisma/prisma/discussions/11108
+    // onko väärä yhdistää kuvan "omistaja" userUUID:llä?
+    pictureId     ProfilePicture @relation(fields: [userUUID], references: [userUUID], onDelete: Cascade, map: "picture_fk")
+    userUUID      String         @unique
+    // onDelete: Cascade pitäisi olla ihan ok idea, koska jos User poistetaan ei Person:ia pitäisi tarvita
+    userId        User           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade, map: "user_fk")
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @updatedAt
+    Anniversary   Anniversary[]
 }
 
 model Gift {
@@ -36,6 +53,17 @@ model Gift {
     updatedAt DateTime @updatedAt
     userUUID  String?
     user      User?    @relation(fields: [userUUID], references: [uuid])
+}
+
+model Anniversary {
+    id        Int      @id @default(autoincrement())
+    uuid      String   @unique @default(uuid())
+    name      String
+    date      DateTime @db.Date
+    userUUID  String
+    personId  Person   @relation(fields: [userUUID], references: [userUUID], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Session {
@@ -57,4 +85,16 @@ model Feedback {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
     user         User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+}
+
+model ProfilePicture {
+    id        Int      @id @default(autoincrement())
+    uuid      String   @unique @default(uuid())
+    userUUID  String   @unique
+    thumbnail Bytes    @db.ByteA
+    picture   Bytes    @db.ByteA
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    // tähän Person:iin ei ole laitettu relaatiota, koska relaatio tulee jo Person-modelista
+    Person    Person?
 }
