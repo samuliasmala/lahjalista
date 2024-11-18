@@ -15,14 +15,17 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import {
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from '@tanstack/react-query';
 
 export { getServerSideProps };
 
-export default async function Home({
+export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
@@ -30,7 +33,7 @@ export default async function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const { isFetching, isError, error } = await useGetGifts();
+  const { isFetching, isError, error, data: giftData } = useGetGifts();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
@@ -58,9 +61,8 @@ export default async function Home({
         gift: newGiftName,
       };
 
-      const createdGift = await createGift(newGift);
-      const updatedGiftList = giftData.concat(createdGift);
-      setGiftData(updatedGiftList);
+      await createGift(newGift);
+
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
@@ -70,8 +72,6 @@ export default async function Home({
 
   async function refreshGiftList() {
     try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
     } catch (e) {
       if (
         handleError(e) !==
@@ -166,7 +166,7 @@ function GiftList({
   refreshGiftList,
 }: {
   giftQuery: { isFetching: boolean; error: Error | null };
-  giftData: Gift[];
+  giftData?: Gift[];
   refreshGiftList: () => void;
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -184,7 +184,7 @@ function GiftList({
 
   return (
     <div>
-      {giftData.length > 0 && (
+      {giftData && giftData.length > 0 && (
         <div>
           {giftData.map((giftItem) => (
             <div
