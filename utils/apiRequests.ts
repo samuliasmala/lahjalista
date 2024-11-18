@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
+import { sleep } from './utilFunctions';
+import { useQuery } from '@tanstack/react-query';
 
 const giftsBaseUrl = '/api/gifts';
 
@@ -7,10 +9,14 @@ const giftsBaseUrl = '/api/gifts';
  *
  * @returns an array that contains all the gifts as objects
  */
-export async function getAllGifts() {
-  // tässä esimerkiksi käytetty sleeppiä, jotta voi kokeilla miten käyttäytyy 3 sekunnin fetchin takia
-  //await sleep(3000);
-  return (await axios.get(giftsBaseUrl)).data as Gift[];
+export async function useGetGifts() {
+  return useQuery({
+    queryKey: ['gifts'],
+    queryFn: async () => (await axios.get(giftsBaseUrl)).data as Gift[],
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retry: false,
+  });
 }
 
 /**
