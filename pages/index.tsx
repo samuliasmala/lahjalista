@@ -77,7 +77,6 @@ export default function Home({
 
       const createdGift = await createGift(newGift);
       const updatedGiftList = giftData.concat(createdGift);
-      console.log(createdGift, updatedGiftList);
       setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
@@ -89,7 +88,6 @@ export default function Home({
   async function refreshGiftList() {
     try {
       const gifts = await getAllGifts();
-      console.log(gifts);
       setGiftData(gifts);
     } catch (e) {
       if (
