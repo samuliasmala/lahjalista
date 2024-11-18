@@ -49,22 +49,6 @@ export default function Home({
     }
   }
 
-  useEffect(() => {
-    console.log('effect');
-    /*
-    async function fetchGifts() {
-      try {
-        const gifts = await getAllGifts();
-        console.log(gifts);
-        //setGiftData(gifts);
-      } catch (e) {
-        handleErrorToast(handleError(e));
-      }
-    }
-    void fetchGifts();
-    */
-  }, []);
-
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
       e.preventDefault();
