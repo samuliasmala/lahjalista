@@ -2,19 +2,25 @@ import { toast } from 'react-toastify';
 
 export function handleErrorToast(errorText: string) {
   try {
-    const toastId = toast(errorText, {
+    const toastExists = document.getElementById(errorText);
+    if (toastExists) {
+      toast.update(errorText, { progress: 0 });
+      return;
+    }
+
+    toast(errorText, {
       type: 'error',
-      toastId: window.crypto.randomUUID(),
+      toastId: errorText,
     });
 
     const observer = new MutationObserver(() => {
-      const addedToast = document.getElementById(toastId.toString());
+      const addedToast = document.getElementById(errorText);
       if (addedToast) {
         addedToast.addEventListener('mouseenter', () => {
-          toast.update(toastId, { progress: 1 });
+          toast.update(errorText, { progress: 1 });
         });
         addedToast.addEventListener('mouseleave', () => {
-          toast.update(toastId, { progress: 0 });
+          toast.update(errorText, { progress: 0 });
         });
         observer.disconnect();
         return;
