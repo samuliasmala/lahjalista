@@ -30,7 +30,7 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const giftQuery = useQuery({
+  const { isFetching, isError, error } = useQuery({
     queryKey: ['gifts'],
     queryFn: getAllGifts,
     refetchOnWindowFocus: false,
@@ -158,10 +158,8 @@ export default function Home({
               </div>
               <Button
                 type="submit"
-                className={`mt-8 ${giftQuery.isFetching || giftQuery.isError ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={
-                  giftQuery.isFetching || giftQuery.isError ? true : false
-                }
+                className={`mt-8 ${isFetching || isError ? 'cursor-not-allowed bg-red-500' : null}`}
+                disabled={isFetching || isError}
               >
                 Lisää
               </Button>
@@ -169,7 +167,7 @@ export default function Home({
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
           <GiftList
-            giftQuery={giftQuery}
+            giftQuery={{ error, isFetching }}
             giftData={giftData}
             refreshGiftList={() => void refreshGiftList()}
           />
@@ -184,7 +182,7 @@ function GiftList({
   giftData,
   refreshGiftList,
 }: {
-  giftQuery: UseQueryResult<Gift[], Error>;
+  giftQuery: { isFetching: boolean; error: Error | null };
   giftData: Gift[];
   refreshGiftList: () => void;
 }) {
@@ -193,13 +191,13 @@ function GiftList({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
-  if (giftQuery.isPending || giftQuery.isFetching)
+  const { error, isFetching } = giftQuery;
+  if (isFetching)
     return (
       <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
     );
 
-  if (giftQuery.error)
-    return <p className="mt-5 bg-red-500 text-lg">{giftQuery.error.message}</p>;
+  if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
 
   return (
     <div>
