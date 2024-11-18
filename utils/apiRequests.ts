@@ -9,7 +9,7 @@ const giftsBaseUrl = '/api/gifts';
  *
  * @returns an array that contains all the gifts as objects
  */
-export async function useGetGifts() {
+export function useGetGifts() {
   return useQuery({
     queryKey: ['gifts'],
     queryFn: async () => (await axios.get(giftsBaseUrl)).data as Gift[],
