@@ -4,7 +4,7 @@ import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
+import { createGift, useGetGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
@@ -19,7 +19,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 export { getServerSideProps };
 
-export default function Home({
+export default async function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [giftData, setGiftData] = useState<Gift[]>([]);
@@ -30,24 +30,7 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const { isFetching, isError, error } = useQuery({
-    queryKey: ['gifts'],
-    queryFn: getAllGifts,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    retry: false,
-  });
-
-  async function fetchGifts() {
-    try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
-      return gifts;
-    } catch (e) {
-      handleErrorToast(handleError(e));
-      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
-    }
-  }
+  const { isFetching, isError, error } = await useGetGifts();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
