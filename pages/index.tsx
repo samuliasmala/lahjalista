@@ -31,8 +31,8 @@ export default function Home({
   const [showUserWindow, setShowUserWindow] = useState(false);
 
   const giftQuery = useQuery({
-    queryKey: ['loadingGifts'],
-    queryFn: async () => await fetchGifts(),
+    queryKey: ['gifts'],
+    queryFn: getAllGifts,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: false,
@@ -192,14 +192,14 @@ function GiftList({
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
-  const { isPending, isFetching, error } = giftQuery;
 
-  if (isPending || isFetching)
+  if (giftQuery.isPending || giftQuery.isFetching)
     return (
       <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
     );
 
-  if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
+  if (giftQuery.error)
+    return <p className="mt-5 bg-red-500 text-lg">{giftQuery.error.message}</p>;
 
   return (
     <div>
