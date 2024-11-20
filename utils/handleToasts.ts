@@ -3,24 +3,27 @@ import { toast } from 'react-toastify';
 export function handleErrorToast(errorText: string) {
   try {
     const toastExists = document.getElementById(errorText);
+    const toastId = `toast-${errorText}`;
+
+    // if toast exists, reset timer
     if (toastExists) {
       toast.update(errorText, { progress: 0 });
       return;
     }
 
-    toast(errorText, {
+    toast(toastId, {
       type: 'error',
-      toastId: errorText,
+      toastId: toastId,
     });
 
     const observer = new MutationObserver(() => {
-      const addedToast = document.getElementById(errorText);
+      const addedToast = document.getElementById(toastId);
       if (addedToast) {
         addedToast.addEventListener('mouseenter', () => {
-          toast.update(errorText, { progress: 1 });
+          toast.update(toastId, { progress: 1 });
         });
         addedToast.addEventListener('mouseleave', () => {
-          toast.update(errorText, { progress: 0 });
+          toast.update(toastId, { progress: 0 });
         });
         observer.disconnect();
         return;
