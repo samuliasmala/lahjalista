@@ -16,6 +16,7 @@ import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useQueryClient } from '@tanstack/react-query';
+import { invalidateSingleQueryKey } from '~/utils/utilFunctions';
 
 export { getServerSideProps };
 
@@ -61,7 +62,7 @@ export default function Home({
 
       await createGift(newGift);
       // reloads gift list!
-      await queryClient.invalidateQueries({ queryKey: ['gifts'] });
+      await invalidateSingleQueryKey(queryClient, 'gifts');
 
       setNewGiftName('');
       setNewReceiver('');
