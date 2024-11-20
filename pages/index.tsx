@@ -141,7 +141,7 @@ export default function Home({
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
-          <GiftList giftQuery={{ error, isFetching }} giftData={giftData} />
+          <GiftList />
         </div>
       </div>
     </main>
@@ -153,8 +153,6 @@ function GiftList() {
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
-
-  const queryClient = useQueryClient();
 
   const { error, isFetching, data: giftData } = useGetGifts();
 
@@ -207,9 +205,6 @@ function GiftList() {
           {isEditModalOpen && editModalGiftData && (
             <EditModal
               gift={editModalGiftData}
-              refreshGiftList={async () =>
-                queryClient.invalidateQueries({ queryKey: ['gifts'] })
-              }
               setIsModalOpen={setIsEditModalOpen}
             />
           )}
@@ -217,9 +212,6 @@ function GiftList() {
           {isDeleteModalOpen && deleteModalGiftData && (
             <DeleteModal
               gift={deleteModalGiftData}
-              refreshGiftList={async () =>
-                queryClient.invalidateQueries({ queryKey: ['gifts'] })
-              }
               setIsModalOpen={setIsDeleteModalOpen}
             />
           )}
