@@ -151,3 +151,8 @@ export type KeyboardEventKeys =
   | 'F12'
   | 'Num Lock'
   | 'Scroll Lock';
+
+// CHECK THIS, onko mitään järkeä
+type queryKeyList = 'gifts';
+export type singleQueryKey = queryKeyList;
+export type multipleQueryKeys = queryKeyList[];
