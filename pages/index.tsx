@@ -35,6 +35,8 @@ export default function Home({
 
   const { isFetching, isError, error, data: giftData } = useGetGifts();
 
+  const queryClient = useQueryClient();
+
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
       e.preventDefault();
@@ -62,6 +64,8 @@ export default function Home({
       };
 
       await createGift(newGift);
+      // reloads gift list!
+      queryClient.invalidateQueries({ queryKey: ['gifts'] });
 
       setNewGiftName('');
       setNewReceiver('');
@@ -72,6 +76,8 @@ export default function Home({
 
   async function refreshGiftList() {
     try {
+      // reloads gift list!
+      queryClient.invalidateQueries({ queryKey: ['gifts'] });
     } catch (e) {
       if (
         handleError(e) !==
