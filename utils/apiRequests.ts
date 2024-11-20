@@ -19,7 +19,7 @@ export function useGetGifts() {
         return (await axios.get(giftsBaseUrl)).data as Gift[];
       } catch (e) {
         handleErrorToast(handleError(e));
-        return false;
+        return [];
       }
     },
     refetchOnWindowFocus: false,
