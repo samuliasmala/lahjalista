@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
-import { sleep } from './utilFunctions';
 import { useQuery } from '@tanstack/react-query';
 import { handleErrorToast } from './handleToasts';
 import { handleError } from './handleError';

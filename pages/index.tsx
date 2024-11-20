@@ -1,4 +1,4 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -15,11 +15,7 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import {
-  useQuery,
-  useQueryClient,
-  UseQueryResult,
-} from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 export { getServerSideProps };
 
@@ -33,7 +29,7 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const { isFetching, isError, error, data: giftData } = useGetGifts();
+  const { isFetching, isError } = useGetGifts();
 
   const queryClient = useQueryClient();
 
@@ -65,7 +61,7 @@ export default function Home({
 
       await createGift(newGift);
       // reloads gift list!
-      queryClient.invalidateQueries({ queryKey: ['gifts'] });
+      await queryClient.invalidateQueries({ queryKey: ['gifts'] });
 
       setNewGiftName('');
       setNewReceiver('');

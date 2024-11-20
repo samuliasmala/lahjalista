@@ -1,4 +1,4 @@
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { multipleQueryKeys, singleQueryKey } from '~/shared/types';
 
 export async function sleep(timeoutTimeInMs: number) {
