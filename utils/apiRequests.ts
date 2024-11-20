@@ -2,6 +2,8 @@ import axios from 'axios';
 import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
 import { sleep } from './utilFunctions';
 import { useQuery } from '@tanstack/react-query';
+import { handleErrorToast } from './handleToasts';
+import { handleError } from './handleError';
 
 const giftsBaseUrl = '/api/gifts';
 
@@ -12,7 +14,14 @@ const giftsBaseUrl = '/api/gifts';
 export function useGetGifts() {
   return useQuery({
     queryKey: ['gifts'],
-    queryFn: async () => (await axios.get(giftsBaseUrl)).data as Gift[],
+    queryFn: async () => {
+      try {
+        return (await axios.get(giftsBaseUrl)).data as Gift[];
+      } catch (e) {
+        handleErrorToast(handleError(e));
+        return false;
+      }
+    },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     retry: false,
