@@ -148,13 +148,7 @@ export default function Home({
   );
 }
 
-function GiftList({
-  giftQuery,
-  giftData,
-}: {
-  giftQuery: { isFetching: boolean; error: Error | null };
-  giftData?: Gift[];
-}) {
+function GiftList() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -162,7 +156,8 @@ function GiftList({
 
   const queryClient = useQueryClient();
 
-  const { error, isFetching } = giftQuery;
+  const { error, isFetching, data: giftData } = useGetGifts();
+
   if (isFetching)
     return (
       <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
