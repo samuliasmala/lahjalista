@@ -2,8 +2,8 @@ import { toast } from 'react-toastify';
 
 export function handleErrorToast(errorText: string) {
   try {
-    const toastExists = document.getElementById(errorText);
     const toastId = `toast-${errorText}`;
+    const toastExists = document.getElementById(toastId);
 
     // if toast exists, reset timer
     if (toastExists) {
