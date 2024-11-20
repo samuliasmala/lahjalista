@@ -11,7 +11,7 @@ export function handleErrorToast(errorText: string) {
       return;
     }
 
-    toast(toastId, {
+    toast(errorText, {
       type: 'error',
       toastId: toastId,
     });
