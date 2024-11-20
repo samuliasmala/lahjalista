@@ -8,7 +8,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 
 type DeleteModal = {
   gift: Gift;
-  refreshGiftList: () => void;
+  refreshGiftList: () => Promise<void>;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -23,7 +23,7 @@ export function DeleteModal({
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    refreshGiftList();
+    await refreshGiftList();
     setIsModalOpen(false);
   }
 

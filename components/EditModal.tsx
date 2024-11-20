@@ -9,7 +9,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 
 type EditModal = {
   gift: Gift;
-  refreshGiftList: () => void;
+  refreshGiftList: () => Promise<void>;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -28,7 +28,7 @@ export function EditModal({
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    refreshGiftList();
+    await refreshGiftList();
     setIsModalOpen(false);
   }
   return (

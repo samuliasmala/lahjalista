@@ -74,20 +74,6 @@ export default function Home({
     }
   }
 
-  async function refreshGiftList() {
-    try {
-      // reloads gift list!
-      queryClient.invalidateQueries({ queryKey: ['gifts'] });
-    } catch (e) {
-      if (
-        handleError(e) !==
-        'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
-      ) {
-        handleErrorToast(handleError(e));
-      }
-    }
-  }
-
   return (
     <main className="h-screen w-full max-w-full">
       <div className="flex justify-center">
@@ -155,11 +141,7 @@ export default function Home({
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
-          <GiftList
-            giftQuery={{ error, isFetching }}
-            giftData={giftData}
-            refreshGiftList={() => void refreshGiftList()}
-          />
+          <GiftList giftQuery={{ error, isFetching }} giftData={giftData} />
         </div>
       </div>
     </main>
@@ -169,16 +151,16 @@ export default function Home({
 function GiftList({
   giftQuery,
   giftData,
-  refreshGiftList,
 }: {
   giftQuery: { isFetching: boolean; error: Error | null };
   giftData?: Gift[];
-  refreshGiftList: () => void;
 }) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+
+  const queryClient = useQueryClient();
 
   const { error, isFetching } = giftQuery;
   if (isFetching)
@@ -230,7 +212,9 @@ function GiftList({
           {isEditModalOpen && editModalGiftData && (
             <EditModal
               gift={editModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              refreshGiftList={async () =>
+                queryClient.invalidateQueries({ queryKey: ['gifts'] })
+              }
               setIsModalOpen={setIsEditModalOpen}
             />
           )}
@@ -238,7 +222,9 @@ function GiftList({
           {isDeleteModalOpen && deleteModalGiftData && (
             <DeleteModal
               gift={deleteModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              refreshGiftList={async () =>
+                queryClient.invalidateQueries({ queryKey: ['gifts'] })
+              }
               setIsModalOpen={setIsDeleteModalOpen}
             />
           )}
