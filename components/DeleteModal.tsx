@@ -5,25 +5,24 @@ import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { invalidateSingleQueryKey } from '~/utils/utilFunctions';
+import { useQueryClient } from '@tanstack/react-query';
 
 type DeleteModal = {
   gift: Gift;
-  refreshGiftList: () => Promise<void>;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function DeleteModal({
-  gift,
-  refreshGiftList,
-  setIsModalOpen,
-}: DeleteModal) {
+export function DeleteModal({ gift, setIsModalOpen }: DeleteModal) {
+  const queryClient = useQueryClient();
+
   async function handleDeletion() {
     try {
       await deleteGift(gift.uuid);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    await refreshGiftList();
+    await invalidateSingleQueryKey(queryClient, 'gifts');
     setIsModalOpen(false);
   }
 
