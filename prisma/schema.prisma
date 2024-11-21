@@ -29,20 +29,19 @@ model User {
 }
 
 model Person {
-    id                 Int            @id @default(autoincrement())
-    uuid               String         @unique @default(uuid())
+    id                 Int             @id @default(autoincrement())
+    uuid               String          @unique @default(uuid())
     name               String
     sendReminders      Boolean
     // map:in käyttö napattu täältä https://github.com/prisma/prisma/discussions/11108
     // onko väärä yhdistää kuvan "omistaja" userUUID:llä?
-    profilePictureUUID String         @unique
-    profilePicture     ProfilePicture @relation(fields: [profilePictureUUID], references: [uuid], onDelete: Cascade, map: "picture_fk")
-    userUUID           String
+    profilePictureUUID String?         @unique
+    profilePicture     ProfilePicture? @relation(fields: [profilePictureUUID], references: [uuid], onDelete: Cascade, map: "picture_fk")
+    userUUID           String?
     // onDelete: Cascade pitäisi olla ihan ok idea, koska jos User poistetaan ei Person:ia pitäisi tarvita
-    user               User           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade, map: "user_fk")
-    createdAt          DateTime       @default(now())
-    updatedAt          DateTime       @updatedAt
-    anniversaryUUID    String         @unique
+    user               User?           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade, map: "user_fk")
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt
     Anniversary        Anniversary[]
 }
 
@@ -58,14 +57,15 @@ model Gift {
 }
 
 model Anniversary {
-    id        Int      @id @default(autoincrement())
-    uuid      String   @unique @default(uuid())
-    name      String
-    date      DateTime @db.Date
-    userUUID  String
-    person    Person   @relation(fields: [uuid], references: [anniversaryUUID], onDelete: Cascade)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id         Int      @id @default(autoincrement())
+    uuid       String   @unique @default(uuid())
+    name       String
+    date       DateTime @db.Date
+    userUUID   String
+    personUUID String?
+    person     Person?  @relation(fields: [personUUID], references: [uuid], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 }
 
 model Session {
