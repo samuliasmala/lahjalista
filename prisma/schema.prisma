@@ -13,19 +13,20 @@ enum Role {
 }
 
 model User {
-    id        Int        @id @default(autoincrement())
-    uuid      String     @unique @default(uuid())
-    firstName String
-    lastName  String
-    email     String     @unique
-    password  String
-    role      Role       @default(USER)
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    gift      Gift[]
-    Session   Session[]
-    Feedback  Feedback[]
-    Person    Person[]
+    id          Int           @id @default(autoincrement())
+    uuid        String        @unique @default(uuid())
+    firstName   String
+    lastName    String
+    email       String        @unique
+    password    String
+    role        Role          @default(USER)
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    gift        Gift[]
+    Session     Session[]
+    Feedback    Feedback[]
+    Person      Person[]
+    Anniversary Anniversary[]
 }
 
 model Person {
@@ -62,6 +63,8 @@ model Anniversary {
     name       String
     date       DateTime @db.Date
     userUUID   String
+    // onko User-relaatio tarpeellinen?
+    user       User?    @relation(fields: [userUUID], references: [uuid])
     personUUID String?
     person     Person?  @relation(fields: [personUUID], references: [uuid], onDelete: Cascade)
     createdAt  DateTime @default(now())
