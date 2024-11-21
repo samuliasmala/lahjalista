@@ -29,19 +29,21 @@ model User {
 }
 
 model Person {
-    id            Int            @id @default(autoincrement())
-    uuid          String         @unique @default(uuid())
-    name          String
-    sendReminders Boolean
+    id                 Int            @id @default(autoincrement())
+    uuid               String         @unique @default(uuid())
+    name               String
+    sendReminders      Boolean
     // map:in käyttö napattu täältä https://github.com/prisma/prisma/discussions/11108
     // onko väärä yhdistää kuvan "omistaja" userUUID:llä?
-    pictureId     ProfilePicture @relation(fields: [userUUID], references: [userUUID], onDelete: Cascade, map: "picture_fk")
-    userUUID      String         @unique
+    profilePictureUUID String         @unique
+    profilePicture     ProfilePicture @relation(fields: [profilePictureUUID], references: [uuid], onDelete: Cascade, map: "picture_fk")
+    userUUID           String
     // onDelete: Cascade pitäisi olla ihan ok idea, koska jos User poistetaan ei Person:ia pitäisi tarvita
-    userId        User           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade, map: "user_fk")
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    Anniversary   Anniversary[]
+    user               User           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade, map: "user_fk")
+    createdAt          DateTime       @default(now())
+    updatedAt          DateTime       @updatedAt
+    anniversaryUUID    String         @unique
+    Anniversary        Anniversary[]
 }
 
 model Gift {
@@ -61,7 +63,7 @@ model Anniversary {
     name      String
     date      DateTime @db.Date
     userUUID  String
-    personId  Person   @relation(fields: [userUUID], references: [userUUID], onDelete: Cascade)
+    person    Person   @relation(fields: [uuid], references: [anniversaryUUID], onDelete: Cascade)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
