@@ -19,7 +19,6 @@ export default async function handlePersons(
 ) {
   try {
     const { user: userData } = await requireLogin(req, res);
-    console.log(userData);
 
     const reqHandler = req.method !== undefined && HANDLER[req.method];
     if (reqHandler) {
@@ -40,28 +39,21 @@ async function handleGET(
   res: NextApiResponse,
   userData: User,
 ) {
-  const personData = await prisma.person.findFirstOrThrow({
+  const personsData = await prisma.person.findMany({
     where: {
       userUUID: userData.uuid,
     },
   });
 
-  const anniversaryData = await prisma.anniversary.findMany({
+  const anniversariesData = await prisma.anniversary.findMany({
     where: {
-      personUUID: personData.uuid,
+      userUUID: userData.uuid,
     },
   });
 
-  console.log(personData);
-  console.log('\n\n\n');
-  console.log(anniversaryData);
-
-  const returnableObject: {
-    personData: typeof personData;
-    anniversaryData: typeof anniversaryData;
-  } = {
-    personData,
-    anniversaryData,
+  const returnableObject = {
+    personsData,
+    anniversariesData,
   };
   return res.status(200).json(returnableObject);
 }
@@ -80,25 +72,10 @@ async function handlePOST(
     select: {
       name: true,
       sendReminders: true,
-    },
-  });
-  /*
-    const giftData = createGiftSchema.parse(req.body);
-
-  const addedGift = await prisma.gift.create({
-    data: {
-      ...giftData,
-      userUUID: userData.uuid,
-    },
-    select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
-
-  */
   return res.status(200).json(addedPerson);
 }
