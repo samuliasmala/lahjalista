@@ -116,7 +116,7 @@ Content-Type: application/json
 DELETE {{baseUrl}}/users/{{userUUID}}
 
 
-# FEEDBACK
+# FEEDBACK REQUESTS
 
 ###
 POST {{baseUrl}}/feedback
@@ -124,4 +124,15 @@ Content-Type: application/json
 
 {
   "feedbackText": "Hello world!"
+}
+
+# PERSON REQUESTS
+
+###
+POST {{baseUrl}}/persons
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminder": true
 }
