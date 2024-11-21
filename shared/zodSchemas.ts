@@ -112,7 +112,7 @@ export const createFeedbackSchema = feedbackSchema.pick({
 
 export const personSchema = z.object({
   name: z.string().min(1),
-  sendReminder: z.boolean(),
+  sendReminders: z.boolean(),
 });
 
 export const getPersonSchema = personSchema.extend({
