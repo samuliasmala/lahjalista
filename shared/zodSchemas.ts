@@ -108,6 +108,21 @@ export const createFeedbackSchema = feedbackSchema.pick({
   feedbackText: true,
 });
 
+// PERSON
+
+export const personSchema = z.object({
+  name: z.string().min(1),
+  sendReminder: z.boolean(),
+});
+
+export const getPersonSchema = personSchema.extend({
+  uuid: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const createPersonSchema = personSchema;
+
 // MISC
 
 export const uuidParseSchema = z

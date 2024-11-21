@@ -2,9 +2,11 @@ import { z } from 'zod';
 import {
   createFeedbackSchema,
   createGiftSchema,
+  createPersonSchema,
   createSessionSchema,
   createUserSchema,
   feedbackSchema,
+  getPersonSchema,
   getSessionSchema,
   getUserSchema,
   giftSchema,
@@ -39,6 +41,12 @@ export type Feedback = z.infer<typeof feedbackSchema>;
 
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
 
+// PERSON
+export type Person = z.infer<typeof getPersonSchema>;
+
+export type CreatePerson = z.infer<typeof createPersonSchema>;
+
+// UTILS
 export type KeyboardEventKeys =
   | ' ' // Space
   | '!'
