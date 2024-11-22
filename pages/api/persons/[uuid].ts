@@ -60,7 +60,15 @@ async function handleGET({ res, personUUID, userData }: HandlerParams) {
     },
   });
   const parsedPersonData = getPersonSchema.parse(personData);
-  return res.status(200).json(parsedPersonData);
+
+  const anniversariesOfPerson = await prisma.anniversary.findMany({
+    where: {
+      personUUID,
+      userUUID: userData.uuid,
+    },
+  });
+  // ZOD HERE
+  return res.status(200).json({ parsedPersonData, anniversariesOfPerson });
 }
 
 async function handlePATCH({ req, res, personUUID, userData }: HandlerParams) {
