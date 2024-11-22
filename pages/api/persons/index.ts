@@ -4,6 +4,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { User } from '~/shared/types';
 import prisma from '~/prisma/index';
+import { createPersonSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -66,10 +67,12 @@ async function handlePOST(
   res: NextApiResponse,
   userData: User,
 ) {
+  const parsedUserData = createPersonSchema.parse(req.body);
+
   const addedPerson = await prisma.person.create({
     data: {
-      name: 'John Doe',
-      sendReminders: true,
+      name: parsedUserData.name,
+      sendReminders: parsedUserData.sendReminders,
       userUUID: userData.uuid,
     },
     select: {
