@@ -45,16 +45,19 @@ async function handleGET(
     },
   });
 
-  const anniversariesData = await prisma.anniversary.findMany({
-    where: {
-      userUUID: userData.uuid,
-    },
-  });
+  let anniversariesData;
+  if (req.query.anniversaries == 'true') {
+    anniversariesData = await prisma.anniversary.findMany({
+      where: {
+        userUUID: userData.uuid,
+      },
+    });
+  }
 
-  const returnableObject = {
-    personsData,
-    anniversariesData,
-  };
+  const returnableObject = anniversariesData
+    ? { personsData, anniversariesData }
+    : { personsData };
+  // ADD ZOD HERE
   return res.status(200).json(returnableObject);
 }
 
