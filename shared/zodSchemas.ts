@@ -123,6 +123,21 @@ export const getPersonSchema = personSchema.extend({
 
 export const createPersonSchema = personSchema;
 
+// ANNIVERSARY
+
+export const anniversarySchema = z.object({
+  name: z.string().min(1),
+  date: z.date(),
+});
+
+export const getAnniversarySchema = anniversarySchema.extend({
+  uuid: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const createAnniversarySchema = anniversarySchema;
+
 // MISC
 
 export const uuidParseSchema = z
