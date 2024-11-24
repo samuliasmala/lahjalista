@@ -128,11 +128,44 @@ Content-Type: application/json
 
 # PERSON REQUESTS
 
+
+
+@personUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
+
+###
+GET {{baseUrl}}/persons
+
+###
+GET {{baseUrl}}/persons/{{personUUID}}
+
 ###
 POST {{baseUrl}}/persons
 Content-Type: application/json
 
 {
   "name": "John Doe",
-  "sendReminder": true
+  "sendReminders": true
 }
+
+###
+PATCH {{baseUrl}}/persons/{{personUUID}}
+Content-Type: application/json
+
+{
+  "email": "matti.meikalainen@esimerkkimail.com",
+  "firstName": "Matti",
+  "lastName": "Meikäläinen"
+}
+
+###
+PUT {{baseUrl}}/persons/{{personUUID}}
+Content-Type: application/json
+
+{
+  "email": "matti.meikalainen@esimerkkimail.com",
+  "firstName": "Mikko",
+  "lastName": "Meikäläinen"
+}
+
+###
+DELETE {{baseUrl}}/persons/{{personUUID}}
