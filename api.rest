@@ -31,6 +31,8 @@ Content-Type: application/json
 
 # GIFT REQUESTS
 
+# this triple hashtag (#) has been added so Register request works
+###
 @giftUUID = cba86307-8f50-4038-bc79-c05cef4fafc1
 
 ###
