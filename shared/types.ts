@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import {
-  createAnniversarySchema,
+  patchAnniversarySchema,
   createFeedbackSchema,
   createGiftSchema,
   createPersonSchema,
@@ -52,7 +52,7 @@ export type CreatePerson = z.infer<typeof createPersonSchema>;
 
 export type Anniversary = z.infer<typeof getAnniversarySchema>;
 
-export type CreateAnniversary = z.infer<typeof createAnniversarySchema>;
+export type PatchAnniversary = z.infer<typeof patchAnniversarySchema>;
 
 // UTILS
 export type KeyboardEventKeys =

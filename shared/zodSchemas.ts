@@ -136,7 +136,15 @@ export const getAnniversarySchema = anniversarySchema.extend({
   updatedAt: z.date(),
 });
 
-export const createAnniversarySchema = anniversarySchema;
+export const patchAnniversarySchema = anniversarySchema.extend({
+  date: z.coerce.date(),
+  uuid: z.string(),
+  action: z.union([
+    z.literal('create'),
+    z.literal('update'),
+    z.literal('delete'),
+  ]),
+});
 
 // MISC
 
