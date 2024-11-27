@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { twMerge } from 'tailwind-merge';
 import { TitleText } from './TitleText';
 import SvgXClose from '~/icons/x_close';
-import { useKeyPress } from '~/utils/hooks/useKeyPress';
+import { useKeyPress } from '~/hooks/useKeyPress';
 
 export function Modal({
   children,
