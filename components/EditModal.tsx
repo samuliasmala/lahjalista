@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { Gift } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
@@ -6,16 +6,19 @@ import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { invalidateSingleQueryKey } from '~/utils/utilFunctions';
+import { useQueryClient } from '@tanstack/react-query';
 
 type EditModal = {
   gift: Gift;
-  refreshGiftList: () => void;
-  closeModal: () => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
+export function EditModal({ gift, setIsModalOpen }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
+
+  const queryClient = useQueryClient();
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
@@ -24,13 +27,13 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    refreshGiftList();
-    closeModal();
+    await invalidateSingleQueryKey(queryClient, 'gifts');
+    setIsModalOpen(false);
   }
   return (
     <Modal
       className="max-w-80"
-      closeModal={() => closeModal()}
+      closeModal={() => setIsModalOpen(false)}
       title="Muokkaa lahjaideaa:"
     >
       <form onSubmit={(e) => void handleEdit(e)}>
@@ -53,7 +56,7 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
           <div className="mt-8 flex flex-row items-center justify-end">
             <Button
               className="mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText"
-              onClick={() => closeModal()}
+              onClick={() => setIsModalOpen(false)}
               type="button"
             >
               Peruuta

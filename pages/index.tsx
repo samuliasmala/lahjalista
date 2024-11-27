@@ -1,10 +1,10 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
+import { createGift, useGetGifts } from '~/utils/apiRequests';
 import { Gift, CreateGift, User } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
@@ -15,14 +15,14 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { invalidateSingleQueryKey } from '~/utils/utilFunctions';
 
 export { getServerSideProps };
 
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
@@ -30,40 +30,9 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const giftQuery = useQuery({
-    queryKey: ['loadingGifts'],
-    queryFn: async () => await fetchGifts(),
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    retry: false,
-  });
+  const { isFetching, isError } = useGetGifts();
 
-  async function fetchGifts() {
-    try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
-      return gifts;
-    } catch (e) {
-      handleErrorToast(handleError(e));
-      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
-    }
-  }
-
-  useEffect(() => {
-    console.log('effect');
-    /*
-    async function fetchGifts() {
-      try {
-        const gifts = await getAllGifts();
-        console.log(gifts);
-        //setGiftData(gifts);
-      } catch (e) {
-        handleErrorToast(handleError(e));
-      }
-    }
-    void fetchGifts();
-    */
-  }, []);
+  const queryClient = useQueryClient();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
@@ -91,29 +60,14 @@ export default function Home({
         gift: newGiftName,
       };
 
-      const createdGift = await createGift(newGift);
-      const updatedGiftList = giftData.concat(createdGift);
-      console.log(createdGift, updatedGiftList);
-      setGiftData(updatedGiftList);
+      await createGift(newGift);
+      // reloads gift list!
+      await invalidateSingleQueryKey(queryClient, 'gifts');
+
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
       handleErrorToast(handleError(e));
-    }
-  }
-
-  async function refreshGiftList() {
-    try {
-      const gifts = await getAllGifts();
-      console.log(gifts);
-      setGiftData(gifts);
-    } catch (e) {
-      if (
-        handleError(e) !==
-        'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
-      ) {
-        handleErrorToast(handleError(e));
-      }
     }
   }
 
@@ -176,41 +130,30 @@ export default function Home({
               </div>
               <Button
                 type="submit"
-                className={`mt-8 ${giftQuery.isFetching || giftQuery.isError ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={
-                  giftQuery.isFetching || giftQuery.isError ? true : false
-                }
+                className={`mt-8 ${isFetching || isError ? 'cursor-not-allowed bg-red-500' : null}`}
+                disabled={isFetching || isError}
               >
                 Lisää
               </Button>
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
-          <GiftList
-            giftQuery={giftQuery}
-            giftData={giftData}
-            refreshGiftList={() => void refreshGiftList()}
-          />
+          <GiftList />
         </div>
       </div>
     </main>
   );
 }
 
-function GiftList({
-  giftQuery,
-  giftData,
-  refreshGiftList,
-}: {
-  giftQuery: UseQueryResult<Gift[], Error>;
-  giftData: Gift[];
-  refreshGiftList: () => void;
-}) {
+function GiftList() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
-  const { isPending, isFetching, error } = giftQuery;
 
-  if (isPending || isFetching)
+  const { error, isFetching, data: giftData } = useGetGifts();
+
+  if (isFetching)
     return (
       <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
     );
@@ -219,7 +162,7 @@ function GiftList({
 
   return (
     <div>
-      {giftData.length > 0 && (
+      {giftData && giftData.length > 0 && (
         <div>
           {giftData.map((giftItem) => (
             <div
@@ -254,19 +197,17 @@ function GiftList({
               </div>
             </div>
           ))}
-          {editModalGiftData && (
+          {editModalGiftData && isEditModalOpen && (
             <EditModal
-              closeModal={() => setEditModalGiftData(undefined)}
               gift={editModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              setIsModalOpen={setIsEditModalOpen}
             />
           )}
 
-          {deleteModalGiftData && (
+          {deleteModalGiftData && isDeleteModalOpen && (
             <DeleteModal
-              closeModal={() => setDeleteModalGiftData(undefined)}
               gift={deleteModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              setIsModalOpen={setIsDeleteModalOpen}
             />
           )}
         </div>
