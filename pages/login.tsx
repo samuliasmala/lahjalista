@@ -48,9 +48,9 @@ export default function Login() {
   const router = useRouter();
 
   const loginQuery = useQuery({
-    queryKey: ['loginQuery'],
+    queryKey: ['login'],
     enabled: false,
-    queryFn: async () => handleLogin({ email, password, rememberMe }),
+    queryFn: async () => await handleLogin({ email, password, rememberMe }),
   });
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
