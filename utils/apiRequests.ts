@@ -14,12 +14,7 @@ export function useGetGifts() {
   return useQuery({
     queryKey: ['gifts'],
     queryFn: async () => {
-      try {
-        return (await axios.get(giftsBaseUrl)).data as Gift[];
-      } catch (e) {
-        handleErrorToast(handleError(e));
-        return [];
-      }
+      return (await axios.get(giftsBaseUrl)).data as Gift[];
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
