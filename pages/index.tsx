@@ -16,6 +16,7 @@ import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useQueryClient } from '@tanstack/react-query';
+import { useCatchQueryErrors } from '~/hooks/useCatchQueryErrors';
 
 export { getServerSideProps };
 
@@ -29,7 +30,9 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const { isFetching, isError } = useGetGifts();
+  const { isFetching, isError, error } = useGetGifts();
+
+  useCatchQueryErrors(isError, error);
 
   const queryClient = useQueryClient();
 
