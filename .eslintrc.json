@@ -40,10 +40,12 @@
         "sourceType": "module",
         "ecmaFeatures": { "jsx": true }
       },
+      "plugins": ["@tanstack/query"],
       "extends": [
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:import/typescript"
+        "plugin:import/typescript",
+        "plugin:@tanstack/eslint-plugin-query/recommended"
       ],
       "rules": {
         // 'tsc' already handles this (https://github.com/typescript-eslint/typescript-eslint/issues/291)
