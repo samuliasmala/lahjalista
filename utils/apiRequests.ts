@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
+import { CreateGift, CreateUser, Gift, QueryKeys, User } from '~/shared/types';
 import { useQuery } from '@tanstack/react-query';
 
 const giftsBaseUrl = '/api/gifts';
@@ -10,7 +10,7 @@ const giftsBaseUrl = '/api/gifts';
  */
 export function useGetGifts() {
   return useQuery({
-    queryKey: ['gifts'],
+    queryKey: QueryKeys.GIFTS,
     queryFn: async () => {
       return (await axios.get(giftsBaseUrl)).data as Gift[];
     },
