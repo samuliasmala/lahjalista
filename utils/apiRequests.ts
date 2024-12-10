@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
 import { useQuery } from '@tanstack/react-query';
-import { handleErrorToast } from './handleToasts';
-import { handleError } from './handleError';
 
 const giftsBaseUrl = '/api/gifts';
 
