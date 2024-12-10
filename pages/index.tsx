@@ -32,7 +32,7 @@ export default function Home({
 
   const { isFetching, isError, error } = useGetGifts();
 
-  useCatchQueryErrors(isError, error);
+  useCatchQueryErrors(error);
 
   const queryClient = useQueryClient();
 
