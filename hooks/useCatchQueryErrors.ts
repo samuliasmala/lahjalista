@@ -13,9 +13,8 @@ export function useCatchQueryErrors(error: Error | null) {
   // tai jotain vastaavaa
 
   useEffect(() => {
-    if (error) {
-      handleErrorToast(handleError(error));
-    }
-    console.log(error);
+    if (!error) return;
+
+    handleErrorToast(handleError(error));
   }, [error]);
 }
