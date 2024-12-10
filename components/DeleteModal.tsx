@@ -1,12 +1,11 @@
-import { Gift } from '~/shared/types';
+import { Dispatch, SetStateAction } from 'react';
+import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { invalidateSingleQueryKey } from '~/utils/utilFunctions';
 import { useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction } from 'react';
 
 type DeleteModal = {
   gift: Gift;
@@ -23,7 +22,10 @@ export function DeleteModal({ gift, setIsModalOpen }: DeleteModal) {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    await invalidateSingleQueryKey(queryClient, 'gifts');
+    await queryClient.invalidateQueries({
+      queryKey: QueryKeys.GIFTS,
+    });
+
     setIsModalOpen(false);
   }
 

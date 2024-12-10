@@ -153,6 +153,10 @@ export type KeyboardEventKeys =
   | 'Scroll Lock';
 
 // CHECK THIS, onko mitään järkeä
-type queryKeyList = 'gifts';
-export type singleQueryKey = queryKeyList;
-export type multipleQueryKeys = queryKeyList[];
+
+export const QueryKeys = {
+  GIFTS: ['gifts'],
+
+  // ei vielä käytössä
+  //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],
+};
