@@ -1,12 +1,11 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
-import { Gift } from '~/shared/types';
+import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { invalidateSingleQueryKey } from '~/utils/utilFunctions';
 import { useQueryClient } from '@tanstack/react-query';
 
 type EditModal = {
@@ -27,7 +26,7 @@ export function EditModal({ gift, setIsModalOpen }: EditModal) {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    await invalidateSingleQueryKey(queryClient, 'gifts');
+    await queryClient.invalidateQueries({ queryKey: QueryKeys.GIFTS });
     setIsModalOpen(false);
   }
   return (

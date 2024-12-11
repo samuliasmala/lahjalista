@@ -9,14 +9,15 @@ import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { UserLoginDetails } from '~/shared/types';
+import { QueryKeys, UserLoginDetails } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCatchQueryErrors } from '~/hooks/useCatchQueryErrors';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -47,11 +48,14 @@ export default function Login() {
 
   const router = useRouter();
 
-  const loginQuery = useQuery({
-    queryKey: ['login'],
-    enabled: false,
-    queryFn: async () => await handleLogin({ email, password, rememberMe }),
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending, isError, error } = useMutation({
+    mutationKey: QueryKeys.LOGIN,
+    mutationFn: async () => await handleLogin({ email, password, rememberMe }),
   });
+
+  useCatchQueryErrors(error);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -86,7 +90,7 @@ export default function Login() {
         return;
       }
 
-      await loginQuery.refetch();
+      await mutateAsync();
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
@@ -103,7 +107,7 @@ export default function Login() {
     }
     // useQuery requires a return that IS NOT undefined
     // more: https://github.com/TanStack/query/discussions/4457
-    return 'loginQuery';
+    return QueryKeys.LOGIN;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -163,7 +167,7 @@ export default function Login() {
                   Muista minut
                 </Label>
               </div>
-              {loginQuery.isFetching ? (
+              {isPending ? (
                 <Button
                   type="submit"
                   className="cursor-not-allowed bg-red-500"
