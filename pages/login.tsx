@@ -17,7 +17,6 @@ import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation } from '@tanstack/react-query';
-import { useCatchQueryErrors } from '~/hooks/useCatchQueryErrors';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -52,8 +51,6 @@ export default function Login() {
     mutationKey: QueryKeys.LOGIN,
     mutationFn: async () => await handleLogin({ email, password, rememberMe }),
   });
-
-  useCatchQueryErrors(error);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -96,13 +93,9 @@ export default function Login() {
   }
 
   async function handleLogin(loginCredentials: UserLoginDetails) {
-    try {
-      await axios.post('/api/auth/login', loginCredentials);
-      await router.push('/');
-    } catch (e) {
-      console.error(e);
-      handleErrorToast(handleError(e));
-    }
+    await axios.post('/api/auth/login', loginCredentials);
+    await router.push('/');
+
     // useQuery requires a return that IS NOT undefined
     // more: https://github.com/TanStack/query/discussions/4457
     return QueryKeys.LOGIN;
