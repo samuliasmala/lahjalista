@@ -56,13 +56,6 @@ export default function Login() {
   });
 
   useCatchQueryErrors(error);
-  /*
-  const loginQuery = useQuery({
-    queryKey: ['login'],
-    enabled: false,
-    queryFn: async () => await handleLogin({ email, password, rememberMe }),
-  });
-  */
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -97,7 +90,7 @@ export default function Login() {
         return;
       }
 
-      console.log(await mutateAsync());
+      await mutateAsync();
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
@@ -106,7 +99,6 @@ export default function Login() {
 
   async function handleLogin(loginCredentials: UserLoginDetails) {
     try {
-      console.log('Logging in...');
       await axios.post('/api/auth/login', loginCredentials);
       await router.push('/');
     } catch (e) {
