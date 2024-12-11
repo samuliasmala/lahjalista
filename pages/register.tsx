@@ -13,7 +13,8 @@ import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { QueryKeys } from '~/shared/types';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -36,10 +37,9 @@ export default function Register() {
 
   const router = useRouter();
 
-  const registerQuery = useQuery({
-    queryKey: ['registerQuery'],
-    enabled: false,
-    queryFn: () => handleRegister(),
+  const { mutateAsync, isError, isPending, error } = useMutation({
+    mutationKey: QueryKeys.REGISTER,
+    mutationFn: async () => handleRegister(),
   });
 
   async function handleSubmit(e: FormEvent) {
@@ -56,7 +56,7 @@ export default function Register() {
         return;
       }
       setErrors({});
-      await registerQuery.refetch();
+      await mutateAsync();
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -71,13 +71,9 @@ export default function Register() {
   }
 
   async function handleRegister() {
-    try {
-      await axios.post('/api/auth/register', formData);
-      userCreatedSuccesfully();
-    } catch (e) {
-      handleErrorToast(handleError(e));
-    }
-    return 'registerQuery';
+    const registerRequest = await axios.post('/api/auth/register', formData);
+    userCreatedSuccesfully();
+    return QueryKeys.REGISTER;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -165,7 +161,7 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                {registerQuery.isFetching ? (
+                {isPending ? (
                   <Button
                     className="mt-8 cursor-not-allowed select-none"
                     disabled
