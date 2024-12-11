@@ -1,25 +1,23 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
-import { Gift } from '~/shared/types';
+import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
+import { useQueryClient } from '@tanstack/react-query';
 
 type EditModal = {
   gift: Gift;
-  refreshGiftList: () => void;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function EditModal({
-  gift,
-  refreshGiftList,
-  setIsModalOpen,
-}: EditModal) {
+export function EditModal({ gift, setIsModalOpen }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
+
+  const queryClient = useQueryClient();
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
@@ -28,7 +26,7 @@ export function EditModal({
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    refreshGiftList();
+    await queryClient.invalidateQueries({ queryKey: QueryKeys.GIFTS });
     setIsModalOpen(false);
   }
   return (

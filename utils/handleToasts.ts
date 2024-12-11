@@ -7,7 +7,7 @@ export function handleErrorToast(errorText: string) {
 
     // if toast exists, reset timer
     if (toastExists) {
-      toast.update(errorText, { progress: 0 });
+      toast.update(toastId, { progress: 0 });
       return;
     }
 
