@@ -71,7 +71,7 @@ export default function Register() {
   }
 
   async function handleRegister() {
-    const registerRequest = await axios.post('/api/auth/register', formData);
+    await axios.post('/api/auth/register', formData);
     userCreatedSuccesfully();
     return QueryKeys.REGISTER;
   }
