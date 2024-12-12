@@ -186,6 +186,7 @@ function GiftList() {
                   className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
                   }}
                 />
 
@@ -196,6 +197,7 @@ function GiftList() {
                   className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
                   }}
                 />
               </div>
