@@ -98,13 +98,9 @@ export default function Login() {
   }
 
   async function handleLogin(loginCredentials: UserLoginDetails) {
-    try {
-      await axios.post('/api/auth/login', loginCredentials);
-      await router.push('/');
-    } catch (e) {
-      console.error(e);
-      handleErrorToast(handleError(e));
-    }
+    await axios.post('/api/auth/login', loginCredentials);
+    await router.push('/');
+
     // useQuery requires a return that IS NOT undefined
     // more: https://github.com/TanStack/query/discussions/4457
     return QueryKeys.LOGIN;
