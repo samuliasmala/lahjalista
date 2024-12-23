@@ -34,8 +34,8 @@
     "bcrypt": "5.1.1",
     "dotenv": "16.4.7",
     "dotenv-cli": "7.4.4",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.15",
+    "eslint": "9.17.0",
+    "eslint-config-next": "15.1.2",
     "google-auth-library": "9.15.0",
     "googleapis": "144.0.0",
     "lucia": "3.2.2",
@@ -57,12 +57,12 @@
     "@svgr/webpack": "8.1.0",
     "@tanstack/eslint-plugin-query": "5.62.1",
     "@types/bcrypt": "5.0.2",
-    "@typescript-eslint/eslint-plugin": "7.5.0",
+    "@typescript-eslint/eslint-plugin": "8.18.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "5.2.1",
     "prettier": "3.4.2",
-    "prettier-plugin-tailwindcss": "0.6.8"
+    "prettier-plugin-tailwindcss": "0.6.9"
   }
 }
