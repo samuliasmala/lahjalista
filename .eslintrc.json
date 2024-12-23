@@ -2,7 +2,7 @@
   "root": true,
   "extends": [
     "eslint:recommended",
-    "plugin:node/recommended",
+    "plugin:n/recommended",
     "plugin:import/recommended",
     "next/core-web-vitals",
     "plugin:prettier/recommended"
@@ -10,11 +10,23 @@
   "rules": {
     // Without 'modules' ignored would get 'Import and export declarations are
     // not supported yet' error in all ts files
+    /*
     "node/no-unsupported-features/es-syntax": [
       "error",
       { "ignores": ["modules"] }
     ],
+    */
 
+    // didn't get this working for now. I tried to allow "styles/globals.css" and make everything
+    // else throw an error. Added a couple eslint-disable-next-line lines to fix the problem for now 
+
+
+    /*
+    "n/no-extraneous-import": ["error", {
+      "allowModules": ["@styles/globals.css"]
+    }],
+    */ 
+    
     // No React component definitions allowed inside components
     "react/no-unstable-nested-components": "warn",
 
@@ -54,7 +66,8 @@
         "no-undef": "off",
 
         // Handled by import/typescript
-        "node/no-missing-import": "off",
+        //"node/no-missing-import": "off",
+        "n/no-missing-import": "off",
 
         // Disable some rules which are difficult for beginners
         "@typescript-eslint/no-unsafe-assignment": "warn",
