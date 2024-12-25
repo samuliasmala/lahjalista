@@ -8,11 +8,19 @@
 
 # Jokin sivu (esimerkiksi asetuksiin), joka näyttää kaikki aktiiviset (miksei epäaktiiviset) Sessionit. Myöskin Sessionin poistomahdollisuus voitaisiin lisätä
 
-# Enter-näppäimellä EditModalin ja DeleteModalin hyväksyminen
+# Enter-näppäimellä EditModalin (DONE) ja DeleteModalin hyväksyminen
 
 ### </IDEOITA>
 
 TODO:
 
-Laitetaan nappulat yms käyttämään tanstack-kirjastoa. Ratkaisee samalla yhden ideoista
-https://www.npmjs.com/package/@tanstack/react-query
+Jos tulee virhe vaikka lahjoja hakiessa, ehkä jokin nappula olisi hyvä tehdä, jolla voisi mahdollisesti kokeilla hakea uudestaan lahjoja
+
+Kun lisää uuden lahjan / kun lahjoja haetaan, järjestetään ne uusin -> vanhin. Myöhemmin voidaan lisätä käyttäjälle mahdollisuus valita miten lahjat haluaa järjestää (vaikka vanhin -> uusin, aakkosjärjestys, ymsyms)
+
+Tässä toteutustapa:
+
+const sortedArrayNewestToOldest = gifts.sort(
+(a, b) =>
+new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+);
