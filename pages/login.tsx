@@ -101,8 +101,6 @@ export default function Login() {
     await axios.post('/api/auth/login', loginCredentials);
     await router.push('/');
 
-    // useQuery requires a return that IS NOT undefined
-    // more: https://github.com/TanStack/query/discussions/4457
     return QueryKeys.LOGIN;
   }
 
