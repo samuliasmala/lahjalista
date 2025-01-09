@@ -16,7 +16,7 @@ import { Label } from '~/components/Label';
 import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -48,9 +48,7 @@ export default function Login() {
 
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-
-  const { mutateAsync, isPending, isError, error } = useMutation({
+  const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.LOGIN,
     mutationFn: async () => await handleLogin({ email, password, rememberMe }),
   });
