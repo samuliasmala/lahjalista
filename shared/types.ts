@@ -151,3 +151,12 @@ export type KeyboardEventKeys =
   | 'F12'
   | 'Num Lock'
   | 'Scroll Lock';
+
+// CHECK THIS, onko mitään järkeä
+
+export const QueryKeys = {
+  GIFTS: ['gifts'],
+
+  // ei vielä käytössä
+  //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],
+};
