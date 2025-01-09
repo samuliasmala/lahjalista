@@ -15,6 +15,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation } from '@tanstack/react-query';
 import { QueryKeys } from '~/shared/types';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -41,6 +42,8 @@ export default function Register() {
     mutationKey: QueryKeys.REGISTER,
     mutationFn: async () => handleRegister(),
   });
+
+  useShowErrorToast(error);
 
   async function handleSubmit(e: FormEvent) {
     try {
@@ -198,7 +201,7 @@ export default function Register() {
                   <SvgCheckMarkIcon
                     className="bg-green-300"
                     circleClassName="fill-green-500"
-                    checkMarkClassName="fill-black-500"
+                    checkMarkClassName="fill-black"
                   />
                 </div>
               </div>
