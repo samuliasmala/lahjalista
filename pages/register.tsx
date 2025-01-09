@@ -38,7 +38,7 @@ export default function Register() {
 
   const router = useRouter();
 
-  const { mutateAsync, isError, isPending, error } = useMutation({
+  const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.REGISTER,
     mutationFn: async () => handleRegister(),
   });
