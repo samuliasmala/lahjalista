@@ -17,6 +17,7 @@ export function DeleteModal({ gift, setIsModalOpen }: DeleteModal) {
 
   async function handleDeletion() {
     try {
+      setIsModalOpen(false);
       await deleteGift(gift.uuid);
     } catch (e) {
       handleErrorToast(handleError(e));

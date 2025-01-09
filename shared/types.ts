@@ -156,7 +156,8 @@ export type KeyboardEventKeys =
 
 export const QueryKeys = {
   GIFTS: ['gifts'],
-
+  LOGIN: ['login'],
+  REGISTER: ['register'],
   // ei vielä käytössä
   //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],
 };

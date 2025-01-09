@@ -9,13 +9,15 @@ import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import SvgEyeOpen from '~/icons/eye_open';
 import SvgEyeSlash from '~/icons/eye_slash';
-import { UserLoginDetails } from '~/shared/types';
+import { QueryKeys, UserLoginDetails } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { emailSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
+import { useMutation } from '@tanstack/react-query';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -45,6 +47,13 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationKey: QueryKeys.LOGIN,
+    mutationFn: async () => await handleLogin({ email, password, rememberMe }),
+  });
+
+  useShowErrorToast(error);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -79,17 +88,18 @@ export default function Login() {
         return;
       }
 
-      const loginCredentials: UserLoginDetails = {
-        email: emailValidation.data || '',
-        password: password,
-        rememberMe: rememberMe,
-      };
-      await axios.post('/api/auth/login', loginCredentials);
-      await router.push('/');
+      await mutateAsync();
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
     }
+  }
+
+  async function handleLogin(loginCredentials: UserLoginDetails) {
+    await axios.post('/api/auth/login', loginCredentials);
+    await router.push('/');
+
+    return QueryKeys.LOGIN;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -149,7 +159,18 @@ export default function Login() {
                   Muista minut
                 </Label>
               </div>
-              <Button type="submit">Kirjaudu sisään</Button>
+              {isPending ? (
+                <Button
+                  type="submit"
+                  className="cursor-not-allowed bg-red-500"
+                  disabled
+                >
+                  Kirjaudutaan sisään
+                  <span className="loading-dots absolute" />
+                </Button>
+              ) : (
+                <Button type="submit">Kirjaudu sisään</Button>
+              )}
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>
               Ei vielä tunnuksia?{' '}
