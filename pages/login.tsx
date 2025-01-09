@@ -17,7 +17,7 @@ import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCatchQueryErrors } from '~/hooks/useCatchQueryErrors';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -55,7 +55,7 @@ export default function Login() {
     mutationFn: async () => await handleLogin({ email, password, rememberMe }),
   });
 
-  useCatchQueryErrors(error);
+  useShowErrorToast(error);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
