@@ -50,7 +50,9 @@ export default function Login() {
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.LOGIN,
-    mutationFn: async () => await handleLogin({ email, password, rememberMe }),
+    mutationFn: async (loginCredentials: UserLoginDetails) =>
+      await axios.post('/api/auth/login', loginCredentials),
+    onSuccess: () => router.push('/'),
   });
 
   useShowErrorToast(error);
@@ -88,18 +90,11 @@ export default function Login() {
         return;
       }
 
-      await mutateAsync();
+      await mutateAsync({ email, password, rememberMe });
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
     }
-  }
-
-  async function handleLogin(loginCredentials: UserLoginDetails) {
-    await axios.post('/api/auth/login', loginCredentials);
-    await router.push('/');
-
-    return QueryKeys.LOGIN;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
