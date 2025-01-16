@@ -40,7 +40,9 @@ export default function Register() {
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.REGISTER,
-    mutationFn: async () => handleRegister(),
+    mutationFn: async (formData: typeof EMPTY_FORM_DATA) =>
+      await axios.post('/api/auth/register', formData),
+    onSuccess: () => userCreatedSuccesfully(),
   });
 
   useShowErrorToast(error);
@@ -59,7 +61,7 @@ export default function Register() {
         return;
       }
       setErrors({});
-      await mutateAsync();
+      await mutateAsync(validatedForm.data);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -71,12 +73,6 @@ export default function Register() {
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
     }, 1000);
-  }
-
-  async function handleRegister() {
-    await axios.post('/api/auth/register', formData);
-    userCreatedSuccesfully();
-    return QueryKeys.REGISTER;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -164,19 +160,10 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                {isPending ? (
-                  <Button
-                    className="mt-8 cursor-not-allowed select-none"
-                    disabled
-                  >
-                    Luodaan käyttäjätunnusta
-                    <span className="loading-dots absolute" />
-                  </Button>
-                ) : (
-                  <Button className="mt-8 select-none">
-                    Luo käyttäjätunnus
-                  </Button>
-                )}
+                <Button className="mt-8 select-none" disabled={isPending}>
+                  Luo käyttäjätunnus
+                  {isPending && <span className="loading-dots absolute" />}
+                </Button>
                 <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}
                   <Link
