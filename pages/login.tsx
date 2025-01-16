@@ -89,8 +89,11 @@ export default function Login() {
       if (errorFound) {
         return;
       }
-
-      await mutateAsync({ email, password, rememberMe });
+      await mutateAsync({
+        email: emailValidation.data ?? '',
+        password,
+        rememberMe,
+      });
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
