@@ -159,6 +159,7 @@ export const QueryKeys = {
   LOGIN: ['login'],
   REGISTER: ['register'],
   CREATE_GIFT: ['createGift'],
+  LOGOUT: ['logout'],
   // ei vielä käytössä
   //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],
 };
