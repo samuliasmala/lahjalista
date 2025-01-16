@@ -128,7 +128,7 @@ After making these changes, save the `.env` file.
 
 ## Troubleshooting Errors
 
-**Error: `dotenv: not found`**
+### Error: `dotenv: not found`
 
 - Ensure you've installed the `dotenv-cli` package. It's usually installed with other dependencies when using `npm i`. If not, use:
 
@@ -143,3 +143,19 @@ npm install -g dotenv-cli
 ```
 
 **Note:** You might need root access for global installation on Linux.
+
+### Error while running SVGR (npm run svgr)
+
+If you get this following error while running `npm run svgr`:
+
+```
+Failed to handle file: public/images/icons/contact-details.svg # NOTE, this is just an example .svg file
+/lahjalista/node_modules/@svgr/cli/dist/index.js:435
+throw error;
+^
+
+Error [ERR_REQUIRE_ESM]: require() of ES Module /lahjalista/node_modules/prettier-plugin-tailwindcss/dist/index.mjs not supported.
+Instead change the require of /lahjalista/node_modules/prettier-plugin-tailwindcss/dist/index.mjs to a dynamic import() which is available in all CommonJS modules.
+```
+
+Head to `.prettierrc`file and remove the following line:`"plugins": ["prettier-plugin-tailwindcss"]`. Save the `.prettierrc`and try to run`npm run svgr` again. Now it should work. Remember to add the removed line back.

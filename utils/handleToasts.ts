@@ -2,13 +2,22 @@ import { toast } from 'react-toastify';
 
 export function handleErrorToast(errorText: string) {
   try {
-    const toastId = toast(errorText, {
+    const toastId = `toast-${errorText}`;
+    const toastExists = document.getElementById(toastId);
+
+    // if toast exists, reset timer
+    if (toastExists) {
+      toast.update(toastId, { progress: 0 });
+      return;
+    }
+
+    toast(errorText, {
       type: 'error',
-      toastId: window.crypto.randomUUID(),
+      toastId: toastId,
     });
 
     const observer = new MutationObserver(() => {
-      const addedToast = document.getElementById(toastId.toString());
+      const addedToast = document.getElementById(toastId);
       if (addedToast) {
         addedToast.addEventListener('mouseenter', () => {
           toast.update(toastId, { progress: 1 });

@@ -1,36 +1,36 @@
-import { Gift } from '~/shared/types';
+import { Dispatch, SetStateAction } from 'react';
+import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { toast } from 'react-toastify';
+import { useQueryClient } from '@tanstack/react-query';
 
 type DeleteModal = {
   gift: Gift;
-  refreshGiftList: () => void;
-  closeModal: () => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export function DeleteModal({
-  gift,
-  refreshGiftList,
-  closeModal,
-}: DeleteModal) {
+export function DeleteModal({ gift, setIsModalOpen }: DeleteModal) {
+  const queryClient = useQueryClient();
+
   async function handleDeletion() {
     try {
-      closeModal();
       await deleteGift(gift.uuid);
+      setIsModalOpen(false);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    refreshGiftList();
+    await queryClient.invalidateQueries({
+      queryKey: QueryKeys.GIFTS,
+    });
   }
 
   return (
     <Modal
       className="max-w-80"
-      closeModal={() => closeModal()}
+      closeModal={() => setIsModalOpen(false)}
       title="Poista lahja:"
     >
       <div className="max-w-80">
@@ -42,7 +42,7 @@ export function DeleteModal({
         <div className="mt-6 flex flex-row items-center justify-end">
           <Button
             className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText`}
-            onClick={() => closeModal()}
+            onClick={() => setIsModalOpen(false)}
             type="button"
           >
             Peruuta

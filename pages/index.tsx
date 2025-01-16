@@ -1,11 +1,11 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift, User } from '~/shared/types';
+import { createGift, useGetGifts } from '~/utils/apiRequests';
+import { Gift, CreateGift, User, QueryKeys } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import SvgUser from '~/icons/user';
@@ -18,27 +18,20 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import SvgSpinner from '~/icons/spinner';
+import { useQueryClient } from '@tanstack/react-query';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
 
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
 
   const [showUserWindow, setShowUserWindow] = useState(false);
-
-  const fetchGiftsQuery = useQuery({
-    queryKey: ['loadingGifts'],
-    queryFn: async () => await fetchGifts(),
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    retry: false,
-  });
 
   const addGiftQuery = useQuery({
     queryKey: ['addingGifts'],
@@ -53,32 +46,11 @@ export default function Home({
     },
   });
 
-  async function fetchGifts() {
-    try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
-      return gifts;
-    } catch (e) {
-      handleErrorToast(handleError(e));
-      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
-    }
-  }
+  const { isFetching, isError, error } = useGetGifts();
 
-  useEffect(() => {
-    console.log('effect');
-    /*
-    async function fetchGifts() {
-      try {
-        const gifts = await getAllGifts();
-        console.log(gifts);
-        //setGiftData(gifts);
-      } catch (e) {
-        handleErrorToast(handleError(e));
-      }
-    }
-    void fetchGifts();
-    */
-  }, []);
+  useShowErrorToast(error);
+
+  const queryClient = useQueryClient();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
@@ -106,36 +78,16 @@ export default function Home({
         gift: newGiftName,
       };
 
-      const createdGift = await addGiftQuery.refetch();
+      await createGift(newGift);
+      // reloads gift list!
+      await queryClient.invalidateQueries({
+        queryKey: QueryKeys.GIFTS,
+      });
 
-      if (createdGift.data === 'error' || !createdGift.data) {
-        setNewGiftName('');
-        setNewReceiver('');
-        return;
-      }
-
-      const updatedGiftList = giftData.concat(createdGift.data);
-
-      setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
       handleErrorToast(handleError(e));
-    }
-  }
-
-  async function refreshGiftList() {
-    try {
-      const gifts = await getAllGifts();
-      console.log(gifts);
-      setGiftData(gifts);
-    } catch (e) {
-      if (
-        handleError(e) !==
-        'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
-      ) {
-        handleErrorToast(handleError(e));
-      }
     }
   }
 
@@ -198,14 +150,8 @@ export default function Home({
               </div>
               <Button
                 type="submit"
-                className={`mt-8 ${fetchGiftsQuery.isFetching || fetchGiftsQuery.isError || addGiftQuery.isFetching ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={
-                  fetchGiftsQuery.isFetching ||
-                  fetchGiftsQuery.isError ||
-                  addGiftQuery.isFetching
-                    ? true
-                    : false
-                }
+                className={`mt-8 ${isFetching || isError ? 'cursor-not-allowed bg-red-500' : null}`}
+                disabled={isFetching || isError}
               >
                 Lisää
                 {addGiftQuery.isFetching ? (
@@ -221,31 +167,22 @@ export default function Home({
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
-          <GiftList
-            giftQuery={fetchGiftsQuery}
-            giftData={giftData}
-            refreshGiftList={() => void refreshGiftList()}
-          />
+          <GiftList />
         </div>
       </div>
     </main>
   );
 }
 
-function GiftList({
-  giftQuery,
-  giftData,
-  refreshGiftList,
-}: {
-  giftQuery: UseQueryResult<Gift[], Error>;
-  giftData: Gift[];
-  refreshGiftList: () => void;
-}) {
+function GiftList() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
-  const { isPending, isFetching, error } = giftQuery;
 
-  if (isPending || isFetching)
+  const { error, isFetching, data: giftData } = useGetGifts();
+
+  if (isFetching)
     return (
       <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
     );
@@ -254,7 +191,7 @@ function GiftList({
 
   return (
     <div>
-      {giftData.length > 0 && (
+      {giftData && giftData.length > 0 && (
         <div>
           {giftData.map((giftItem) => (
             <div
@@ -274,6 +211,7 @@ function GiftList({
                   className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
                   }}
                 />
 
@@ -284,24 +222,23 @@ function GiftList({
                   className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
                   }}
                 />
               </div>
             </div>
           ))}
-          {editModalGiftData && (
+          {editModalGiftData && isEditModalOpen && (
             <EditModal
-              closeModal={() => setEditModalGiftData(undefined)}
               gift={editModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              setIsModalOpen={setIsEditModalOpen}
             />
           )}
 
-          {deleteModalGiftData && (
+          {deleteModalGiftData && isDeleteModalOpen && (
             <DeleteModal
-              closeModal={() => setDeleteModalGiftData(undefined)}
               gift={deleteModalGiftData}
-              refreshGiftList={() => void refreshGiftList()}
+              setIsModalOpen={setIsDeleteModalOpen}
             />
           )}
         </div>

@@ -18,24 +18,21 @@
 /* Used when loading gifts inside /pages/index.tsx */
 .loading-dots:after {
   display: inline-block;
-  animation: dotty steps(1, end) 1s infinite;
+  animation: dotty steps(1, end) 2s infinite;
   content: '';
 }
 
 @keyframes dotty {
   0% {
-    content: '';
-  }
-  25% {
     content: '.';
   }
-  50% {
+  25% {
     content: '..';
   }
-  75% {
+  50% {
     content: '...';
   }
-  100% {
+  75% {
     content: '';
   }
 }
