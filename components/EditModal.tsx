@@ -12,18 +12,16 @@ import { useQueryClient } from '@tanstack/react-query';
 
 type EditModal = {
   gift: Gift;
-  refreshGiftList: () => Promise<void>;
   closeModal: () => void;
 };
 
-export function EditModal({ gift, closeModal, refreshGiftList }: EditModal) {
+export function EditModal({ gift, closeModal }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
   const editGiftQuery = useMutation({
     mutationFn: async (gitfData: { receiver: string; gift: string }) => {
       await updateGift(gift.uuid, gitfData);
-      await refreshGiftList();
     },
   });
   const queryClient = useQueryClient();

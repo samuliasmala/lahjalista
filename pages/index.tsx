@@ -220,7 +220,6 @@ function GiftList() {
           {editModalGiftData && isEditModalOpen && (
             <EditModal
               gift={editModalGiftData}
-              refreshGiftList={async () => {}}
               closeModal={() => setIsEditModalOpen(false)}
             />
           )}
@@ -228,7 +227,6 @@ function GiftList() {
           {deleteModalGiftData && isDeleteModalOpen && (
             <DeleteModal
               gift={deleteModalGiftData}
-              refreshGiftList={async () => {}}
               closeModal={() => setIsDeleteModalOpen(false)}
             />
           )}

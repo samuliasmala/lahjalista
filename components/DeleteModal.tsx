@@ -9,15 +9,10 @@ import SvgSpinner from '~/icons/spinner';
 
 type DeleteModal = {
   gift: Gift;
-  refreshGiftList: () => Promise<void>;
   closeModal: () => void;
 };
 
-export function DeleteModal({
-  gift,
-  refreshGiftList,
-  closeModal,
-}: DeleteModal) {
+export function DeleteModal({ gift, closeModal }: DeleteModal) {
   const queryClient = useQueryClient();
 
   const deleteGiftQuery = useQuery({
@@ -35,7 +30,6 @@ export function DeleteModal({
     } catch (e) {
       handleErrorToast(handleError(e));
     }
-    await refreshGiftList();
     closeModal();
     await queryClient.invalidateQueries({
       queryKey: QueryKeys.GIFTS,
@@ -77,13 +71,3 @@ export function DeleteModal({
     </Modal>
   );
 }
-
-/*
-            <Button
-              className={`m-6 mt-0 h-8 w-20 p-0 text-sm`}
-              onClick={() => void deleteGiftQuery.refetch()}
-            >
-              Poista
-            </Button>
-
-            */
