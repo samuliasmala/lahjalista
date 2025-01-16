@@ -50,7 +50,9 @@ export default function Login() {
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.LOGIN,
-    mutationFn: async () => await handleLogin({ email, password, rememberMe }),
+    mutationFn: async (loginCredentials: UserLoginDetails) =>
+      await axios.post('/api/auth/login', loginCredentials),
+    onSuccess: () => router.push('/'),
   });
 
   useShowErrorToast(error);
@@ -87,19 +89,15 @@ export default function Login() {
       if (errorFound) {
         return;
       }
-
-      await mutateAsync();
+      await mutateAsync({
+        email: emailValidation.data ?? '',
+        password,
+        rememberMe,
+      });
     } catch (e) {
       console.error(e);
       handleErrorToast(handleError(e));
     }
-  }
-
-  async function handleLogin(loginCredentials: UserLoginDetails) {
-    await axios.post('/api/auth/login', loginCredentials);
-    await router.push('/');
-
-    return QueryKeys.LOGIN;
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -159,18 +157,11 @@ export default function Login() {
                   Muista minut
                 </Label>
               </div>
-              {isPending ? (
-                <Button
-                  type="submit"
-                  className="cursor-not-allowed bg-red-500"
-                  disabled
-                >
-                  Kirjaudutaan sisään
-                  <span className="loading-dots absolute" />
-                </Button>
-              ) : (
-                <Button type="submit">Kirjaudu sisään</Button>
-              )}
+
+              <Button type="submit" disabled={isPending}>
+                Kirjaudu sisään{' '}
+                {isPending && <span className="loading-dots absolute" />}
+              </Button>
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>
               Ei vielä tunnuksia?{' '}
