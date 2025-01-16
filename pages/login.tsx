@@ -159,18 +159,11 @@ export default function Login() {
                   Muista minut
                 </Label>
               </div>
-              {isPending ? (
-                <Button
-                  type="submit"
-                  className="cursor-not-allowed bg-red-500"
-                  disabled
-                >
-                  Kirjaudutaan sisään
-                  <span className="loading-dots absolute" />
-                </Button>
-              ) : (
-                <Button type="submit">Kirjaudu sisään</Button>
-              )}
+
+              <Button type="submit" disabled={isPending}>
+                Kirjaudu sisään{' '}
+                {isPending && <span className="loading-dots absolute" />}
+              </Button>
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>
               Ei vielä tunnuksia?{' '}
