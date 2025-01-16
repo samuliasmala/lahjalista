@@ -1,11 +1,10 @@
-import { Gift } from '~/shared/types';
+import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { toast } from 'react-toastify';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 
 type DeleteModal = {
@@ -19,6 +18,8 @@ export function DeleteModal({
   refreshGiftList,
   closeModal,
 }: DeleteModal) {
+  const queryClient = useQueryClient();
+
   const deleteGiftQuery = useQuery({
     queryKey: ['deletingGift'],
     enabled: false,
@@ -36,6 +37,9 @@ export function DeleteModal({
     }
     await refreshGiftList();
     closeModal();
+    await queryClient.invalidateQueries({
+      queryKey: QueryKeys.GIFTS,
+    });
   }
 
   return (
@@ -52,33 +56,34 @@ export function DeleteModal({
         </p>
         <div className="mt-6 flex flex-row items-center justify-end">
           <Button
-            className={`mb-6 mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText`}
+            className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText`}
             onClick={() => closeModal()}
             type="button"
           >
             Peruuta
           </Button>
-          {deleteGiftQuery.isFetching ? (
-            <Button
-              className={`m-6 mt-0 h-8 w-28 cursor-not-allowed bg-red-500 p-0 text-sm`}
-              disabled
-              onClick={() => void deleteGiftQuery.refetch()}
-            >
-              Poista
-              <span className="absolute ml-2">
-                <SvgSpinner width={18} height={18} className="animate-spin" />
-              </span>
-            </Button>
-          ) : (
+          <Button
+            className={`m-6 mt-0 h-8 w-28 cursor-not-allowed bg-red-500 p-0 text-sm`}
+            disabled
+            onClick={() => void deleteGiftQuery.refetch()}
+          >
+            Poista
+            <span className="absolute ml-2">
+              <SvgSpinner width={18} height={18} className="animate-spin" />
+            </span>
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+/*
             <Button
               className={`m-6 mt-0 h-8 w-20 p-0 text-sm`}
               onClick={() => void deleteGiftQuery.refetch()}
             >
               Poista
             </Button>
-          )}
-        </div>
-      </div>
-    </Modal>
-  );
-}
+
+            */

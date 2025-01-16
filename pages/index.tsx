@@ -1,11 +1,11 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift, User } from '~/shared/types';
+import { createGift, useGetGifts } from '~/utils/apiRequests';
+import { Gift, CreateGift, User, QueryKeys } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import SvgUser from '~/icons/user';
@@ -15,16 +15,17 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import SvgSpinner from '~/icons/spinner';
+import { useQueryClient } from '@tanstack/react-query';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
 
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
@@ -32,53 +33,21 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const fetchGiftsQuery = useQuery({
-    queryKey: ['loadingGifts'],
-    queryFn: async () => await fetchGifts(),
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    retry: false,
+  const createGiftQuery = useMutation({
+    mutationKey: QueryKeys.CREATE_GIFT,
+    mutationFn: async (newGift: CreateGift) => await createGift(newGift),
+    // if success: refresh giftlist
+    onSuccess: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: QueryKeys.GIFTS,
+      }),
   });
 
-  const addGiftQuery = useQuery({
-    queryKey: ['addingGifts'],
-    enabled: false,
-    queryFn: async () => {
-      try {
-        return await createGift({ gift: newGiftName, receiver: newReceiver });
-      } catch (e) {
-        handleErrorToast(handleError(e));
-        return 'error';
-      }
-    },
-  });
+  const { isFetching, isError, error } = useGetGifts();
 
-  async function fetchGifts() {
-    try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
-      return gifts;
-    } catch (e) {
-      handleErrorToast(handleError(e));
-      throw new Error('Palvelinvirhe! Lisätietoja kehittäjäkonsolissa');
-    }
-  }
+  useShowErrorToast(error);
 
-  useEffect(() => {
-    console.log('effect');
-    /*
-    async function fetchGifts() {
-      try {
-        const gifts = await getAllGifts();
-        console.log(gifts);
-        //setGiftData(gifts);
-      } catch (e) {
-        handleErrorToast(handleError(e));
-      }
-    }
-    void fetchGifts();
-    */
-  }, []);
+  const queryClient = useQueryClient();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
@@ -105,36 +74,13 @@ export default function Home({
         receiver: newReceiver,
         gift: newGiftName,
       };
+      // send gift creation request
+      await createGiftQuery.mutateAsync(newGift);
 
-      const createdGift = await addGiftQuery.refetch();
-
-      if (createdGift.data === 'error' || !createdGift.data) {
-        setNewGiftName('');
-        setNewReceiver('');
-        return;
-      }
-
-      const updatedGiftList = giftData.concat(createdGift.data);
-
-      setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
     } catch (e) {
       handleErrorToast(handleError(e));
-    }
-  }
-
-  async function refreshGiftList() {
-    try {
-      const gifts = await getAllGifts();
-      setGiftData(gifts);
-    } catch (e) {
-      if (
-        handleError(e) !==
-        'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
-      ) {
-        handleErrorToast(handleError(e));
-      }
     }
   }
 
@@ -195,19 +141,9 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button
-                type="submit"
-                className={`mt-8 ${fetchGiftsQuery.isFetching || fetchGiftsQuery.isError || addGiftQuery.isFetching ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={
-                  fetchGiftsQuery.isFetching ||
-                  fetchGiftsQuery.isError ||
-                  addGiftQuery.isFetching
-                    ? true
-                    : false
-                }
-              >
+              <Button type="submit" className="mt-8" disabled={isFetching}>
                 Lisää
-                {addGiftQuery.isFetching ? (
+                {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
                     <SvgSpinner
                       width={18}
@@ -220,31 +156,22 @@ export default function Home({
             </form>
           </div>
           <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
-          <GiftList
-            giftQuery={fetchGiftsQuery}
-            giftData={giftData}
-            refreshGiftList={refreshGiftList}
-          />
+          <GiftList />
         </div>
       </div>
     </main>
   );
 }
 
-function GiftList({
-  giftQuery,
-  giftData,
-  refreshGiftList,
-}: {
-  giftQuery: UseQueryResult<Gift[], Error>;
-  giftData: Gift[];
-  refreshGiftList: () => Promise<void>;
-}) {
+function GiftList() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
-  const { isPending, isFetching, error } = giftQuery;
 
-  if (isPending || isFetching)
+  const { error, isFetching, data: giftData } = useGetGifts();
+
+  if (isFetching)
     return (
       <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
     );
@@ -253,7 +180,7 @@ function GiftList({
 
   return (
     <div>
-      {giftData.length > 0 && (
+      {giftData && giftData.length > 0 && (
         <div>
           {giftData.map((giftItem) => (
             <div
@@ -273,6 +200,7 @@ function GiftList({
                   className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
                   }}
                 />
 
@@ -283,24 +211,25 @@ function GiftList({
                   className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
                   }}
                 />
               </div>
             </div>
           ))}
-          {editModalGiftData && (
+          {editModalGiftData && isEditModalOpen && (
             <EditModal
-              closeModal={() => setEditModalGiftData(undefined)}
               gift={editModalGiftData}
-              refreshGiftList={refreshGiftList}
+              refreshGiftList={async () => {}}
+              closeModal={() => setIsEditModalOpen(false)}
             />
           )}
 
-          {deleteModalGiftData && (
+          {deleteModalGiftData && isDeleteModalOpen && (
             <DeleteModal
-              closeModal={() => setDeleteModalGiftData(undefined)}
               gift={deleteModalGiftData}
-              refreshGiftList={refreshGiftList}
+              refreshGiftList={async () => {}}
+              closeModal={() => setIsDeleteModalOpen(false)}
             />
           )}
         </div>
@@ -320,29 +249,25 @@ function UserDetailModal({
 }) {
   const router = useRouter();
 
-  const logoutQuery = useQuery({
-    queryKey: ['logoutQuery'],
-    enabled: false,
-    queryFn: () => handleLogout(),
+  const { isPending, error, mutateAsync } = useMutation({
+    mutationKey: QueryKeys.LOGOUT,
+    mutationFn: async () => await axios.post('/api/auth/logout'),
+    onSuccess: () => router.push('/'),
   });
 
-  async function handleLogout() {
-    try {
-      await axios.post('/api/auth/logout');
-      await router.push('/logout');
-    } catch (e) {
-      console.error(e);
-      router.push('/').catch((e) => console.error(e));
-    }
-    return 'logoutQuery';
-  }
+  useShowErrorToast(error);
 
   if (user && showUserWindow) {
     return (
       <>
         <div
           className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
-          onClick={() => closeUserWindow()}
+          onClick={() => {
+            // this blocks the closing of the User Modal if request for logout is sent
+            if (!isPending) {
+              closeUserWindow();
+            }
+          }}
         />
         <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
           <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
@@ -351,16 +276,27 @@ function UserDetailModal({
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full justify-center">
             <Button
-              className={`mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary ${logoutQuery.isFetching ? 'cursor-not-allowed bg-red-600' : ''}`}
-              onClick={() => void logoutQuery.refetch()}
-              disabled={logoutQuery.isFetching ? true : false}
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
+              onClick={async () => {
+                try {
+                  await mutateAsync();
+                } catch (e) {
+                  /*
+                  this catch's idea is to prevent fatal error from occuring which would break the whole site
+                  useShowErrorToast(error) handles the showing of the error
+                  */
+                  return;
+                }
+              }}
+              disabled={isPending}
             >
-              <p className="text-sm font-medium text-white">Kirjaudu ulos</p>
-              {logoutQuery.isFetching ? (
+              {' '}
+              Kirjaudu ulos
+              {isPending ? (
                 <SvgSpinner
                   width={18}
                   height={18}
-                  className="ml-2 animate-spin text-white"
+                  className="ml-2 animate-spin"
                 />
               ) : (
                 <SvgArrowRightStartOnRectangle

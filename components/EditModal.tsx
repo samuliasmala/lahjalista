@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Gift } from '~/shared/types';
+import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
@@ -8,6 +8,7 @@ import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
+import { useQueryClient } from '@tanstack/react-query';
 
 type EditModal = {
   gift: Gift;
@@ -15,7 +16,7 @@ type EditModal = {
   closeModal: () => void;
 };
 
-export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
+export function EditModal({ gift, closeModal, refreshGiftList }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
@@ -25,6 +26,7 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
       await refreshGiftList();
     },
   });
+  const queryClient = useQueryClient();
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
@@ -37,6 +39,7 @@ export function EditModal({ gift, refreshGiftList, closeModal }: EditModal) {
       handleErrorToast(handleError(e));
     }
     closeModal();
+    await queryClient.invalidateQueries({ queryKey: QueryKeys.GIFTS });
   }
 
   return (
