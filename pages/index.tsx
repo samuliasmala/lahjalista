@@ -15,7 +15,7 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import SvgSpinner from '~/icons/spinner';
 import { useQueryClient } from '@tanstack/react-query';
@@ -33,17 +33,14 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const addGiftQuery = useQuery({
-    queryKey: ['addingGifts'],
-    enabled: false,
-    queryFn: async () => {
-      try {
-        return await createGift({ gift: newGiftName, receiver: newReceiver });
-      } catch (e) {
-        handleErrorToast(handleError(e));
-        return 'error';
-      }
-    },
+  const createGiftQuery = useMutation({
+    mutationKey: QueryKeys.CREATE_GIFT,
+    mutationFn: async (newGift: CreateGift) => await createGift(newGift),
+    // if success: refresh giftlist
+    onSuccess: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: QueryKeys.GIFTS,
+      }),
   });
 
   const { isFetching, isError, error } = useGetGifts();
@@ -77,12 +74,8 @@ export default function Home({
         receiver: newReceiver,
         gift: newGiftName,
       };
-
-      await createGift(newGift);
-      // reloads gift list!
-      await queryClient.invalidateQueries({
-        queryKey: QueryKeys.GIFTS,
-      });
+      // send gift creation request
+      await createGiftQuery.mutateAsync(newGift);
 
       setNewGiftName('');
       setNewReceiver('');
@@ -148,13 +141,9 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button
-                type="submit"
-                className={`mt-8 ${isFetching || isError ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={isFetching || isError}
-              >
+              <Button type="submit" className="mt-8" disabled={isFetching}>
                 Lisää
-                {addGiftQuery.isFetching ? (
+                {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
                     <SvgSpinner
                       width={18}
