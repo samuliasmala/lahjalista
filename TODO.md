@@ -26,3 +26,7 @@ const sortedArrayNewestToOldest = gifts.sort(
 (a, b) =>
 new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
 );
+
+Kysymys: Jos palvelin on hitaalla käyttäjä pystyy poistumaan EditModal tai DeleteModalista ennen kuin kyseinen toimenpide on toteutunut. Olisiko parempi lisätä requestille maksimiaika kuinka kauan odotetaan vastausta. Requestin ajan käyttäjä ei voisi sulkea Modalia
+
+CHECK THIS: onClick funktio vs oma funktio esim. handleEdit(). Katso DeleteModal.tsx vs EditModal.tsx
