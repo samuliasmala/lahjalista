@@ -258,7 +258,7 @@ function UserDetailModal({
     return (
       <>
         <div
-          className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
+          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
           onClick={() => {
             // this blocks the closing of the User Modal if request for logout is sent
             if (!isPending) {
@@ -276,7 +276,7 @@ function UserDetailModal({
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
               onClick={() => {
                 try {
-                  mutateAsync();
+                  void mutateAsync();
                 } catch (e) {
                   handleErrorToast(handleError(e));
                 }
