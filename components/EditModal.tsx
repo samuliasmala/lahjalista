@@ -9,6 +9,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 type EditModal = {
   gift: Gift;
@@ -19,24 +20,29 @@ export function EditModal({ gift, closeModal }: EditModal) {
   const [giftReceiver, setGiftReceiver] = useState(gift.receiver);
   const [giftName, setGiftName] = useState(gift.gift);
 
-  const editGiftQuery = useMutation({
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, error, isPending } = useMutation({
     mutationFn: async (gitfData: { receiver: string; gift: string }) => {
       await updateGift(gift.uuid, gitfData);
     },
   });
-  const queryClient = useQueryClient();
+
+  useShowErrorToast(error);
 
   async function handleEdit(e: FormEvent<HTMLElement>) {
     e.preventDefault();
     try {
-      await editGiftQuery.mutateAsync({
+      await mutateAsync({
         receiver: giftReceiver,
         gift: giftName,
       });
     } catch (e) {
-      handleErrorToast(handleError(e));
+      return;
     }
+
     closeModal();
+    // refresh gifts
     await queryClient.invalidateQueries({ queryKey: QueryKeys.GIFTS });
   }
 
@@ -71,22 +77,19 @@ export function EditModal({ gift, closeModal }: EditModal) {
             >
               Peruuta
             </Button>
-            {editGiftQuery.isPending ? (
-              <Button
-                className="ml-6 mt-0 h-8 w-28 cursor-not-allowed bg-red-500 p-0 pl-4 text-start text-sm"
-                type="submit"
-                disabled
-              >
-                Tallenna
-                <span className="absolute">
-                  <SvgSpinner className="ml-2 size-5 animate-spin" />
+            <Button
+              className="ml-6 mt-0 h-8 w-20 p-0 text-sm disabled:w-24 disabled:pr-4"
+              type="submit"
+              disabled={isPending}
+              onClick={(e) => handleEdit(e)}
+            >
+              Tallenna
+              {isPending && (
+                <span className="absolute ml-1">
+                  <SvgSpinner width={18} height={18} className="animate-spin" />
                 </span>
-              </Button>
-            ) : (
-              <Button className="ml-6 mt-0 h-8 w-20 p-0 text-sm" type="submit">
-                Tallenna
-              </Button>
-            )}
+              )}
+            </Button>
           </div>
         </div>
       </form>
