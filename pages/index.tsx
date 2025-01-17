@@ -252,7 +252,7 @@ function UserDetailModal({
   const { isPending, error, mutateAsync } = useMutation({
     mutationKey: QueryKeys.LOGOUT,
     mutationFn: async () => await axios.post('/api/auth/logout'),
-    onSuccess: () => router.push('/'),
+    onSuccess: () => router.push('/logout'),
   });
 
   useShowErrorToast(error);
