@@ -18,14 +18,13 @@ export function DeleteModal({ gift, setIsModalOpen }: DeleteModal) {
   async function handleDeletion() {
     try {
       await deleteGift(gift.uuid);
+      setIsModalOpen(false);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
     await queryClient.invalidateQueries({
       queryKey: QueryKeys.GIFTS,
     });
-
-    setIsModalOpen(false);
   }
 
   return (

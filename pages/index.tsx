@@ -151,8 +151,8 @@ export default function Home({
 
 function GiftList() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
   const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
 
   const { error, isFetching, data: giftData } = useGetGifts();
@@ -203,14 +203,14 @@ function GiftList() {
               </div>
             </div>
           ))}
-          {isEditModalOpen && editModalGiftData && (
+          {editModalGiftData && isEditModalOpen && (
             <EditModal
               gift={editModalGiftData}
               setIsModalOpen={setIsEditModalOpen}
             />
           )}
 
-          {isDeleteModalOpen && deleteModalGiftData && (
+          {deleteModalGiftData && isDeleteModalOpen && (
             <DeleteModal
               gift={deleteModalGiftData}
               setIsModalOpen={setIsDeleteModalOpen}
