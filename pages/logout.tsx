@@ -10,7 +10,7 @@ import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import SvgSpinner from '~/icons/spinner';
-import { CreateFeedback } from '~/shared/types';
+import { CreateFeedback, QueryKeys } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
 
@@ -44,7 +44,7 @@ export default function Logout() {
   const router = useRouter();
 
   const { mutateAsync, error, isPending } = useMutation({
-    mutationKey: ['feedback'],
+    mutationKey: QueryKeys.CREATE_FEEDBACK,
     mutationFn: async (dataToSend: CreateFeedback) => {
       await axios.post('/api/feedback', dataToSend);
     },

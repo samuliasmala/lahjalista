@@ -164,6 +164,8 @@ export const QueryKeys = {
   CREATE_GIFT: ['createGift'],
   DELETE_GIFT: ['deleteGift'],
 
+  CREATE_FEEDBACK: ['createFeedback'],
+
   // ei vielä käytössä
   //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],
 };
