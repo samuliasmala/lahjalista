@@ -15,10 +15,9 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import SvgSpinner from '~/icons/spinner';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
@@ -43,7 +42,7 @@ export default function Home({
       }),
   });
 
-  const { isFetching, isError, error } = useGetGifts();
+  const { isFetching, error } = useGetGifts();
 
   useShowErrorToast(error);
 
