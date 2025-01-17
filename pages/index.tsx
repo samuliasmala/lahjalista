@@ -15,10 +15,9 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import SvgSpinner from '~/icons/spinner';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
@@ -43,7 +42,7 @@ export default function Home({
       }),
   });
 
-  const { isFetching, isError, error } = useGetGifts();
+  const { isFetching, error } = useGetGifts();
 
   useShowErrorToast(error);
 
@@ -141,7 +140,11 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button type="submit" className="mt-8" disabled={isFetching}>
+              <Button
+                type="submit"
+                className="mt-8"
+                disabled={isFetching || createGiftQuery.isPending}
+              >
                 Lisää
                 {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
@@ -164,8 +167,6 @@ export default function Home({
 }
 
 function GiftList() {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<
     Gift | undefined
   >();
@@ -261,7 +262,7 @@ function UserDetailModal({
     return (
       <>
         <div
-          className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
+          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
           onClick={() => {
             // this blocks the closing of the User Modal if request for logout is sent
             if (!isPending) {
@@ -277,15 +278,11 @@ function UserDetailModal({
           <div className="flex w-full justify-center">
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
-              onClick={async () => {
+              onClick={() => {
                 try {
-                  await mutateAsync();
+                  void mutateAsync();
                 } catch (e) {
-                  /*
-                  this catch's idea is to prevent fatal error from occuring which would break the whole site
-                  useShowErrorToast(error) handles the showing of the error
-                  */
-                  return;
+                  handleErrorToast(handleError(e));
                 }
               }}
               disabled={isPending}

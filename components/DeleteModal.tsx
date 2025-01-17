@@ -2,11 +2,11 @@ import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
-import { handleError } from '~/utils/handleError';
-import { handleErrorToast } from '~/utils/handleToasts';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { handleErrorToast } from '~/utils/handleToasts';
+import { handleError } from '~/utils/handleError';
 
 type DeleteModal = {
   gift: Gift;
@@ -53,15 +53,11 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
           <Button
             className={`m-6 mt-0 h-8 w-20 p-0 text-sm disabled:w-24 disabled:pr-4`}
             disabled={isPending}
-            onClick={async () => {
+            onClick={() => {
               try {
-                await mutateAsync();
+                void mutateAsync();
               } catch (e) {
-                /*
-                  this catch's idea is to prevent fatal error from occuring which would break the whole site
-                  useShowErrorToast(error) handles the showing of the error
-                */
-                return;
+                handleErrorToast(handleError(e));
               }
             }}
           >

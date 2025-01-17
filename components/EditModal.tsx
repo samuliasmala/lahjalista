@@ -4,12 +4,11 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
-import { handleError } from '~/utils/handleError';
-import { handleErrorToast } from '~/utils/handleToasts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
-import { useQueryClient } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { handleErrorToast } from '~/utils/handleToasts';
+import { handleError } from '~/utils/handleError';
 
 type EditModal = {
   gift: Gift;
@@ -38,6 +37,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
         gift: giftName,
       });
     } catch (e) {
+      handleErrorToast(handleError(e));
       return;
     }
 
@@ -81,7 +81,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
               className="ml-6 mt-0 h-8 w-20 p-0 text-sm disabled:w-24 disabled:pr-4"
               type="submit"
               disabled={isPending}
-              onClick={(e) => handleEdit(e)}
+              onClick={(e) => void handleEdit(e)}
             >
               Tallenna
               {isPending && (
