@@ -274,15 +274,11 @@ function UserDetailModal({
           <div className="flex w-full justify-center">
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
-              onClick={async () => {
+              onClick={() => {
                 try {
-                  await mutateAsync();
+                  mutateAsync();
                 } catch (e) {
-                  /*
-                  this catch's idea is to prevent fatal error from occuring which would break the whole site
-                  useShowErrorToast(error) handles the showing of the error
-                  */
-                  return;
+                  handleErrorToast(handleError(e));
                 }
               }}
               disabled={isPending}
