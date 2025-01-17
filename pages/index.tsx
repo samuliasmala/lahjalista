@@ -167,8 +167,6 @@ export default function Home({
 }
 
 function GiftList() {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [deleteModalGiftData, setDeleteModalGiftData] = useState<
     Gift | undefined
   >();

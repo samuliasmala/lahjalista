@@ -4,11 +4,8 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
-import { handleError } from '~/utils/handleError';
-import { handleErrorToast } from '~/utils/handleToasts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
-import { useQueryClient } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 type EditModal = {
