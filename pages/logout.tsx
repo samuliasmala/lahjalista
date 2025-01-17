@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
@@ -7,6 +8,8 @@ import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import SvgSpinner from '~/icons/spinner';
 import { CreateFeedback } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
@@ -40,6 +43,16 @@ export default function Logout() {
 
   const router = useRouter();
 
+  const { mutateAsync, error, isPending } = useMutation({
+    mutationKey: ['feedback'],
+    mutationFn: async (dataToSend: CreateFeedback) => {
+      await axios.post('/api/feedback', dataToSend);
+    },
+    onSuccess: () => feedbackSent(),
+  });
+
+  useShowErrorToast(error);
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
@@ -51,8 +64,7 @@ export default function Logout() {
         feedbackText,
       };
 
-      await axios.post('/api/feedback', dataToSend);
-      feedbackSent();
+      await mutateAsync(dataToSend);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -92,8 +104,17 @@ export default function Logout() {
                     setFeedbackText(e.currentTarget.value);
                   }}
                 />
-                <Button className="p-2" type="submit">
+                <Button className="p-2" type="submit" disabled={isPending}>
                   Lähetä
+                  {isPending && (
+                    <span className="absolute ml-2 mt-1">
+                      <SvgSpinner
+                        width={20}
+                        height={20}
+                        className="animate-spin"
+                      />
+                    </span>
+                  )}
                 </Button>
                 <p className="select-none pt-6 text-xs text-gray-600">
                   Saitko uuden idean?{' '}
