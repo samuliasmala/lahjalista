@@ -29,8 +29,6 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const { isFetching, isError } = useGetGifts();
-
   const queryClient = useQueryClient();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
@@ -129,11 +127,7 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button
-                type="submit"
-                className={`mt-8 ${isFetching || isError ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={isFetching || isError}
-              >
+              <Button type="submit" className="mt-8">
                 Lisää
               </Button>
             </form>
