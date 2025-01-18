@@ -42,7 +42,7 @@ export default function Register() {
     mutationKey: QueryKeys.REGISTER,
     mutationFn: async (formData: typeof EMPTY_FORM_DATA) =>
       await axios.post('/api/auth/register', formData),
-    onSuccess: () => userCreatedSuccesfully(),
+    onSuccess: userCreatedSuccesfully,
   });
 
   useShowErrorToast(error);
