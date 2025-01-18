@@ -42,10 +42,6 @@ export default function Home({
       }),
   });
 
-  const { isFetching, error } = useGetGifts();
-
-  useShowErrorToast(error);
-
   const queryClient = useQueryClient();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
@@ -140,11 +136,7 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button
-                type="submit"
-                className="mt-8"
-                disabled={isFetching || createGiftQuery.isPending}
-              >
+              <Button type="submit" className="mt-8">
                 Lisää
                 {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
