@@ -16,12 +16,15 @@ import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation } from '@tanstack/react-query';
 import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { z } from 'zod';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
-const EMPTY_FORM_DATA = {
+type FormData = z.infer<typeof formSchema>;
+
+const EMPTY_FORM_DATA: FormData = {
   firstName: '',
   lastName: '',
   email: '',
@@ -40,7 +43,7 @@ export default function Register() {
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.REGISTER,
-    mutationFn: async (formData: typeof EMPTY_FORM_DATA) =>
+    mutationFn: async (formData: FormData) =>
       await axios.post('/api/auth/register', formData),
     onSuccess: userCreatedSuccesfully,
   });
