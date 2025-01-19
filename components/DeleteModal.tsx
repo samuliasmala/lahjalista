@@ -51,7 +51,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
             disabled={isPending}
             onClick={errorWrapper(async () => {
               try {
-                void mutateAsync();
+                await mutateAsync();
               } catch (e) {
                 handleErrorToast(handleError(e));
               }
