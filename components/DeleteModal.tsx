@@ -31,11 +31,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
   useShowErrorToast(error);
 
   return (
-    <Modal
-      className="max-w-80"
-      closeModal={() => closeModal()}
-      title="Poista lahja:"
-    >
+    <Modal className="max-w-80" closeModal={closeModal} title="Poista lahja:">
       <div className="max-w-80">
         <p
           className={`ml-4 mt-5 text-base text-primaryText [overflow-wrap:anywhere]`}
@@ -51,7 +47,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
             Peruuta
           </Button>
           <Button
-            className={`m-6 mt-0 h-8 w-20 p-0 text-sm disabled:w-24 disabled:pr-4`}
+            className={`m-6 mt-0 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center`}
             disabled={isPending}
             onClick={() => {
               try {
@@ -61,11 +57,10 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
               }
             }}
           >
-            Poista
-            {isPending && (
-              <span className="absolute ml-2">
-                <SvgSpinner width={18} height={18} className="animate-spin" />
-              </span>
+            {isPending ? (
+              <SvgSpinner width={24} height={24} className="animate-spin" />
+            ) : (
+              'Poista'
             )}
           </Button>
         </div>
