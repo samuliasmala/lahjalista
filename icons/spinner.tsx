@@ -18,7 +18,7 @@ import type { SVGProps } from 'react';
 const SvgSpinner = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" {...props}>
     <path
-      fill="currentColor"
+      fill="#000000"
       fillRule="nonzero"
       d="M10 3a7 7 0 0 0-7 7 .5.5 0 0 1-1 0 8 8 0 1 1 8 8 .5.5 0 0 1 0-1 7 7 0 1 0 0-14"
     />
