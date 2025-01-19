@@ -1,5 +1,5 @@
 import React, { FormEvent, HTMLAttributes, useState } from 'react';
-import { Button } from '~/components/Button';
+import { Button, errorWrapper } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
@@ -275,13 +275,13 @@ function UserDetailModal({
           <div className="flex w-full justify-center">
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
-              onClick={() => {
+              onClick={errorWrapper(async () => {
                 try {
-                  void mutateAsync();
+                  await mutateAsync();
                 } catch (e) {
                   handleErrorToast(handleError(e));
                 }
-              }}
+              })}
               disabled={isPending}
             >
               {' '}
