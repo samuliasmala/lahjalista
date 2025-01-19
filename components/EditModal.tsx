@@ -49,7 +49,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
   return (
     <Modal
       className="max-w-80"
-      closeModal={() => closeModal()}
+      closeModal={closeModal}
       title="Muokkaa lahjaideaa:"
     >
       <form onSubmit={(e) => void handleEdit(e)}>
@@ -78,16 +78,19 @@ export function EditModal({ gift, closeModal }: EditModal) {
               Peruuta
             </Button>
             <Button
-              className="ml-6 mt-0 h-8 w-20 p-0 text-sm disabled:w-24 disabled:pr-4"
+              className="ml-6 mt-0 h-8 w-20 p-0 text-sm"
               type="submit"
               disabled={isPending}
               onClick={(e) => void handleEdit(e)}
             >
-              Tallenna
-              {isPending && (
-                <span className="absolute ml-1">
-                  <SvgSpinner width={18} height={18} className="animate-spin" />
-                </span>
+              {isPending ? (
+                <SvgSpinner
+                  width={24}
+                  height={24}
+                  className="ml-6 animate-spin"
+                />
+              ) : (
+                'Tallenna'
               )}
             </Button>
           </div>
