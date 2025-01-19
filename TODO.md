@@ -10,23 +10,19 @@
 
 # Enter-näppäimellä EditModalin ja DeleteModalin hyväksyminen
 
+# Jos tulee virhe vaikka lahjoja hakiessa, ehkä jokin nappula olisi hyvä tehdä, jolla voisi mahdollisesti kokeilla hakea uudestaan lahjoja
+
+# Kun lisää uuden lahjan / kun lahjoja haetaan, järjestetään ne uusin -> vanhin. Myöhemmin voidaan lisätä käyttäjälle mahdollisuus valita miten lahjat haluaa järjestää (vaikka vanhin -> uusin, aakkosjärjestys, ymsyms)
+
+# Tässä toteutustapa:const sortedArrayNewestToOldest = gifts.sort((a, b) =>new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+
+);
+
 ### </IDEOITA>
 
 TODO:
 
-Lisää /pages/login.tsx:n Kirjaudu sisään -nappulaan "select-none" jottei teksti tule maalatuksi jos silmää painaa muutaman kerran liian nopeasti
+1. Tee https://github.com/samuliasmala/lahjalista/pull/62#discussion_r1921024704 omaan branchiin
 
-Jos tulee virhe vaikka lahjoja hakiessa, ehkä jokin nappula olisi hyvä tehdä, jolla voisi mahdollisesti kokeilla hakea uudestaan lahjoja
-
-Kun lisää uuden lahjan / kun lahjoja haetaan, järjestetään ne uusin -> vanhin. Myöhemmin voidaan lisätä käyttäjälle mahdollisuus valita miten lahjat haluaa järjestää (vaikka vanhin -> uusin, aakkosjärjestys, ymsyms)
-
-Tässä toteutustapa:
-
-const sortedArrayNewestToOldest = gifts.sort(
-(a, b) =>
-new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-);
-
-Kysymys: Jos palvelin on hitaalla käyttäjä pystyy poistumaan EditModal tai DeleteModalista ennen kuin kyseinen toimenpide on toteutunut. Olisiko parempi lisätä requestille maksimiaika kuinka kauan odotetaan vastausta. Requestin ajan käyttäjä ei voisi sulkea Modalia
-
-CHECK THIS: onClick funktio vs oma funktio esim. handleEdit(). Katso DeleteModal.tsx vs EditModal.tsx
+2.1 Vaihda "Kirjaudu sisään"- ja "Luo käyttäjätunnus" -nappuloihin pyörivä spinner-indikaattori "..." sijaan
+2.2 Lisää /pages/login.tsx:n Kirjaudu sisään -nappulaan "select-none" jottei teksti tule maalatuksi jos silmää painaa muutaman kerran liian nopeasti

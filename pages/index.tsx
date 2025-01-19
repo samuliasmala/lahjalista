@@ -1,5 +1,5 @@
 import React, { FormEvent, HTMLAttributes, useState } from 'react';
-import { Button } from '~/components/Button';
+import { Button, errorWrapper } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
@@ -41,10 +41,6 @@ export default function Home({
         queryKey: QueryKeys.GIFTS,
       }),
   });
-
-  const { isFetching, error } = useGetGifts();
-
-  useShowErrorToast(error);
 
   const queryClient = useQueryClient();
 
@@ -140,11 +136,7 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button
-                type="submit"
-                className="mt-8"
-                disabled={isFetching || createGiftQuery.isPending}
-              >
+              <Button type="submit" className="mt-8">
                 Lisää
                 {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
@@ -178,7 +170,12 @@ function GiftList() {
 
   if (isFetching)
     return (
-      <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
+      <p className="mt-4 text-lg font-bold">
+        Noudetaan lahjoja{' '}
+        <span className="absolute ml-2 mt-1.5">
+          <SvgSpinner width={18} height={18} className="animate-spin" />
+        </span>
+      </p>
     );
 
   if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
@@ -278,13 +275,13 @@ function UserDetailModal({
           <div className="flex w-full justify-center">
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
-              onClick={() => {
+              onClick={errorWrapper(async () => {
                 try {
-                  void mutateAsync();
+                  await mutateAsync();
                 } catch (e) {
                   handleErrorToast(handleError(e));
                 }
-              }}
+              })}
               disabled={isPending}
             >
               {' '}
