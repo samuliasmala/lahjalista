@@ -25,6 +25,13 @@ export function EditModal({ gift, closeModal }: EditModal) {
     mutationFn: async (gitfData: { receiver: string; gift: string }) => {
       await updateGift(gift.uuid, gitfData);
     },
+    onSuccess: async () => {
+      // refresh gift list
+      await queryClient.invalidateQueries({
+        queryKey: QueryKeys.GIFTS,
+      });
+      closeModal();
+    },
   });
 
   useShowErrorToast(error);
@@ -40,10 +47,6 @@ export function EditModal({ gift, closeModal }: EditModal) {
       handleErrorToast(handleError(e));
       return;
     }
-
-    closeModal();
-    // refresh gifts
-    await queryClient.invalidateQueries({ queryKey: QueryKeys.GIFTS });
   }
 
   return (
