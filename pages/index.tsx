@@ -168,7 +168,12 @@ function GiftList() {
 
   if (isFetching)
     return (
-      <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
+      <p className="mt-4 text-lg font-bold">
+        Noudetaan lahjoja{' '}
+        <span className="absolute ml-2 mt-1.5">
+          <SvgSpinner width={18} height={18} className="animate-spin" />
+        </span>
+      </p>
     );
 
   if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
