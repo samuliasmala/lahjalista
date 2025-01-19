@@ -78,17 +78,13 @@ export function EditModal({ gift, closeModal }: EditModal) {
               Peruuta
             </Button>
             <Button
-              className="ml-6 mt-0 h-8 w-20 p-0 text-sm"
+              className="ml-6 mt-0 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center"
               type="submit"
               disabled={isPending}
               onClick={(e) => void handleEdit(e)}
             >
               {isPending ? (
-                <SvgSpinner
-                  width={24}
-                  height={24}
-                  className="ml-6 animate-spin"
-                />
+                <SvgSpinner width={24} height={24} className="animate-spin" />
               ) : (
                 'Tallenna'
               )}
