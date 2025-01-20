@@ -247,10 +247,15 @@ function UserDetailModal({
 }) {
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const { isPending, error, mutateAsync } = useMutation({
     mutationKey: QueryKeys.LOGOUT,
     mutationFn: async () => await axios.post('/api/auth/logout'),
-    onSuccess: () => router.push('/logout'),
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/logout');
+    },
   });
 
   useShowErrorToast(error);
