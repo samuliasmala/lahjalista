@@ -258,7 +258,7 @@ function UserDetailModal({
     mutationFn: async () => await axios.post('/api/auth/logout'),
     onSuccess: () => {
       queryClient.clear();
-      router.push('/logout');
+      router.push('/logout').catch((e) => console.error(e));
     },
   });
 

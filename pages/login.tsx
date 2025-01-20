@@ -56,7 +56,7 @@ export default function Login() {
       await axios.post('/api/auth/login', loginCredentials),
     onSuccess: () => {
       queryClient.clear();
-      router.push('/');
+      router.push('/').catch((e) => console.error(e));
     },
   });
 
