@@ -1,6 +1,6 @@
 import { ComponentPropsWithoutRef } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { errorWrapper } from '~/utils/errorWrapper';
+import { errorWrapper } from '~/utils/utilFunctions';
 
 type ButtonProps = ComponentPropsWithoutRef<'button'> & {
   onClick?: (
