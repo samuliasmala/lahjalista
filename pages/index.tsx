@@ -136,7 +136,11 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button type="submit" className="mt-8">
+              <Button
+                type="submit"
+                className="mt-8"
+                disabled={createGiftQuery.isPending}
+              >
                 Lisää
                 {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
