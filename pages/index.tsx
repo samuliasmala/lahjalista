@@ -1,5 +1,5 @@
 import React, { FormEvent, HTMLAttributes, useState } from 'react';
-import { Button, errorWrapper } from '~/components/Button';
+import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
@@ -136,7 +136,11 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button type="submit" className="mt-8">
+              <Button
+                type="submit"
+                className="mt-8"
+                disabled={createGiftQuery.isPending}
+              >
                 Lisää
                 {createGiftQuery.isPending ? (
                   <span className="absolute p-1">
@@ -247,10 +251,15 @@ function UserDetailModal({
 }) {
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const { isPending, error, mutateAsync } = useMutation({
     mutationKey: QueryKeys.LOGOUT,
     mutationFn: async () => await axios.post('/api/auth/logout'),
-    onSuccess: () => router.push('/logout'),
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/logout').catch((e) => console.error(e));
+    },
   });
 
   useShowErrorToast(error);
@@ -275,13 +284,13 @@ function UserDetailModal({
           <div className="flex w-full justify-center">
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
-              onClick={errorWrapper(async () => {
+              onClick={async () => {
                 try {
                   await mutateAsync();
                 } catch (e) {
                   handleErrorToast(handleError(e));
                 }
-              })}
+              }}
               disabled={isPending}
             >
               {' '}
