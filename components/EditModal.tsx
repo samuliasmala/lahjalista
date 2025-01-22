@@ -9,6 +9,7 @@ import SvgSpinner from '~/icons/spinner';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { handleError } from '~/utils/handleError';
+import { errorWrapper } from '~/utils/utilFunctions';
 
 type EditModal = {
   gift: Gift;
@@ -55,7 +56,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
       closeModal={closeModal}
       title="Muokkaa lahjaideaa:"
     >
-      <form onSubmit={(e) => void handleEdit(e)}>
+      <form onSubmit={(e) => errorWrapper(async () => await handleEdit(e))}>
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
