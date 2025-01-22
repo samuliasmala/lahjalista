@@ -5,8 +5,6 @@ import { deleteGift } from '~/utils/apiRequests';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
-import { handleErrorToast } from '~/utils/handleToasts';
-import { handleError } from '~/utils/handleError';
 
 type DeleteModal = {
   gift: Gift;
