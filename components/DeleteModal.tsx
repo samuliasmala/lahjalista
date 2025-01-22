@@ -1,6 +1,6 @@
 import { Gift, QueryKeys } from '~/shared/types';
 import { Modal } from './Modal';
-import { Button, errorWrapper } from './Button';
+import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
@@ -41,7 +41,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
         <div className="mt-6 flex flex-row items-center justify-end">
           <Button
             className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText`}
-            onClick={() => closeModal()}
+            onClick={closeModal}
             type="button"
           >
             Peruuta
@@ -49,13 +49,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
           <Button
             className={`m-6 mt-0 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center`}
             disabled={isPending}
-            onClick={errorWrapper(async () => {
-              try {
-                await mutateAsync();
-              } catch (e) {
-                handleErrorToast(handleError(e));
-              }
-            })}
+            onClick={() => void mutateAsync()}
           >
             {isPending ? (
               <SvgSpinner width={24} height={24} className="animate-spin" />
