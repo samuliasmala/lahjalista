@@ -1,3 +1,6 @@
+import { handleError } from './handleError';
+import { handleErrorToast } from './handleToasts';
+
 export async function sleep(timeoutTimeInMs: number) {
   await new Promise((r) => setTimeout(r, timeoutTimeInMs));
 }
@@ -39,9 +42,11 @@ export function errorWrapper<A extends unknown[]>(
       if (p instanceof Promise)
         p.catch((error: unknown) => {
           console.error('Error thrown asynchronously', error);
+          handleErrorToast(handleError(error));
         });
     } catch (error) {
       console.error('Error thrown synchronously', error);
+      handleErrorToast(handleError(error));
     }
   };
 }
