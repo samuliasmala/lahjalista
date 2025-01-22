@@ -10,13 +10,13 @@
 
 # Enter-näppäimellä EditModalin ja DeleteModalin hyväksyminen
 
-# Jos tulee virhe vaikka lahjoja hakiessa, ehkä jokin nappula olisi hyvä tehdä, jolla voisi mahdollisesti kokeilla hakea uudestaan lahjoja
-
 # Kun lisää uuden lahjan / kun lahjoja haetaan, järjestetään ne uusin -> vanhin. Myöhemmin voidaan lisätä käyttäjälle mahdollisuus valita miten lahjat haluaa järjestää (vaikka vanhin -> uusin, aakkosjärjestys, ymsyms)
 
 # Tässä toteutustapa:const sortedArrayNewestToOldest = gifts.sort((a, b) =>new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),);
 
 # Tanstackin requesteihin joku maksimiaika mitä odotetaan
+
+# Lisätään nappula, jolla voi hakea lahjat uudelleen halutessaan. Esimerkiksi jos tulee virhe lahjoja noutaessa, voisi haun laittaa uudelleen. Tai jos esimerkiksi lahjan poistaminen ei onnistu, koska lahjaa ei löydy palvelimelta. Ei käyttäjä voi ladata lahjoja uudelleen ilman sivun uudelleen latausta / F5
 
 ### </IDEOITA>
 
