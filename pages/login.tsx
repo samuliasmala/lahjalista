@@ -16,7 +16,7 @@ import { Label } from '~/components/Label';
 import { GetServerSidePropsContext } from 'next';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -48,11 +48,16 @@ export default function Login() {
 
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const { mutateAsync, isPending, error } = useMutation({
     mutationKey: QueryKeys.LOGIN,
     mutationFn: async (loginCredentials: UserLoginDetails) =>
       await axios.post('/api/auth/login', loginCredentials),
-    onSuccess: () => router.push('/'),
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/').catch((e) => console.error(e));
+    },
   });
 
   useShowErrorToast(error);

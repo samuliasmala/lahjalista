@@ -15,7 +15,9 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
-import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import SvgSpinner from '~/icons/spinner';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
@@ -30,9 +32,15 @@ export default function Home({
 
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const { isFetching, isError, error } = useGetGifts();
-
-  useShowErrorToast(error);
+  const createGiftQuery = useMutation({
+    mutationKey: QueryKeys.CREATE_GIFT,
+    mutationFn: async (newGift: CreateGift) => await createGift(newGift),
+    // if success: refresh giftlist
+    onSuccess: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: QueryKeys.GIFTS,
+      }),
+  });
 
   const queryClient = useQueryClient();
 
@@ -61,12 +69,8 @@ export default function Home({
         receiver: newReceiver,
         gift: newGiftName,
       };
-
-      await createGift(newGift);
-      // reloads gift list!
-      await queryClient.invalidateQueries({
-        queryKey: QueryKeys.GIFTS,
-      });
+      // send gift creation request
+      await createGiftQuery.mutateAsync(newGift);
 
       setNewGiftName('');
       setNewReceiver('');
@@ -134,10 +138,19 @@ export default function Home({
               </div>
               <Button
                 type="submit"
-                className={`mt-8 ${isFetching || isError ? 'cursor-not-allowed bg-red-500' : null}`}
-                disabled={isFetching || isError}
+                className="mt-8"
+                disabled={createGiftQuery.isPending}
               >
                 Lisää
+                {createGiftQuery.isPending ? (
+                  <span className="absolute p-1">
+                    <SvgSpinner
+                      width={18}
+                      height={18}
+                      className="animate-spin text-black"
+                    />
+                  </span>
+                ) : null}
               </Button>
             </form>
           </div>
@@ -159,7 +172,12 @@ function GiftList() {
 
   if (isFetching)
     return (
-      <p className="loading-dots mt-4 text-lg font-bold">Noudetaan lahjoja</p>
+      <p className="mt-4 text-lg font-bold">
+        Noudetaan lahjoja{' '}
+        <span className="absolute ml-2 mt-1.5">
+          <SvgSpinner width={18} height={18} className="animate-spin" />
+        </span>
+      </p>
     );
 
   if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
@@ -231,22 +249,32 @@ function UserDetailModal({
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
-  async function handleLogout() {
-    try {
-      await axios.post('/api/auth/logout');
-      window.location.href = '/logout';
-    } catch (e) {
-      console.error(e);
-      window.location.href = '/';
-    }
-  }
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
+  const { isPending, error, mutateAsync } = useMutation({
+    mutationKey: QueryKeys.LOGOUT,
+    mutationFn: async () => await axios.post('/api/auth/logout'),
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/logout').catch((e) => console.error(e));
+    },
+  });
+
+  useShowErrorToast(error);
 
   if (user && showUserWindow) {
     return (
       <>
         <div
-          className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
-          onClick={() => closeUserWindow()}
+          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
+          onClick={() => {
+            // this blocks the closing of the User Modal if request for logout is sent
+            if (!isPending) {
+              closeUserWindow();
+            }
+          }}
         />
         <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
           <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
@@ -255,15 +283,31 @@ function UserDetailModal({
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full justify-center">
             <Button
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary"
-              onClick={() => void handleLogout()}
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
+              onClick={async () => {
+                try {
+                  await mutateAsync();
+                } catch (e) {
+                  handleErrorToast(handleError(e));
+                }
+              }}
+              disabled={isPending}
             >
-              <p className={`text-sm font-medium text-white`}>Kirjaudu ulos</p>
-              <SvgArrowRightStartOnRectangle
-                width={18}
-                height={18}
-                className="ml-2"
-              />
+              {' '}
+              Kirjaudu ulos
+              {isPending ? (
+                <SvgSpinner
+                  width={18}
+                  height={18}
+                  className="ml-2 animate-spin"
+                />
+              ) : (
+                <SvgArrowRightStartOnRectangle
+                  width={18}
+                  height={18}
+                  className="ml-2"
+                />
+              )}
             </Button>
           </div>
         </div>
