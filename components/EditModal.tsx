@@ -76,7 +76,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
           <div className="mt-8 flex flex-row items-center justify-end">
             <Button
               className="mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText"
-              onClick={() => closeModal()}
+              onClick={closeModal}
               type="button"
             >
               Peruuta
