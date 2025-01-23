@@ -14,7 +14,7 @@ import { TitleBar } from '~/components/TitleBar';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Feedback } from '@prisma/client';
-import { useKeyPress } from '~/utils/hooks/useKeyPress';
+import { useKeyPress } from '~/hooks/useKeyPress';
 
 export { getServerSideProps };
 
