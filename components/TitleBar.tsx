@@ -1,17 +1,23 @@
 import React, { Dispatch, SetStateAction, HTMLAttributes } from 'react';
 import SvgUser from '~/icons/user';
-import { User } from '~/shared/types';
+import { QueryKeys, User } from '~/shared/types';
 import axios from 'axios';
 import { Button } from './Button';
 import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import Link from 'next/link';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { handleErrorToast } from '~/utils/handleToasts';
+import { handleError } from '~/utils/handleError';
+import SvgSpinner from '~/icons/spinner';
 
 type UserDetails = Pick<User, 'firstName' | 'lastName' | 'email' | 'role'>;
 
 type TitleBar = {
   setShowUserWindow: Dispatch<SetStateAction<boolean>>;
   showUserWindow: boolean;
-  userDetails: UserDetails;
+  userDetails: User;
 };
 
 export function TitleBar({
@@ -42,12 +48,7 @@ export function TitleBar({
         />
         <UserDetailModal
           showUserWindow={showUserWindow}
-          userDetails={{
-            email: userDetails.email,
-            firstName: userDetails.firstName,
-            lastName: userDetails.lastName,
-            role: userDetails.role,
-          }}
+          user={userDetails}
           closeUserWindow={() => setShowUserWindow(false)}
         />
       </div>
@@ -56,29 +57,75 @@ export function TitleBar({
 }
 
 function UserDetailModal({
-  userDetails,
+  user,
   showUserWindow,
   closeUserWindow,
 }: HTMLAttributes<HTMLDivElement> & {
-  userDetails: UserDetails;
+  user: User;
   showUserWindow: boolean;
   closeUserWindow: () => void;
 }) {
-  if (userDetails && showUserWindow) {
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
+  const { isPending, error, mutateAsync } = useMutation({
+    mutationKey: QueryKeys.LOGOUT,
+    mutationFn: async () => await axios.post('/api/auth/logout'),
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/logout').catch((e) => console.error(e));
+    },
+  });
+
+  useShowErrorToast(error);
+
+  if (user && showUserWindow) {
     return (
       <>
         <div
-          className="fixed left-0 top-0 h-full w-full max-w-full bg-transparent"
-          onClick={() => closeUserWindow()}
+          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
+          onClick={() => {
+            // this blocks the closing of the User Modal if request for logout is sent
+            if (!isPending) {
+              closeUserWindow();
+            }
+          }}
         />
         <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
           <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
-            {userDetails.firstName} {userDetails.lastName}
+            {user.firstName} {user.lastName}
           </p>
-          <p className="ml-3 [overflow-wrap:anywhere]">{userDetails.email}</p>
+          <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full flex-col justify-center">
-            <AdminPanelButton userDetails={userDetails} />
-            <LogoutButton />
+            <AdminPanelButton userDetails={user} />
+            <Button
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
+              onClick={async () => {
+                try {
+                  await mutateAsync();
+                } catch (e) {
+                  handleErrorToast(handleError(e));
+                }
+              }}
+              disabled={isPending}
+            >
+              {' '}
+              Kirjaudu ulos
+              {isPending ? (
+                <SvgSpinner
+                  width={18}
+                  height={18}
+                  className="ml-2 animate-spin"
+                />
+              ) : (
+                <SvgArrowRightStartOnRectangle
+                  width={18}
+                  height={18}
+                  className="ml-2"
+                />
+              )}
+            </Button>
           </div>
         </div>
       </>
@@ -97,28 +144,6 @@ function AdminPanelButton({ userDetails }: { userDetails: UserDetails }) {
       <Link href={'/admin'} className="absolute h-full w-full" />
       <p className={`text-sm font-medium text-white`}>Ylläpito</p>
       <SvgUser width={18} height={18} className="ml-2" />
-    </Button>
-  );
-}
-
-function LogoutButton() {
-  async function handleLogout() {
-    try {
-      await axios.post('/api/auth/logout');
-      window.location.href = '/logout';
-    } catch (e) {
-      console.error(e);
-      window.location.href = '/';
-    }
-  }
-
-  return (
-    <Button
-      className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md"
-      onClick={() => void handleLogout()}
-    >
-      <p className={`text-sm font-medium text-white`}>Kirjaudu ulos</p>
-      <SvgArrowRightStartOnRectangle width={18} height={18} className="ml-2" />
     </Button>
   );
 }
