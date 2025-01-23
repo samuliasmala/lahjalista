@@ -1,11 +1,11 @@
-import { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '~/components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift, User } from '~/shared/types';
+import { createGift, useGetGifts } from '~/utils/apiRequests';
+import { Gift, CreateGift, User, QueryKeys } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
@@ -13,35 +13,36 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
+import { useRouter } from 'next/router';
+import SvgSpinner from '~/icons/spinner';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
+import axios from 'axios';
 
 export { getServerSideProps };
 
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [giftData, setGiftData] = useState<Gift[]>([]);
   const [giftNameError, setGiftNameError] = useState(false);
   const [receiverError, setReceiverError] = useState(false);
   const [newReceiver, setNewReceiver] = useState('');
   const [newGiftName, setNewGiftName] = useState('');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  useEffect(() => {
-    console.log('effect');
-    async function fetchGifts() {
-      try {
-        const gifts = await getAllGifts();
-        setGiftData(gifts);
-      } catch (e) {
-        handleErrorToast(handleError(e));
-      }
-    }
-    void fetchGifts();
-  }, []);
+  const createGiftQuery = useMutation({
+    mutationKey: QueryKeys.CREATE_GIFT,
+    mutationFn: async (newGift: CreateGift) => await createGift(newGift),
+    // if success: refresh giftlist
+    onSuccess: async () =>
+      await queryClient.invalidateQueries({
+        queryKey: QueryKeys.GIFTS,
+      }),
+  });
+
+  const queryClient = useQueryClient();
 
   async function handleSubmit(e: FormEvent<HTMLElement>) {
     try {
@@ -68,21 +69,11 @@ export default function Home({
         receiver: newReceiver,
         gift: newGiftName,
       };
+      // send gift creation request
+      await createGiftQuery.mutateAsync(newGift);
 
-      const createdGift = await createGift(newGift);
-      const updatedGiftList = giftData.concat(createdGift);
-
-      setGiftData(updatedGiftList);
       setNewGiftName('');
       setNewReceiver('');
-    } catch (e) {
-      handleErrorToast(handleError(e));
-    }
-  }
-
-  async function refreshGiftList() {
-    try {
-      setGiftData(await getAllGifts());
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -134,68 +125,183 @@ export default function Home({
                   <div className="text-red-500">Lahjansaaja on pakollinen</div>
                 )}
               </div>
-              <Button type="submit" className="mt-8">
+              <Button
+                type="submit"
+                className="mt-8"
+                disabled={createGiftQuery.isPending}
+              >
                 Lisää
+                {createGiftQuery.isPending ? (
+                  <span className="absolute p-1">
+                    <SvgSpinner
+                      width={18}
+                      height={18}
+                      className="animate-spin text-black"
+                    />
+                  </span>
+                ) : null}
               </Button>
             </form>
           </div>
-          {giftData.length > 0 && (
-            <div className="mt-7">
-              <TitleText className="text-start text-xl">Lahjaideat</TitleText>
-              {giftData.map((giftItem) => (
-                <div
-                  key={`${giftItem.uuid}_divbutton`}
-                  className="mt-4 animate-opacity"
-                >
-                  <div key={giftItem.uuid} className="grid">
-                    <p
-                      className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
-                    >
-                      {giftItem.gift} <span>-</span> {giftItem.receiver}
-                    </p>
-                    <SvgPencilEdit
-                      key={`${giftItem.uuid}_editbutton`}
-                      width={24}
-                      height={24}
-                      className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
-                      onClick={() => {
-                        setEditModalGiftData(giftItem);
-                        setIsEditModalOpen(true);
-                      }}
-                    />
-
-                    <SvgTrashCan
-                      key={`${giftItem.uuid}_deletebutton`}
-                      width={24}
-                      height={24}
-                      className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
-                      onClick={() => {
-                        setDeleteModalGiftData(giftItem);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-              {isEditModalOpen && editModalGiftData && (
-                <EditModal
-                  gift={editModalGiftData}
-                  refreshGiftList={() => void refreshGiftList()}
-                  setIsModalOpen={setIsEditModalOpen}
-                />
-              )}
-
-              {isDeleteModalOpen && deleteModalGiftData && (
-                <DeleteModal
-                  gift={deleteModalGiftData}
-                  refreshGiftList={() => void refreshGiftList()}
-                  setIsModalOpen={setIsDeleteModalOpen}
-                />
-              )}
-            </div>
-          )}
+          <TitleText className="mt-7 text-start text-xl">Lahjaideat</TitleText>
+          <GiftList />
         </div>
       </div>
     </main>
   );
+}
+
+function GiftList() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
+  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+
+  const { error, isFetching, data: giftData } = useGetGifts();
+
+  if (isFetching)
+    return (
+      <p className="mt-4 text-lg font-bold">
+        Noudetaan lahjoja{' '}
+        <span className="absolute ml-2 mt-1.5">
+          <SvgSpinner width={18} height={18} className="animate-spin" />
+        </span>
+      </p>
+    );
+
+  if (error) return <p className="mt-5 bg-red-500 text-lg">{error.message}</p>;
+
+  return (
+    <div>
+      {giftData && giftData.length > 0 && (
+        <div>
+          {giftData.map((giftItem) => (
+            <div
+              key={`${giftItem.uuid}_divbutton`}
+              className="mt-4 animate-opacity"
+            >
+              <div key={giftItem.uuid} className="grid">
+                <p
+                  className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
+                >
+                  {giftItem.gift} <span>-</span> {giftItem.receiver}
+                </p>
+                <SvgPencilEdit
+                  key={`${giftItem.uuid}_editbutton`}
+                  width={24}
+                  height={24}
+                  className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
+                  onClick={() => {
+                    setEditModalGiftData(giftItem);
+                    setIsEditModalOpen(true);
+                  }}
+                />
+
+                <SvgTrashCan
+                  key={`${giftItem.uuid}_deletebutton`}
+                  width={24}
+                  height={24}
+                  className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
+                  onClick={() => {
+                    setDeleteModalGiftData(giftItem);
+                    setIsDeleteModalOpen(true);
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+          {editModalGiftData && isEditModalOpen && (
+            <EditModal
+              gift={editModalGiftData}
+              setIsModalOpen={setIsEditModalOpen}
+            />
+          )}
+
+          {deleteModalGiftData && isDeleteModalOpen && (
+            <DeleteModal
+              gift={deleteModalGiftData}
+              setIsModalOpen={setIsDeleteModalOpen}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function UserDetailModal({
+  user,
+  showUserWindow,
+  closeUserWindow,
+}: HTMLAttributes<HTMLDivElement> & {
+  user: User;
+  showUserWindow: boolean;
+  closeUserWindow: () => void;
+}) {
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
+  const { isPending, error, mutateAsync } = useMutation({
+    mutationKey: QueryKeys.LOGOUT,
+    mutationFn: async () => await axios.post('/api/auth/logout'),
+    onSuccess: () => {
+      queryClient.clear();
+      router.push('/logout').catch((e) => console.error(e));
+    },
+  });
+
+  useShowErrorToast(error);
+
+  if (user && showUserWindow) {
+    return (
+      <>
+        <div
+          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
+          onClick={() => {
+            // this blocks the closing of the User Modal if request for logout is sent
+            if (!isPending) {
+              closeUserWindow();
+            }
+          }}
+        />
+        <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
+          <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
+            {user.firstName} {user.lastName}
+          </p>
+          <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
+          <div className="flex w-full justify-center">
+            <Button
+              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
+              onClick={async () => {
+                try {
+                  await mutateAsync();
+                } catch (e) {
+                  handleErrorToast(handleError(e));
+                }
+              }}
+              disabled={isPending}
+            >
+              {' '}
+              Kirjaudu ulos
+              {isPending ? (
+                <SvgSpinner
+                  width={18}
+                  height={18}
+                  className="ml-2 animate-spin"
+                />
+              ) : (
+                <SvgArrowRightStartOnRectangle
+                  width={18}
+                  height={18}
+                  className="ml-2"
+                />
+              )}
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  }
+  return null;
 }

@@ -10,9 +10,19 @@
 
 # Enter-näppäimellä EditModalin ja DeleteModalin hyväksyminen
 
+# Kun lisää uuden lahjan / kun lahjoja haetaan, järjestetään ne uusin -> vanhin. Myöhemmin voidaan lisätä käyttäjälle mahdollisuus valita miten lahjat haluaa järjestää (vaikka vanhin -> uusin, aakkosjärjestys, ymsyms)
+
+# Tässä toteutustapa:const sortedArrayNewestToOldest = gifts.sort((a, b) =>new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),);
+
+# Tanstackin requesteihin joku maksimiaika mitä odotetaan
+
+# Lisätään nappula, jolla voi hakea lahjat uudelleen halutessaan. Esimerkiksi jos tulee virhe lahjoja noutaessa, voisi haun laittaa uudelleen. Tai jos esimerkiksi lahjan poistaminen ei onnistu, koska lahjaa ei löydy palvelimelta. Ei käyttäjä voi ladata lahjoja uudelleen ilman sivun uudelleen latausta / F5
+
 ### </IDEOITA>
 
 TODO:
 
-Laitetaan nappulat yms käyttämään tanstack-kirjastoa. Ratkaisee samalla yhden ideoista
-https://www.npmjs.com/package/@tanstack/react-query
+1. Tee https://github.com/samuliasmala/lahjalista/pull/62#discussion_r1921024704 omaan branchiin
+
+2.1 Vaihda "Kirjaudu sisään"- ja "Luo käyttäjätunnus" -nappuloihin pyörivä spinner-indikaattori "..." sijaan
+2.2 Lisää /pages/login.tsx:n Kirjaudu sisään -nappulaan "select-none" jottei teksti tule maalatuksi jos silmää painaa muutaman kerran liian nopeasti
