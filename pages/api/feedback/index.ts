@@ -47,7 +47,6 @@ async function handleGET(
   }
 
   const feedbacks = await prisma.feedback.findMany();
-  console.log(feedbacks);
 
   return res.status(200).json(feedbacks);
 }

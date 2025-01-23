@@ -50,10 +50,11 @@ export default function Home({
         const fetchedFeedbacks = (await (
           await axios.get('/api/feedback')
         ).data) as Feedback[];
-        //console.log(fetchedFeedbacks);
+
         setFeedbacks(fetchedFeedbacks);
 
         // Rounds up the value, eg. 21 feedbacks / 5 = 4.2 -> 5
+        // the divider (5) will be changed to generic in the future which allows user to determine how many feedbacks should be shown per page
         setTotalPages(Math.ceil(fetchedFeedbacks.length / 5));
       } catch (e) {
         handleInternalError(e);
@@ -68,7 +69,7 @@ export default function Home({
       errorMessage ===
       'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
     ) {
-      window.location.href = '/';
+      router.push('/').catch((e) => console.error(e));
     }
     handleErrorToast(errorMessage);
   }
@@ -120,16 +121,19 @@ function FeedbackParagraph({
   currentPage: number;
   feedbacks: Feedback[];
 }) {
+  // this will be changed to be a generic in the future
   const howManyFeedbacksPerPage = 5;
+
   const startNumber =
     currentPage === 1 ? 0 : (currentPage - 1) * howManyFeedbacksPerPage;
+
   const endNumber =
     currentPage === 1
       ? howManyFeedbacksPerPage
       : startNumber + howManyFeedbacksPerPage;
-  //console.log(startNumber, endNumber);
+
   const currentFeedbacks = feedbacks.slice(startNumber, endNumber);
-  //console.log(currentFeedbacks, feedbacks);
+
   if (feedbacks.length > 0) {
     return (
       <div className="w-full">
