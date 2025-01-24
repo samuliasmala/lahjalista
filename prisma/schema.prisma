@@ -88,7 +88,6 @@ model Feedback {
 model PersonPicture {
     id         Int      @id @default(autoincrement())
     uuid       String   @unique @default(uuid())
-    userUUID   String   @unique
     thumbnail  Bytes    @db.ByteA
     picture    Bytes    @db.ByteA
     createdAt  DateTime @default(now())
