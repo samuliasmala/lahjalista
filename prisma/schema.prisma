@@ -29,21 +29,17 @@ model User {
 }
 
 model Person {
-    id                Int           @id @default(autoincrement())
-    uuid              String        @unique @default(uuid())
-    name              String
-    sendReminders     Boolean
-    // map:in käyttö napattu täältä https://github.com/prisma/prisma/discussions/11108
-    // onko väärä yhdistää kuvan "omistaja" userUUID:llä?
-    personPictureUUID String        @unique
-    personPicture     PersonPicture @relation(fields: [personPictureUUID], references: [uuid], onDelete: Cascade, map: "picture_fk")
-    userUUID          String
-    // onDelete: Cascade pitäisi olla ihan ok idea, koska jos User poistetaan ei Person:ia pitäisi tarvita
-    user              User          @relation(fields: [userUUID], references: [uuid], onDelete: Cascade, map: "user_fk")
-    createdAt         DateTime      @default(now())
-    updatedAt         DateTime      @updatedAt
-    anniversaryUUID   String        @unique
-    Anniversary       Anniversary[]
+    id              Int            @id @default(autoincrement())
+    uuid            String         @unique @default(uuid())
+    name            String
+    sendReminders   Boolean
+    userUUID        String
+    user            User           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @updatedAt
+    anniversaryUUID String         @unique
+    Anniversary     Anniversary[]
+    PersonPicture   PersonPicture?
 }
 
 model Gift {
@@ -58,14 +54,14 @@ model Gift {
 }
 
 model Anniversary {
-    id        Int      @id @default(autoincrement())
-    uuid      String   @unique @default(uuid())
-    name      String
-    date      DateTime @db.Date
-    userUUID  String
-    person    Person   @relation(fields: [uuid], references: [anniversaryUUID], onDelete: Cascade)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id         Int      @id @default(autoincrement())
+    uuid       String   @unique @default(uuid())
+    name       String
+    date       DateTime @db.Date
+    personUUID String
+    person     Person   @relation(fields: [uuid], references: [anniversaryUUID], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 }
 
 model Session {
@@ -90,13 +86,13 @@ model Feedback {
 }
 
 model PersonPicture {
-    id        Int      @id @default(autoincrement())
-    uuid      String   @unique @default(uuid())
-    userUUID  String   @unique
-    thumbnail Bytes    @db.ByteA
-    picture   Bytes    @db.ByteA
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    // tähän Person:iin ei ole laitettu relaatiota, koska relaatio tulee jo Person-modelista
-    Person    Person?
+    id         Int      @id @default(autoincrement())
+    uuid       String   @unique @default(uuid())
+    userUUID   String   @unique
+    thumbnail  Bytes    @db.ByteA
+    picture    Bytes    @db.ByteA
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    personUUID String   @unique
+    Person     Person   @relation(fields: [personUUID], references: [uuid], onDelete: Cascade)
 }
