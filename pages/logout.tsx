@@ -105,15 +105,14 @@ export default function Logout() {
                   }}
                 />
                 <Button className="p-2" type="submit" disabled={isPending}>
-                  Lähetä
-                  {isPending && (
-                    <span className="absolute ml-2 mt-1">
-                      <SvgSpinner
-                        width={20}
-                        height={20}
-                        className="animate-spin"
-                      />
-                    </span>
+                  {isPending ? (
+                    <SvgSpinner
+                      width={28}
+                      height={28}
+                      className="animate-spin justify-self-center"
+                    />
+                  ) : (
+                    'Lähetä'
                   )}
                 </Button>
                 <p className="select-none pt-6 text-xs text-gray-600">
