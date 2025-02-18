@@ -56,7 +56,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
       closeModal={closeModal}
       title="Muokkaa lahjaideaa:"
     >
-      <form onSubmit={(e) => errorWrapper(async () => await handleEdit(e))}>
+      <form onSubmit={(e) => errorWrapper(() => handleEdit(e))}>
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
