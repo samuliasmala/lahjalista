@@ -5,8 +5,6 @@ import { deleteGift } from '~/utils/apiRequests';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import SvgSpinner from '~/icons/spinner';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
-import { handleErrorToast } from '~/utils/handleToasts';
-import { handleError } from '~/utils/handleError';
 
 type DeleteModal = {
   gift: Gift;
@@ -49,13 +47,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
           <Button
             className={`m-6 mt-0 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center`}
             disabled={isPending}
-            onClick={async () => {
-              try {
-                await mutateAsync();
-              } catch (e) {
-                handleErrorToast(handleError(e));
-              }
-            }}
+            onClick={() => mutateAsync()}
           >
             {isPending ? (
               <SvgSpinner width={24} height={24} className="animate-spin" />
