@@ -93,5 +93,5 @@ model PersonPicture {
     createdAt  DateTime @default(now())
     updatedAt  DateTime @updatedAt
     personUUID String   @unique
-    Person     Person   @relation(fields: [personUUID], references: [uuid], onDelete: Cascade)
+    person     Person   @relation(fields: [personUUID], references: [uuid], onDelete: Cascade)
 }
