@@ -155,7 +155,16 @@ export type KeyboardEventKeys =
 // CHECK THIS, onko mitään järkeä
 
 export const QueryKeys = {
+  LOGIN: ['login'],
+  LOGOUT: ['logout'],
+
+  REGISTER: ['register'],
+
   GIFTS: ['gifts'],
+  CREATE_GIFT: ['createGift'],
+  DELETE_GIFT: ['deleteGift'],
+
+  CREATE_FEEDBACK: ['createFeedback'],
 
   // ei vielä käytössä
   //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],

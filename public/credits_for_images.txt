@@ -5,3 +5,4 @@ eye_slash.svg = https://heroicons.com/
 user.svg = https://heroicons.com/
 arrow-right-start-on-rectangle.svg = https://heroicons.com/
 logo = https://www.freepik.com/free-vector/flat-wheat-collection_1545231.htm
+spinner.svg = https://www.svgrepo.com/svg/310005/spinner-ios
