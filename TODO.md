@@ -8,7 +8,7 @@
 
 # Jokin sivu (esimerkiksi asetuksiin), joka näyttää kaikki aktiiviset (miksei epäaktiiviset) Sessionit. Myöskin Sessionin poistomahdollisuus voitaisiin lisätä
 
-# Enter-näppäimellä EditModalin ja DeleteModalin hyväksyminen
+# Enter-näppäimellä EditModalin (DONE) ja DeleteModalin hyväksyminen
 
 # Kun lisää uuden lahjan / kun lahjoja haetaan, järjestetään ne uusin -> vanhin. Myöhemmin voidaan lisätä käyttäjälle mahdollisuus valita miten lahjat haluaa järjestää (vaikka vanhin -> uusin, aakkosjärjestys, ymsyms)
 
