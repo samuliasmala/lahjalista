@@ -25,6 +25,21 @@ model User {
     gift      Gift[]
     Session   Session[]
     Feedback  Feedback[]
+    Person    Person[]
+}
+
+model Person {
+    id              Int            @id @default(autoincrement())
+    uuid            String         @unique @default(uuid())
+    name            String
+    sendReminders   Boolean
+    userUUID        String
+    user            User           @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+    createdAt       DateTime       @default(now())
+    updatedAt       DateTime       @updatedAt
+    anniversaryUUID String         @unique
+    Anniversary     Anniversary[]
+    PersonPicture   PersonPicture?
 }
 
 model Gift {
@@ -36,6 +51,17 @@ model Gift {
     updatedAt DateTime @updatedAt
     userUUID  String?
     user      User?    @relation(fields: [userUUID], references: [uuid])
+}
+
+model Anniversary {
+    id         Int      @id @default(autoincrement())
+    uuid       String   @unique @default(uuid())
+    name       String
+    date       DateTime @db.Date
+    personUUID String
+    person     Person   @relation(fields: [uuid], references: [anniversaryUUID], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 }
 
 model Session {
@@ -57,4 +83,15 @@ model Feedback {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
     user         User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+}
+
+model PersonPicture {
+    id         Int      @id @default(autoincrement())
+    uuid       String   @unique @default(uuid())
+    thumbnail  Bytes    @db.ByteA
+    picture    Bytes    @db.ByteA
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    personUUID String   @unique
+    person     Person   @relation(fields: [personUUID], references: [uuid], onDelete: Cascade)
 }
