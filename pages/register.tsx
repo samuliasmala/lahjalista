@@ -13,12 +13,18 @@ import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
+import { useMutation } from '@tanstack/react-query';
+import { QueryKeys } from '~/shared/types';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { z } from 'zod';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
-const EMPTY_FORM_DATA = {
+type FormData = z.infer<typeof formSchema>;
+
+const EMPTY_FORM_DATA: FormData = {
   firstName: '',
   lastName: '',
   email: '',
@@ -35,7 +41,16 @@ export default function Register() {
 
   const router = useRouter();
 
-  async function handleRegister(e: FormEvent) {
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationKey: QueryKeys.REGISTER,
+    mutationFn: async (formData: FormData) =>
+      await axios.post('/api/auth/register', formData),
+    onSuccess: userCreatedSuccesfully,
+  });
+
+  useShowErrorToast(error);
+
+  async function handleSubmit(e: FormEvent) {
     try {
       e.preventDefault();
       const validatedForm = formSchema.safeParse(formData);
@@ -49,8 +64,7 @@ export default function Register() {
         return;
       }
       setErrors({});
-      await axios.post('/api/auth/register', validatedForm.data);
-      userCreatedSuccesfully();
+      await mutateAsync(validatedForm.data);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -71,7 +85,7 @@ export default function Register() {
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="mt-14 flex w-full max-w-72 flex-col">
-            <form onSubmit={(e) => void handleRegister(e)}>
+            <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
               <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
                 <Label>Etunimi</Label>
@@ -149,7 +163,10 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                <Button className="mt-8 select-none">Luo käyttäjätunnus</Button>
+                <Button className="mt-8 select-none" disabled={isPending}>
+                  Luo käyttäjätunnus
+                  {isPending && <span className="loading-dots absolute" />}
+                </Button>
                 <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}
                   <Link
@@ -174,7 +191,7 @@ export default function Register() {
                   <SvgCheckMarkIcon
                     className="bg-green-300"
                     circleClassName="fill-green-500"
-                    checkMarkClassName="fill-black-500"
+                    checkMarkClassName="fill-black"
                   />
                 </div>
               </div>
