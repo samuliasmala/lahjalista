@@ -31,9 +31,4 @@ jobs:
         run: npm ci
 
       - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          eslint_extensions: js,ts,tsx
-          tsc: true
-          tsc_args: '--noemit'
+        run: npm run lint

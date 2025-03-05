@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { CreateGift, CreateUser, Gift, User } from '~/shared/types';
+import { CreateGift, CreateUser, Gift, QueryKeys, User } from '~/shared/types';
+import { useQuery } from '@tanstack/react-query';
 
 const giftsBaseUrl = '/api/gifts';
 
@@ -7,8 +8,16 @@ const giftsBaseUrl = '/api/gifts';
  *
  * @returns an array that contains all the gifts as objects
  */
-export async function getAllGifts() {
-  return (await axios.get(giftsBaseUrl)).data as Gift[];
+export function useGetGifts() {
+  return useQuery({
+    queryKey: QueryKeys.GIFTS,
+    queryFn: async () => {
+      return (await axios.get(giftsBaseUrl)).data as Gift[];
+    },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retry: false,
+  });
 }
 
 /**

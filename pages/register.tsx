@@ -13,13 +13,18 @@ import { formSchema } from '~/shared/zodSchemas';
 import { Label } from '~/components/Label';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { QueryKeys } from '~/shared/types';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { z } from 'zod';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
-const EMPTY_FORM_DATA = {
+type FormData = z.infer<typeof formSchema>;
+
+const EMPTY_FORM_DATA: FormData = {
   firstName: '',
   lastName: '',
   email: '',
@@ -36,11 +41,14 @@ export default function Register() {
 
   const router = useRouter();
 
-  const registerQuery = useQuery({
-    queryKey: ['registerQuery'],
-    enabled: false,
-    queryFn: () => handleRegister(),
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationKey: QueryKeys.REGISTER,
+    mutationFn: async (formData: FormData) =>
+      await axios.post('/api/auth/register', formData),
+    onSuccess: userCreatedSuccesfully,
   });
+
+  useShowErrorToast(error);
 
   async function handleSubmit(e: FormEvent) {
     try {
@@ -56,7 +64,7 @@ export default function Register() {
         return;
       }
       setErrors({});
-      await registerQuery.refetch();
+      await mutateAsync(validatedForm.data);
     } catch (e) {
       handleErrorToast(handleError(e));
     }
@@ -68,16 +76,6 @@ export default function Register() {
     setTimeout(() => {
       router.push('/').catch((e) => console.error(e));
     }, 1000);
-  }
-
-  async function handleRegister() {
-    try {
-      await axios.post('/api/auth/register', formData);
-      userCreatedSuccesfully();
-    } catch (e) {
-      handleErrorToast(handleError(e));
-    }
-    return 'registerQuery';
   }
 
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
@@ -165,19 +163,10 @@ export default function Register() {
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
-                {registerQuery.isFetching ? (
-                  <Button
-                    className="mt-8 cursor-not-allowed select-none"
-                    disabled
-                  >
-                    Luodaan käyttäjätunnusta
-                    <span className="loading-dots absolute" />
-                  </Button>
-                ) : (
-                  <Button className="mt-8 select-none">
-                    Luo käyttäjätunnus
-                  </Button>
-                )}
+                <Button className="mt-8 select-none" disabled={isPending}>
+                  Luo käyttäjätunnus
+                  {isPending && <span className="loading-dots absolute" />}
+                </Button>
                 <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}
                   <Link
@@ -202,7 +191,7 @@ export default function Register() {
                   <SvgCheckMarkIcon
                     className="bg-green-300"
                     circleClassName="fill-green-500"
-                    checkMarkClassName="fill-black-500"
+                    checkMarkClassName="fill-black"
                   />
                 </div>
               </div>

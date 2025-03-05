@@ -30,6 +30,7 @@ Content-Type: application/json
 
 
 # GIFT REQUESTS
+###
 
 # this triple hashtag (#) has been added so Register request works
 ###
@@ -74,6 +75,7 @@ DELETE {{baseUrl}}/gifts/{{giftUUID}}
 
 # USER REQUESTS
 
+###
 @userUUID = 26ab195c-5f56-4831-bedd-07725e8012ff
 
 ###
