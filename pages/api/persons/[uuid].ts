@@ -1,15 +1,9 @@
-import { Gift, User } from '~/shared/types';
+import { Person, User } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import {
-  getAnniversarySchema,
-  getPersonSchema,
-  updateGiftSchema,
-  uuidParseSchema,
-  patchAnniversarySchema,
-} from '~/shared/zodSchemas';
+import { getPersonSchema, uuidParseSchema } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
 import { z } from 'zod';
 
@@ -25,24 +19,6 @@ const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
   PATCH: handlePATCH,
   PUT: handlePUT,
   DELETE: handleDELETE,
-};
-
-type PrismaHandlerParams<ResponseType = unknown> = {
-  res: NextApiResponse<ResponseType>;
-  name: string;
-  date: Date;
-  personUUID: string;
-  userUUID: string;
-  uuid: string;
-};
-
-const PRISMA_ACTION_HANDLERS: Record<
-  string,
-  (params: PrismaHandlerParams) => Promise<void>
-> = {
-  create: handlePrismaCreate,
-  update: handlePrismaUpdate,
-  delete: handlePrismaDelete,
 };
 
 export default async function handleRequest(
@@ -82,114 +58,49 @@ async function handleGET({ res, personUUID, userData }: HandlerParams) {
   });
   const parsedPersonData = getPersonSchema.parse(personData);
 
-  const anniversariesOfPerson = await prisma.anniversary.findMany({
-    where: {
-      personUUID,
-      userUUID: userData.uuid,
-    },
-  });
-  console.log(anniversariesOfPerson, personUUID, userData.uuid);
-  // ZOD HERE
-  const parsedAnniversaries = z
-    .array(getAnniversarySchema)
-    .parse(anniversariesOfPerson);
-  console.log(parsedAnniversaries);
-
-  return res.status(200).json({ parsedPersonData, anniversariesOfPerson });
+  return res.status(200).json(parsedPersonData);
 }
 
-async function handlePATCH({ req, res, personUUID, userData }: HandlerParams) {
-  console.log(req.body);
-  const parsedAnniversaries = patchAnniversarySchema.parse(
-    req.body.anniversary,
-  );
-  console.log(parsedAnniversaries);
+async function handlePATCH({
+  req,
+  res,
+  personUUID,
+  userData,
+}: HandlerParams<Person>) {
+  const personData = getPersonSchema.parse(req.body);
 
-  if (parsedAnniversaries) {
-    const prismaActionHandler =
-      PRISMA_ACTION_HANDLERS[parsedAnniversaries.action];
-
-    const { date, name, uuid } = parsedAnniversaries;
-    return await prismaActionHandler({
-      res,
-      date,
-      name,
-      personUUID,
+  const updatedPerson = await prisma.person.update({
+    where: {
+      uuid: personUUID,
       userUUID: userData.uuid,
-      uuid,
-    });
-  }
+    },
+    data: personData,
+  });
 
-  return res.status(200).send('Test2');
+  return res.status(200).json(updatedPerson);
 }
 
 async function handlePUT({ req, res, personUUID, userData }: HandlerParams) {
-  return res.status(200).send('Test3');
+  const personData = getPersonSchema.parse(req.body);
+
+  const updatedPerson = await prisma.person.update({
+    where: {
+      uuid: personUUID,
+      userUUID: userData.uuid,
+    },
+    data: personData,
+  });
+
+  return res.status(200).json(updatedPerson);
 }
 
 async function handleDELETE({ res, personUUID, userData }: HandlerParams) {
-  return res.status(200).send('Test4');
-}
-
-/*
-handle functions
-*/
-
-async function handlePrismaCreate({
-  res,
-  name,
-  date,
-  personUUID,
-  userUUID,
-}: PrismaHandlerParams) {
-  const createdAnniversary = await prisma.anniversary.create({
-    data: {
-      name,
-      date,
-      personUUID,
-      userUUID,
-    },
-  });
-  // CHECK THIS, ZOD HERE!!!
-  return res.status(200).json(createdAnniversary);
-}
-
-async function handlePrismaUpdate({
-  res,
-  name,
-  date,
-  uuid,
-  personUUID,
-  userUUID,
-}: PrismaHandlerParams) {
-  const updatedAnniversary = await prisma.anniversary.update({
+  await prisma.person.delete({
     where: {
-      uuid: uuid,
-      personUUID: personUUID,
-      userUUID: userUUID,
-    },
-    data: {
-      name: name,
-      date: date,
+      uuid: personUUID,
+      userUUID: userData.uuid,
     },
   });
-  console.log(updatedAnniversary);
-  // CHECK THIS, ZOD HERE!!!
-  return res.status(200).json(updatedAnniversary);
-}
-
-async function handlePrismaDelete({
-  res,
-  uuid,
-  personUUID,
-  userUUID,
-}: PrismaHandlerParams) {
-  await prisma.anniversary.delete({
-    where: {
-      uuid,
-      personUUID,
-      userUUID,
-    },
-  });
-  return res.status(200).send('Success!');
+  res.status(200).end();
+  return;
 }

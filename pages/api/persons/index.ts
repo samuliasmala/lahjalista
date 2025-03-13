@@ -4,7 +4,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { User } from '~/shared/types';
 import prisma from '~/prisma/index';
-import { createPersonSchema } from '~/shared/zodSchemas';
+import { createPersonSchema, personSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -40,26 +40,14 @@ async function handleGET(
   res: NextApiResponse,
   userData: User,
 ) {
-  const personsData = await prisma.person.findMany({
+  const personData = await prisma.person.findMany({
     where: {
       userUUID: userData.uuid,
     },
   });
+  const parsedPersonData = personSchema.parse(personData);
 
-  let anniversariesData;
-  if (req.query.anniversaries == 'true') {
-    anniversariesData = await prisma.anniversary.findMany({
-      where: {
-        userUUID: userData.uuid,
-      },
-    });
-  }
-
-  const returnableObject = anniversariesData
-    ? { personsData, anniversariesData }
-    : { personsData };
-  // ADD ZOD HERE
-  return res.status(200).json(returnableObject);
+  return res.status(200).json(parsedPersonData);
 }
 
 async function handlePOST(

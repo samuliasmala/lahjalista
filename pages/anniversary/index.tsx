@@ -1,23 +1,11 @@
-import React, { FormEvent, HTMLAttributes, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '~/components/Button';
-import { TitleText } from '~/components/TitleText';
-import { DeleteModal } from '~/components/DeleteModal';
-import { EditModal } from '~/components/EditModal';
-import { createGift, getAllGifts } from '~/utils/apiRequests';
-import { Gift, PatchAnniversary, User } from '~/shared/types';
-import { handleError } from '~/utils/handleError';
+import { PatchAnniversary } from '~/shared/types';
 import { InferGetServerSidePropsType } from 'next';
-import SvgUser from '~/icons/user';
-import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
 import { getServerSideProps } from '~/utils/getServerSideProps';
-import SvgPencilEdit from '~/icons/pencil_edit';
-import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
-import { handleErrorToast } from '~/utils/handleToasts';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import SvgSpinner from '~/icons/spinner';
 import { Input } from '~/components/Input';
+import { errorWrapper } from '~/utils/utilFunctions';
 
 export { getServerSideProps };
 
@@ -45,6 +33,25 @@ export default function Home({
     void runThis();
   }, []);
 
+  function handleSubmit() {
+    console.log(e);
+    console.log(date);
+    console.log(anniversaryName);
+    console.log(personUUID);
+    const patchObject: PatchAnniversary = {
+      action: 'create',
+      date: date,
+      name: anniversaryName,
+      uuid: anniversaryUUID,
+    };
+    console.log(patchObject);
+    /*
+    await axios.patch(`/api/persons/${personUUID}`, {
+      anniversary: patchObject,
+    });
+    */
+  }
+
   return (
     <main className="h-screen w-full max-w-full">
       <div className="mt-5 flex max-w-72 flex-col justify-self-center">
@@ -55,9 +62,9 @@ export default function Home({
           onChange={(e) => setPersonUUID(e.currentTarget.value)}
         />
         <form
-          onSubmit={async (e) => {
-            try {
-              e.preventDefault();
+          onSubmit={(e) => {
+            e.preventDefault();
+            errorWrapper(async () => {
               console.log(e);
               console.log(date);
               console.log(anniversaryName);
@@ -68,12 +75,14 @@ export default function Home({
                 name: anniversaryName,
                 uuid: anniversaryUUID,
               };
+              console.log(patchObject);
+              /*
               await axios.patch(`/api/persons/${personUUID}`, {
                 anniversary: patchObject,
               });
-            } catch (e) {
-              console.error(e);
-            }
+              */
+            });
+            return;
           }}
         >
           <label htmlFor="anniversaryName">Nimi:</label>
