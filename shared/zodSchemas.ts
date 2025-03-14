@@ -147,6 +147,10 @@ export const getAnniversarySchema = anniversarySchema.extend({
   updatedAt: z.date(),
 });
 
+export const createAnniversarySchema = anniversarySchema.extend({
+  personUUID: uuidParseSchema,
+});
+
 export const patchAnniversarySchema = anniversarySchema.partial();
 
 // CHECK THIS, onko tarpeellinen
