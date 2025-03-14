@@ -4,7 +4,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { User } from '~/shared/types';
 import prisma from '~/prisma/index';
-import { createPersonSchema } from '~/shared/zodSchemas';
+import { createAnniversarySchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -45,26 +45,22 @@ async function handleGET(
   return res.status(200).send('True');
 }
 
-async function handlePOST(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  userData: User,
-) {
-  const parsedUserData = createPersonSchema.parse(req.body);
+async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+  const parsedAnniversaryData = createAnniversarySchema.parse(req.body);
 
-  const addedPerson = await prisma.person.create({
+  const addedAnniversary = await prisma.anniversary.create({
     data: {
-      name: parsedUserData.name,
-      sendReminders: parsedUserData.sendReminders,
-      userUUID: userData.uuid,
+      date: parsedAnniversaryData.date,
+      name: parsedAnniversaryData.name,
+      personUUID: parsedAnniversaryData.personUUID,
     },
     select: {
+      date: true,
       name: true,
-      sendReminders: true,
       uuid: true,
       createdAt: true,
       updatedAt: true,
     },
   });
-  return res.status(200).json(addedPerson);
+  return res.status(200).json(addedAnniversary);
 }
