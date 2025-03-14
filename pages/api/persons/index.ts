@@ -44,10 +44,17 @@ async function handleGET(
     where: {
       userUUID: userData.uuid,
     },
+    select: {
+      uuid: true,
+      name: true,
+      PersonPicture: true,
+      sendReminders: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
-  const parsedPersonData = personSchema.parse(personData);
 
-  return res.status(200).json(parsedPersonData);
+  return res.status(200).json(personData);
 }
 
 async function handlePOST(
