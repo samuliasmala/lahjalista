@@ -171,3 +171,46 @@ Content-Type: application/json
 
 ###
 DELETE {{baseUrl}}/persons/{{personUUID}}
+
+
+
+
+# ANNIVERSARY REQUESTS
+
+@anniversaryUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
+
+###
+GET {{baseUrl}}/anniversary
+
+###
+GET {{baseUrl}}/anniversary/{{anniversaryUUID}}
+
+###
+POST {{baseUrl}}/anniversary
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminders": true
+}
+
+###
+PATCH {{baseUrl}}/anniversary/{{anniversaryUUID}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminders": false
+}
+
+###
+PUT {{baseUrl}}/anniversary/{{anniversaryUUID}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminders": true
+}
+
+###
+DELETE {{baseUrl}}/anniversary/{{anniversaryUUID}}
