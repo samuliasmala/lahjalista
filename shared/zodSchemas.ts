@@ -128,6 +128,11 @@ export const patchPersonSchema = getPersonSchema
   })
   .partial();
 
+export const putPersonSchema = getPersonSchema.pick({
+  name: true,
+  sendReminders: true,
+});
+
 export const createPersonSchema = personSchema;
 
 // ANNIVERSARY

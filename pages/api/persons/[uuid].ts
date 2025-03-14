@@ -6,6 +6,7 @@ import { HttpError } from '~/backend/HttpError';
 import {
   getPersonSchema,
   patchPersonSchema,
+  putPersonSchema,
   uuidParseSchema,
 } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
@@ -84,7 +85,8 @@ async function handlePATCH({
 }
 
 async function handlePUT({ req, res, personUUID, userData }: HandlerParams) {
-  const personData = patchPersonSchema.parse(req.body);
+  const personData = putPersonSchema.parse(req.body);
+
   const updatedPerson = await prisma.person.update({
     where: {
       uuid: personUUID,
