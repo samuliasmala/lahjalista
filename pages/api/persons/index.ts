@@ -55,12 +55,12 @@ async function handlePOST(
   res: NextApiResponse,
   userData: User,
 ) {
-  const parsedUserData = createPersonSchema.parse(req.body);
+  const parsedPerson = createPersonSchema.parse(req.body);
 
   const addedPerson = await prisma.person.create({
     data: {
-      name: parsedUserData.name,
-      sendReminders: parsedUserData.sendReminders,
+      name: parsedPerson.name,
+      sendReminders: parsedPerson.sendReminders,
       userUUID: userData.uuid,
     },
     select: {
