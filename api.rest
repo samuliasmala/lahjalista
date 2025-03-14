@@ -156,9 +156,8 @@ PATCH {{baseUrl}}/persons/{{personUUID}}
 Content-Type: application/json
 
 {
-  "email": "matti.meikalainen@esimerkkimail.com",
-  "firstName": "Matti",
-  "lastName": "Meikäläinen"
+  "name": "John Doe",
+  "sendReminders": false
 }
 
 ###
@@ -166,9 +165,8 @@ PUT {{baseUrl}}/persons/{{personUUID}}
 Content-Type: application/json
 
 {
-  "email": "matti.meikalainen@esimerkkimail.com",
-  "firstName": "Mikko",
-  "lastName": "Meikäläinen"
+  "name": "John Doe",
+  "sendReminders": true
 }
 
 ###
