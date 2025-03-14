@@ -3,9 +3,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { getPersonSchema, uuidParseSchema } from '~/shared/zodSchemas';
+import {
+  getPersonSchema,
+  patchPersonSchema,
+  uuidParseSchema,
+} from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
-import { z } from 'zod';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
@@ -67,7 +70,7 @@ async function handlePATCH({
   personUUID,
   userData,
 }: HandlerParams<Person>) {
-  const personData = getPersonSchema.parse(req.body);
+  const personData = patchPersonSchema.parse(req.body);
 
   const updatedPerson = await prisma.person.update({
     where: {
@@ -81,8 +84,7 @@ async function handlePATCH({
 }
 
 async function handlePUT({ req, res, personUUID, userData }: HandlerParams) {
-  const personData = getPersonSchema.parse(req.body);
-
+  const personData = patchPersonSchema.parse(req.body);
   const updatedPerson = await prisma.person.update({
     where: {
       uuid: personUUID,
