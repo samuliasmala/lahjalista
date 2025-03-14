@@ -2,6 +2,12 @@ import { z } from 'zod';
 import { emailRegex, passwordRegex } from './regexPatterns';
 import { Prisma } from '@prisma/client';
 
+// MISC
+
+export const uuidParseSchema = z
+  .string({ message: 'Invalid UUID! It should be given as a string!' })
+  .uuid('UUID pattern was invalid!');
+
 // FORM
 
 const firstNameSchema = z
@@ -145,9 +151,3 @@ export const patchAnniversarySchema = anniversarySchema.partial();
 
 // CHECK THIS, onko tarpeellinen
 export const putAnniversarySchema = anniversarySchema;
-
-// MISC
-
-export const uuidParseSchema = z
-  .string({ message: 'Invalid UUID! It should be given as a string!' })
-  .uuid('UUID pattern was invalid!');
