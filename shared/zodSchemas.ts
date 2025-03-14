@@ -123,10 +123,8 @@ export const getPersonSchema = personSchema.extend({
 
 export const patchPersonSchema = personSchema.partial();
 
-export const putPersonSchema = getPersonSchema.pick({
-  name: true,
-  sendReminders: true,
-});
+// CHECK THIS, onko tarpeellinen
+export const putPersonSchema = personSchema;
 
 export const createPersonSchema = personSchema;
 
@@ -143,15 +141,10 @@ export const getAnniversarySchema = anniversarySchema.extend({
   updatedAt: z.date(),
 });
 
-export const patchAnniversarySchema = anniversarySchema.extend({
-  date: z.coerce.date(),
-  uuid: z.string(),
-  action: z.union([
-    z.literal('create'),
-    z.literal('update'),
-    z.literal('delete'),
-  ]),
-});
+export const patchAnniversarySchema = anniversarySchema.partial();
+
+// CHECK THIS, onko tarpeellinen
+export const putAnniversarySchema = anniversarySchema;
 
 // MISC
 
