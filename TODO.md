@@ -28,3 +28,25 @@ TODO:
 2.2 Lisää /pages/login.tsx:n Kirjaudu sisään -nappulaan "select-none" jottei teksti tule maalatuksi jos silmää painaa muutaman kerran liian nopeasti
 
 3. Tee https://github.com/samuliasmala/lahjalista/pull/63/files/6cc43a4562191ceb6c29b6c42059e8e750ed575d#r1921036461 omaan branchiin
+
+4. Vaihda /shared/zodSchemas.ts:ssä olevat uuid-tarkistukset käyttämään nykyistä uuidParseSchema-skeemaa. Esimerkiksi:
+
+```ts
+export const giftSchema = z.object({
+  gift: z.string().min(1),
+  receiver: z.string().min(1),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  uuid: z.string(),
+});
+
+// -------->
+
+export const giftSchema = z.object({
+  gift: z.string().min(1),
+  receiver: z.string().min(1),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  uuid: uuidParseSchema,
+});
+```
