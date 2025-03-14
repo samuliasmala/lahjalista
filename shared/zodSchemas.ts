@@ -121,12 +121,7 @@ export const getPersonSchema = personSchema.extend({
   updatedAt: z.date(),
 });
 
-export const patchPersonSchema = getPersonSchema
-  .pick({
-    name: true,
-    sendReminders: true,
-  })
-  .partial();
+export const patchPersonSchema = personSchema.partial();
 
 export const putPersonSchema = getPersonSchema.pick({
   name: true,
