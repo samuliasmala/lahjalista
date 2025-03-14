@@ -15,12 +15,10 @@ ALTER TABLE "Gift" DROP CONSTRAINT "Gift_userUUID_fkey";
 DROP INDEX "Feedback_feedbackUUID_key";
 
 -- AlterTable
-ALTER TABLE "Feedback" DROP CONSTRAINT "Feedback_pkey",
-DROP COLUMN "feedbackID",
-DROP COLUMN "feedbackUUID",
-ADD COLUMN     "id" SERIAL NOT NULL,
-ADD COLUMN     "uuid" TEXT NOT NULL,
-ADD CONSTRAINT "Feedback_pkey" PRIMARY KEY ("id");
+ALTER TABLE "Feedback" RENAME COLUMN "feedbackID" TO "id";
+ALTER TABLE "Feedback" RENAME COLUMN "feedbackUUID" TO "uuid";
+ALTER TABLE "Feedback" DROP CONSTRAINT "Feedback_pkey";
+ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_pkey" PRIMARY KEY ("id");
 
 -- CreateTable
 CREATE TABLE "Person" (
