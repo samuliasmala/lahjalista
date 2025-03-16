@@ -202,8 +202,10 @@ PATCH {{baseUrl}}/anniversary/{{anniversaryUUID}}
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "sendReminders": false
+
+  "date": "{{currentDatePlusOneYear}}",
+  "name": "John Doe's birthday",
+  "personUUID": "{{personUUID}}"
 }
 
 ###
@@ -211,8 +213,9 @@ PUT {{baseUrl}}/anniversary/{{anniversaryUUID}}
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "sendReminders": true
+  "date": "{{currentDatePlusOneYear}}",
+  "name": "John Doe's birthday",
+  "personUUID": "{{personUUID}}"
 }
 
 ###
