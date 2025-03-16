@@ -8,6 +8,14 @@ export const uuidParseSchema = z
   .string({ message: 'Invalid UUID! It should be given as a string!' })
   .uuid('UUID pattern was invalid!');
 
+// This checks if given value is a string and is a date. If that's true it will check if the given date is not invalid
+// CHECK THIS, this has to be tested if it is working properly
+export const dateParseSchema = z
+  .string()
+  .min(1, 'Päivämäärä on pakollinen!')
+  .datetime({ message: 'Annettu päivämäärä on virheellinen!' })
+  .pipe(z.coerce.date());
+
 // FORM
 
 const firstNameSchema = z
@@ -138,7 +146,7 @@ export const createPersonSchema = personSchema;
 
 export const anniversarySchema = z.object({
   name: z.string().min(1),
-  date: z.date(),
+  date: dateParseSchema,
 });
 
 export const getAnniversarySchema = anniversarySchema.extend({
