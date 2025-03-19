@@ -46,13 +46,13 @@ async function handleGET(
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-  const parsedAnniversaryData = createAnniversarySchema.parse(req.body);
+  const { date, name, personUUID } = createAnniversarySchema.parse(req.body);
 
   const addedAnniversary = await prisma.anniversary.create({
     data: {
-      date: parsedAnniversaryData.date,
-      name: parsedAnniversaryData.name,
-      personUUID: parsedAnniversaryData.personUUID,
+      date,
+      name,
+      personUUID,
     },
     select: {
       date: true,
