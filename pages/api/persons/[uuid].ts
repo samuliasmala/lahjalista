@@ -59,6 +59,14 @@ async function handleGET({ res, personUUID, userData }: HandlerParams<Person>) {
       uuid: personUUID,
       userUUID: userData.uuid,
     },
+    select: {
+      uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
   const parsedPersonData = getPersonSchema.parse(personData);
 
@@ -78,6 +86,14 @@ async function handlePATCH({
       uuid: personUUID,
       userUUID: userData.uuid,
     },
+    select: {
+      uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     data: personData,
   });
 
@@ -96,6 +112,14 @@ async function handlePUT({
     where: {
       uuid: personUUID,
       userUUID: userData.uuid,
+    },
+    select: {
+      uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
     },
     data: personData,
   });
