@@ -53,7 +53,7 @@ export default async function handleRequest(
   }
 }
 
-async function handleGET({ res, personUUID, userData }: HandlerParams) {
+async function handleGET({ res, personUUID, userData }: HandlerParams<Person>) {
   const personData = await prisma.person.findUniqueOrThrow({
     where: {
       uuid: personUUID,
@@ -84,7 +84,12 @@ async function handlePATCH({
   return res.status(200).json(updatedPerson);
 }
 
-async function handlePUT({ req, res, personUUID, userData }: HandlerParams) {
+async function handlePUT({
+  req,
+  res,
+  personUUID,
+  userData,
+}: HandlerParams<Person>) {
   const personData = putPersonSchema.parse(req.body);
 
   const updatedPerson = await prisma.person.update({
@@ -98,7 +103,11 @@ async function handlePUT({ req, res, personUUID, userData }: HandlerParams) {
   return res.status(200).json(updatedPerson);
 }
 
-async function handleDELETE({ res, personUUID, userData }: HandlerParams) {
+async function handleDELETE({
+  res,
+  personUUID,
+  userData,
+}: HandlerParams<Person>) {
   await prisma.person.delete({
     where: {
       uuid: personUUID,
