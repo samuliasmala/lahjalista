@@ -1,4 +1,4 @@
-import { Anniversary, Gift, User } from '~/shared/types';
+import { Anniversary, User } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
@@ -6,7 +6,6 @@ import { HttpError } from '~/backend/HttpError';
 import {
   patchAnniversarySchema,
   putAnniversarySchema,
-  updateGiftSchema,
   uuidParseSchema,
 } from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';

@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { requireLogin } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { Person, User } from '~/shared/types';
+import { User } from '~/shared/types';
 import prisma from '~/prisma/index';
-import { createAnniversarySchema, uuidParseSchema } from '~/shared/zodSchemas';
+import { createAnniversarySchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,

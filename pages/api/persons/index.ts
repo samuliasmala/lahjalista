@@ -4,7 +4,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { User } from '~/shared/types';
 import prisma from '~/prisma/index';
-import { createPersonSchema, personSchema } from '~/shared/zodSchemas';
+import { createPersonSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,

@@ -4,7 +4,6 @@ import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import {
-  getPersonSchema,
   patchPersonSchema,
   putPersonSchema,
   uuidParseSchema,
