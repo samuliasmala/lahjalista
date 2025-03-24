@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { requireLogin } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { User } from '~/shared/types';
+import { Person, User } from '~/shared/types';
 import prisma from '~/prisma/index';
-import { createAnniversarySchema } from '~/shared/zodSchemas';
+import { createAnniversarySchema, uuidParseSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
@@ -40,6 +40,22 @@ async function handleGET(
   res: NextApiResponse,
   userData: User,
 ) {
+  console.log(userData);
+
+  const anniversaries = await prisma.anniversary.findMany({
+    where: {
+      Person: { userUUID: userData.uuid },
+    },
+    select: {
+      uuid: true,
+      name: true,
+      date: true,
+      personUUID: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  console.log(anniversaries);
   console.log('get');
 
   return res.status(200).send('True');
@@ -55,9 +71,10 @@ async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
       personUUID,
     },
     select: {
-      date: true,
-      name: true,
       uuid: true,
+      name: true,
+      date: true,
+      personUUID: true,
       createdAt: true,
       updatedAt: true,
     },
