@@ -39,7 +39,7 @@
     "google-auth-library": "9.15.0",
     "googleapis": "144.0.0",
     "lucia": "3.2.2",
-    "next": "15.1.4",
+    "next": "15.2.3",
     "oslo": "1.2.1",
     "postcss": "8.5.1",
     "prisma": "5.20.0",
