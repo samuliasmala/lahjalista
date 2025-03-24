@@ -47,8 +47,9 @@ async function handleGET(
     select: {
       uuid: true,
       name: true,
-      PersonPicture: true,
       sendReminders: true,
+      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
+      PersonPicture: true,
       createdAt: true,
       updatedAt: true,
     },
@@ -71,9 +72,11 @@ async function handlePOST(
       userUUID: userData.uuid,
     },
     select: {
+      uuid: true,
       name: true,
       sendReminders: true,
-      uuid: true,
+      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
+      PersonPicture: true,
       createdAt: true,
       updatedAt: true,
     },
