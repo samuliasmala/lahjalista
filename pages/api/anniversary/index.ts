@@ -40,8 +40,6 @@ async function handleGET(
   res: NextApiResponse,
   userData: User,
 ) {
-  console.log(userData);
-
   const anniversaries = await prisma.anniversary.findMany({
     where: {
       Person: { userUUID: userData.uuid },
@@ -55,10 +53,8 @@ async function handleGET(
       updatedAt: true,
     },
   });
-  console.log(anniversaries);
-  console.log('get');
 
-  return res.status(200).send('True');
+  return res.status(200).json(anniversaries);
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
