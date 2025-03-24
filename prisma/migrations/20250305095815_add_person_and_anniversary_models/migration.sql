@@ -11,14 +11,9 @@
 -- DropForeignKey
 ALTER TABLE "Gift" DROP CONSTRAINT "Gift_userUUID_fkey";
 
--- DropIndex
-DROP INDEX "Feedback_feedbackUUID_key";
-
 -- AlterTable
 ALTER TABLE "Feedback" RENAME COLUMN "feedbackID" TO "id";
 ALTER TABLE "Feedback" RENAME COLUMN "feedbackUUID" TO "uuid";
-ALTER TABLE "Feedback" DROP CONSTRAINT "Feedback_pkey";
-ALTER TABLE "Feedback" ADD CONSTRAINT "Feedback_pkey" PRIMARY KEY ("id");
 
 -- CreateTable
 CREATE TABLE "Person" (
@@ -71,8 +66,8 @@ CREATE UNIQUE INDEX "PersonPicture_uuid_key" ON "PersonPicture"("uuid");
 -- CreateIndex
 CREATE UNIQUE INDEX "PersonPicture_personUUID_key" ON "PersonPicture"("personUUID");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Feedback_uuid_key" ON "Feedback"("uuid");
+-- RenameIndex
+ALTER INDEX "Feedback_feedbackUUID_key" RENAME TO "Feedback_uuid_key";
 
 -- AddForeignKey
 ALTER TABLE "Person" ADD CONSTRAINT "Person_userUUID_fkey" FOREIGN KEY ("userUUID") REFERENCES "User"("uuid") ON DELETE CASCADE ON UPDATE CASCADE;

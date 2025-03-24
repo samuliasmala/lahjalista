@@ -18,6 +18,8 @@
 
 # Lisätään nappula, jolla voi hakea lahjat uudelleen halutessaan. Esimerkiksi jos tulee virhe lahjoja noutaessa, voisi haun laittaa uudelleen. Tai jos esimerkiksi lahjan poistaminen ei onnistu, koska lahjaa ei löydy palvelimelta. Ei käyttäjä voi ladata lahjoja uudelleen ilman sivun uudelleen latausta / F5
 
+# Jos käyttäjä ohjataan kirjautumissivulle, tallennetaan sijainti mistä käyttäjä tuotiin kirjautumissivulle. Mahdollisesti jotain seuraavaa http://localhost:3000/login?redirect=/
+
 ### </IDEOITA>
 
 TODO:
