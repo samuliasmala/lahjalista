@@ -2,6 +2,8 @@
 # https://marketplace.visualstudio.com/items?itemName=humao.rest-client
 
 @baseUrl = http://localhost:3000/api
+@currentDatePlusOneYear = {{$datetime iso8601 1 y}}
+
 
 # LOGIN
 
@@ -32,6 +34,8 @@ Content-Type: application/json
 # GIFT REQUESTS
 ###
 
+# this triple hashtag (#) has been added so Register request works
+###
 @giftUUID = cba86307-8f50-4038-bc79-c05cef4fafc1
 
 ###
@@ -118,7 +122,7 @@ Content-Type: application/json
 DELETE {{baseUrl}}/users/{{userUUID}}
 
 
-# FEEDBACK
+# FEEDBACK REQUESTS
 
 ###
 POST {{baseUrl}}/feedback
@@ -127,3 +131,92 @@ Content-Type: application/json
 {
   "feedbackText": "Hello world!"
 }
+
+# PERSON REQUESTS
+
+###
+@personUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
+
+###
+GET {{baseUrl}}/persons
+
+###
+GET {{baseUrl}}/persons/{{personUUID}}
+
+###
+POST {{baseUrl}}/persons
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminders": true
+}
+
+###
+PATCH {{baseUrl}}/persons/{{personUUID}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminders": false
+}
+
+###
+PUT {{baseUrl}}/persons/{{personUUID}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "sendReminders": true
+}
+
+###
+DELETE {{baseUrl}}/persons/{{personUUID}}
+
+
+
+
+# ANNIVERSARY REQUESTS
+
+###
+@anniversaryUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
+
+###
+GET {{baseUrl}}/anniversaries
+
+###
+GET {{baseUrl}}/anniversaries/{{anniversaryUUID}}
+
+###
+POST {{baseUrl}}/anniversaries
+Content-Type: application/json
+
+{
+  "date": "{{currentDatePlusOneYear}}",
+  "name": "John Doe's birthday",
+  "personUUID": "{{personUUID}}"
+}
+
+###
+PATCH {{baseUrl}}/anniversaries/{{anniversaryUUID}}
+Content-Type: application/json
+
+{
+
+  "date": "{{currentDatePlusOneYear}}",
+  "name": "John Doe's birthday",
+  "personUUID": "{{personUUID}}"
+}
+
+###
+PUT {{baseUrl}}/anniversaries/{{anniversaryUUID}}
+Content-Type: application/json
+
+{
+  "date": "{{currentDatePlusOneYear}}",
+  "name": "John Doe's birthday",
+  "personUUID": "{{personUUID}}"
+}
+
+###
+DELETE {{baseUrl}}/anniversaries/{{anniversaryUUID}}

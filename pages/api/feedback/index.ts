@@ -15,7 +15,7 @@ const HANDLER: Record<
   POST: handlePOST,
 };
 
-export default async function handleFeedback(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {

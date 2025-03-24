@@ -18,7 +18,7 @@ const HANDLER: Record<string, (params: HandlerParams) => Promise<void>> = {
   POST: handlePOST,
 };
 
-export default async function handlePrisma(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
