@@ -54,20 +54,21 @@ async function handleGET({
   anniversaryUUID,
   userData,
 }: HandlerParams<Anniversary>) {
-  const gift = await prisma.gift.findUniqueOrThrow({
+  const anniversary = await prisma.anniversary.findUniqueOrThrow({
     where: {
       uuid: anniversaryUUID,
-      userUUID: userData.uuid,
+      Person: { userUUID: userData.uuid },
     },
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      name: true,
+      date: true,
+      personUUID: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
-  return res.status(200).json(gift);
+  return res.status(200).json(anniversary);
 }
 
 async function handlePATCH({
