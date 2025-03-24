@@ -25,7 +25,7 @@ const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
   DELETE: handleDELETE,
 };
 
-export default async function handlePrisma(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {

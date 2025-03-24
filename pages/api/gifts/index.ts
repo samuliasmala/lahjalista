@@ -19,7 +19,7 @@ const HANDLER: Record<
   POST: handlePOST,
 };
 
-export default async function handlePrisma(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {

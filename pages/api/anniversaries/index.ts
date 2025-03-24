@@ -14,7 +14,7 @@ const HANDLER: Record<
   POST: handlePOST,
 };
 
-export default async function handleAnniversary(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
