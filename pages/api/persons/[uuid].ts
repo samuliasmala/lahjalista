@@ -85,6 +85,7 @@ async function handlePATCH({
       uuid: personUUID,
       userUUID: userData.uuid,
     },
+    data: personData,
     select: {
       uuid: true,
       name: true,
@@ -93,7 +94,6 @@ async function handlePATCH({
       createdAt: true,
       updatedAt: true,
     },
-    data: personData,
   });
 
   return res.status(200).json(updatedPerson);
@@ -112,6 +112,7 @@ async function handlePUT({
       uuid: personUUID,
       userUUID: userData.uuid,
     },
+    data: personData,
     select: {
       uuid: true,
       name: true,
@@ -120,7 +121,6 @@ async function handlePUT({
       createdAt: true,
       updatedAt: true,
     },
-    data: personData,
   });
 
   return res.status(200).json(updatedPerson);
