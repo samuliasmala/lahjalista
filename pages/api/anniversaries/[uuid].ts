@@ -134,10 +134,12 @@ async function handlePUT({
 }
 
 async function handleDELETE({ res, anniversaryUUID, userData }: HandlerParams) {
-  await prisma.gift.delete({
+  await prisma.anniversary.delete({
     where: {
       uuid: anniversaryUUID,
-      userUUID: userData.uuid,
+      Person: {
+        userUUID: userData.uuid,
+      },
     },
   });
 
