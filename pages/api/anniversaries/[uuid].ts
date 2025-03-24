@@ -10,7 +10,7 @@ import { User as LuciaUser } from 'lucia';
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
   res: NextApiResponse<ResponseType>;
-  giftUUID: string;
+  anniversaryUUID: string;
   userData: LuciaUser;
 };
 
@@ -30,12 +30,12 @@ export default async function handlePrisma(
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      const giftUUID = uuidParseSchema.parse(req.query.uuid);
+      const anniversaryUUID = uuidParseSchema.parse(req.query.uuid);
 
       await reqHandler({
         req,
         res,
-        giftUUID,
+        anniversaryUUID,
         userData,
       });
     } else {
@@ -49,10 +49,14 @@ export default async function handlePrisma(
   }
 }
 
-async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
+async function handleGET({
+  res,
+  anniversaryUUID,
+  userData,
+}: HandlerParams<Gift>) {
   const gift = await prisma.gift.findUniqueOrThrow({
     where: {
-      uuid: giftUUID,
+      uuid: anniversaryUUID,
       userUUID: userData.uuid,
     },
     select: {
@@ -69,14 +73,14 @@ async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
 async function handlePATCH({
   req,
   res,
-  giftUUID,
+  anniversaryUUID,
   userData,
 }: HandlerParams<Gift>) {
   const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {
-      uuid: giftUUID,
+      uuid: anniversaryUUID,
       userUUID: userData.uuid,
     },
     data: giftData,
@@ -95,14 +99,14 @@ async function handlePATCH({
 async function handlePUT({
   req,
   res,
-  giftUUID,
+  anniversaryUUID,
   userData,
 }: HandlerParams<Gift>) {
   const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
     where: {
-      uuid: giftUUID,
+      uuid: anniversaryUUID,
       userUUID: userData.uuid,
     },
     data: giftData,
@@ -118,10 +122,10 @@ async function handlePUT({
   return res.status(200).json(updatedGift);
 }
 
-async function handleDELETE({ res, giftUUID, userData }: HandlerParams) {
+async function handleDELETE({ res, anniversaryUUID, userData }: HandlerParams) {
   await prisma.gift.delete({
     where: {
-      uuid: giftUUID,
+      uuid: anniversaryUUID,
       userUUID: userData.uuid,
     },
   });
