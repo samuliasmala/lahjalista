@@ -3,7 +3,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { updateGiftSchema, uuidParseSchema } from '~/shared/zodSchemas';
+import {
+  patchAnniversarySchema,
+  updateGiftSchema,
+  uuidParseSchema,
+} from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
 
 type HandlerParams<ResponseType = unknown> = {
@@ -76,24 +80,27 @@ async function handlePATCH({
   anniversaryUUID,
   userData,
 }: HandlerParams<Anniversary>) {
-  const giftData = updateGiftSchema.parse(req.body);
+  const anniversaryData = patchAnniversarySchema.parse(req.body);
 
-  const updatedGift = await prisma.gift.update({
+  const updatedAnniversary = await prisma.anniversary.update({
     where: {
       uuid: anniversaryUUID,
-      userUUID: userData.uuid,
+      Person: {
+        userUUID: userData.uuid,
+      },
     },
-    data: giftData,
+    data: anniversaryData,
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      name: true,
+      date: true,
+      personUUID: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return res.status(200).json(updatedGift);
+  return res.status(200).json(updatedAnniversary);
 }
 
 async function handlePUT({
