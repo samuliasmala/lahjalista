@@ -182,13 +182,13 @@ DELETE {{baseUrl}}/persons/{{personUUID}}
 @anniversaryUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
 
 ###
-GET {{baseUrl}}/anniversary
+GET {{baseUrl}}/anniversaries
 
 ###
-GET {{baseUrl}}/anniversary/{{anniversaryUUID}}
+GET {{baseUrl}}/anniversaries/{{anniversaryUUID}}
 
 ###
-POST {{baseUrl}}/anniversary
+POST {{baseUrl}}/anniversaries
 Content-Type: application/json
 
 {
@@ -198,7 +198,7 @@ Content-Type: application/json
 }
 
 ###
-PATCH {{baseUrl}}/anniversary/{{anniversaryUUID}}
+PATCH {{baseUrl}}/anniversaries/{{anniversaryUUID}}
 Content-Type: application/json
 
 {
@@ -209,7 +209,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/anniversary/{{anniversaryUUID}}
+PUT {{baseUrl}}/anniversaries/{{anniversaryUUID}}
 Content-Type: application/json
 
 {
@@ -219,4 +219,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{baseUrl}}/anniversary/{{anniversaryUUID}}
+DELETE {{baseUrl}}/anniversaries/{{anniversaryUUID}}
