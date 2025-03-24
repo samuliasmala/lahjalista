@@ -77,8 +77,10 @@ TODO:
 
 4. Vaihda /shared/zodSchemas.ts:ssä olevat uuid-tarkistukset käyttämään nykyistä uuidParseSchema-skeemaa. Esimerkiksi:
 
+5. Käy läpi `zodSchemas.ts` ja katso että Schemat noudattavat jotain protokollaa. Tällä hetkellä esimerkiksi `giftSchema` sisältää tiedot, jotka `get{SchemaName}` esim. `getUserSchema` sisältää. Eli esimerkiksi seuraava voisi toimia?:
+
 ```ts
-export const giftSchema = z.object({
+export const getGiftSchema = z.object({
   gift: z.string().min(1),
   receiver: z.string().min(1),
   createdAt: z.date(),
@@ -86,13 +88,14 @@ export const giftSchema = z.object({
   uuid: z.string(),
 });
 
-// -------->
-
 export const giftSchema = z.object({
   gift: z.string().min(1),
   receiver: z.string().min(1),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  uuid: uuidParseSchema,
 });
+
+export const createGiftSchema = giftSchema;
+
+export const updateGiftSchema = createGiftSchema;
 ```
+
+Mahdollisesti jotain tällaista
