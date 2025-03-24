@@ -68,9 +68,8 @@ async function handleGET({ res, personUUID, userData }: HandlerParams<Person>) {
       updatedAt: true,
     },
   });
-  const parsedPersonData = getPersonSchema.parse(personData);
 
-  return res.status(200).json(parsedPersonData);
+  return res.status(200).json(personData);
 }
 
 async function handlePATCH({
