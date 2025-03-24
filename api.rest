@@ -134,8 +134,7 @@ Content-Type: application/json
 
 # PERSON REQUESTS
 
-
-
+###
 @personUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
 
 ###
@@ -179,6 +178,7 @@ DELETE {{baseUrl}}/persons/{{personUUID}}
 
 # ANNIVERSARY REQUESTS
 
+###
 @anniversaryUUID = ef6bec60-cf63-42d9-a3c7-34ff801411e5
 
 ###
