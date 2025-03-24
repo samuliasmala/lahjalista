@@ -1,4 +1,4 @@
-import { Gift } from '~/shared/types';
+import { Anniversary, Gift } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
@@ -53,7 +53,7 @@ async function handleGET({
   res,
   anniversaryUUID,
   userData,
-}: HandlerParams<Gift>) {
+}: HandlerParams<Anniversary>) {
   const gift = await prisma.gift.findUniqueOrThrow({
     where: {
       uuid: anniversaryUUID,
@@ -75,7 +75,7 @@ async function handlePATCH({
   res,
   anniversaryUUID,
   userData,
-}: HandlerParams<Gift>) {
+}: HandlerParams<Anniversary>) {
   const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
@@ -101,7 +101,7 @@ async function handlePUT({
   res,
   anniversaryUUID,
   userData,
-}: HandlerParams<Gift>) {
+}: HandlerParams<Anniversary>) {
   const giftData = updateGiftSchema.parse(req.body);
 
   const updatedGift = await prisma.gift.update({
