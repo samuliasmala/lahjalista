@@ -135,12 +135,12 @@ export const getPersonSchema = personSchema.extend({
   updatedAt: z.date(),
 });
 
+export const createPersonSchema = personSchema;
+
 export const patchPersonSchema = personSchema.partial();
 
 // CHECK THIS, onko tarpeellinen
 export const putPersonSchema = personSchema;
-
-export const createPersonSchema = personSchema;
 
 // ANNIVERSARY
 
