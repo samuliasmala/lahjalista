@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { handleError } from '~/utils/handleError';
 import SvgSpinner from '~/icons/spinner';
+import { errorWrapper } from '~/utils/utilFunctions';
 
 type UserDetails = Pick<User, 'firstName' | 'lastName' | 'email' | 'role'>;
 
@@ -25,18 +26,16 @@ export function TitleBar({
   showUserWindow,
   userDetails,
 }: TitleBar) {
+  const router = useRouter();
+
   return (
     <div className="flex w-full justify-center">
       <div className="relative flex w-full flex-row justify-between bg-primaryLight p-3 pr-2 sm:w-96 sm:pr-0">
         <div
           className="select-none text-lg hover:cursor-pointer"
-          onClick={() => {
-            try {
-              window.location.href = '/';
-            } catch (e) {
-              window.location.href = '/';
-            }
-          }}
+          onClick={errorWrapper(() => {
+            router.push('/').catch((e) => console.log(e));
+          })}
         >
           Lahjaidealista
         </div>
