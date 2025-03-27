@@ -13,8 +13,6 @@ import { handleError } from '~/utils/handleError';
 import SvgSpinner from '~/icons/spinner';
 import { errorWrapper } from '~/utils/utilFunctions';
 
-type UserDetails = Pick<User, 'firstName' | 'lastName' | 'email' | 'role'>;
-
 type TitleBar = {
   setShowUserWindow: Dispatch<SetStateAction<boolean>>;
   showUserWindow: boolean;
@@ -97,7 +95,7 @@ function UserDetailModal({
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full flex-col justify-center">
-            <AdminPanelButton userDetails={user} />
+            <AdminPanelButton user={user} />
             <Button
               className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
               onClick={async () => {
@@ -133,8 +131,8 @@ function UserDetailModal({
   return null;
 }
 
-function AdminPanelButton({ userDetails }: { userDetails: UserDetails }) {
-  if (userDetails.role !== 'ADMIN') {
+function AdminPanelButton({ user }: { user: User }) {
+  if (user.role !== 'ADMIN') {
     return null;
   }
 
