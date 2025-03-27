@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '~/components/Button';
-import { handleGeneralError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
-import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useIsAdmin } from '~/hooks/useIsAdmin';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
 
@@ -17,23 +17,8 @@ export default function Home({
 
   const router = useRouter();
 
-  useEffect(() => {
-    try {
-      if (!user || user.role !== 'ADMIN') {
-        router.push('/');
-      }
-    } catch (e) {
-      handleError(e);
-    }
-  }, []);
-
-  function handleError(e: unknown) {
-    const errorMessage = handleGeneralError(e);
-    if (errorMessage === 'You are unauthorized!') {
-      window.location.href = '/';
-    }
-    handleErrorToast(errorMessage);
-  }
+  useIsAdmin(user, router);
+  useShowErrorToast(null);
 
   return (
     <main className="h-screen w-full max-w-full">

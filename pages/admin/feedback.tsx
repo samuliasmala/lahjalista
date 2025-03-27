@@ -15,6 +15,8 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Feedback } from '@prisma/client';
 import { useKeyPress } from '~/hooks/useKeyPress';
+import { useIsAdmin } from '~/hooks/useIsAdmin';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 export { getServerSideProps };
 
@@ -40,11 +42,11 @@ export default function Home({
     );
   });
 
+  useIsAdmin(user, router);
+
+  useShowErrorToast(null);
+
   useEffect(() => {
-    if (!user || user.role !== 'ADMIN') {
-      router.push('/').catch((e) => console.error(e));
-      return;
-    }
     async function fetchFeedbacks() {
       try {
         const fetchedFeedbacks = (await (
