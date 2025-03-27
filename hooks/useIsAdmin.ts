@@ -13,7 +13,7 @@ import { User } from '~/shared/types';
  */
 export function useIsAdmin(user: User, router: NextRouter) {
   useEffect(() => {
-    if (user.role !== 'ADMIN') {
+    if (!user || user.role !== 'ADMIN') {
       router.push('/').catch((e) => console.error(e));
       return;
     }
