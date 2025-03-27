@@ -6,12 +6,9 @@ import {
   useState,
 } from 'react';
 import { Button } from '~/components/Button';
-import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getServerSideProps';
-import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
-import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useKeyPress } from '~/hooks/useKeyPress';
 import { useQuery } from '@tanstack/react-query';
@@ -28,8 +25,6 @@ export default function Home({
   const [totalPages, setTotalPages] = useState(0);
   const [showUserWindow, setShowUserWindow] = useState(false);
 
-  const router = useRouter();
-
   useKeyPress('ArrowRight', () => {
     setCurrentPage((currentPageNumber) =>
       calculatePageSwitch(currentPageNumber, totalPages, 'plus'),
@@ -42,11 +37,7 @@ export default function Home({
     );
   });
 
-  const {
-    data: feedbacks,
-    error,
-    refetch,
-  } = useQuery({
+  const { data: feedbacks, error } = useQuery({
     queryKey: QueryKeys.ADMIN_FETCH_FEEDBACKS,
     // the **as Feedback[]** should be fine because the API
     // is only returning an array of Feedbacks or throw an error?
@@ -56,6 +47,15 @@ export default function Home({
   });
 
   useShowErrorToast(error);
+
+  // sets totalpage amount
+  useEffect(() => {
+    if (feedbacks) {
+      // Rounds up the value, eg. 21 feedbacks / 5 = 4.2 -> 5
+      // the divider (5) will be changed to generic in the future which allows user to determine how many feedbacks should be shown per page
+      setTotalPages(Math.ceil(feedbacks.length / 5));
+    }
+  }, [feedbacks]);
 
   return (
     <main className="h-screen w-full max-w-full">
