@@ -13,8 +13,10 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Feedback } from '@prisma/client';
 import { useKeyPress } from '~/hooks/useKeyPress';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys, Feedback } from '~/shared/types';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 // ALLOWS ADMINS ONLY, look at the import for more details!
 export { getServerSideProps };
@@ -22,7 +24,8 @@ export { getServerSideProps };
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  // should not be needed due to Tanstack
+  const [feedbacks_old, setFeedbacks_old] = useState<Feedback[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [showUserWindow, setShowUserWindow] = useState(false);
@@ -41,35 +44,20 @@ export default function Home({
     );
   });
 
-  useEffect(() => {
-    async function fetchFeedbacks() {
-      try {
-        const fetchedFeedbacks = (await (
-          await axios.get('/api/feedback')
-        ).data) as Feedback[];
+  const {
+    data: feedbacks,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: QueryKeys.ADMIN_FETCH_FEEDBACKS,
+    // the **as Feedback[]** should be fine because the API
+    // is only returning an array of Feedbacks or throw an error?
+    queryFn: async () => {
+      return (await axios.get('/api/feedback')).data as Feedback[];
+    },
+  });
 
-        setFeedbacks(fetchedFeedbacks);
-
-        // Rounds up the value, eg. 21 feedbacks / 5 = 4.2 -> 5
-        // the divider (5) will be changed to generic in the future which allows user to determine how many feedbacks should be shown per page
-        setTotalPages(Math.ceil(fetchedFeedbacks.length / 5));
-      } catch (e) {
-        handleInternalError(e);
-      }
-    }
-    void fetchFeedbacks();
-  }, []);
-
-  function handleInternalError(e: unknown) {
-    const errorMessage = handleError(e);
-    if (
-      errorMessage ===
-      'Istuntosi on vanhentunut! Ole hyvä ja kirjaudu uudelleen jatkaaksesi!'
-    ) {
-      router.push('/').catch((e) => console.error(e));
-    }
-    handleErrorToast(errorMessage);
-  }
+  useShowErrorToast(error);
 
   return (
     <main className="h-screen w-full max-w-full">
@@ -119,7 +107,7 @@ function FeedbackParagraph({
   feedbacks,
 }: {
   currentPage: number;
-  feedbacks: Feedback[];
+  feedbacks?: Feedback[];
 }) {
   // this will be changed to be a generic in the future
   const howManyFeedbacksPerPage = 5;
@@ -132,6 +120,10 @@ function FeedbackParagraph({
     currentPage === 1
       ? howManyFeedbacksPerPage
       : startNumber + howManyFeedbacksPerPage;
+
+  if (!feedbacks || feedbacks.length <= 0) {
+    return null;
+  }
 
   const currentFeedbacks = feedbacks.slice(startNumber, endNumber);
 
@@ -152,7 +144,7 @@ function FeedbackParagraph({
   return null;
 }
 
-//this handles the number in bottom bar ("Footer") and the
+// this handles the number in bottom bar ("Footer") and the
 // next and previous buttons
 function PageNavigator({
   setCurrentPage,
@@ -162,7 +154,7 @@ function PageNavigator({
 }: {
   setCurrentPage: Dispatch<SetStateAction<number>>;
   currentPage: number;
-  feedbacks: Feedback[];
+  feedbacks?: Feedback[];
   totalPages: number;
 }) {
   return (
@@ -188,7 +180,7 @@ function PageNavigator({
               }}
               value={currentPage}
             >
-              {feedbacks.map((_, index) => {
+              {feedbacks?.map((_, index) => {
                 if (index <= totalPages && index > 0) {
                   return (
                     <option value={index} key={index}>
