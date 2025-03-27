@@ -8,16 +8,15 @@ import {
 import { Button } from '~/components/Button';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
-import { getServerSideProps } from '~/utils/getServerSideProps';
+import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getServerSideProps';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Feedback } from '@prisma/client';
 import { useKeyPress } from '~/hooks/useKeyPress';
-import { useIsAdmin } from '~/hooks/useIsAdmin';
-import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
+// ADMIN ONLY
 export { getServerSideProps };
 
 export default function Home({
@@ -41,10 +40,6 @@ export default function Home({
       calculatePageSwitch(currentPageNumber, totalPages, 'minus'),
     );
   });
-
-  useIsAdmin(user, router);
-
-  useShowErrorToast(null);
 
   useEffect(() => {
     async function fetchFeedbacks() {

@@ -1,24 +1,17 @@
 import { useState } from 'react';
 import { Button } from '~/components/Button';
 import { InferGetServerSidePropsType } from 'next';
-import { getServerSideProps } from '~/utils/getServerSideProps';
+import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getServerSideProps';
 import { TitleBar } from '~/components/TitleBar';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useIsAdmin } from '~/hooks/useIsAdmin';
-import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
+// ADMIN ONLY
 export { getServerSideProps };
 
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [showUserWindow, setShowUserWindow] = useState(false);
-
-  const router = useRouter();
-
-  useIsAdmin(user, router);
-  useShowErrorToast(null);
 
   return (
     <main className="h-screen w-full max-w-full">
