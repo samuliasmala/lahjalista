@@ -152,10 +152,12 @@ export default function Home({
 }
 
 function GiftList() {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [deleteModalGiftData, setDeleteModalGiftData] = useState<Gift>();
-  const [editModalGiftData, setEditModalGiftData] = useState<Gift>();
+  const [deleteModalGiftData, setDeleteModalGiftData] = useState<
+    Gift | undefined
+  >();
+  const [editModalGiftData, setEditModalGiftData] = useState<
+    Gift | undefined
+  >();
 
   const { error, isFetching, data: giftData } = useGetGifts();
 
@@ -193,7 +195,6 @@ function GiftList() {
                   className="trigger-underline col-start-2 row-start-1 mr-8 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setEditModalGiftData(giftItem);
-                    setIsEditModalOpen(true);
                   }}
                 />
 
@@ -204,23 +205,22 @@ function GiftList() {
                   className="trigger-line-through col-start-2 row-start-1 justify-self-end align-middle text-stone-600 hover:cursor-pointer"
                   onClick={() => {
                     setDeleteModalGiftData(giftItem);
-                    setIsDeleteModalOpen(true);
                   }}
                 />
               </div>
             </div>
           ))}
-          {editModalGiftData && isEditModalOpen && (
+          {editModalGiftData && (
             <EditModal
               gift={editModalGiftData}
-              setIsModalOpen={setIsEditModalOpen}
+              closeModal={() => setEditModalGiftData(undefined)}
             />
           )}
 
-          {deleteModalGiftData && isDeleteModalOpen && (
+          {deleteModalGiftData && (
             <DeleteModal
               gift={deleteModalGiftData}
-              setIsModalOpen={setIsDeleteModalOpen}
+              closeModal={() => setDeleteModalGiftData(undefined)}
             />
           )}
         </div>
