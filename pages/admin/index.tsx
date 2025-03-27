@@ -5,7 +5,7 @@ import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getSe
 import { TitleBar } from '~/components/TitleBar';
 import Link from 'next/link';
 
-// ADMIN ONLY
+// ALLOWS ADMINS ONLY, look at the import for more details!
 export { getServerSideProps };
 
 export default function Home({

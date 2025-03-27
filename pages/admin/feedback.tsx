@@ -16,7 +16,7 @@ import axios from 'axios';
 import { Feedback } from '@prisma/client';
 import { useKeyPress } from '~/hooks/useKeyPress';
 
-// ADMIN ONLY
+// ALLOWS ADMINS ONLY, look at the import for more details!
 export { getServerSideProps };
 
 export default function Home({
