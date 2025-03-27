@@ -166,6 +166,8 @@ export const QueryKeys = {
 
   CREATE_FEEDBACK: ['createFeedback'],
 
+  ADMIN_FETCH_FEEDBACKS: ['adminFetchFeedbacks'],
+
   // ei vielä käytössä
   //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],
 };
