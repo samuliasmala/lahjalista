@@ -24,8 +24,6 @@ export { getServerSideProps };
 export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  // should not be needed due to Tanstack
-  const [feedbacks_old, setFeedbacks_old] = useState<Feedback[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [showUserWindow, setShowUserWindow] = useState(false);
