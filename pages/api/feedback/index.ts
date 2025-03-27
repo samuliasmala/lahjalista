@@ -35,8 +35,7 @@ export default async function handleFeedback(
     return handleError(res, e);
   }
 }
-// tämä alla oleva rivi lisätty, jotta "@typescript-eslint/require-await"-virheen pystyi ohittamaan väliaikaisesti
-// handleGET-funktio laitetaan toimimaan myöhemmässä vaiheessa
+
 async function handleGET(
   req: NextApiRequest,
   res: NextApiResponse,
