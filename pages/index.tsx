@@ -1,11 +1,11 @@
-import React, { FormEvent, HTMLAttributes, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '~/components/Input';
 import { DeleteModal } from '~/components/DeleteModal';
 import { EditModal } from '~/components/EditModal';
 import { createGift, useGetGifts } from '~/utils/apiRequests';
-import { Gift, CreateGift, User, QueryKeys } from '~/shared/types';
+import { Gift, CreateGift, QueryKeys } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSideProps } from '~/utils/getServerSideProps';
@@ -13,12 +13,8 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
-import { useRouter } from 'next/router';
 import SvgSpinner from '~/icons/spinner';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { useShowErrorToast } from '~/hooks/useShowErrorToast';
-import SvgArrowRightStartOnRectangle from '~/icons/arrow_right_start_on_rectangle';
-import axios from 'axios';
 
 export { getServerSideProps };
 
