@@ -11,11 +11,16 @@ import { User } from '~/shared/types';
  * @param user User
  * @param router NextRouter
  */
-export function useIsAdmin(user: User, router: NextRouter) {
+export function useIsAdmin(
+  user: User,
+  router: NextRouter,
+  callback?: () => void,
+) {
   useEffect(() => {
     if (!user || user.role !== 'ADMIN') {
       router.push('/').catch((e) => console.error(e));
       return;
     }
+    if (callback) callback();
   }, [user]);
 }
