@@ -172,25 +172,29 @@ function PageNavigator({
         {'<'} Edellinen
       </Button>
       <div>
-        <span>
-          <select
-            onChange={(e) => {
-              setCurrentPage(Number(e.target.value) || 1);
-            }}
-            value={currentPage}
-          >
-            {feedbacks.map((_, index) => {
-              if (index <= totalPages && index > 0) {
-                return (
-                  <option value={index} key={index}>
-                    {index}
-                  </option>
-                );
-              }
-              return null;
-            })}
-          </select>
-        </span>
+        {totalPages <= 1 ? (
+          currentPage
+        ) : (
+          <span>
+            <select
+              onChange={(e) => {
+                setCurrentPage(Number(e.target.value) || 1);
+              }}
+              value={currentPage}
+            >
+              {feedbacks.map((_, index) => {
+                if (index <= totalPages && index > 0) {
+                  return (
+                    <option value={index} key={index}>
+                      {index}
+                    </option>
+                  );
+                }
+                return null;
+              })}
+            </select>
+          </span>
+        )}{' '}
         / {totalPages}{' '}
       </div>
       <Button
