@@ -100,6 +100,7 @@ export default function Home({
   );
 }
 
+// CHECK THIS, olisiko hyvä nakkaa esim. /utils/utilFunctions.ts-tiedostoon
 function calculatePageSwitch(
   currentPage: number,
   totalPages: number,
@@ -111,6 +112,8 @@ function calculatePageSwitch(
   return currentPage - 1 >= 1 ? currentPage - 1 : totalPages;
 }
 
+// this handles the individual Feedback. Code loops through all of feedbacks
+// and creates same looking elements of them
 function FeedbackParagraph({
   currentPage,
   feedbacks,
@@ -121,6 +124,7 @@ function FeedbackParagraph({
   // this will be changed to be a generic in the future
   const howManyFeedbacksPerPage = 5;
 
+  // if currentPage is 1, we want to startNumber be 0 so we can get
   const startNumber =
     currentPage === 1 ? 0 : (currentPage - 1) * howManyFeedbacksPerPage;
 
@@ -148,6 +152,8 @@ function FeedbackParagraph({
   return null;
 }
 
+//this handles the number in bottom bar ("Footer") and the
+// next and previous buttons
 function PageNavigator({
   setCurrentPage,
   currentPage,
