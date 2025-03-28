@@ -162,7 +162,7 @@ export default function Register() {
                         setShowPassword((prevValue) => !prevValue);
                       }}
                     >
-                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary" />
+                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines" />
                     </button>
                   </div>
                 </div>
