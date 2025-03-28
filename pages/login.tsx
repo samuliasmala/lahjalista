@@ -142,12 +142,13 @@ export default function Login() {
                     name="password"
                   />
                   <div className="flex items-center rounded-md bg-bgForms has-[input:focus]:rounded has-[input:focus]:outline-2">
-                    <SvgEye
-                      className="h-8 w-8 cursor-pointer p-0 text-lines"
+                    <button
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
-                    />
+                    >
+                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines" />
+                    </button>
                   </div>
                 </div>
               </div>

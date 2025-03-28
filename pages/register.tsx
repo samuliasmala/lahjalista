@@ -153,12 +153,13 @@ export default function Register() {
                     name="password"
                   />
                   <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
-                    <SvgEye
-                      className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary"
+                    <button
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
-                    />
+                    >
+                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary" />
+                    </button>
                   </div>
                 </div>
                 <ErrorParagraph errorText={errors.password} />
