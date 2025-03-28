@@ -1,4 +1,4 @@
-import React, { FormEvent, HTMLAttributes, useState } from 'react';
+import { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -143,11 +143,11 @@ export default function Home({
               >
                 Lisää
                 {createGiftQuery.isPending ? (
-                  <span className="absolute p-1">
+                  <span className="absolute pl-1 pt-0.5">
                     <SvgSpinner
-                      width={18}
-                      height={18}
-                      className="animate-spin text-black"
+                      width={24}
+                      height={24}
+                      className="animate-spin"
                     />
                   </span>
                 ) : null}
