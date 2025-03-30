@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
@@ -17,6 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
+import SvgInfoCircle from '~/icons/info_circle';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -36,6 +37,10 @@ export default function Register() {
 
   const [errors, setErrors] = useState<ErrorTypes>({});
 
+  const passwordInfoModalRef = useRef<HTMLDivElement | null>(null);
+  const isInitialClick = useRef<boolean>(false);
+
+  const [showPasswordInfoModal, setShowPasswordInfoModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isUserCreated, setIsUserCreated] = useState(false);
 
@@ -49,6 +54,35 @@ export default function Register() {
   });
 
   useShowErrorToast(error);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      // check if e.target is Element typed so it will work in .contains function
+      if (e.target instanceof Element) {
+        const isClickInModal = passwordInfoModalRef.current?.contains(e.target);
+        if (
+          showPasswordInfoModal &&
+          !isClickInModal &&
+          !isInitialClick.current
+        ) {
+          setShowPasswordInfoModal((prevValue) => !prevValue);
+        }
+      }
+      // set initial click back to false, because initial click has been done
+      if (isInitialClick.current) {
+        isInitialClick.current = !isInitialClick.current;
+      }
+    }
+    // if modal is open add the EventListener
+    if (showPasswordInfoModal) {
+      document.body.addEventListener('click', handleClick);
+    }
+
+    // remove the EventListener when modal is closed / unmounts
+    return () => {
+      document.body.removeEventListener('click', handleClick);
+    };
+  }, [showPasswordInfoModal]);
 
   async function handleSubmit(e: FormEvent) {
     try {
@@ -136,7 +170,51 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.email} />
 
-                <Label className="mt-5">Salasana</Label>
+                <Label
+                  className="mt-5"
+                  onClick={(e) => {
+                    // this prevents button's onClick function run when Label is clicked
+                    e.preventDefault();
+                  }}
+                >
+                  Salasana
+                  <span className="absolute pl-1 pt-0.5">
+                    {showPasswordInfoModal && (
+                      // tämä pitää ns. "kasassa koko homman"
+
+                      // toinen versio alanuolesta
+                      // <span className="absolute left-14 top-36 mt-1 border-l-[20px] border-r-[20px] border-t-[20px] border-transparent border-t-black"></span>
+                      <div className="absolute -left-16 -top-44">
+                        <div
+                          className="absolute w-max max-w-80 rounded-md border-4 border-lines bg-bgForms"
+                          ref={passwordInfoModalRef}
+                        >
+                          <p className="pr-1 text-primaryText">
+                            Salasanan pitää täyttää seuaravat vaatimukset:
+                          </p>
+                          <ul className="relative z-10 list-disc pb-1 pl-5 text-primaryText">
+                            <li>maksimissaan 128 merkkiä pitkä</li>
+                            <li>vähintään yksi iso kirjain</li>
+                            <li>vähintään yksi pieni kirjain</li>
+                            <li>vähintään yksi numero</li>
+                            <li>vähintään yksi erikoismerkki</li>
+                          </ul>
+                          <span className="absolute left-14 top-32 z-0 ml-1 mt-1.5 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms"></span>
+                        </div>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        isInitialClick.current = true;
+                        setShowPasswordInfoModal((prevValue) => !prevValue);
+                      }}
+                    >
+                      <SvgInfoCircle width={20} height={20} />
+                    </button>
+                  </span>
+                </Label>
+
                 <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
                   <Input
                     value={formData.password}
