@@ -23,6 +23,22 @@ type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
 
+type PasswordErrorNames =
+  | 'length'
+  | 'lowercaseLetter'
+  | 'uppercaseLetter'
+  | 'number'
+  | 'specialCharacter';
+
+type PasswordErrorTypes = Record<PasswordErrorNames, boolean>;
+const EMPTY_PASSWORD_DATA: PasswordErrorTypes = {
+  length: false,
+  lowercaseLetter: false,
+  number: false,
+  specialCharacter: false,
+  uppercaseLetter: false,
+};
+
 type FormData = z.infer<typeof formSchema>;
 
 const EMPTY_FORM_DATA: FormData = {
@@ -42,6 +58,9 @@ export default function Register() {
 
   const [showPasswordInfoModal, setShowPasswordInfoModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordErrors, setPasswordErrors] =
+    useState<PasswordErrorTypes>(EMPTY_PASSWORD_DATA);
+
   const [isUserCreated, setIsUserCreated] = useState(false);
 
   const router = useRouter();
@@ -102,6 +121,19 @@ export default function Register() {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
+  }
+
+  function findPasswordErrors(password: string) {
+    setPasswordErrors({
+      length: z.string().min(8).max(128).safeParse(password).success,
+      number: z.string().regex(/[0-9]/).safeParse(password).success,
+      lowercaseLetter: z.string().regex(/[a-z]/).safeParse(password).success,
+      uppercaseLetter: z.string().regex(/[A-Z]/).safeParse(password).success,
+      specialCharacter: z
+        .string()
+        .regex(/[^((0-9)|(a-z)|(A-Z)|\s)]/)
+        .safeParse(password).success,
+    });
   }
 
   function userCreatedSuccesfully() {
@@ -190,14 +222,29 @@ export default function Register() {
                           ref={passwordInfoModalRef}
                         >
                           <p className="pr-1 text-primaryText">
-                            Salasanan pitää täyttää seuaravat vaatimukset:
+                            Salasanan pitää täyttää seuraavat vaatimukset:
                           </p>
                           <ul className="relative z-10 list-disc pb-1 pl-5 text-primaryText">
-                            <li>maksimissaan 128 merkkiä pitkä</li>
-                            <li>vähintään yksi iso kirjain</li>
-                            <li>vähintään yksi pieni kirjain</li>
-                            <li>vähintään yksi numero</li>
-                            <li>vähintään yksi erikoismerkki</li>
+                            <li>
+                              8-128 merkkiä:{' '}
+                              {passwordErrors.length ? '✅' : '❌'}
+                            </li>
+                            <li>
+                              vähintään yksi iso kirjain:{' '}
+                              {passwordErrors.uppercaseLetter ? '✅' : '❌'}
+                            </li>
+                            <li>
+                              vähintään yksi pieni kirjain:{' '}
+                              {passwordErrors.lowercaseLetter ? '✅' : '❌'}
+                            </li>
+                            <li>
+                              vähintään yksi numero:{' '}
+                              {passwordErrors.number ? '✅' : '❌'}
+                            </li>
+                            <li>
+                              vähintään yksi erikoismerkki:{' '}
+                              {passwordErrors.specialCharacter ? '✅' : '❌'}
+                            </li>
                           </ul>
                           <span className="absolute left-14 top-32 z-0 ml-1 mt-1.5 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms"></span>
                         </div>
@@ -223,6 +270,7 @@ export default function Register() {
                         ...formData,
                         password: e.currentTarget.value,
                       });
+                      findPasswordErrors(e.currentTarget.value);
                     }}
                     className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
