@@ -14,6 +14,7 @@ Credits: https://www.svgrepo.com/svg/522904/info-circle
 */
 
 import type { SVGProps } from 'react';
+
 const SvgInfoCircle = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +22,7 @@ const SvgInfoCircle = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 24 24"
     {...props}
   >
-    <g fill="#000">
+    <g fill="currentColor">
       <path d="M12 17.75a.75.75 0 0 0 .75-.75v-6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75M12 7a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
       <path
         fillRule="evenodd"
