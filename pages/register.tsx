@@ -193,7 +193,7 @@ export default function Register() {
                             Salasanan pitää täyttää seuaravat vaatimukset:
                           </p>
                           <ul className="relative z-10 list-disc pb-1 pl-5 text-primaryText">
-                            <li>maksimissaan 128 merkkiä pitkä</li>
+                            <li>8 - 128 merkkiä pitkä</li>
                             <li>vähintään yksi iso kirjain</li>
                             <li>vähintään yksi pieni kirjain</li>
                             <li>vähintään yksi numero</li>
