@@ -4,7 +4,7 @@ import { Browser as BrowserEnum } from 'ua-parser-js/enums';
 
 type Browser = (typeof BrowserEnum)[keyof typeof BrowserEnum];
 
-const BROWSERS: Partial<Browser | String>[] = ['Mobile Firefox', 'Firefox'];
+const BROWSERS: string[] & Partial<Browser>[] = ['Mobile Firefox', 'Firefox'];
 
 export function useIsFirefox(
   isFirefox: boolean,
