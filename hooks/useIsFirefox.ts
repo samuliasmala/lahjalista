@@ -7,15 +7,15 @@ type Browser = (typeof BrowserEnum)[keyof typeof BrowserEnum];
 const BROWSERS: Partial<Browser | String>[] = ['Mobile Firefox', 'Firefox'];
 
 export function useIsFirefox(
-  isFirefoxOrSafari: boolean,
-  setIsFirefoxOrSafari: Dispatch<SetStateAction<boolean>>,
+  isFirefox: boolean,
+  setIsFirefox: Dispatch<SetStateAction<boolean>>,
 ) {
   useEffect(() => {
     const userAgent = UAParser(window.navigator.userAgent);
     const browserName = userAgent.browser.name ?? '';
 
     if (BROWSERS.includes(browserName)) {
-      setIsFirefoxOrSafari(true);
+      setIsFirefox(true);
     }
-  }, [isFirefoxOrSafari]);
+  }, [isFirefox]);
 }
