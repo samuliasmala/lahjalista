@@ -18,7 +18,7 @@ import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
 import SvgInfoCircle from '~/icons/info_circle';
-import { useIsFirefox } from '~/hooks/useIsFirefoxOrSafari';
+import { useIsFirefox } from '~/hooks/useIsFirefox';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
