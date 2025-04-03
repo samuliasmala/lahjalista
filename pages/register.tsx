@@ -185,7 +185,7 @@ export default function Register() {
               <div className="absolute top-[50%] left-[50%] z-99 translate-x-[-50%] translate-y-[-50%]">
                 <div
                   className={
-                    'border-lines bg-bgForms grid w-96 rounded-md border'
+                    'border-lines bg-bg-forms grid w-96 rounded-md border'
                   }
                 >
                   <SvgCheckMarkIcon

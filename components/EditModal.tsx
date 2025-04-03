@@ -75,7 +75,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
           />
           <div className="mt-8 flex flex-row items-center justify-end">
             <Button
-              className="text-primaryText mt-0 h-8 w-20 bg-white p-0 text-sm"
+              className="text-primary-text mt-0 h-8 w-20 bg-white p-0 text-sm"
               onClick={closeModal}
               type="button"
             >

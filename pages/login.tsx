@@ -108,7 +108,7 @@ export default function Login() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className={`bg-bgPage h-screen w-full max-w-full`}>
+    <main className={`bg-bg-page h-screen w-full max-w-full`}>
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="flex w-full max-w-72 flex-col">
@@ -131,7 +131,7 @@ export default function Login() {
               <ErrorParagraph errorText={errors.email} />
               <div className="flex flex-col pt-6">
                 <Label>Salasana</Label>
-                <div className="border-lines bg-bgForms flex justify-between rounded-md outline-1 has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
+                <div className="border-lines bg-bg-forms flex justify-between rounded-md outline-1 has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
@@ -141,7 +141,7 @@ export default function Login() {
                     placeholder="************"
                     name="password"
                   />
-                  <div className="bg-bgForms flex items-center rounded-md has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
+                  <div className="bg-bg-forms flex items-center rounded-md has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                     <SvgEye
                       className="text-lines h-8 w-8 cursor-pointer p-0"
                       onClick={() => {

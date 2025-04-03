@@ -82,7 +82,7 @@ export default function Home({
   return (
     <main className="h-screen w-full max-w-full">
       <div className="flex justify-center">
-        <div className="bg-primaryLight relative flex w-full flex-row justify-between p-3 pr-2 sm:w-96 sm:pr-0">
+        <div className="bg-primary-light relative flex w-full flex-row justify-between p-3 pr-2 sm:w-96 sm:pr-0">
           <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
             width={24}
@@ -195,7 +195,7 @@ function GiftList() {
             >
               <div key={giftItem.uuid} className="grid">
                 <p
-                  className={`hover-target text-primaryText col-start-1 [overflow-wrap:anywhere]`}
+                  className={`hover-target text-primary-text col-start-1 [overflow-wrap:anywhere]`}
                 >
                   {giftItem.gift} <span>-</span> {giftItem.receiver}
                 </p>
@@ -276,7 +276,7 @@ function UserDetailModal({
             }
           }}
         />
-        <div className="border-lines bg-bgForms absolute top-12 right-1 z-99 w-56 rounded-md border-2 shadow-md shadow-black">
+        <div className="border-lines bg-bg-forms absolute top-12 right-1 z-99 w-56 rounded-md border-2 shadow-md shadow-black">
           <p className="overflow mt-3 mb-0 ml-3 font-bold [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>

@@ -8,7 +8,7 @@ export function Input({
   return (
     <input
       className={twMerge(
-        `border-lines bg-bgForms rounded-md border pt-3 pb-3 pl-2`,
+        `border-lines bg-bg-forms rounded-md border pt-3 pb-3 pl-2`,
         className,
       )}
       {...rest}

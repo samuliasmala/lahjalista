@@ -23,12 +23,14 @@ export function Modal({
       <div className="absolute top-[50%] left-[50%] z-99 translate-x-[-50%] translate-y-[-50%]">
         <div
           className={twMerge(
-            'border-lines bg-bgForms grid w-96 rounded-md border',
+            'border-lines bg-bg-forms grid w-96 rounded-md border',
             className,
           )}
         >
           <div className="flex flex-row justify-between">
-            <TitleText className={`text-primaryText m-6 text-base font-medium`}>
+            <TitleText
+              className={`text-primary-text m-6 text-base font-medium`}
+            >
               {title}
             </TitleText>
             <SvgXClose
