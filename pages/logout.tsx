@@ -80,7 +80,7 @@ export default function Logout() {
 
   if (!isFeedbackSent) {
     return (
-      <main className="h-screen w-full max-w-full bg-orange-50">
+      <main className="h-screen w-full max-w-full">
         <div className="flex h-screen w-screen flex-col items-center">
           <div className="max-w-80">
             <Logo />
@@ -99,7 +99,7 @@ export default function Logout() {
                 <label className="text-start">Palaute</label>
                 <textarea
                   value={feedbackText}
-                  className="h-32 border border-black pt-1 pl-1"
+                  className="bg-bg-forms h-32 border border-black pt-1 pl-1"
                   onChange={(e) => {
                     setFeedbackText(e.currentTarget.value);
                   }}
@@ -133,7 +133,7 @@ export default function Logout() {
   }
 
   return (
-    <main className="h-screen w-full max-w-full bg-orange-50">
+    <main className="h-screen w-full max-w-full">
       <div className="flex h-screen w-screen flex-col items-center">
         <div className="max-w-80">
           <Logo />

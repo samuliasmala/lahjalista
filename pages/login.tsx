@@ -108,7 +108,7 @@ export default function Login() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className={`bg-bg-page h-screen w-full max-w-full`}>
+    <main className={`h-screen w-full max-w-full`}>
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="flex w-full max-w-72 flex-col">
