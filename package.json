@@ -37,7 +37,7 @@
     "eslint": "9.23.0",
     "eslint-config-next": "15.2.4",
     "google-auth-library": "9.15.1",
-    "googleapis": "144.0.0",
+    "googleapis": "148.0.0",
     "lucia": "3.2.2",
     "next": "15.2.4",
     "oslo": "1.2.1",
