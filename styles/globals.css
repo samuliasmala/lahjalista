@@ -35,7 +35,7 @@ button:not(:disabled),
 }
 
 .hover-target:has(~ .trigger-underline:hover) {
-  text-decoration: line-through;
+  text-decoration: underline;
 }
 
 /* Used everywhere where password inputs are */
