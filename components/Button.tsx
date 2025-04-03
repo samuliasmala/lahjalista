@@ -13,7 +13,7 @@ export function Button({ children, onClick, className, ...rest }: ButtonProps) {
     <button
       onClick={onClick === undefined ? undefined : errorWrapper(onClick)}
       className={twMerge(
-        `mt-6 w-full rounded-md border border-lines bg-primary p-2 text-lg font-medium text-white disabled:bg-gray-300 disabled:text-gray-500`,
+        `border-lines bg-primary mt-6 w-full rounded-md border p-2 text-lg font-medium text-white disabled:bg-gray-300 disabled:text-gray-500`,
         className,
       )}
       {...rest}

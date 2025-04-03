@@ -32,13 +32,13 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
     <Modal className="max-w-80" closeModal={closeModal} title="Poista lahja:">
       <div className="max-w-80">
         <p
-          className={`ml-4 mt-5 text-base text-primaryText [overflow-wrap:anywhere]`}
+          className={`text-primaryText mt-5 ml-4 text-base [overflow-wrap:anywhere]`}
         >
           {gift.gift} - {gift.receiver}
         </p>
         <div className="mt-6 flex flex-row items-center justify-end">
           <Button
-            className={`mb-6 mt-0 h-8 w-20 bg-white pb-1 pl-4 pr-4 pt-1 text-sm text-primaryText`}
+            className={`text-primaryText mt-0 mb-6 h-8 w-20 bg-white pt-1 pr-4 pb-1 pl-4 text-sm`}
             onClick={closeModal}
             type="button"
           >

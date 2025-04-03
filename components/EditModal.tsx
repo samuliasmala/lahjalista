@@ -60,29 +60,29 @@ export function EditModal({ gift, closeModal }: EditModal) {
         <div className="m-6 mt-0 flex flex-col">
           <label className="pb-1">Lahja</label>
           <Input
-            className="pb-2.5 pt-2.5"
+            className="pt-2.5 pb-2.5"
             onChange={(e) => setGiftName(e.target.value)}
             value={giftName}
             name="giftName"
             autoComplete="off"
           />
-          <label className="pb-1 pt-4">Saaja</label>
+          <label className="pt-4 pb-1">Saaja</label>
           <Input
-            className="pb-2.5 pt-2.5"
+            className="pt-2.5 pb-2.5"
             onChange={(e) => setGiftReceiver(e.target.value)}
             value={giftReceiver}
             autoComplete="off"
           />
           <div className="mt-8 flex flex-row items-center justify-end">
             <Button
-              className="mt-0 h-8 w-20 bg-white p-0 text-sm text-primaryText"
+              className="text-primaryText mt-0 h-8 w-20 bg-white p-0 text-sm"
               onClick={closeModal}
               type="button"
             >
               Peruuta
             </Button>
             <Button
-              className="ml-6 mt-0 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center"
+              className="mt-0 ml-6 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center"
               type="submit"
               disabled={isPending}
               onClick={(e) => void handleEdit(e)}

@@ -86,7 +86,7 @@ export default function Logout() {
             <Logo />
             <div className="flex flex-col items-center pt-10">
               <TitleText className="font-bold">Näkemiin!</TitleText>
-              <p className="pt-10 text-center text-sm text-gray-600 [overflow-wrap:anywhere]">
+              <p className="pt-10 text-center text-sm [overflow-wrap:anywhere] text-gray-600">
                 Oli ilo auttaa sinua lahjaideoiden kanssa, nähdään pian
                 uudelleen!
               </p>
@@ -99,7 +99,7 @@ export default function Logout() {
                 <label className="text-start">Palaute</label>
                 <textarea
                   value={feedbackText}
-                  className="h-32 border border-black pl-1 pt-1"
+                  className="h-32 border border-black pt-1 pl-1"
                   onChange={(e) => {
                     setFeedbackText(e.currentTarget.value);
                   }}
@@ -115,7 +115,7 @@ export default function Logout() {
                     'Lähetä'
                   )}
                 </Button>
-                <p className="select-none pt-6 text-xs text-gray-600">
+                <p className="pt-6 text-xs text-gray-600 select-none">
                   Saitko uuden idean?{' '}
                   <Link
                     href={'/login'}
@@ -139,7 +139,7 @@ export default function Logout() {
           <Logo />
           <div className="flex flex-col items-center pt-10">
             <TitleText className="font-bold">Kiitos palautteesta!</TitleText>
-            <p className="pt-10 text-center text-sm text-gray-600 [overflow-wrap:anywhere]">
+            <p className="pt-10 text-center text-sm [overflow-wrap:anywhere] text-gray-600">
               Oli ilo auttaa sinua lahjaideoiden kanssa, nähdään pian uudelleen!
             </p>
           </div>
