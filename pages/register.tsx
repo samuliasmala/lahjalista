@@ -137,7 +137,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <Label className="mt-5">Salasana</Label>
-                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
+                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -146,13 +146,13 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
+                    className={`w-full border-0 outline-hidden ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
+                  <div className="flex items-center rounded-md has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                     <SvgEye
                       className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary"
                       onClick={() => {
@@ -181,8 +181,8 @@ export default function Register() {
           </div>
           {isUserCreated ? (
             <>
-              <div className="fixed left-0 top-0 z-[98] h-full w-full bg-black opacity-20" />
-              <div className="absolute left-[50%] top-[50%] z-[99] translate-x-[-50%] translate-y-[-50%]">
+              <div className="fixed left-0 top-0 z-98 h-full w-full bg-black opacity-20" />
+              <div className="absolute left-[50%] top-[50%] z-99 translate-x-[-50%] translate-y-[-50%]">
                 <div
                   className={
                     'grid w-96 rounded-md border border-lines bg-bgForms'
