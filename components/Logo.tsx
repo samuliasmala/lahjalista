@@ -17,7 +17,7 @@ export function Logo({
   return (
     <div
       className={twMerge(
-        `mt-16 flex select-none items-center justify-center`,
+        `mt-16 flex items-center justify-center select-none`,
         wrapperClassName,
       )}
     >
