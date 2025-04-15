@@ -22,3 +22,9 @@ Major Potentially breaking API changes
 - [] testaa sivu että normaalikäyttö toimii (rekistöröinti, kirjautuminen, lahjan (lisääminen, poistaminen, muokkaaminen), palaute)
 
 - [] API-endpointtien testaaminen
+
+Session Modelin päivitys tehty seuraavasti:
+
+1. uuid lisätty vapaaehtoisena (uuid String?)
+2. UPDATE "Session" SET "uuid" = "id"; Kopioidaan id-kentän tiedot uuid-kenttään
+3.

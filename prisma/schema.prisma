@@ -63,10 +63,11 @@ model Anniversary {
     updatedAt  DateTime @updatedAt
 }
 
+// INFO.MD-tiedostossa lisätietoa
+
 model Session {
     // not totally sure yet where this is exactly used, but Lucia requires it. If this is changed, "[TypeError: The "payload" argument must be of type object. Received null]" error will occur
-    id         String   @id @default(uuid())
-    uuid       String   @default(uuid())
+    uuid       String   @id @default(uuid())
     // Lucia uses userId to check which user this Session belongs to. Normally we would use userUUID instead, but Lucia requires to have userId
     userId     String
     // userUUID is here so we will follow our "policy" with relating User
