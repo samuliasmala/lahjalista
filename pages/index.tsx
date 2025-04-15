@@ -1,4 +1,4 @@
-import React, { FormEvent, HTMLAttributes, useState } from 'react';
+import { FormEvent, HTMLAttributes, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '../components/Input';
@@ -82,12 +82,12 @@ export default function Home({
   return (
     <main className="h-screen w-full max-w-full">
       <div className="flex justify-center">
-        <div className="relative flex w-full flex-row justify-between bg-primaryLight p-3 pr-2 sm:w-96 sm:pr-0">
-          <div className="select-none text-lg">Lahjaidealista</div>
+        <div className="bg-primary-light relative flex w-full flex-row justify-between p-3 pr-2 sm:w-96 sm:pr-0">
+          <div className="text-lg select-none">Lahjaidealista</div>
           <SvgUser
             width={24}
             height={24}
-            className={`z-[98] mr-4 cursor-pointer text-stone-600`}
+            className={`z-98 mr-4 cursor-pointer text-stone-600`}
             onClick={() => setShowUserWindow((prevValue) => !prevValue)}
           />
           <UserDetailModal
@@ -101,7 +101,7 @@ export default function Home({
         <div className="w-full max-w-72">
           <div className="mt-12">
             <form onSubmit={(e) => void handleSubmit(e)}>
-              <TitleText className="select-none text-start">
+              <TitleText className="text-start select-none">
                 Uusi idea
               </TitleText>
               <div className="mt-6 flex flex-col">
@@ -176,7 +176,7 @@ function GiftList() {
     return (
       <p className="mt-4 text-lg font-bold">
         Noudetaan lahjoja{' '}
-        <span className="absolute ml-2 mt-1.5">
+        <span className="absolute mt-1.5 ml-2">
           <SvgSpinner width={18} height={18} className="animate-spin" />
         </span>
       </p>
@@ -191,11 +191,11 @@ function GiftList() {
           {giftData.map((giftItem) => (
             <div
               key={`${giftItem.uuid}_divbutton`}
-              className="mt-4 animate-opacity"
+              className="animate-opacity mt-4"
             >
               <div key={giftItem.uuid} className="grid">
                 <p
-                  className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
+                  className={`hover-target text-primary-text col-start-1 [overflow-wrap:anywhere]`}
                 >
                   {giftItem.gift} <span>-</span> {giftItem.receiver}
                 </p>
@@ -268,7 +268,7 @@ function UserDetailModal({
     return (
       <>
         <div
-          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
+          className={`fixed top-0 left-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-100' : ''}`}
           onClick={() => {
             // this blocks the closing of the User Modal if request for logout is sent
             if (!isPending) {
@@ -276,14 +276,14 @@ function UserDetailModal({
             }
           }}
         />
-        <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
-          <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
+        <div className="border-lines bg-bg-forms absolute top-12 right-1 z-99 w-56 rounded-md border-2 shadow-md shadow-black">
+          <p className="overflow mt-3 mb-0 ml-3 font-bold [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full justify-center">
             <Button
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-full max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
+              className="bg-primary mt-4 mr-3 mb-4 ml-3 flex h-8 w-full max-w-56 items-center justify-center rounded-md text-sm font-medium"
               onClick={async () => {
                 try {
                   await mutateAsync();
