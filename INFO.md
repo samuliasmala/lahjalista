@@ -27,4 +27,4 @@ Session Modelin päivitys tehty seuraavasti:
 
 1. uuid lisätty vapaaehtoisena (uuid String?)
 2. UPDATE "Session" SET "uuid" = "id"; Kopioidaan id-kentän tiedot uuid-kenttään
-3.
+3. id-kenttä poistetaan
