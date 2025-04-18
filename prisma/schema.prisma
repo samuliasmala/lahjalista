@@ -73,7 +73,7 @@ model Session {
     updatedAt  DateTime @updatedAt
     isLoggedIn Boolean  @default(false)
     // user has to be lower-cased. Otherwise "payload" error occurs
-    user       User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
+    User       User?    @relation(fields: [userUUID], references: [uuid], onDelete: Cascade)
 
     //@@unique([uuid]) //tarpeellinen?
 }
