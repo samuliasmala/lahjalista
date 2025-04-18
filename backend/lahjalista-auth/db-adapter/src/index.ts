@@ -208,5 +208,3 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     return;
   }
 }
-
-const prisma = new PrismaClient();
