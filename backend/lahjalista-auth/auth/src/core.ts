@@ -8,7 +8,7 @@ import type {
   Session,
   LahjalistaUser,
   DatabaseAdapter,
-} from '~/packages/shared/types';
+} from '~/backend/lahjalista-auth/shared/types';
 
 export class LahjaListaAuth {
   private adapter: DatabaseAdapter;
