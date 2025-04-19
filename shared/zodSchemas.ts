@@ -62,6 +62,7 @@ export const userSchema = z.object({
   lastName: lastNameSchema,
 });
 
+/** **This is FULL User schema. Contains all the fields!** */
 export const getUserSchema = userSchema.extend({
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -69,9 +70,7 @@ export const getUserSchema = userSchema.extend({
   role: z.string(),
 });
 
-export const createUserSchema = userSchema.extend({
-  password: passwordSchema,
-});
+export const createUserSchema = userSchema.extend({ password: passwordSchema });
 
 export const userLoginDetailsSchema = createUserSchema
   .pick({ email: true, password: true })
@@ -104,9 +103,7 @@ export const feedbackSchema = z.object({
   updatedAt: z.date(),
 });
 
-export const createFeedbackSchema = feedbackSchema.pick({
-  feedbackText: true,
-});
+export const createFeedbackSchema = feedbackSchema.pick({ feedbackText: true });
 
 // MISC
 
