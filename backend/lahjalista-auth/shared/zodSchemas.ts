@@ -1,36 +1,31 @@
 import { z } from 'zod';
+import { getUserSchema } from '~/shared/zodSchemas';
 
-const databaseSessionSchema = z.object({
+const sessionSchema = z.object({
   uuid: z.string().uuid(),
-  expiresAt: z.date(),
   userUUID: z.string().uuid(),
-});
-
-const createSessionSchema = databaseSessionSchema;
-
-const sessionSchema = databaseSessionSchema.extend({
-  fresh: z.boolean(),
-});
-
-// this will be changed when imported to Lahjalista project
-const lahjaListaUserSchema = z.object({
-  email: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
+  expiresAt: z.date(),
+  isLoggedIn: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  uuid: z.string(),
-  role: z.string(),
 });
+
+const databaseSessionSchema = sessionSchema;
+
+const createSessionSchema = sessionSchema;
+
+const frontendSessionSchema = databaseSessionSchema
+  .pick({ uuid: true, expiresAt: true, isLoggedIn: true })
+  .extend({ fresh: z.boolean() });
 
 const validSessionResultSchema = z.object({
   status: z.literal('valid'),
   databaseSession: databaseSessionSchema,
-  databaseUser: lahjaListaUserSchema,
+  databaseUser: getUserSchema,
 });
 
 const invalidSessionResultSchema = z.object({
   status: z.literal('invalid'),
   databaseSession: databaseSessionSchema,
-  databaseUser: lahjaListaUserSchema,
+  databaseUser: getUserSchema,
 });
