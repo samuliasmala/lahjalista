@@ -5,14 +5,14 @@ import {
   DatabaseSession,
   GetUserAndSessionResult,
   LahjalistaUser,
-} from '~/packages/shared/types';
+} from '~/backend/lahjalista-auth/shared/types';
 import { User } from '~/shared/types';
 
 declare global {
   var prisma: undefined | PrismaClient; //eslint-disable-line no-var
 }
 
-export class PrismaAdapter implements DatabaseAdapter {
+export class LahjalistaAuthAdapter implements DatabaseAdapter {
   private prisma: PrismaClient;
 
   constructor(prisma: PrismaClient | undefined) {
@@ -208,5 +208,3 @@ export class PrismaAdapter implements DatabaseAdapter {
     return;
   }
 }
-
-const prisma = new PrismaClient();

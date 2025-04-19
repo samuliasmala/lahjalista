@@ -5,10 +5,10 @@ import { generateUUID } from './crypto';
 import type { Cookie, CookieAttributes } from './cookie';
 
 import type {
-  Session,
+  FrontEndSession,
   LahjalistaUser,
   DatabaseAdapter,
-} from '~/packages/shared/types';
+} from '~/backend/lahjalista-auth/shared/types';
 
 export class LahjaListaAuth {
   private adapter: DatabaseAdapter;
@@ -53,9 +53,9 @@ export class LahjaListaAuth {
   }
 
   /** **Gets all the NON-EXPIRED sessions of a user** */
-  public async getUserSessions(userUUID: string): Promise<Session[]> {
+  public async getUserSessions(userUUID: string): Promise<FrontEndSession[]> {
     const databaseSessions = await this.adapter.getUserSessions(userUUID);
-    const sessions: Session[] = [];
+    const sessions: FrontEndSession[] = [];
     for (const databaseSession of databaseSessions) {
       // session is expired, don't add it into sessions array
       if (!isWithinExpirationDate(databaseSession.expiresAt)) {
@@ -76,7 +76,8 @@ export class LahjaListaAuth {
   public async validateSession(
     sessionUUID: string,
   ): Promise<
-    { user: LahjalistaUser; session: Session } | { user: null; session: null }
+    | { user: LahjalistaUser; session: FrontEndSession }
+    | { user: null; session: null }
   > {
     const {
       status: databaseStatus,
@@ -108,7 +109,7 @@ export class LahjaListaAuth {
       databaseSession.expiresAt.getTime() -
         this.sessionExpiresIn.milliseconds() / 2,
     );
-    const session: Session = {
+    const session: FrontEndSession = {
       uuid: databaseSession.uuid,
       userUUID: databaseSession.userUUID,
       fresh: false,
@@ -136,7 +137,7 @@ export class LahjaListaAuth {
     options?: {
       sessionUUID?: string;
     },
-  ): Promise<Session> {
+  ): Promise<FrontEndSession> {
     const sessionUUID = options?.sessionUUID ?? generateUUID();
     const sessionExpiresAt = createDate(this.sessionExpiresIn);
     await this.adapter.createSession({
@@ -144,7 +145,7 @@ export class LahjaListaAuth {
       expiresAt: sessionExpiresAt,
       userUUID,
     });
-    const session: Session = {
+    const session: FrontEndSession = {
       userUUID,
       uuid: sessionUUID,
       fresh: true,
