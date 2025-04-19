@@ -7,7 +7,7 @@ export type Session = {
   expiresAt: Date;
   createdAt: Date;
   updatedAt: Date;
-  isLoggedIn: Boolean;
+  isLoggedIn: boolean;
   userUUID: string;
 };
 
