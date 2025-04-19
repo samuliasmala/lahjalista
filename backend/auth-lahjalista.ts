@@ -6,93 +6,58 @@ import type { PrismaUser, User } from '~/shared/types';
 import type { Session as LuciaSession, User as LuciaUser } from 'lucia';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
+import { LahjalistaAuthAdapter } from './lahjalista-auth/db-adapter/src';
+import { LahjaListaAuth } from './lahjalista-auth/auth/src';
+import { DatabaseSession } from './lahjalista-auth/shared/types';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
-export const lucia = new Lucia(adapter, {
+const prismaAdapter = new LahjalistaAuthAdapter(prisma);
+
+// 1 hour
+const lahjalistaAuth = new LahjaListaAuth(prismaAdapter, {
   sessionExpiresIn: new TimeSpan(1, 'h'),
   sessionCookie: {
     attributes: {
       secure: process.env.NODE_ENV === 'production',
     },
   },
-  getSessionAttributes(session) {
-    const { isLoggedIn } = session;
-    return { isLoggedIn };
-  },
-  getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
-      user;
-    return {
-      uuid,
-      firstName,
-      lastName,
-      email,
-      createdAt,
-      updatedAt,
-      role,
-    };
-  },
 });
 
-export const luciaLongSession = new Lucia(adapter, {
+// 30 days | 1 month
+const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
   sessionExpiresIn: new TimeSpan(30, 'd'),
   sessionCookie: {
     attributes: {
       secure: process.env.NODE_ENV === 'production',
     },
   },
-  getSessionAttributes(session) {
-    const { isLoggedIn } = session;
-    return { isLoggedIn };
-  },
-  getUserAttributes(user): User {
-    const { uuid, firstName, lastName, email, createdAt, updatedAt, role } =
-      user;
-    return {
-      uuid,
-      firstName,
-      lastName,
-      email,
-      createdAt,
-      updatedAt,
-      role,
-    };
-  },
 });
-
-declare module 'lucia' {
-  interface Register {
-    Lucia: typeof lucia;
-    DatabaseUserAttributes: PrismaUser;
-    DatabaseSessionAttributes: { userUUID: string; isLoggedIn: boolean };
-  }
-}
 
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
 ): Promise<
-  { user: LuciaUser; session: LuciaSession } | { user: null; session: null }
+  { user: User; session: DatabaseSession } | { user: null; session: null }
 > {
-  const sessionId = lucia.readSessionCookie(req.headers.cookie ?? '');
+  const sessionId = lahjalistaAuth.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
       user: null,
       session: null,
     };
   }
-  const result = await lucia.validateSession(sessionId);
+  const result = await lahjalistaAuth.validateSession(sessionId);
   if (result.session && result.session.fresh) {
     res.appendHeader(
       'Set-Cookie',
-      lucia.createSessionCookie(result.session.id).serialize(),
+      lahjalistaAuth.createSessionCookie(result.session.id).serialize(),
     );
   }
   if (!result.session) {
     res.appendHeader(
       'Set-Cookie',
-      lucia.createBlankSessionCookie().serialize(),
+      lahjalistaAuth.createBlankSessionCookie().serialize(),
     );
   }
 
