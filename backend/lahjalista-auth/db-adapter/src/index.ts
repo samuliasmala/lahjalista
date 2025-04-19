@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { z } from 'zod';
 import {
   CreateSession,
   DatabaseAdapter,
@@ -7,6 +8,7 @@ import {
   LahjalistaUser,
 } from '~/backend/lahjalista-auth/shared/types';
 import { User } from '~/shared/types';
+import { sessionSchema } from '../../shared/zodSchemas';
 
 declare global {
   var prisma: undefined | PrismaClient; //eslint-disable-line no-var
@@ -21,9 +23,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
 
   private async _getUser(userUUID: string): Promise<LahjalistaUser | null> {
     const user = await this.prisma.user.findUnique({
-      where: {
-        uuid: userUUID,
-      },
+      where: { uuid: userUUID },
     });
 
     return user ? user : null;
@@ -34,38 +34,20 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
   ): Promise<DatabaseSession | null> {
     const { expiresAt, userUUID, uuid } = sessionData;
     const session = await this.prisma.session.create({
-      data: {
-        uuid,
-        userUUID,
-        expiresAt,
-      },
-      select: {
-        uuid: true,
-        expiresAt: true,
-        userUUID: true,
-      },
+      data: { uuid, userUUID, expiresAt },
     });
 
     return session;
   }
 
   async deleteSession(sessionUUID: string): Promise<void> {
-    await this.prisma.session.delete({
-      where: {
-        uuid: sessionUUID,
-      },
-    });
+    await this.prisma.session.delete({ where: { uuid: sessionUUID } });
     return;
   }
 
   async getSession(sessionUUID: string): Promise<DatabaseSession | null> {
     const session = await this.prisma.session.findUnique({
       where: { uuid: sessionUUID },
-      select: {
-        uuid: true,
-        expiresAt: true,
-        userUUID: true,
-      },
     });
 
     return session;
@@ -74,17 +56,8 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
   /** **Potentially a risky function** */
   async getUserFromSession(sessionUUID: string): Promise<User | null> {
     const session = await this.prisma.session.findUnique({
-      where: {
-        uuid: sessionUUID,
-      },
-      select: {
-        User: {
-          omit: {
-            id: true,
-            password: true,
-          },
-        },
-      },
+      where: { uuid: sessionUUID },
+      select: { User: { omit: { id: true, password: true } } },
     });
 
     if (!session || !session.User) return null;
@@ -96,14 +69,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     userUUID: string,
   ): Promise<[DatabaseSession[], User] | null> {
     const sessions = await this.prisma.session.findMany({
-      where: {
-        userUUID: userUUID,
-      },
-      select: {
-        uuid: true,
-        expiresAt: true,
-        userUUID: true,
-      },
+      where: { userUUID: userUUID },
     });
 
     // return null if sessions were not found
@@ -123,45 +89,37 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     sessionUUID: string,
   ): Promise<GetUserAndSessionResult> {
     const sessionFromDatabase = await this.prisma.session.findUnique({
-      where: {
-        uuid: sessionUUID,
-      },
+      where: { uuid: sessionUUID },
       select: {
         uuid: true,
+        createdAt: true,
+        isLoggedIn: true,
+        updatedAt: true,
         expiresAt: true,
         userUUID: true,
-        User: {
-          omit: {
-            id: true,
-            password: true,
-          },
-        },
+        User: { omit: { id: true, password: true } },
       },
     });
 
     if (!sessionFromDatabase || !sessionFromDatabase.User)
       return { status: 'invalid', databaseSession: null, databaseUser: null };
 
-    const { expiresAt, userUUID, uuid } = sessionFromDatabase;
+    const databaseSession = sessionSchema.safeParse(sessionFromDatabase);
 
-    // add Zod here perhaps
+    // if Zod parsing fails for some reason, return invalid
+    if (!databaseSession.success)
+      return { status: 'invalid', databaseSession: null, databaseUser: null };
+
     return {
       status: 'valid',
-      databaseSession: { expiresAt, userUUID, uuid },
+      databaseSession: databaseSession.data,
       databaseUser: sessionFromDatabase.User,
     };
   }
 
   async getUserSessions(userUUID: string): Promise<DatabaseSession[]> {
     const sessions = await this.prisma.session.findMany({
-      where: {
-        userUUID,
-      },
-      select: {
-        uuid: true,
-        expiresAt: true,
-        userUUID: true,
-      },
+      where: { userUUID },
     });
 
     return sessions;
@@ -169,11 +127,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
 
   /** **Deletes sessions that belongs to a specific user** */
   async deleteUserSessions(userUUID: string): Promise<void> {
-    await this.prisma.session.deleteMany({
-      where: {
-        userUUID,
-      },
-    });
+    await this.prisma.session.deleteMany({ where: { userUUID } });
 
     return;
   }
@@ -181,11 +135,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
   /** **Deletes ALL the expired sessions no matter who owns it** */
   async deleteExpiredSessions(): Promise<void> {
     await this.prisma.session.deleteMany({
-      where: {
-        expiresAt: {
-          lte: new Date(),
-        },
-      },
+      where: { expiresAt: { lte: new Date() } },
     });
 
     return;
@@ -197,12 +147,8 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     newSessionExpirationDate: Date,
   ): Promise<void> {
     await this.prisma.session.update({
-      where: {
-        uuid: sessionUUID,
-      },
-      data: {
-        expiresAt: newSessionExpirationDate,
-      },
+      where: { uuid: sessionUUID },
+      data: { expiresAt: newSessionExpirationDate },
     });
 
     return;
