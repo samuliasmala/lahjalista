@@ -5,7 +5,7 @@ import { generateUUID } from './crypto';
 import type { Cookie, CookieAttributes } from './cookie';
 
 import type {
-  FrontEndSession,
+  FrontendSession,
   LahjalistaUser,
   DatabaseAdapter,
 } from '~/backend/lahjalista-auth/shared/types';
@@ -53,9 +53,9 @@ export class LahjaListaAuth {
   }
 
   /** **Gets all the NON-EXPIRED sessions of a user** */
-  public async getUserSessions(userUUID: string): Promise<FrontEndSession[]> {
+  public async getUserSessions(userUUID: string): Promise<FrontendSession[]> {
     const databaseSessions = await this.adapter.getUserSessions(userUUID);
-    const sessions: FrontEndSession[] = [];
+    const sessions: FrontendSession[] = [];
     for (const databaseSession of databaseSessions) {
       // session is expired, don't add it into sessions array
       if (!isWithinExpirationDate(databaseSession.expiresAt)) {
@@ -76,7 +76,7 @@ export class LahjaListaAuth {
   public async validateSession(
     sessionUUID: string,
   ): Promise<
-    | { user: LahjalistaUser; session: FrontEndSession }
+    | { user: LahjalistaUser; session: FrontendSession }
     | { user: null; session: null }
   > {
     const {
@@ -109,7 +109,7 @@ export class LahjaListaAuth {
       databaseSession.expiresAt.getTime() -
         this.sessionExpiresIn.milliseconds() / 2,
     );
-    const session: FrontEndSession = {
+    const session: FrontendSession = {
       uuid: databaseSession.uuid,
       userUUID: databaseSession.userUUID,
       fresh: false,
@@ -137,7 +137,7 @@ export class LahjaListaAuth {
     options?: {
       sessionUUID?: string;
     },
-  ): Promise<FrontEndSession> {
+  ): Promise<FrontendSession> {
     const sessionUUID = options?.sessionUUID ?? generateUUID();
     const sessionExpiresAt = createDate(this.sessionExpiresIn);
     await this.adapter.createSession({
@@ -145,7 +145,7 @@ export class LahjaListaAuth {
       expiresAt: sessionExpiresAt,
       userUUID,
     });
-    const session: FrontEndSession = {
+    const session: FrontendSession = {
       userUUID,
       uuid: sessionUUID,
       fresh: true,

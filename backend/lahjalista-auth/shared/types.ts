@@ -1,4 +1,4 @@
-export interface FrontEndSession extends DatabaseSession {
+export interface FrontendSession extends DatabaseSession {
   fresh: boolean;
 }
 
