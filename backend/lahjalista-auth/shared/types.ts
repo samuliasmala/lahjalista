@@ -1,5 +1,5 @@
 export interface FrontendSession
-  extends Pick<Session, 'uuid' | 'expiresAt' | 'isLoggedIn' | 'userUUID'> {
+  extends Pick<Session, 'uuid' | 'expiresAt' | 'userUUID'> {
   fresh: boolean;
 }
 
