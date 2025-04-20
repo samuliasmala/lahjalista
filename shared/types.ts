@@ -49,6 +49,24 @@ export type Feedback = z.infer<typeof feedbackSchema>;
 
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
 
+export type DatabaseAdapter = {
+  createSession: (sessionData: CreateSession) => Promise<Session | null>;
+  deleteSession: (sessionUUID: string) => Promise<void>;
+  //setSession: () => Promise<void>; // createSession is same
+  getSession: (sessionUUID: string) => Promise<Session | null>;
+  //prettier-ignore
+  getUserFromSession: (sessionUUID: string) => Promise<User | null>; // potentially a dangerous function
+  // prettier-ignore
+  getUserAndSessions: (userUUID: string) => Promise<[Session[], User] | null>; // gets the user and ALL the sessions
+  //prettier-ignore
+  getUserAndSession: (sessionUUID: string) => Promise<GetUserAndSessionResult>; // gets the user and ONLY ONE session
+  getUserSessions: (userUUID: string) => Promise<Session[]>; // gets all the sessions belonging to a ONE user
+  // prettier-ignore
+  updateSessionExpirationDate: (sessionUUID: string, newSessionExpirationDate: Date) => Promise<void>;
+  deleteUserSessions: (userUUID: string) => Promise<void>; // deletes all the sessions belonging to a user
+  deleteExpiredSessions: () => Promise<void>;
+};
+
 export type KeyboardEventKeys =
   | ' ' // Space
   | '!'
