@@ -5,9 +5,10 @@ import {
   createSessionSchema,
   createUserSchema,
   feedbackSchema,
-  getSessionSchema,
+  frontendSessionSchema,
   getUserSchema,
   giftSchema,
+  sessionSchema,
   userLoginDetailsSchema,
 } from './zodSchemas';
 
@@ -30,7 +31,9 @@ export type CreateUser = z.infer<typeof createUserSchema>;
 export type UserLoginDetails = z.infer<typeof userLoginDetailsSchema>;
 
 // SESSION
-export type Session = z.infer<typeof getSessionSchema>;
+export type Session = z.infer<typeof sessionSchema>;
+
+export type FrontendSession = z.infer<typeof frontendSessionSchema>;
 
 export type CreateSession = z.infer<typeof createSessionSchema>;
 

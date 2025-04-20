@@ -87,8 +87,6 @@ export const sessionSchema = z.object({
   updatedAt: z.date(),
 });
 
-export const databaseSessionSchema = sessionSchema;
-
 export const createSessionSchema = z.object({
   uuid: z.string().uuid(),
   expiresAt: z.string().uuid(),
@@ -101,13 +99,13 @@ export const frontendSessionSchema = sessionSchema
 
 export const validSessionResultSchema = z.object({
   status: z.literal('valid'),
-  databaseSession: databaseSessionSchema,
+  databaseSession: sessionSchema,
   databaseUser: getUserSchema,
 });
 
 export const invalidSessionResultSchema = z.object({
   status: z.literal('invalid'),
-  databaseSession: databaseSessionSchema,
+  databaseSession: sessionSchema,
   databaseUser: getUserSchema,
 });
 
