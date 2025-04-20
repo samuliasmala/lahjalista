@@ -65,6 +65,7 @@ export class LahjaListaAuth {
       sessions.push({
         uuid: databaseSession.uuid,
         expiresAt: databaseSession.expiresAt,
+        isLoggedIn: databaseSession.isLoggedIn,
         userUUID: databaseSession.userUUID,
         fresh: false,
       });
