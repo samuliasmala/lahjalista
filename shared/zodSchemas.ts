@@ -95,6 +95,10 @@ export const createSessionSchema = z.object({
   userUUID: z.string().uuid(),
 });
 
+export const frontendSessionSchema = sessionSchema
+  .pick({ uuid: true, expiresAt: true, isLoggedIn: true })
+  .extend({ fresh: z.boolean() });
+
 // FEEDBACK
 
 export const feedbackSchema = z.object({
