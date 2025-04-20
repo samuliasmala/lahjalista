@@ -33,6 +33,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     sessionData: CreateSession,
   ): Promise<DatabaseSession | null> {
     const { expiresAt, userUUID, uuid } = sessionData;
+    // perhaps isLoggedIn: true here?
     const session = await this.prisma.session.create({
       data: { uuid, userUUID, expiresAt },
     });
