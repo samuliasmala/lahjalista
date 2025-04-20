@@ -11,7 +11,7 @@ export type Session = {
   userUUID: string;
 };
 
-export interface DatabaseSession extends Session {}
+export type DatabaseSession = Session;
 
 export type CreateSession = {
   uuid: string;
