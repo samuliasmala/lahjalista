@@ -112,9 +112,10 @@ export class LahjaListaAuth {
     );
     const session: FrontendSession = {
       uuid: databaseSession.uuid,
+      expiresAt: databaseSession.expiresAt,
+      isLoggedIn: databaseSession.isLoggedIn,
       userUUID: databaseSession.userUUID,
       fresh: false,
-      expiresAt: databaseSession.expiresAt,
     };
 
     // here we would check if current time is less than so called "activePeriodExpirationDate" time
@@ -149,6 +150,7 @@ export class LahjaListaAuth {
     const session: FrontendSession = {
       userUUID,
       uuid: sessionUUID,
+      isLoggedIn: false,
       fresh: true,
       expiresAt: sessionExpiresAt,
     };
