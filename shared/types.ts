@@ -49,6 +49,8 @@ export type Feedback = z.infer<typeof feedbackSchema>;
 
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
 
+// MISC
+
 export type DatabaseAdapter = {
   createSession: (sessionData: CreateSession) => Promise<Session | null>;
   deleteSession: (sessionUUID: string) => Promise<void>;
