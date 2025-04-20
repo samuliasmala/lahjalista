@@ -78,20 +78,21 @@ export const userLoginDetailsSchema = createUserSchema
 
 // SESSION
 
-export const getSessionSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  userUUID: z.string(),
+export const sessionSchema = z.object({
+  uuid: z.string().uuid(),
+  userUUID: z.string().uuid(),
   expiresAt: z.date(),
+  isLoggedIn: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  isLoggedIn: z.boolean(),
 });
 
+export const databaseSessionSchema = sessionSchema;
+
 export const createSessionSchema = z.object({
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  user: z.custom<Prisma.UserCreateNestedOneWithoutSessionInput>(),
+  uuid: z.string().uuid(),
+  expiresAt: z.string().uuid(),
+  userUUID: z.string().uuid(),
 });
 
 // FEEDBACK
