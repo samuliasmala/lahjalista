@@ -8,8 +8,10 @@ import {
   frontendSessionSchema,
   getUserSchema,
   giftSchema,
+  invalidSessionResultSchema,
   sessionSchema,
   userLoginDetailsSchema,
+  validSessionResultSchema,
 } from './zodSchemas';
 
 export type {
@@ -36,6 +38,11 @@ export type Session = z.infer<typeof sessionSchema>;
 export type FrontendSession = z.infer<typeof frontendSessionSchema>;
 
 export type CreateSession = z.infer<typeof createSessionSchema>;
+
+export type ValidSessionResult = z.infer<typeof validSessionResultSchema>;
+export type InvalidSessionResult = z.infer<typeof invalidSessionResultSchema>;
+
+export type GetUserAndSessionResult = ValidSessionResult | InvalidSessionResult;
 
 // FEEDBACK
 export type Feedback = z.infer<typeof feedbackSchema>;
