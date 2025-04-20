@@ -19,10 +19,6 @@ export type CreateSession = {
   userUUID: string;
 };
 
-export type User = {
-  uuid: string; // userUUID
-};
-
 export type DatabaseAdapter = {
   createSession: (
     sessionData: CreateSession,
