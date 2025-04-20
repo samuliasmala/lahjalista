@@ -99,6 +99,18 @@ export const frontendSessionSchema = sessionSchema
   .pick({ uuid: true, expiresAt: true, isLoggedIn: true })
   .extend({ fresh: z.boolean() });
 
+export const validSessionResultSchema = z.object({
+  status: z.literal('valid'),
+  databaseSession: databaseSessionSchema,
+  databaseUser: getUserSchema,
+});
+
+export const invalidSessionResultSchema = z.object({
+  status: z.literal('invalid'),
+  databaseSession: databaseSessionSchema,
+  databaseUser: getUserSchema,
+});
+
 // FEEDBACK
 
 export const feedbackSchema = z.object({
