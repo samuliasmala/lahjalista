@@ -104,8 +104,8 @@ export const validSessionResultSchema = z.object({
 
 export const invalidSessionResultSchema = z.object({
   status: z.literal('invalid'),
-  databaseSession: sessionSchema,
-  databaseUser: getUserSchema,
+  databaseSession: z.null(),
+  databaseUser: z.null(),
 });
 
 // FEEDBACK
