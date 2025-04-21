@@ -2,7 +2,7 @@ import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { Lucia, TimeSpan } from 'lucia';
 import prisma from '~/prisma';
-import type { PrismaUser, User } from '~/shared/types';
+import type { FrontendSession, PrismaUser, User } from '~/shared/types';
 import type { Session as LuciaSession, User as LuciaUser } from 'lucia';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
@@ -37,7 +37,9 @@ const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
-): Promise<{ user: User; session: Session } | { user: null; session: null }> {
+): Promise<
+  { user: User; session: FrontendSession } | { user: null; session: null }
+> {
   const sessionId = lahjalistaAuth.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
@@ -49,7 +51,7 @@ export async function validateRequest(
   if (result.session && result.session.fresh) {
     res.appendHeader(
       'Set-Cookie',
-      lahjalistaAuth.createSessionCookie(result.session.id).serialize(),
+      lahjalistaAuth.createSessionCookie(result.session.uuid).serialize(),
     );
   }
   if (!result.session) {
