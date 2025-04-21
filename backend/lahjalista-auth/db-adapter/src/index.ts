@@ -1,13 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import { z } from 'zod';
 import {
   CreateSession,
   DatabaseAdapter,
-  DatabaseSession,
+  Session,
   GetUserAndSessionResult,
-} from '~/backend/lahjalista-auth/shared/types';
+} from '~/shared/types';
 import { User } from '~/shared/types';
-import { sessionSchema } from '../../shared/zodSchemas';
+import { sessionSchema } from '~/shared/zodSchemas';
 
 declare global {
   var prisma: undefined | PrismaClient; //eslint-disable-line no-var
@@ -28,9 +27,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     return user ? user : null;
   }
 
-  async createSession(
-    sessionData: CreateSession,
-  ): Promise<DatabaseSession | null> {
+  async createSession(sessionData: CreateSession): Promise<Session | null> {
     const { expiresAt, userUUID, uuid } = sessionData;
     // perhaps isLoggedIn: true here?
     const session = await this.prisma.session.create({
@@ -45,7 +42,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     return;
   }
 
-  async getSession(sessionUUID: string): Promise<DatabaseSession | null> {
+  async getSession(sessionUUID: string): Promise<Session | null> {
     const session = await this.prisma.session.findUnique({
       where: { uuid: sessionUUID },
     });
@@ -67,7 +64,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
 
   async getUserAndSessions(
     userUUID: string,
-  ): Promise<[DatabaseSession[], User] | null> {
+  ): Promise<[Session[], User] | null> {
     const sessions = await this.prisma.session.findMany({
       where: { userUUID: userUUID },
     });
@@ -117,7 +114,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     };
   }
 
-  async getUserSessions(userUUID: string): Promise<DatabaseSession[]> {
+  async getUserSessions(userUUID: string): Promise<Session[]> {
     const sessions = await this.prisma.session.findMany({
       where: { userUUID },
     });
