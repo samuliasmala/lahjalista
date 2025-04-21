@@ -6,9 +6,9 @@ import type { Cookie, CookieAttributes } from './cookie';
 
 import type {
   FrontendSession,
-  LahjalistaUser,
   DatabaseAdapter,
 } from '~/backend/lahjalista-auth/shared/types';
+import { User } from '~/shared/types';
 
 export class LahjaListaAuth {
   private adapter: DatabaseAdapter;
@@ -76,8 +76,7 @@ export class LahjaListaAuth {
   public async validateSession(
     sessionUUID: string,
   ): Promise<
-    | { user: LahjalistaUser; session: FrontendSession }
-    | { user: null; session: null }
+    { user: User; session: FrontendSession } | { user: null; session: null }
   > {
     const {
       status: databaseStatus,
@@ -127,7 +126,7 @@ export class LahjaListaAuth {
         session.expiresAt,
       );
     }
-    const user: LahjalistaUser = databaseUser;
+    const user: User = databaseUser;
     return { user, session };
   }
 

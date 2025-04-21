@@ -5,7 +5,6 @@ import {
   DatabaseAdapter,
   DatabaseSession,
   GetUserAndSessionResult,
-  LahjalistaUser,
 } from '~/backend/lahjalista-auth/shared/types';
 import { User } from '~/shared/types';
 import { sessionSchema } from '../../shared/zodSchemas';
@@ -21,7 +20,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     this.prisma = prisma ?? new PrismaClient();
   }
 
-  private async _getUser(userUUID: string): Promise<LahjalistaUser | null> {
+  private async _getUser(userUUID: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { uuid: userUUID },
     });
