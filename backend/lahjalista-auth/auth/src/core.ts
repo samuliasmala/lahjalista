@@ -4,10 +4,7 @@ import { generateUUID } from './crypto';
 
 import type { Cookie, CookieAttributes } from './cookie';
 
-import type {
-  FrontendSession,
-  DatabaseAdapter,
-} from '~/backend/lahjalista-auth/shared/types';
+import type { FrontendSession, DatabaseAdapter } from '~/shared/types';
 import { User } from '~/shared/types';
 
 export class LahjaListaAuth {
