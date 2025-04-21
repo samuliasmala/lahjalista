@@ -8,7 +8,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
 import { LahjalistaAuthAdapter } from './lahjalista-auth/db-adapter/src';
 import { LahjaListaAuth } from './lahjalista-auth/auth/src';
-import { DatabaseSession } from './lahjalista-auth/shared/types';
+import { Session } from '~/shared/types';
 
 export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -37,9 +37,7 @@ const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
-): Promise<
-  { user: User; session: DatabaseSession } | { user: null; session: null }
-> {
+): Promise<{ user: User; session: Session } | { user: null; session: null }> {
   const sessionId = lahjalistaAuth.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
