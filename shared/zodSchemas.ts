@@ -87,10 +87,10 @@ export const sessionSchema = z.object({
   updatedAt: z.date(),
 });
 
-export const createSessionSchema = z.object({
-  uuid: z.string().uuid(),
-  expiresAt: z.string().uuid(),
-  userUUID: z.string().uuid(),
+export const createSessionSchema = sessionSchema.pick({
+  uuid: true,
+  userUUID: true,
+  expiresAt: true,
 });
 
 export const frontendSessionSchema = sessionSchema
