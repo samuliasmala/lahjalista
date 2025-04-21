@@ -182,8 +182,6 @@ export type KeyboardEventKeys =
   | 'Num Lock'
   | 'Scroll Lock';
 
-// CHECK THIS, onko mitään järkeä
-
 export const QueryKeys = {
   LOGIN: ['login'],
   LOGOUT: ['logout'],
