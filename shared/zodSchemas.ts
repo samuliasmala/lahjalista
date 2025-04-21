@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { emailRegex, passwordRegex } from './regexPatterns';
-import { Prisma } from '@prisma/client';
 
 // FORM
 
