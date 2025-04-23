@@ -2,7 +2,7 @@ import { PrismaAdapter } from '@lucia-auth/adapter-prisma';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { TimeSpan } from 'lucia';
 import prisma from '~/prisma';
-import type { User, Session } from '~/shared/types';
+import type { User, Session, FrontendSession } from '~/shared/types';
 import type { Session as LuciaSession, User as LuciaUser } from 'lucia';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpError } from './HttpError';
@@ -36,7 +36,9 @@ const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
 export async function validateRequest(
   req: IncomingMessage,
   res: ServerResponse,
-): Promise<{ user: User; session: Session } | { user: null; session: null }> {
+): Promise<
+  { user: User; session: FrontendSession } | { user: null; session: null }
+> {
   const sessionId = lahjalistaAuth.readSessionCookie(req.headers.cookie ?? '');
   if (!sessionId) {
     return {
@@ -64,7 +66,7 @@ export async function validateRequest(
 export async function requireLogin(
   req: NextApiRequest,
   res: NextApiResponse,
-): Promise<{ user: LuciaUser; session: LuciaSession }> {
+): Promise<{ user: User; session: FrontendSession }> {
   const userDetails = await validateRequest(req, res);
   if (
     !userDetails.session ||
@@ -85,7 +87,7 @@ export async function requireLogin(
 export async function checkIfSessionValid(
   req: NextApiRequest,
   res: NextApiResponse,
-): Promise<{ user: User; session: LuciaSession }> {
+): Promise<{ user: User; session: FrontendSession }> {
   const userData = await validateRequest(req, res);
   if (!userData.session || !userData.user) {
     throw new HttpError('You are unauthorized!', 401);

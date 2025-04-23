@@ -63,6 +63,7 @@ export class LahjaListaAuth {
         uuid: databaseSession.uuid,
         expiresAt: databaseSession.expiresAt,
         userUUID: databaseSession.userUUID,
+        isLoggedIn: databaseSession.isLoggedIn,
         fresh: false,
       });
     }
@@ -109,6 +110,7 @@ export class LahjaListaAuth {
       uuid: databaseSession.uuid,
       expiresAt: databaseSession.expiresAt,
       userUUID: databaseSession.userUUID,
+      isLoggedIn: databaseSession.isLoggedIn,
       fresh: false,
     };
 
@@ -142,10 +144,11 @@ export class LahjaListaAuth {
       userUUID,
     });
     const session: FrontendSession = {
-      userUUID,
       uuid: sessionUUID,
-      fresh: true,
       expiresAt: sessionExpiresAt,
+      userUUID,
+      isLoggedIn: true,
+      fresh: true,
     };
     return session;
   }
