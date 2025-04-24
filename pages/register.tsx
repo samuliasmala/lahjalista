@@ -155,8 +155,6 @@ export default function Register() {
                   />
                   <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
                     <button
-                      /* CHECK THIS, onko hyvä skipata salasanan paljastamisnäppäimen yli */
-                      tabIndex={-1}
                       type="button"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);

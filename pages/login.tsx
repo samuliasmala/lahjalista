@@ -144,8 +144,6 @@ export default function Login() {
                   />
                   <div className="flex items-center rounded-md bg-bgForms has-[input:focus]:rounded has-[input:focus]:outline-2">
                     <button
-                      /* CHECK THIS, onko hyvä skipata salasanan paljastamisnäppäimen yli */
-                      tabIndex={-1}
                       type="button"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
