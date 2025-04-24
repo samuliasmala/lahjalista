@@ -18,7 +18,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
-import SvgSpinner from '~/icons/spinner';
+import { Spinner } from '~/components/Spinner';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -167,16 +167,7 @@ export default function Login() {
               </div>
 
               <Button type="submit" disabled={isPending}>
-                Kirjaudu sisään{' '}
-                {isPending && (
-                  <span className="absolute pl-1 pt-0.5">
-                    <SvgSpinner
-                      width={24}
-                      height={24}
-                      className="animate-spin text-white"
-                    />
-                  </span>
-                )}
+                Kirjaudu sisään {isPending && <Spinner />}
               </Button>
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>

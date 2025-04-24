@@ -3,8 +3,8 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { deleteGift } from '~/utils/apiRequests';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import SvgSpinner from '~/icons/spinner';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { Spinner } from './Spinner';
 
 type DeleteModal = {
   gift: Gift;
@@ -50,7 +50,11 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
             onClick={() => mutateAsync()}
           >
             {isPending ? (
-              <SvgSpinner width={24} height={24} className="animate-spin" />
+              /* CHECK THIS, bottom-7 onko ok? */
+              <p className="mr-5">
+                Poista
+                <Spinner className="bottom-7 px-0.5" />
+              </p>
             ) : (
               'Poista'
             )}

@@ -17,7 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
-import SvgSpinner from '~/icons/spinner';
+import { Spinner } from '~/components/Spinner';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -167,15 +167,12 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.password} />
 
                 <Button className="mt-8 select-none" disabled={isPending}>
-                  Luo käyttäjätunnus
-                  {isPending && (
-                    <span className="absolute pl-1 pt-0.5">
-                      <SvgSpinner
-                        width={24}
-                        height={24}
-                        className="animate-spin text-white"
-                      />
-                    </span>
+                  {isPending ? (
+                    <p className="mr-5">
+                      Luo käyttäjätunnus <Spinner />
+                    </p>
+                  ) : (
+                    'Luo käyttäjätunnus'
                   )}
                 </Button>
                 <p className="mt-3 select-none text-center text-xs text-gray-500">

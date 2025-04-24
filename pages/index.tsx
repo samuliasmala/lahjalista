@@ -16,9 +16,9 @@ import SvgTrashCan from '~/icons/trash_can';
 import axios from 'axios';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { useRouter } from 'next/router';
-import SvgSpinner from '~/icons/spinner';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { Spinner } from '~/components/Spinner';
 
 export { getServerSideProps };
 
@@ -142,15 +142,7 @@ export default function Home({
                 disabled={createGiftQuery.isPending}
               >
                 Lisää
-                {createGiftQuery.isPending ? (
-                  <span className="absolute pl-1 pt-0.5">
-                    <SvgSpinner
-                      width={24}
-                      height={24}
-                      className="animate-spin"
-                    />
-                  </span>
-                ) : null}
+                {createGiftQuery.isPending ? <Spinner /> : null}
               </Button>
             </form>
           </div>
@@ -173,12 +165,10 @@ function GiftList() {
   const { error, isFetching, data: giftData } = useGetGifts();
 
   if (isFetching)
+    /* CHECK THIS, onko spinner liian lähellä Noudetaan lahjoja -tekstiä*/
     return (
       <p className="mt-4 text-lg font-bold">
-        Noudetaan lahjoja{' '}
-        <span className="absolute ml-2 mt-1.5">
-          <SvgSpinner width={18} height={18} className="animate-spin" />
-        </span>
+        Noudetaan lahjoja <Spinner className="" />
       </p>
     );
 
@@ -296,11 +286,7 @@ function UserDetailModal({
               {' '}
               Kirjaudu ulos
               {isPending ? (
-                <SvgSpinner
-                  width={18}
-                  height={18}
-                  className="ml-2 animate-spin"
-                />
+                <Spinner className="relative ml-1" />
               ) : (
                 <SvgArrowRightStartOnRectangle
                   width={18}
