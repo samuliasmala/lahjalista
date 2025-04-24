@@ -8,7 +8,7 @@ interface Spinner extends HTMLAttributes<HTMLSpanElement> {
 
 export function Spinner({ className, spinnerClassName, ...rest }: Spinner) {
   return (
-    <span className="absolute px-1 py-0.5" {...rest}>
+    <span className={twMerge('absolute px-1 py-0.5', className)} {...rest}>
       <SvgSpinner
         className={twMerge('h-6 w-6 animate-spin', spinnerClassName)}
       />
