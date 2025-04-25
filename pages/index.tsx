@@ -165,7 +165,6 @@ function GiftList() {
   const { error, isFetching, data: giftData } = useGetGifts();
 
   if (isFetching)
-    /* CHECK THIS, onko spinner liian lähellä Noudetaan lahjoja -tekstiä*/
     return (
       <p className="mt-4 text-lg font-bold">
         Noudetaan lahjoja <Spinner />
