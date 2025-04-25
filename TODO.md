@@ -98,4 +98,4 @@ export const createGiftSchema = giftSchema;
 export const updateGiftSchema = createGiftSchema;
 ```
 
-Mahdollisesti jotain tällaista
+6. Tee Palaute-tekstikentästä pyöreä "/pages/logout.tsx"
