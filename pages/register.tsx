@@ -167,13 +167,8 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.password} />
 
                 <Button className="mt-8 select-none" disabled={isPending}>
-                  {isPending ? (
-                    <p className="mr-5">
-                      Luo käyttäjätunnus <Spinner />
-                    </p>
-                  ) : (
-                    'Luo käyttäjätunnus'
-                  )}
+                  Luo käyttäjätunnus
+                  {isPending && <Spinner />}
                 </Button>
                 <p className="mt-3 select-none text-center text-xs text-gray-500">
                   Onko sinulla jo tunnus?{' '}

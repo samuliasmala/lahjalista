@@ -49,15 +49,7 @@ export function DeleteModal({ gift, closeModal }: DeleteModal) {
             disabled={isPending}
             onClick={() => mutateAsync()}
           >
-            {isPending ? (
-              /* CHECK THIS, bottom-7 onko ok? */
-              <p className="mr-5">
-                Poista
-                <Spinner className="bottom-7 px-0.5" />
-              </p>
-            ) : (
-              'Poista'
-            )}
+            {isPending ? <Spinner className="static inline-block" /> : 'Poista'}
           </Button>
         </div>
       </div>

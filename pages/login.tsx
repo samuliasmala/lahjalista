@@ -167,7 +167,7 @@ export default function Login() {
               </div>
 
               <Button type="submit" disabled={isPending}>
-                Kirjaudu sisään {isPending && <Spinner />}
+                Kirjaudu sisään {!isPending && <Spinner />}
               </Button>
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>

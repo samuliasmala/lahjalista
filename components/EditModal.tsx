@@ -88,11 +88,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
               onClick={(e) => void handleEdit(e)}
             >
               {isPending ? (
-                /* CHECK THIS, onko ok */
-                <p className="mr-5">
-                  Tallenna
-                  <Spinner className="bottom-7 px-0 py-0" />
-                </p>
+                <Spinner className="static inline-block" />
               ) : (
                 'Tallenna'
               )}
