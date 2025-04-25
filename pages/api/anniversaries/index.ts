@@ -57,8 +57,22 @@ async function handleGET(
   return res.status(200).json(anniversaries);
 }
 
-async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
+async function handlePOST(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  userData: User,
+) {
   const { date, name, personUUID } = createAnniversarySchema.parse(req.body);
+
+  const findIfPersonBelongsToUser = await prisma.person.findFirst({
+    where: {
+      uuid: personUUID,
+      userUUID: userData.uuid,
+    },
+  });
+  if (!findIfPersonBelongsToUser) {
+    throw new HttpError('Henkilöä ei löytynyt tietokannasta!', 400);
+  }
 
   const addedAnniversary = await prisma.anniversary.create({
     data: {
