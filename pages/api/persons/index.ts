@@ -48,7 +48,6 @@ async function handleGET(
       uuid: true,
       name: true,
       sendReminders: true,
-      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
       PersonPicture: true,
       createdAt: true,
       updatedAt: true,
@@ -75,7 +74,6 @@ async function handlePOST(
       uuid: true,
       name: true,
       sendReminders: true,
-      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
       PersonPicture: true,
       createdAt: true,
       updatedAt: true,

@@ -62,7 +62,6 @@ async function handleGET({ res, personUUID, userData }: HandlerParams<Person>) {
       uuid: true,
       name: true,
       sendReminders: true,
-      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
       PersonPicture: true,
       createdAt: true,
       updatedAt: true,
@@ -90,7 +89,6 @@ async function handlePATCH({
       uuid: true,
       name: true,
       sendReminders: true,
-      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
       PersonPicture: true,
       createdAt: true,
       updatedAt: true,
@@ -118,7 +116,6 @@ async function handlePUT({
       uuid: true,
       name: true,
       sendReminders: true,
-      // CHECK THIS, onko tarpeellista palauttaa PersonPicture tässä
       PersonPicture: true,
       createdAt: true,
       updatedAt: true,

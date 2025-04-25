@@ -9,7 +9,6 @@ export const uuidParseSchema = z
   .uuid('UUID pattern was invalid!');
 
 // This checks if given value is a string and is a date. If that's true it will check if the given date is not invalid
-// CHECK THIS, this has to be tested if it is working properly
 export const dateParseSchema = z
   .string()
   .min(1, 'Päivämäärä on pakollinen!')
@@ -139,7 +138,6 @@ export const createPersonSchema = personSchema;
 
 export const patchPersonSchema = personSchema.partial();
 
-// CHECK THIS, onko tarpeellinen
 export const putPersonSchema = personSchema;
 
 // ANNIVERSARY
@@ -161,5 +159,4 @@ export const createAnniversarySchema = anniversarySchema.extend({
 
 export const patchAnniversarySchema = anniversarySchema.partial();
 
-// CHECK THIS, onko tarpeellinen
 export const putAnniversarySchema = anniversarySchema;
