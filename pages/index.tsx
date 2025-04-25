@@ -168,7 +168,7 @@ function GiftList() {
     /* CHECK THIS, onko spinner liian lähellä Noudetaan lahjoja -tekstiä*/
     return (
       <p className="mt-4 text-lg font-bold">
-        Noudetaan lahjoja <Spinner className="" />
+        Noudetaan lahjoja <Spinner />
       </p>
     );
 
