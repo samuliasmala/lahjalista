@@ -14,7 +14,7 @@ export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 const prismaAdapter = new LahjalistaAuthAdapter(prisma);
 
 // 1 hour
-const lahjalistaAuth = new LahjaListaAuth(prismaAdapter, {
+export const lahjalistaAuth = new LahjaListaAuth(prismaAdapter, {
   sessionExpiresIn: new TimeSpan(1, 'h'),
   sessionCookie: {
     attributes: {
@@ -24,7 +24,7 @@ const lahjalistaAuth = new LahjaListaAuth(prismaAdapter, {
 });
 
 // 30 days | 1 month
-const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
+export const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
   sessionExpiresIn: new TimeSpan(30, 'd'),
   sessionCookie: {
     attributes: {
