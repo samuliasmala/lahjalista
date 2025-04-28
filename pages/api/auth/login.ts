@@ -1,10 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 import { luciaLongSession, lucia as luciaShortSession } from '~/backend/auth';
-import {
-  authLongSession,
-  authSession as authShortSession,
-} from '~/backend/auth-lahjalista';
+import { authLongSession, authShortSession } from '~/backend/auth-lahjalista';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { verifyPassword } from '~/backend/utils';

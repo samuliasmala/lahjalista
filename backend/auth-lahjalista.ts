@@ -14,7 +14,7 @@ export const adapter = new PrismaAdapter(prisma.session, prisma.user);
 const prismaAdapter = new LahjalistaAuthAdapter(prisma);
 
 // 1 hour
-export const lahjalistaAuth = new LahjaListaAuth(prismaAdapter, {
+export const authShortSession = new LahjaListaAuth(prismaAdapter, {
   sessionExpiresIn: new TimeSpan(1, 'h'),
   sessionCookie: {
     attributes: {
@@ -24,7 +24,7 @@ export const lahjalistaAuth = new LahjaListaAuth(prismaAdapter, {
 });
 
 // 30 days | 1 month
-export const lahjalistaAuthLong = new LahjaListaAuth(prismaAdapter, {
+export const authLongSession = new LahjaListaAuth(prismaAdapter, {
   sessionExpiresIn: new TimeSpan(30, 'd'),
   sessionCookie: {
     attributes: {
@@ -39,24 +39,26 @@ export async function validateRequest(
 ): Promise<
   { user: User; session: FrontendSession } | { user: null; session: null }
 > {
-  const sessionId = lahjalistaAuth.readSessionCookie(req.headers.cookie ?? '');
+  const sessionId = authShortSession.readSessionCookie(
+    req.headers.cookie ?? '',
+  );
   if (!sessionId) {
     return {
       user: null,
       session: null,
     };
   }
-  const result = await lahjalistaAuth.validateSession(sessionId);
+  const result = await authShortSession.validateSession(sessionId);
   if (result.session && result.session.fresh) {
     res.appendHeader(
       'Set-Cookie',
-      lahjalistaAuth.createSessionCookie(result.session.uuid).serialize(),
+      authShortSession.createSessionCookie(result.session.uuid).serialize(),
     );
   }
   if (!result.session) {
     res.appendHeader(
       'Set-Cookie',
-      lahjalistaAuth.createBlankSessionCookie().serialize(),
+      authShortSession.createBlankSessionCookie().serialize(),
     );
   }
 
