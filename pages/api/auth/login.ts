@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { z } from 'zod';
 import { luciaLongSession, lucia as luciaShortSession } from '~/backend/auth';
+import {
+  authLongSession,
+  authSession as authShortSession,
+} from '~/backend/auth-lahjalista';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { verifyPassword } from '~/backend/utils';
@@ -29,7 +33,7 @@ export default async function loginHandler(
     }
     const { email, password, rememberMe } = userDetailsParse.data;
 
-    const lucia = rememberMe ? luciaLongSession : luciaShortSession;
+    const auth = rememberMe ? authLongSession : authShortSession;
 
     const userData = await prisma.user.findUnique({
       where: {
@@ -52,7 +56,7 @@ export default async function loginHandler(
     res
       .appendHeader(
         'Set-cookie',
-        lucia.createSessionCookie(sessionId).serialize(),
+        auth.createSessionCookie(sessionId).serialize(),
       )
       .status(200)
       .end();
