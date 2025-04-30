@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { validateRequest } from '~/backend/auth';
+import { validateRequest } from '~/backend/auth-lahjalista';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import prisma from '~/prisma';
@@ -18,7 +18,7 @@ export default async function handler(
       return;
     }
 
-    await logOutUser(session.id);
+    await logOutUser(session.uuid);
 
     res.status(200).end();
     return;
@@ -27,9 +27,9 @@ export default async function handler(
   }
 }
 
-export async function logOutUser(sessionId: string) {
+export async function logOutUser(sessionUUID: string) {
   await prisma.session.update({
-    where: { id: sessionId },
+    where: { uuid: sessionUUID },
     data: {
       isLoggedIn: false,
     },
