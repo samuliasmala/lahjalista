@@ -31,7 +31,7 @@ export class LahjalistaAuthAdapter implements DatabaseAdapter {
     const { expiresAt, userUUID, uuid } = sessionData;
     // perhaps isLoggedIn: true here?
     const session = await this.prisma.session.create({
-      data: { uuid, userUUID, expiresAt },
+      data: { uuid, userUUID, expiresAt, isLoggedIn: true },
     });
 
     return session;
