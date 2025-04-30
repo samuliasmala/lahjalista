@@ -153,7 +153,7 @@ export class LahjaListaAuth {
     return session;
   }
 
-  /** **Deletes ONLY ONE session of a user** */
+  /** **Deletes / invalidates ONLY ONE session of a user** */
   public async deleteSession(sessionUUID: string): Promise<void> {
     await this.adapter.deleteSession(sessionUUID);
   }
