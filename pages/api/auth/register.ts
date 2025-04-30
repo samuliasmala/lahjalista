@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { lucia } from '~/backend/auth';
+import { authShortSession } from '~/backend/auth-lahjalista';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createUser } from '../users';
@@ -17,14 +17,11 @@ export default async function handler(
 
     const userData = await createUser(validatedBody);
 
-    const session = await lucia.createSession(userData.uuid, {
-      userUUID: userData.uuid,
-      isLoggedIn: true,
-    });
+    const session = await authShortSession.createSession(userData.uuid);
     res
       .appendHeader(
         'Set-Cookie',
-        lucia.createSessionCookie(session.id).serialize(),
+        authShortSession.createSessionCookie(session.uuid).serialize(),
       )
       .status(200)
       .end();
