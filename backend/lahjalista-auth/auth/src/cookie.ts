@@ -81,6 +81,9 @@ export class CookieController {
   public createCookie(sessionUUID: string): Cookie {
     return new Cookie(this.cookieName, sessionUUID, {
       maxAge: this.cookieExpiresIn?.seconds(),
+      // this puts all the values set in baseCookieAttributes. Such as path, httpOnly, secure, etc
+      // else these values are ignored and for example path is "/api/auth", not "/"
+      ...this.baseCookieAttributes,
     });
   }
 
