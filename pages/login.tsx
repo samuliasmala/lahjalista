@@ -2,7 +2,6 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { Logo } from '~/components/Logo';
@@ -18,6 +17,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { validateRequest } from '~/backend/auth-lahjalista';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);

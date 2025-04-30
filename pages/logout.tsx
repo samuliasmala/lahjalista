@@ -4,7 +4,7 @@ import { GetServerSidePropsContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { validateRequest } from '~/backend/auth';
+import { validateRequest } from '~/backend/auth-lahjalista';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
 import { TitleText } from '~/components/TitleText';
