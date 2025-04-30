@@ -64,12 +64,9 @@ export default async function loginHandler(
 }
 
 async function logUserIn(userUUID: string, rememberMe: boolean) {
-  const lucia = rememberMe ? luciaLongSession : luciaShortSession;
+  const auth = rememberMe ? authLongSession : authShortSession;
 
-  const newSession = await lucia.createSession(userUUID, {
-    userUUID: userUUID,
-    isLoggedIn: true,
-  });
+  const newSession = await auth.createSession(userUUID);
 
-  return newSession.id;
+  return newSession.uuid;
 }
