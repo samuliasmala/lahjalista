@@ -251,6 +251,7 @@ export default function Register() {
                     <button
                       type="button"
                       onClick={() => {
+                        findPasswordErrors(formData.password);
                         isInitialClick.current = true;
                         setShowPasswordInfoModal((prevValue) => !prevValue);
                       }}
@@ -268,7 +269,6 @@ export default function Register() {
                         ...formData,
                         password: e.currentTarget.value,
                       });
-                      findPasswordErrors(e.currentTarget.value);
                     }}
                     className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
