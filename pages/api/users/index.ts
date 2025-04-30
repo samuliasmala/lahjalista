@@ -5,7 +5,7 @@ import { handleError } from '~/backend/handleError';
 import { hashPassword } from '~/backend/utils';
 import { HttpError } from '~/backend/HttpError';
 import { createUserSchema } from '~/shared/zodSchemas';
-import { requireLogin } from '~/backend/auth';
+import { requireLogin } from '~/backend/auth-lahjalista';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;

@@ -4,7 +4,7 @@ import prisma from '~/prisma';
 import { HttpError } from '~/backend/HttpError';
 import { handleError } from '~/backend/handleError';
 import { userSchema, uuidParseSchema } from '~/shared/zodSchemas';
-import { requireLogin } from '~/backend/auth';
+import { requireLogin } from '~/backend/auth-lahjalista';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;

@@ -1,19 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Gift } from '~/shared/types';
+import { Gift, User } from '~/shared/types';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { requireLogin } from '~/backend/auth';
+import { requireLogin } from '~/backend/auth-lahjalista';
 import { User as LuciaUser } from 'lucia';
 import { createGiftSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
-  (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    userData: LuciaUser,
-  ) => Promise<void>
+  (req: NextApiRequest, res: NextApiResponse, userData: User) => Promise<void>
 > = {
   GET: handleGET,
   POST: handlePOST,
@@ -43,7 +39,7 @@ export default async function handlePrisma(
 async function handleGET(
   req: NextApiRequest,
   res: NextApiResponse<Gift[]>,
-  userData: LuciaUser,
+  userData: User,
 ) {
   const gifts = await prisma.gift.findMany({
     select: {
@@ -64,7 +60,7 @@ async function handleGET(
 async function handlePOST(
   req: NextApiRequest,
   res: NextApiResponse<Gift>,
-  userData: LuciaUser,
+  userData: User,
 ) {
   const giftData = createGiftSchema.parse(req.body);
 

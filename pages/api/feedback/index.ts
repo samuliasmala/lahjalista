@@ -5,7 +5,7 @@ import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { createFeedbackSchema } from '~/shared/zodSchemas';
 import { sendFeedbackToGoogleSheets } from '~/backend/GoogleAPI';
-import { checkIfSessionValid } from '~/backend/auth';
+import { checkIfSessionValid } from '~/backend/auth-lahjalista';
 
 const HANDLER: Record<
   string,

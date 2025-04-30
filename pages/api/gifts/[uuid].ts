@@ -1,17 +1,16 @@
-import { Gift } from '~/shared/types';
+import { Gift, User } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { updateGiftSchema, uuidParseSchema } from '~/shared/zodSchemas';
-import { requireLogin } from '~/backend/auth';
-import { User as LuciaUser } from 'lucia';
+import { requireLogin } from '~/backend/auth-lahjalista';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
   res: NextApiResponse<ResponseType>;
   giftUUID: string;
-  userData: LuciaUser;
+  userData: User;
 };
 
 const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
