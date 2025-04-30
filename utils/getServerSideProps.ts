@@ -1,5 +1,8 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
-import { lucia, validateRequest } from '~/backend/auth';
+import {
+  authShortSession as auth,
+  validateRequest,
+} from '~/backend/auth-lahjalista';
 import { logOutUser } from '~/pages/api/auth/logout';
 import { User } from '~/shared/types';
 import { getUserSchema } from '~/shared/zodSchemas';
@@ -22,8 +25,8 @@ export async function getServerSideProps(
   }
   const returnThis = getUserSchema.safeParse(cookieData.user);
   if (returnThis.error) {
-    await logOutUser(cookieData.session.id);
-    await lucia.invalidateSession(cookieData.session.id);
+    await logOutUser(cookieData.session.uuid);
+    await auth.deleteSession(cookieData.session.uuid);
 
     return {
       redirect: {
