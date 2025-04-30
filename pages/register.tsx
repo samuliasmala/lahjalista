@@ -212,10 +212,6 @@ export default function Register() {
                   Salasana
                   <span className="absolute pl-1 pt-0.5">
                     {showPasswordInfoModal && (
-                      // tämä pitää ns. "kasassa koko homman"
-
-                      // toinen versio alanuolesta
-                      // <span className="absolute left-14 top-36 mt-1 border-l-[20px] border-r-[20px] border-t-[20px] border-transparent border-t-black"></span>
                       <div className="absolute -left-16 -top-44">
                         <div
                           className="absolute w-max max-w-80 rounded-md border-4 border-lines bg-bgForms"
@@ -247,7 +243,7 @@ export default function Register() {
                             </li>
                           </ul>
                           <span
-                            className={`absolute left-14 z-0 ml-1 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms`}
+                            className={`absolute left-14 z-0 -mt-3.5 ml-1 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms`}
                           ></span>
                         </div>
                       </div>
