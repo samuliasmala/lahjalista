@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { lucia } from '~/backend/auth';
+import { authShortSession as auth } from '~/backend/auth-lahjalista';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 
@@ -21,7 +21,7 @@ export default async function handler(
     // if authHeader was correct we can delete expired sessions
 
     console.log('Cron job activated! Deleting expired sessions...');
-    await lucia.deleteExpiredSessions();
+    await auth.deleteExpiredSessions();
     res.status(200).end();
   } catch (e) {
     return handleError(res, e);
