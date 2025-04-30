@@ -1,5 +1,9 @@
 package.json
 
+Voiko Node-version vaihtaa "^20" -> "^22". 22.14 on nykyinen stable-versio
+
+Korjaisi samalla seuraavan ongelman: The 'navigator.userAgent' is still an experimental feature and is not supported until Node.js 21.1.0. The configured version range is '^20'. n/no-unsupported-features/node-builtins
+
 Seuraavia paketteja ei ole päivitetty
 
 Major Potentially breaking API changes

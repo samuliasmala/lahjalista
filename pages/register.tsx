@@ -18,6 +18,7 @@ import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
 import SvgInfoCircle from '~/icons/info_circle';
+import { useIsFirefox } from '~/hooks/useIsFirefox';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -49,6 +50,7 @@ const EMPTY_FORM_DATA: FormData = {
 };
 
 export default function Register() {
+  const [isFirefox, setIsFirefox] = useState<boolean>(false);
   const [formData, setFormData] = useState(EMPTY_FORM_DATA);
 
   const [errors, setErrors] = useState<ErrorTypes>({});
@@ -73,6 +75,7 @@ export default function Register() {
   });
 
   useShowErrorToast(error);
+  useIsFirefox(isFirefox, setIsFirefox);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -246,7 +249,9 @@ export default function Register() {
                               {passwordErrors.specialCharacter ? '✅' : '❌'}
                             </li>
                           </ul>
-                          <span className="absolute left-14 top-32 z-0 ml-1 mt-1.5 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms"></span>
+                          <span
+                            className={`absolute left-14 z-0 ml-1 ${isFirefox ? '-bottom-3.5' : 'top-32 mt-1.5'} h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms`}
+                          ></span>
                         </div>
                       </div>
                     )}
