@@ -4,8 +4,8 @@ import {
   DatabaseAdapter,
   Session,
   GetUserAndSessionResult,
+  User,
 } from '~/shared/types';
-import { User } from '~/shared/types';
 import { sessionSchema } from '~/shared/zodSchemas';
 
 declare global {

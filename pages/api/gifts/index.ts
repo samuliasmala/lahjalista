@@ -4,7 +4,6 @@ import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
 import { requireLogin } from '~/backend/auth-lahjalista';
-import { User as LuciaUser } from 'lucia';
 import { createGiftSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
