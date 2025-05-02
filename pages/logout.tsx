@@ -105,14 +105,7 @@ export default function Logout() {
                   }}
                 />
                 <Button className="p-2" type="submit" disabled={isPending}>
-                  {isPending ? (
-                    <p>
-                      Lähetä
-                      <Spinner />
-                    </p>
-                  ) : (
-                    'Lähetä'
-                  )}
+                  Lähetä {isPending && <Spinner />}
                 </Button>
                 <p className="select-none pt-6 text-xs text-gray-600">
                   Saitko uuden idean?{' '}
