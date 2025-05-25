@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React, { FormEvent, useState } from 'react';
-=======
-import { FormEvent, HTMLAttributes, useState } from 'react';
->>>>>>> antti/update-packages
+import { FormEvent, useState } from 'react';
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '~/components/Input';
