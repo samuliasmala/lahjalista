@@ -28,9 +28,9 @@ export function TitleBar({
 
   return (
     <div className="flex w-full justify-center">
-      <div className="relative flex w-full flex-row justify-between bg-primaryLight p-3 pr-2 sm:w-96 sm:pr-0">
+      <div className="bg-primary-light relative flex w-full flex-row justify-between p-3 pr-2 sm:w-96 sm:pr-0">
         <div
-          className="select-none text-lg hover:cursor-pointer"
+          className="text-lg select-none hover:cursor-pointer"
           onClick={errorWrapper(() => {
             router.push('/').catch((e) => console.log(e));
           })}
@@ -81,7 +81,7 @@ function UserDetailModal({
     return (
       <>
         <div
-          className={`fixed left-0 top-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
+          className={`fixed top-0 left-0 h-full w-full max-w-full bg-transparent ${isPending ? 'z-[100]' : ''}`}
           onClick={() => {
             // this blocks the closing of the User Modal if request for logout is sent
             if (!isPending) {
@@ -89,15 +89,15 @@ function UserDetailModal({
             }
           }}
         />
-        <div className="absolute right-1 top-12 z-[99] w-56 rounded-md border-2 border-lines bg-bgForms shadow-md shadow-black">
-          <p className="overflow mb-0 ml-3 mt-3 font-bold [overflow-wrap:anywhere]">
+        <div className="border-lines bg-bg-forms absolute top-12 right-1 z-[99] w-56 rounded-md border-2 shadow-md shadow-black">
+          <p className="overflow mt-3 mb-0 ml-3 font-bold [overflow-wrap:anywhere]">
             {user.firstName} {user.lastName}
           </p>
           <p className="ml-3 [overflow-wrap:anywhere]">{user.email}</p>
           <div className="flex w-full flex-col justify-center">
             <AdminPanelButton user={user} />
             <Button
-              className="mb-4 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-primary text-sm font-medium"
+              className="bg-primary mt-4 mr-3 mb-4 ml-3 flex h-8 w-auto max-w-56 items-center justify-center rounded-md text-sm font-medium"
               onClick={async () => {
                 try {
                   await mutateAsync();
@@ -137,7 +137,7 @@ function AdminPanelButton({ user }: { user: User }) {
   }
 
   return (
-    <Button className="relative mb-0 ml-3 mr-3 mt-4 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-black">
+    <Button className="relative mt-4 mr-3 mb-0 ml-3 flex h-8 w-auto max-w-56 items-center justify-center rounded-md bg-black">
       <Link href={'/admin'} className="absolute h-full w-full" />
       <p className={`text-sm font-medium text-white`}>Ylläpito</p>
       <SvgUser width={18} height={18} className="ml-2" />
