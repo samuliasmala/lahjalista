@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { FormEvent, useState } from 'react';
+=======
+import { FormEvent, HTMLAttributes, useState } from 'react';
+>>>>>>> antti/update-packages
 import { Button } from '~/components/Button';
 import { TitleText } from '~/components/TitleText';
 import { Input } from '~/components/Input';
@@ -86,7 +90,7 @@ export default function Home({
         <div className="w-full max-w-72">
           <div className="mt-12">
             <form onSubmit={(e) => void handleSubmit(e)}>
-              <TitleText className="select-none text-start">
+              <TitleText className="text-start select-none">
                 Uusi idea
               </TitleText>
               <div className="mt-6 flex flex-col">
@@ -161,7 +165,7 @@ function GiftList() {
     return (
       <p className="mt-4 text-lg font-bold">
         Noudetaan lahjoja{' '}
-        <span className="absolute ml-2 mt-1.5">
+        <span className="absolute mt-1.5 ml-2">
           <SvgSpinner width={18} height={18} className="animate-spin" />
         </span>
       </p>
@@ -176,11 +180,11 @@ function GiftList() {
           {giftData.map((giftItem) => (
             <div
               key={`${giftItem.uuid}_divbutton`}
-              className="mt-4 animate-opacity"
+              className="animate-opacity mt-4"
             >
               <div key={giftItem.uuid} className="grid">
                 <p
-                  className={`hover-target col-start-1 text-primaryText [overflow-wrap:anywhere]`}
+                  className={`hover-target text-primary-text col-start-1 [overflow-wrap:anywhere]`}
                 >
                   {giftItem.gift} <span>-</span> {giftItem.receiver}
                 </p>
