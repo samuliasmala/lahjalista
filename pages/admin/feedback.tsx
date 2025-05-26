@@ -1,11 +1,23 @@
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getServerSideProps';
 import { TitleBar } from '~/components/TitleBar';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { QueryKeys, Feedback } from '~/shared/types';
-import { MessageSquare, FilterIcon, User, Eye, Trash2 } from 'lucide-react';
+import {
+  QueryKeys,
+  Feedback,
+  User,
+  GetFeedback,
+  CustomFeedback,
+} from '~/shared/types';
+import {
+  MessageSquare,
+  FilterIcon,
+  User as UserSVG,
+  Eye,
+  Trash2,
+} from 'lucide-react';
 import { Input } from '~/components/Input';
 import { Label } from '~/components/Label';
 
@@ -64,15 +76,44 @@ export default function Home({
   user,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [showUserWindow, setShowUserWindow] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [parameterUUID, setParameterUUID] = useState('');
 
   const { data: feedbacks, error } = useQuery({
     queryKey: QueryKeys.ADMIN_FETCH_FEEDBACKS,
     // the **as Feedback[]** should be fine because the API
     // is only returning an array of Feedbacks or throw an error?
     queryFn: async () => {
-      return (await axios.get('/api/feedback')).data as Feedback[];
+      return (await axios.get('/api/feedback')).data as CustomFeedback[];
     },
   });
+
+  if (!feedbacks) {
+    return;
+  }
+
+  feedbacks.map((_feedback) => {
+    console.log(_feedback);
+    //const a = axios.get(`/api/users/${_feedback.userUUID}`);
+    //console.log(a);
+  });
+
+  const totalFeedbacks = feedbacks.length;
+
+  const filteredFeedbacks = feedbacks.filter(
+    (feedback) =>
+      feedback.feedbackText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      feedback.User.firstName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      feedback.User.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      feedback.User.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  const uniqueUsers = new Set(feedbacks.map((feedback) => feedback.User.email))
+    .size;
+
+  const searchTermResults = filteredFeedbacks.length;
 
   return (
     <main className="h-screen w-full max-w-full">
@@ -83,90 +124,93 @@ export default function Home({
           userDetails={user}
         />
         <div className="flex flex-col items-center">
-          <div className="border-lines bg-bg-forms mt-5 w-56 rounded-lg border p-6 shadow-sm">
-            <div className="flex items-center">
-              <MessageSquare className="text-primary-text size-8" />
-              <div>
-                <p className="ml-3 text-sm">Palautteita yhteensä</p>
-                <p className="ml-3 text-lg font-bold">5</p>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-center">
+            <div className="border-lines bg-bg-forms mt-5 w-56 rounded-lg border p-6 shadow-sm sm:mr-2 sm:ml-2">
+              <div className="flex items-center">
+                <MessageSquare className="text-primary-text size-8" />
+                <div>
+                  <p className="ml-3 text-sm">Palautteita yhteensä</p>
+                  <p className="ml-3 text-lg font-bold">{totalFeedbacks}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="border-lines bg-bg-forms mt-5 w-56 rounded-lg border p-6 shadow-sm">
-            <div className="flex items-center">
-              <User className="text-primary-text size-8" />
-              <div>
-                <p className="ml-3 text-sm">Uniikit käyttäjät</p>
-                <p className="ml-3 text-lg font-bold">5</p>
+            <div className="border-lines bg-bg-forms mt-5 w-56 rounded-lg border p-6 shadow-sm sm:mr-2 sm:ml-2">
+              <div className="flex items-center">
+                <UserSVG className="text-primary-text size-8" />
+                <div>
+                  <p className="ml-3 text-sm">Uniikit käyttäjät</p>
+                  <p className="ml-3 text-lg font-bold">{uniqueUsers}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="border-lines bg-bg-forms mt-5 w-56 rounded-lg border p-6 shadow-sm">
-            <div className="flex items-center">
-              <FilterIcon className="text-primary-text size-8" />
-              <div>
-                <p className="ml-3 text-sm">Suodatetut tulokset</p>
-                <p className="ml-3 text-lg font-bold">5</p>
+            <div className="border-lines bg-bg-forms mt-5 w-56 rounded-lg border p-6 shadow-sm sm:mr-2 sm:ml-2">
+              <div className="flex items-center">
+                <FilterIcon className="text-primary-text size-8" />
+                <div>
+                  <p className="ml-3 text-sm">Suodatetut tulokset</p>
+                  <p className="ml-3 text-lg font-bold">{searchTermResults}</p>
+                </div>
               </div>
             </div>
           </div>
           <div className="mt-10 flex flex-col">
             <Label htmlFor="feedbackSearch">Etsi palautteita</Label>
             <Input
-              className="w-56"
+              className="w-56 sm:w-96"
               placeholder="Etsi palautteella, nimellä tai sähköpostiosoitteella"
               name="feedbackSearch"
+              onChange={(e) => setSearchTerm(e.currentTarget.value)}
             />
           </div>
 
-          <FeedbackBlock></FeedbackBlock>
+          <div className="mt-12 flex w-full justify-center">
+            <FeedbackBlock feedbacks={filteredFeedbacks} />
+          </div>
         </div>
       </div>
     </main>
   );
 }
 
-function FeedbackBlock() {
+function FeedbackBlock({ feedbacks }: { feedbacks: CustomFeedback[] }) {
   return (
     <table className="block w-56 overflow-auto overflow-y-auto sm:w-96 lg:w-1/2">
       <thead>
         <tr className="">
-          <th className="border border-black px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-            Palaute
-          </th>
-          <th className="border border-black px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-            Palaute lisätty
-          </th>
-          <th className="border border-black px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-            Nimi
-          </th>
-          <th className="border border-black px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-            Sähköposti
-          </th>
-          <th className="border border-black px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-            Valinnat
-          </th>
+          <Th>Palaute</Th>
+          <Th>Palaute lisätty</Th>
+          <Th>Nimi</Th>
+          <Th>Sähköposti</Th>
+          <Th>Valinnat</Th>
         </tr>
       </thead>
       <tbody className="">
-        {debugData.map((_data, _index) => (
+        {feedbacks.map((_data, _index) => (
           <tr
-            key={_data.id}
+            key={`feedback_${_index}`}
             className="border-lines border transition-colors hover:bg-gray-100"
           >
             <td className="px-6 py-4">
-              <div className="max-w-xs truncate">{_data.feedback}</div>
+              <div className="max-w-xs truncate">{_data.feedbackText}</div>
             </td>
-            <td className="px-6 py-4">{_data.feedbackAdded}</td>
-            <td className="px-6 py-4">{_data.name}</td>
-            <td className="px-6 py-4">{_data.email}</td>
+            <td className="px-6 py-4">
+              {new Date(_data.createdAt).toLocaleDateString('fi-FI', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+              })}
+            </td>
+            <td className="px-6 py-4">
+              {_data.User.firstName} {_data.User.lastName}
+            </td>
+            <td className="px-6 py-4">{_data.User.email}</td>
             <td className="px-6 py-4">
               <div className="flex justify-between">
-                <button className="border-lines rounded-md border-2">
-                  <Eye className="text-primary-text size-6 hover:size-7" />
+                <button className="border-lines group rounded-md border-2 hover:bg-gray-300">
+                  <Eye className="text-primary-text size-6" />
                 </button>
-                <button className="border-lines ml-7 rounded-md border-2">
-                  <Trash2 className="text-primary-text size-6 hover:size-7" />
+                <button className="border-lines ml-7 rounded-md border-2 hover:bg-gray-300">
+                  <Trash2 className="text-primary-text size-6" />
                 </button>
               </div>
             </td>
@@ -174,6 +218,14 @@ function FeedbackBlock() {
         ))}
       </tbody>
     </table>
+  );
+}
+
+function Th({ children }: { children: ReactNode }) {
+  return (
+    <th className="border border-black px-6 py-3 text-xs font-medium tracking-wider text-gray-500 uppercase">
+      {children}
+    </th>
   );
 }
 
