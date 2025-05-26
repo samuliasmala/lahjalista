@@ -4,7 +4,9 @@ import {
   createGiftSchema,
   createSessionSchema,
   createUserSchema,
+  customFeedbackSchema,
   feedbackSchema,
+  getFeedbackSchema,
   getSessionSchema,
   getUserSchema,
   giftSchema,
@@ -35,6 +37,10 @@ export type Session = z.infer<typeof getSessionSchema>;
 export type CreateSession = z.infer<typeof createSessionSchema>;
 
 // FEEDBACK
+export type CustomFeedback = z.infer<typeof customFeedbackSchema>;
+
+export type GetFeedback = z.infer<typeof getFeedbackSchema>;
+
 export type Feedback = z.infer<typeof feedbackSchema>;
 
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
