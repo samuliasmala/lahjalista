@@ -45,7 +45,23 @@ async function handleGET(
     throw new HttpError("You don't have privileges to do that!", 403);
   }
 
-  const feedbacks = await prisma.feedback.findMany();
+  const feedbacks = await prisma.feedback.findMany({
+    select: {
+      uuid: true,
+      feedbackText: true,
+      userUUID: true,
+      createdAt: true,
+      updatedAt: true,
+      User: {
+        select: {
+          uuid: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+        },
+      },
+    },
+  });
 
   return res.status(200).json(feedbacks);
 }
