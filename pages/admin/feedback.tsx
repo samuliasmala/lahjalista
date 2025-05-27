@@ -1,23 +1,10 @@
-import {
-  Dispatch,
-  HTMLAttributes,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getServerSideProps';
 import { TitleBar } from '~/components/TitleBar';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import {
-  QueryKeys,
-  Feedback,
-  User,
-  GetFeedback,
-  CustomFeedback,
-} from '~/shared/types';
+import { QueryKeys, CustomFeedback } from '~/shared/types';
 import {
   MessageSquare,
   FilterIcon,
@@ -34,54 +21,6 @@ import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 // ALLOWS ADMINS ONLY, look at the import for more details!
 export { getServerSideProps };
-
-const debugData = [
-  {
-    id: '1',
-    feedback:
-      'The application is working great! I love the clean interface and how easy it is to navigate. The response time is excellent and I have not encountered any bugs so far.',
-    feedbackAdded:
-      'Thu May 08 2025 09:36:42 GMT+0300 (Eastern European Summer Time)',
-    name: 'Matti Meikäläinen',
-    email: 'matti@example.com',
-  },
-  {
-    id: '2',
-    feedback:
-      'Could you please add a dark mode option? It would be much easier on the eyes during night time usage.',
-    feedbackAdded:
-      'Wed May 07 2025 14:22:15 GMT+0300 (Eastern European Summer Time)',
-    name: 'Anna Virtanen',
-    email: 'anna.virtanen@email.fi',
-  },
-  {
-    id: '3',
-    feedback:
-      'The search functionality seems to be a bit slow when dealing with large datasets. Otherwise, great work!',
-    feedbackAdded:
-      'Tue May 06 2025 11:45:30 GMT+0300 (Eastern European Summer Time)',
-    name: 'Jukka Korhonen',
-    email: 'jukka.korhonen@company.com',
-  },
-  {
-    id: '4',
-    feedback:
-      'Excellent service! The customer support team was very helpful and responsive.',
-    feedbackAdded:
-      'Mon May 05 2025 16:18:45 GMT+0300 (Eastern European Summer Time)',
-    name: 'Liisa Nieminen',
-    email: 'liisa@test.fi',
-  },
-  {
-    id: '5',
-    feedback:
-      'The mobile version could use some improvements. Some buttons are difficult to tap on smaller screens.',
-    feedbackAdded:
-      'Sun May 04 2025 10:33:22 GMT+0300 (Eastern European Summer Time)',
-    name: 'Petri Aalto',
-    email: 'petri.aalto@mobile.com',
-  },
-];
 
 export default function Home({
   user,
