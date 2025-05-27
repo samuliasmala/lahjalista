@@ -1,4 +1,11 @@
-import { HTMLAttributes, ReactNode, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  HTMLAttributes,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { getServerSidePropsAdminOnly as getServerSideProps } from '~/utils/getServerSideProps';
 import { TitleBar } from '~/components/TitleBar';
@@ -20,6 +27,9 @@ import {
 } from 'lucide-react';
 import { Input } from '~/components/Input';
 import { Label } from '~/components/Label';
+import { Modal } from '~/components/Modal';
+import { Button } from '~/components/Button';
+import { toast } from 'react-toastify';
 
 // ALLOWS ADMINS ONLY, look at the import for more details!
 export { getServerSideProps };
@@ -77,6 +87,7 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [showUserWindow, setShowUserWindow] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [deleteModalData, setDeleteModalData] = useState('');
 
   const { data: feedbacks, error } = useQuery({
     queryKey: QueryKeys.ADMIN_FETCH_FEEDBACKS,
@@ -158,15 +169,30 @@ export default function Home({
           </div>
 
           <div className="mt-12 flex w-full justify-center">
-            <FeedbackBlock feedbacks={filteredFeedbacks} />
+            <FeedbackBlock
+              feedbacks={filteredFeedbacks}
+              setDeleteModalData={setDeleteModalData}
+            />
           </div>
+          {deleteModalData.length > 0 && (
+            <DeleteModal
+              closeModal={() => setDeleteModalData('')}
+              feedbackText={deleteModalData}
+            />
+          )}
         </div>
       </div>
     </main>
   );
 }
 
-function FeedbackBlock({ feedbacks }: { feedbacks: CustomFeedback[] }) {
+function FeedbackBlock({
+  feedbacks,
+  setDeleteModalData,
+}: {
+  feedbacks: CustomFeedback[];
+  setDeleteModalData: Dispatch<SetStateAction<string>>;
+}) {
   return (
     <table className="block w-56 overflow-auto overflow-y-auto sm:w-96 lg:w-1/2">
       <thead>
@@ -203,7 +229,10 @@ function FeedbackBlock({ feedbacks }: { feedbacks: CustomFeedback[] }) {
                 <button className="border-lines group rounded-md border-2 hover:bg-gray-300">
                   <Eye className="text-primary-text size-6" />
                 </button>
-                <button className="border-lines ml-7 rounded-md border-2 hover:bg-gray-300">
+                <button
+                  className="border-lines ml-7 rounded-md border-2 hover:bg-gray-300"
+                  onClick={() => setDeleteModalData(_data.feedbackText)}
+                >
                   <Trash2 className="text-primary-text size-6" />
                 </button>
               </div>
@@ -220,5 +249,41 @@ function Th({ children }: { children: ReactNode }) {
     <th className="border border-black px-6 py-3 text-xs font-medium tracking-wider text-gray-500 uppercase">
       {children}
     </th>
+  );
+}
+
+function DeleteModal({
+  closeModal,
+  feedbackText,
+}: {
+  closeModal: () => void;
+  feedbackText: string;
+}) {
+  return (
+    <Modal
+      className="max-w-80"
+      title="Poistetaan palaute:"
+      closeModal={closeModal}
+    >
+      <div className="ml-4">
+        <p>{feedbackText}</p>
+        <div className="mt-6 flex justify-center">
+          <Button
+            className={`text-primary-text mt-0 mb-6 h-8 w-20 bg-white pt-1 pr-4 pb-1 pl-4 text-sm`}
+            onClick={() => closeModal()}
+          >
+            Peruuta
+          </Button>
+          <Button
+            className={`m-6 mt-0 h-8 w-20 p-0 text-sm disabled:flex disabled:items-center disabled:justify-center`}
+            onClick={() => {
+              toast('Poista-toiminto ei ole vielä käytettävissä');
+            }}
+          >
+            Poista
+          </Button>
+        </div>
+      </div>
+    </Modal>
   );
 }
