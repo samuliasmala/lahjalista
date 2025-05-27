@@ -88,6 +88,9 @@ export default function Home({
   const [showUserWindow, setShowUserWindow] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteModalData, setDeleteModalData] = useState('');
+  const [showMoreModalData, setShowMoreModalData] = useState<
+    CustomFeedback | undefined
+  >(undefined);
 
   const { data: feedbacks, error } = useQuery({
     queryKey: QueryKeys.ADMIN_FETCH_FEEDBACKS,
@@ -172,12 +175,19 @@ export default function Home({
             <FeedbackBlock
               feedbacks={filteredFeedbacks}
               setDeleteModalData={setDeleteModalData}
+              setShowMoreModalData={setShowMoreModalData}
             />
           </div>
           {deleteModalData.length > 0 && (
             <DeleteModal
               closeModal={() => setDeleteModalData('')}
               feedbackText={deleteModalData}
+            />
+          )}
+          {showMoreModalData && (
+            <ShowMoreModal
+              closeModal={() => setShowMoreModalData(undefined)}
+              feedback={showMoreModalData}
             />
           )}
         </div>
@@ -189,9 +199,11 @@ export default function Home({
 function FeedbackBlock({
   feedbacks,
   setDeleteModalData,
+  setShowMoreModalData,
 }: {
   feedbacks: CustomFeedback[];
   setDeleteModalData: Dispatch<SetStateAction<string>>;
+  setShowMoreModalData: Dispatch<SetStateAction<CustomFeedback | undefined>>;
 }) {
   return (
     <table className="block w-56 overflow-auto overflow-y-auto sm:w-96 lg:w-1/2">
@@ -226,7 +238,10 @@ function FeedbackBlock({
             <td className="px-6 py-4">{_data.User.email}</td>
             <td className="px-6 py-4">
               <div className="flex justify-between">
-                <button className="border-lines group rounded-md border-2 hover:bg-gray-300">
+                <button
+                  className="border-lines group rounded-md border-2 hover:bg-gray-300"
+                  onClick={() => setShowMoreModalData(_data)}
+                >
                   <Eye className="text-primary-text size-6" />
                 </button>
                 <button
@@ -252,7 +267,60 @@ function Th({ children }: { children: ReactNode }) {
   );
 }
 
-function ShowMoreModal({});
+function ShowMoreModal({
+  closeModal,
+  feedback,
+}: {
+  closeModal: () => void;
+  feedback: CustomFeedback;
+}) {
+  return (
+    <Modal
+      closeModal={closeModal}
+      title="Palautteen lisätiedot:"
+      className="max-w-80"
+    >
+      <div className="mr-4 ml-4 flex flex-col">
+        <div>
+          <p className="font-bold">Palaute:</p>
+          <p className="rounded border bg-gray-50 p-3 text-sm text-gray-900">
+            {feedback.feedbackText}
+          </p>
+        </div>
+        <div className="mt-4">
+          <p className="font-bold">Palaute lisätty:</p>
+          <p className="rounded border bg-gray-50 p-3 text-sm text-gray-900">
+            {new Date(feedback.createdAt).toLocaleDateString('fi-FI', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            })}
+          </p>
+        </div>
+        <div className="mt-4">
+          <p className="font-bold">Nimi:</p>
+          <p className="rounded border bg-gray-50 p-3 text-sm text-gray-900">
+            {feedback.User.firstName} {feedback.User.lastName}
+          </p>
+        </div>
+        <div className="mt-4">
+          <p className="font-bold">Sähköposti:</p>
+          <p className="rounded border bg-gray-50 p-3 text-sm text-gray-900">
+            {feedback.User.email}
+          </p>
+        </div>
+        <div className="mt-8 flex justify-end">
+          <Button
+            className={`text-primary-text mt-0 mb-6 h-8 w-20 bg-white pt-1 pr-4 pb-1 pl-4 text-sm`}
+            onClick={() => closeModal()}
+          >
+            Sulje
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
 
 function DeleteModal({
   closeModal,
