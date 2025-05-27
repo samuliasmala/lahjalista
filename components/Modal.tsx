@@ -20,7 +20,7 @@ export function Modal({
   return createPortal(
     <>
       <div className="fixed top-0 left-0 z-98 h-full w-full bg-black opacity-20" />
-      <div className="absolute top-[50%] left-[50%] z-99 translate-x-[-50%] translate-y-[-50%]">
+      <div className="fixed top-[50%] left-[50%] z-99 translate-x-[-50%] translate-y-[-50%]">
         <div
           className={twMerge(
             'border-lines bg-bg-forms grid w-96 rounded-md border',
