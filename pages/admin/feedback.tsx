@@ -77,26 +77,20 @@ export default function Home({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [showUserWindow, setShowUserWindow] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [parameterUUID, setParameterUUID] = useState('');
 
   const { data: feedbacks, error } = useQuery({
     queryKey: QueryKeys.ADMIN_FETCH_FEEDBACKS,
     // the **as Feedback[]** should be fine because the API
     // is only returning an array of Feedbacks or throw an error?
     queryFn: async () => {
-      return (await axios.get('/api/feedback')).data as CustomFeedback[];
+      return (await axios.get('/api/feedback?includeUser=true'))
+        .data as CustomFeedback[];
     },
   });
 
   if (!feedbacks) {
     return;
   }
-
-  feedbacks.map((_feedback) => {
-    console.log(_feedback);
-    //const a = axios.get(`/api/users/${_feedback.userUUID}`);
-    //console.log(a);
-  });
 
   const totalFeedbacks = feedbacks.length;
 
@@ -228,35 +222,3 @@ function Th({ children }: { children: ReactNode }) {
     </th>
   );
 }
-
-function FeedbackBlock2({
-  email,
-  feedback,
-  feedbackAdded,
-  name,
-}: {
-  feedback: string;
-  feedbackAdded: string;
-  name: string;
-  email: string;
-}) {
-  return (
-    <div className="flex">
-      <p className="m-4">{feedback}</p>
-      <p className="m-4">{feedbackAdded}</p>
-      <p className="m-4">{name}</p>
-      <p className="m-4">{email}</p>
-    </div>
-  );
-}
-
-/*
-            {debugData.map((_data, _index) => (
-              <FeedbackBlock
-                email={_data.email}
-                feedback={_data.feedback}
-                feedbackAdded={_data.feedbackAdded}
-                name={_data.name}
-              />
-            ))}
-*/
