@@ -30,6 +30,7 @@ import { Label } from '~/components/Label';
 import { Modal } from '~/components/Modal';
 import { Button } from '~/components/Button';
 import { toast } from 'react-toastify';
+import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 
 // ALLOWS ADMINS ONLY, look at the import for more details!
 export { getServerSideProps };
@@ -99,8 +100,16 @@ export default function Home({
     },
   });
 
+  useShowErrorToast(error);
+
   if (!feedbacks) {
-    return;
+    // this prevents user seeing "Virhe tapahtui" if error really hasn't happened
+    // if internet connection is slow, user saw the error message eventhough error hadn't happened
+    return error ? (
+      <div className="text-center text-4xl">
+        Virhe tapahtui palautteita noutaessa
+      </div>
+    ) : null;
   }
 
   const totalFeedbacks = feedbacks.length;
