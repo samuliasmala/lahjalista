@@ -228,7 +228,6 @@ export default function Register() {
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
-                        findPasswordErrors(formData.password);
                         setShowPasswordInfoModal((prevValue) => !prevValue);
                       }}
                     >
