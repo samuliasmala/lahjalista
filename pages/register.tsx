@@ -54,7 +54,6 @@ export default function Register() {
   const [errors, setErrors] = useState<ErrorTypes>({});
 
   const passwordInfoModalRef = useRef<HTMLDivElement | null>(null);
-  const isInitialClick = useRef<boolean>(false);
 
   const [showPasswordInfoModal, setShowPasswordInfoModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -79,17 +78,9 @@ export default function Register() {
       // check if e.target is Element typed so it will work in .contains function
       if (e.target instanceof Element) {
         const isClickInModal = passwordInfoModalRef.current?.contains(e.target);
-        if (
-          showPasswordInfoModal &&
-          !isClickInModal &&
-          !isInitialClick.current
-        ) {
+        if (showPasswordInfoModal && !isClickInModal) {
           setShowPasswordInfoModal((prevValue) => !prevValue);
         }
-      }
-      // set initial click back to false, because initial click has been done
-      if (isInitialClick.current) {
-        isInitialClick.current = !isInitialClick.current;
       }
     }
     // if modal is open add the EventListener
@@ -250,9 +241,9 @@ export default function Register() {
                     )}
                     <button
                       type="button"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         findPasswordErrors(formData.password);
-                        isInitialClick.current = true;
                         setShowPasswordInfoModal((prevValue) => !prevValue);
                       }}
                     >
