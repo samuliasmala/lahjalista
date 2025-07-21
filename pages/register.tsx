@@ -245,6 +245,7 @@ export default function Register() {
                         ...formData,
                         password: e.currentTarget.value,
                       });
+                      findPasswordErrors(e.currentTarget.value);
                     }}
                     className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
@@ -261,7 +262,10 @@ export default function Register() {
                     />
                   </div>
                 </div>
-                <ErrorParagraph errorText={errors.password} />
+                <PasswordRequirements
+                  isPasswordError={errors.password}
+                  passwordErrors={passwordErrors}
+                />
 
                 <Button className="mt-8 select-none" disabled={isPending}>
                   Luo käyttäjätunnus
@@ -302,52 +306,34 @@ export default function Register() {
     </main>
   );
 }
-/*
-function PasswordInfoModal() {
-  <span className="absolute pl-1 pt-0.5">
-    {showPasswordInfoModal && (
-      <div className="absolute -left-16 -top-44">
-        <div
-          className="absolute w-max max-w-80 rounded-md border-4 border-lines bg-bgForms"
-          ref={passwordInfoModalRef}
-        >
-          <p className="pr-1 text-primaryText">
-            Salasanan pitää täyttää seuraavat vaatimukset:
-          </p>
-          <ul className="relative z-10 list-disc pb-1 pl-5 text-primaryText">
-            <li>8-128 merkkiä: {passwordErrors.length ? '✅' : '❌'}</li>
-            <li>
-              vähintään yksi iso kirjain:{' '}
-              {passwordErrors.uppercaseLetter ? '✅' : '❌'}
-            </li>
-            <li>
-              vähintään yksi pieni kirjain:{' '}
-              {passwordErrors.lowercaseLetter ? '✅' : '❌'}
-            </li>
-            <li>
-              vähintään yksi numero: {passwordErrors.number ? '✅' : '❌'}
-            </li>
-            <li>
-              vähintään yksi erikoismerkki:{' '}
-              {passwordErrors.specialCharacter ? '✅' : '❌'}
-            </li>
-          </ul>
-          <span
-            className={`absolute left-14 z-0 -mt-3.5 ml-1 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms`}
-          ></span>
-        </div>
-      </div>
-    )}
-    <button
-      type="button"
-      onClick={(e) => {
-        e.stopPropagation();
-        findPasswordErrors(formData.password);
-        setShowPasswordInfoModal((prevValue) => !prevValue);
-      }}
-    >
-      <SvgInfoCircle width={20} height={20} />
-    </button>
-  </span>;
+
+function PasswordRequirements({
+  passwordErrors,
+  isPasswordError,
+}: {
+  passwordErrors: PasswordErrorTypes;
+  isPasswordError: string | undefined;
+}) {
+  if (!isPasswordError) return;
+
+  return (
+    <div className="pt-3">
+      <ul className="relative list-disc pb-1 pl-5 text-primaryText">
+        <li>8-128 merkkiä: {passwordErrors.length ? '✅' : '❌'}</li>
+        <li>
+          vähintään yksi iso kirjain:{' '}
+          {passwordErrors.uppercaseLetter ? '✅' : '❌'}
+        </li>
+        <li>
+          vähintään yksi pieni kirjain:{' '}
+          {passwordErrors.lowercaseLetter ? '✅' : '❌'}
+        </li>
+        <li>vähintään yksi numero: {passwordErrors.number ? '✅' : '❌'}</li>
+        <li>
+          vähintään yksi erikoismerkki:{' '}
+          {passwordErrors.specialCharacter ? '✅' : '❌'}
+        </li>
+      </ul>
+    </div>
+  );
 }
-*/
