@@ -2,6 +2,19 @@ import { z } from 'zod';
 import { emailRegex, passwordRegex } from './regexPatterns';
 import { Prisma } from '@prisma/client';
 
+// MISC
+
+export const uuidParseSchema = z
+  .string({ message: 'Invalid UUID! It should be given as a string!' })
+  .uuid('UUID pattern was invalid!');
+
+// This checks if given value is a string and is a date. If that's true it will check if the given date is not invalid
+export const dateParseSchema = z
+  .string()
+  .min(1, 'Päivämäärä on pakollinen!')
+  .datetime({ message: 'Annettu päivämäärä on virheellinen!' })
+  .pipe(z.coerce.date());
+
 // FORM
 
 const firstNameSchema = z
@@ -125,8 +138,42 @@ export const createFeedbackSchema = feedbackSchema.pick({
   feedbackText: true,
 });
 
-// MISC
+// PERSON
 
-export const uuidParseSchema = z
-  .string({ message: 'Invalid UUID! It should be given as a string!' })
-  .uuid('UUID pattern was invalid!');
+export const personSchema = z.object({
+  name: z.string().min(1),
+  sendReminders: z.boolean(),
+});
+
+export const getPersonSchema = personSchema.extend({
+  uuid: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const createPersonSchema = personSchema;
+
+export const patchPersonSchema = personSchema.partial();
+
+export const putPersonSchema = personSchema;
+
+// ANNIVERSARY
+
+export const anniversarySchema = z.object({
+  name: z.string().min(1),
+  date: dateParseSchema,
+});
+
+export const getAnniversarySchema = anniversarySchema.extend({
+  uuid: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const createAnniversarySchema = anniversarySchema.extend({
+  personUUID: uuidParseSchema,
+});
+
+export const patchAnniversarySchema = anniversarySchema.partial();
+
+export const putAnniversarySchema = anniversarySchema;

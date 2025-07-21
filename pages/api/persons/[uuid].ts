@@ -1,17 +1,20 @@
-import { Gift } from '~/shared/types';
+import { Person, User } from '~/shared/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '~/prisma';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { updateGiftSchema, uuidParseSchema } from '~/shared/zodSchemas';
+import {
+  patchPersonSchema,
+  putPersonSchema,
+  uuidParseSchema,
+} from '~/shared/zodSchemas';
 import { requireLogin } from '~/backend/auth';
-import { User as LuciaUser } from 'lucia';
 
 type HandlerParams<ResponseType = unknown> = {
   req: NextApiRequest;
   res: NextApiResponse<ResponseType>;
-  giftUUID: string;
-  userData: LuciaUser;
+  personUUID: string;
+  userData: User;
 };
 
 const HANDLERS: Record<string, (params: HandlerParams) => Promise<void>> = {
@@ -30,12 +33,12 @@ export default async function handleRequest(
 
     const reqHandler = req.method !== undefined && HANDLERS[req.method];
     if (reqHandler) {
-      const giftUUID = uuidParseSchema.parse(req.query.uuid);
+      const personUUID = uuidParseSchema.parse(req.query.uuid);
 
       await reqHandler({
         req,
         res,
-        giftUUID,
+        personUUID,
         userData,
       });
     } else {
@@ -49,83 +52,90 @@ export default async function handleRequest(
   }
 }
 
-async function handleGET({ res, giftUUID, userData }: HandlerParams<Gift>) {
-  const gift = await prisma.gift.findUniqueOrThrow({
+async function handleGET({ res, personUUID, userData }: HandlerParams<Person>) {
+  const personData = await prisma.person.findUniqueOrThrow({
     where: {
-      uuid: giftUUID,
+      uuid: personUUID,
       userUUID: userData.uuid,
     },
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
-  return res.status(200).json(gift);
+
+  return res.status(200).json(personData);
 }
 
 async function handlePATCH({
   req,
   res,
-  giftUUID,
+  personUUID,
   userData,
-}: HandlerParams<Gift>) {
-  const giftData = updateGiftSchema.parse(req.body);
+}: HandlerParams<Person>) {
+  const personData = patchPersonSchema.parse(req.body);
 
-  const updatedGift = await prisma.gift.update({
+  const updatedPerson = await prisma.person.update({
     where: {
-      uuid: giftUUID,
+      uuid: personUUID,
       userUUID: userData.uuid,
     },
-    data: giftData,
+    data: personData,
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return res.status(200).json(updatedGift);
+  return res.status(200).json(updatedPerson);
 }
 
 async function handlePUT({
   req,
   res,
-  giftUUID,
+  personUUID,
   userData,
-}: HandlerParams<Gift>) {
-  const giftData = updateGiftSchema.parse(req.body);
+}: HandlerParams<Person>) {
+  const personData = putPersonSchema.parse(req.body);
 
-  const updatedGift = await prisma.gift.update({
+  const updatedPerson = await prisma.person.update({
     where: {
-      uuid: giftUUID,
+      uuid: personUUID,
       userUUID: userData.uuid,
     },
-    data: giftData,
+    data: personData,
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return res.status(200).json(updatedGift);
+  return res.status(200).json(updatedPerson);
 }
 
-async function handleDELETE({ res, giftUUID, userData }: HandlerParams) {
-  await prisma.gift.delete({
+async function handleDELETE({
+  res,
+  personUUID,
+  userData,
+}: HandlerParams<Person>) {
+  await prisma.person.delete({
     where: {
-      uuid: giftUUID,
+      uuid: personUUID,
       userUUID: userData.uuid,
     },
   });
-
   res.status(200).end();
   return;
 }
