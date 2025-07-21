@@ -285,7 +285,7 @@ function UserDetailModal({
               {' '}
               Kirjaudu ulos
               {isPending ? (
-                <Spinner className="relative ml-1" />
+                <Spinner className="static inline-block" />
               ) : (
                 <SvgArrowRightStartOnRectangle
                   width={18}
