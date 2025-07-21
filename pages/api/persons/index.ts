@@ -1,19 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Gift } from '~/shared/types';
-import prisma from '~/prisma';
+import { requireLogin } from '~/backend/auth';
 import { handleError } from '~/backend/handleError';
 import { HttpError } from '~/backend/HttpError';
-import { requireLogin } from '~/backend/auth';
-import { User as LuciaUser } from 'lucia';
-import { createGiftSchema } from '~/shared/zodSchemas';
+import { User } from '~/shared/types';
+import prisma from '~/prisma/index';
+import { createPersonSchema } from '~/shared/zodSchemas';
 
 const HANDLER: Record<
   string,
-  (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    userData: LuciaUser,
-  ) => Promise<void>
+  (req: NextApiRequest, res: NextApiResponse, userData: User) => Promise<void>
 > = {
   GET: handleGET,
   POST: handlePOST,
@@ -42,45 +37,47 @@ export default async function handleRequest(
 
 async function handleGET(
   req: NextApiRequest,
-  res: NextApiResponse<Gift[]>,
-  userData: LuciaUser,
+  res: NextApiResponse,
+  userData: User,
 ) {
-  const gifts = await prisma.gift.findMany({
-    select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
-      uuid: true,
-    },
+  const personData = await prisma.person.findMany({
     where: {
       userUUID: userData.uuid,
     },
+    select: {
+      uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   });
 
-  return res.status(200).json(gifts);
+  return res.status(200).json(personData);
 }
 
 async function handlePOST(
   req: NextApiRequest,
-  res: NextApiResponse<Gift>,
-  userData: LuciaUser,
+  res: NextApiResponse,
+  userData: User,
 ) {
-  const giftData = createGiftSchema.parse(req.body);
+  const { name, sendReminders } = createPersonSchema.parse(req.body);
 
-  const addedGift = await prisma.gift.create({
+  const addedPerson = await prisma.person.create({
     data: {
-      ...giftData,
+      name,
+      sendReminders,
       userUUID: userData.uuid,
     },
     select: {
-      createdAt: true,
-      gift: true,
-      receiver: true,
-      updatedAt: true,
       uuid: true,
+      name: true,
+      sendReminders: true,
+      PersonPicture: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
-
-  return res.status(200).json(addedGift);
+  return res.status(200).json(addedPerson);
 }
