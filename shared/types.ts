@@ -1,10 +1,14 @@
 import { z } from 'zod';
 import {
+  patchAnniversarySchema,
   createFeedbackSchema,
   createGiftSchema,
+  createPersonSchema,
   createSessionSchema,
   createUserSchema,
   feedbackSchema,
+  getAnniversarySchema,
+  getPersonSchema,
   getSessionSchema,
   getUserSchema,
   giftSchema,
@@ -39,6 +43,18 @@ export type Feedback = z.infer<typeof feedbackSchema>;
 
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
 
+// PERSON
+export type Person = z.infer<typeof getPersonSchema>;
+
+export type CreatePerson = z.infer<typeof createPersonSchema>;
+
+// ANNIVERSARY
+
+export type Anniversary = z.infer<typeof getAnniversarySchema>;
+
+export type PatchAnniversary = z.infer<typeof patchAnniversarySchema>;
+
+// UTILS
 export type KeyboardEventKeys =
   | ' ' // Space
   | '!'
@@ -151,8 +167,6 @@ export type KeyboardEventKeys =
   | 'F12'
   | 'Num Lock'
   | 'Scroll Lock';
-
-// CHECK THIS, onko mitään järkeä
 
 export const QueryKeys = {
   LOGIN: ['login'],
