@@ -18,6 +18,7 @@ import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
 import SvgInfoCircle from '~/icons/info_circle';
+import { Spinner } from '~/components/Spinner';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -144,7 +145,7 @@ export default function Register() {
           <div className="mt-14 flex w-full max-w-72 flex-col">
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
-              <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
+              <div className="mt-5 mr-4 ml-4 flex w-full flex-col">
                 <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
@@ -201,17 +202,17 @@ export default function Register() {
                   }}
                 >
                   Salasana
-                  <span className="absolute pl-1 pt-0.5">
+                  <span className="absolute pt-0.5 pl-1">
                     {showPasswordInfoModal && (
-                      <div className="absolute -left-16 -top-44">
+                      <div className="absolute -top-44 -left-16">
                         <div
-                          className="absolute w-max max-w-80 rounded-md border-4 border-lines bg-bgForms"
+                          className="border-lines bg-bgForms absolute w-max max-w-80 rounded-md border-4"
                           ref={passwordInfoModalRef}
                         >
-                          <p className="pr-1 text-primaryText">
+                          <p className="text-primaryText pr-1">
                             Salasanan pitää täyttää seuraavat vaatimukset:
                           </p>
-                          <ul className="relative z-10 list-disc pb-1 pl-5 text-primaryText">
+                          <ul className="text-primaryText relative z-10 list-disc pb-1 pl-5">
                             <li>8 - 128 merkkiä</li>
                             <li>vähintään yksi iso kirjain</li>
                             <li>vähintään yksi pieni kirjain</li>
@@ -219,7 +220,7 @@ export default function Register() {
                             <li>vähintään yksi erikoismerkki</li>
                           </ul>
                           <span
-                            className={`absolute left-14 z-0 -mt-3.5 ml-1 h-7 w-7 rotate-45 border-4 border-b-inherit border-l-transparent border-r-inherit border-t-transparent bg-bgForms`}
+                            className={`bg-bgForms absolute left-14 z-0 -mt-3.5 ml-1 h-7 w-7 rotate-45 border-4 border-t-transparent border-r-inherit border-b-inherit border-l-transparent`}
                           ></span>
                         </div>
                       </div>
@@ -236,7 +237,7 @@ export default function Register() {
                   </span>
                 </Label>
 
-                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
+                <div className="border-lines flex rounded-md outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -253,12 +254,14 @@ export default function Register() {
                     name="password"
                   />
                   <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
-                    <SvgEye
-                      className="h-8 w-8 cursor-pointer p-0 text-lines hover:stroke-primary"
+                    <button
+                      type="button"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
-                    />
+                    >
+                      <SvgEye className="text-lines h-8 w-8 cursor-pointer p-0" />
+                    </button>
                   </div>
                 </div>
                 <PasswordRequirements
@@ -268,9 +271,9 @@ export default function Register() {
 
                 <Button className="mt-8 select-none" disabled={isPending}>
                   Luo käyttäjätunnus
-                  {isPending && <span className="loading-dots absolute" />}
+                  {isPending && <Spinner />}
                 </Button>
-                <p className="mt-3 select-none text-center text-xs text-gray-500">
+                <p className="mt-3 text-center text-xs text-gray-500 select-none">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
@@ -284,11 +287,11 @@ export default function Register() {
           </div>
           {isUserCreated ? (
             <>
-              <div className="fixed left-0 top-0 z-[98] h-full w-full bg-black opacity-20" />
-              <div className="absolute left-[50%] top-[50%] z-[99] translate-x-[-50%] translate-y-[-50%]">
+              <div className="fixed top-0 left-0 z-[98] h-full w-full bg-black opacity-20" />
+              <div className="absolute top-[50%] left-[50%] z-[99] translate-x-[-50%] translate-y-[-50%]">
                 <div
                   className={
-                    'grid w-96 rounded-md border border-lines bg-bgForms'
+                    'border-lines bg-bgForms grid w-96 rounded-md border'
                   }
                 >
                   <SvgCheckMarkIcon
@@ -317,7 +320,7 @@ function PasswordRequirements({
 
   return (
     <div className="pt-3">
-      <ul className="relative list-disc pb-1 pl-5 text-primaryText">
+      <ul className="text-primaryText relative list-disc pb-1 pl-5">
         <li>8-128 merkkiä: {passwordErrors.length ? '✅' : '❌'}</li>
         <li>
           vähintään yksi iso kirjain:{' '}

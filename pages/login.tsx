@@ -18,6 +18,7 @@ import { handleErrorToast } from '~/utils/handleToasts';
 import { ErrorParagraph } from '~/components/ErrorParagraph';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
+import { Spinner } from '~/components/Spinner';
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const cookieData = await validateRequest(context.req, context.res);
@@ -142,12 +143,14 @@ export default function Login() {
                     name="password"
                   />
                   <div className="flex items-center rounded-md bg-bgForms has-[input:focus]:rounded has-[input:focus]:outline-2">
-                    <SvgEye
-                      className="h-8 w-8 cursor-pointer p-0 text-lines"
+                    <button
+                      type="button"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
-                    />
+                    >
+                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -164,8 +167,7 @@ export default function Login() {
               </div>
 
               <Button type="submit" disabled={isPending}>
-                Kirjaudu sisään{' '}
-                {isPending && <span className="loading-dots absolute" />}
+                Kirjaudu sisään {isPending && <Spinner />}
               </Button>
             </form>
             <p className={`mt-4 text-center text-xs text-gray-500`}>
