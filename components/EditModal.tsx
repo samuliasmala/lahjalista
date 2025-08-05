@@ -5,11 +5,11 @@ import { Button } from './Button';
 import { updateGift } from '~/utils/apiRequests';
 import { Input } from './Input';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import SvgSpinner from '~/icons/spinner';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { handleError } from '~/utils/handleError';
 import { errorWrapper } from '~/utils/utilFunctions';
+import { Spinner } from './Spinner';
 
 type EditModal = {
   gift: Gift;
@@ -88,7 +88,7 @@ export function EditModal({ gift, closeModal }: EditModal) {
               onClick={(e) => void handleEdit(e)}
             >
               {isPending ? (
-                <SvgSpinner width={24} height={24} className="animate-spin" />
+                <Spinner className="static inline-block" />
               ) : (
                 'Tallenna'
               )}
