@@ -110,8 +110,25 @@ export const createSessionSchema = z.object({
 
 // FEEDBACK
 
+export const customFeedbackSchema = z.object({
+  uuid: z.string(),
+  feedbackText: z.string().min(1, 'Feedback text is mandatory!'),
+  userUUID: z.string().uuid(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  User: userSchema.extend({ uuid: z.string().uuid() }),
+});
+
+export const getFeedbackSchema = z.object({
+  uuid: z.string(),
+  feedbackText: z.string().min(1, 'Feedback text is mandatory!'),
+  userUUID: z.string().uuid(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
 export const feedbackSchema = z.object({
-  feedbackUUID: z.string(),
+  uuid: z.string(),
   feedbackText: z.string().min(1, 'Feedback text is mandatory!'),
   createdAt: z.date(),
   updatedAt: z.date(),

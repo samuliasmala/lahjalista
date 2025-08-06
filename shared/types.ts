@@ -6,7 +6,9 @@ import {
   createPersonSchema,
   createSessionSchema,
   createUserSchema,
+  customFeedbackSchema,
   feedbackSchema,
+  getFeedbackSchema,
   getAnniversarySchema,
   getPersonSchema,
   getSessionSchema,
@@ -39,6 +41,10 @@ export type Session = z.infer<typeof getSessionSchema>;
 export type CreateSession = z.infer<typeof createSessionSchema>;
 
 // FEEDBACK
+export type CustomFeedback = z.infer<typeof customFeedbackSchema>;
+
+export type GetFeedback = z.infer<typeof getFeedbackSchema>;
+
 export type Feedback = z.infer<typeof feedbackSchema>;
 
 export type CreateFeedback = z.infer<typeof createFeedbackSchema>;
@@ -179,6 +185,8 @@ export const QueryKeys = {
   DELETE_GIFT: ['deleteGift'],
 
   CREATE_FEEDBACK: ['createFeedback'],
+
+  ADMIN_FETCH_FEEDBACKS: ['adminFetchFeedbacks'],
 
   // ei vielä käytössä
   //GIFT_DETAILS: (uuid: string) => ['gifts', uuid],

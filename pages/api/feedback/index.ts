@@ -35,11 +35,43 @@ export default async function handleRequest(
     return handleError(res, e);
   }
 }
-// tämä alla oleva rivi lisätty, jotta "@typescript-eslint/require-await"-virheen pystyi ohittamaan väliaikaisesti
-// handleGET-funktio laitetaan toimimaan myöhemmässä vaiheessa
-// eslint-disable-next-line
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-  return res.status(200).send('Not in use yet');
+
+async function handleGET(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  userData: User,
+) {
+  if (userData.role !== 'ADMIN') {
+    throw new HttpError("You don't have privileges to do that!", 403);
+  }
+
+  const includeUserQuery = req.query.includeUser;
+  if (includeUserQuery == 'true') {
+    const feedbacks = await prisma.feedback.findMany({
+      select: {
+        uuid: true,
+        feedbackText: true,
+        userUUID: true,
+        createdAt: true,
+        updatedAt: true,
+        // Fetch User's data
+        User: {
+          select: {
+            uuid: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(feedbacks);
+  }
+
+  const feedbacks = await prisma.feedback.findMany();
+
+  return res.status(200).json(feedbacks);
 }
 
 async function handlePOST(
