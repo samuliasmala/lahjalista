@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/Button';
 import { Input } from '~/components/Input';
 import { TitleText } from '~/components/TitleText';
@@ -17,11 +17,28 @@ import { useMutation } from '@tanstack/react-query';
 import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
+import SvgInfoCircle from '~/icons/info_circle';
 import { Spinner } from '~/components/Spinner';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
 type ErrorTypes = Partial<Record<ErrorFieldNames, string | undefined>>;
+
+type PasswordErrorNames =
+  | 'length'
+  | 'lowercaseLetter'
+  | 'uppercaseLetter'
+  | 'number'
+  | 'specialCharacter';
+
+type PasswordErrorTypes = Record<PasswordErrorNames, boolean>;
+const EMPTY_PASSWORD_DATA: PasswordErrorTypes = {
+  length: false,
+  lowercaseLetter: false,
+  number: false,
+  specialCharacter: false,
+  uppercaseLetter: false,
+};
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -37,7 +54,13 @@ export default function Register() {
 
   const [errors, setErrors] = useState<ErrorTypes>({});
 
+  const passwordInfoModalRef = useRef<HTMLDivElement | null>(null);
+
+  const [showPasswordInfoModal, setShowPasswordInfoModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordErrors, setPasswordErrors] =
+    useState<PasswordErrorTypes>(EMPTY_PASSWORD_DATA);
+
   const [isUserCreated, setIsUserCreated] = useState(false);
 
   const router = useRouter();
@@ -50,6 +73,27 @@ export default function Register() {
   });
 
   useShowErrorToast(error);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      // check if e.target is Element typed so it will work in .contains function
+      if (e.target instanceof Element) {
+        const isClickInModal = passwordInfoModalRef.current?.contains(e.target);
+        if (showPasswordInfoModal && !isClickInModal) {
+          setShowPasswordInfoModal((prevValue) => !prevValue);
+        }
+      }
+    }
+    // if modal is open add the EventListener
+    if (showPasswordInfoModal) {
+      document.body.addEventListener('click', handleClick);
+    }
+
+    // remove the EventListener when modal is closed / unmounts
+    return () => {
+      document.body.removeEventListener('click', handleClick);
+    };
+  }, [showPasswordInfoModal]);
 
   async function handleSubmit(e: FormEvent) {
     try {
@@ -69,6 +113,19 @@ export default function Register() {
     } catch (e) {
       handleErrorToast(handleError(e));
     }
+  }
+
+  function findPasswordErrors(password: string) {
+    setPasswordErrors({
+      length: z.string().min(8).max(128).safeParse(password).success,
+      number: z.string().regex(/[0-9]/).safeParse(password).success,
+      lowercaseLetter: z.string().regex(/[a-z]/).safeParse(password).success,
+      uppercaseLetter: z.string().regex(/[A-Z]/).safeParse(password).success,
+      specialCharacter: z
+        .string()
+        .regex(/[^((0-9)|(a-z)|(A-Z)|\s)]/)
+        .safeParse(password).success,
+    });
   }
 
   function userCreatedSuccesfully() {
@@ -137,8 +194,50 @@ export default function Register() {
                 />
                 <ErrorParagraph errorText={errors.email} />
 
-                <Label className="mt-5">Salasana</Label>
-                <div className="border-lines flex rounded-md outline-1 has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
+                <Label
+                  className="mt-5"
+                  onClick={(e) => {
+                    // this prevents button's onClick function run when Label is clicked
+                    e.preventDefault();
+                  }}
+                >
+                  Salasana
+                  <span className="absolute pt-0.5 pl-1">
+                    {showPasswordInfoModal && (
+                      <div className="absolute -top-44 -left-16">
+                        <div
+                          className="border-lines bg-bg-forms absolute w-max max-w-80 rounded-md border-4"
+                          ref={passwordInfoModalRef}
+                        >
+                          <p className="text-primary-text pr-1">
+                            Salasanan pitää täyttää seuraavat vaatimukset:
+                          </p>
+                          <ul className="text-primary-text relative z-10 list-disc pb-1 pl-5">
+                            <li>8 - 128 merkkiä</li>
+                            <li>vähintään yksi iso kirjain</li>
+                            <li>vähintään yksi pieni kirjain</li>
+                            <li>vähintään yksi numero</li>
+                            <li>vähintään yksi erikoismerkki</li>
+                          </ul>
+                          <span
+                            className={`bg-bg-forms absolute left-14 z-0 -mt-3.5 ml-1 h-7 w-7 rotate-45 border-4 border-t-transparent border-r-inherit border-b-inherit border-l-transparent`}
+                          ></span>
+                        </div>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowPasswordInfoModal((prevValue) => !prevValue);
+                      }}
+                    >
+                      <SvgInfoCircle width={20} height={20} />
+                    </button>
+                  </span>
+                </Label>
+
+                <div className="border-lines flex rounded-md outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -146,6 +245,7 @@ export default function Register() {
                         ...formData,
                         password: e.currentTarget.value,
                       });
+                      findPasswordErrors(e.currentTarget.value);
                     }}
                     className={`w-full border-0 outline-hidden ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
@@ -164,7 +264,10 @@ export default function Register() {
                     </button>
                   </div>
                 </div>
-                <ErrorParagraph errorText={errors.password} />
+                <PasswordRequirements
+                  isPasswordError={errors.password}
+                  passwordErrors={passwordErrors}
+                />
 
                 <Button className="mt-8 select-none" disabled={isPending}>
                   Luo käyttäjätunnus
@@ -203,5 +306,36 @@ export default function Register() {
         </div>
       </div>
     </main>
+  );
+}
+
+function PasswordRequirements({
+  passwordErrors,
+  isPasswordError,
+}: {
+  passwordErrors: PasswordErrorTypes;
+  isPasswordError: string | undefined;
+}) {
+  if (!isPasswordError) return;
+
+  return (
+    <div className="pt-3">
+      <ul className="text-primary-text relative list-disc pb-1 pl-5">
+        <li>8-128 merkkiä: {passwordErrors.length ? '✅' : '❌'}</li>
+        <li>
+          vähintään yksi iso kirjain:{' '}
+          {passwordErrors.uppercaseLetter ? '✅' : '❌'}
+        </li>
+        <li>
+          vähintään yksi pieni kirjain:{' '}
+          {passwordErrors.lowercaseLetter ? '✅' : '❌'}
+        </li>
+        <li>vähintään yksi numero: {passwordErrors.number ? '✅' : '❌'}</li>
+        <li>
+          vähintään yksi erikoismerkki:{' '}
+          {passwordErrors.specialCharacter ? '✅' : '❌'}
+        </li>
+      </ul>
+    </div>
   );
 }
