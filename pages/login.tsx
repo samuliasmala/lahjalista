@@ -109,7 +109,7 @@ export default function Login() {
   const SvgEye = showPassword ? SvgEyeSlash : SvgEyeOpen;
 
   return (
-    <main className={`h-screen w-full max-w-full bg-bgPage`}>
+    <main className={`h-screen w-full max-w-full`}>
       <div className="h-screen w-screen">
         <div className="flex w-full justify-center">
           <div className="flex w-full max-w-72 flex-col">
@@ -121,7 +121,7 @@ export default function Login() {
                 <Input
                   onChange={(e) => setEmail(e.currentTarget.value)}
                   value={email}
-                  className="border border-lines pr-0"
+                  className="border-lines border pr-0"
                   autoComplete="off"
                   type="text"
                   placeholder="matti.meikalainen@email.com"
@@ -132,24 +132,24 @@ export default function Login() {
               <ErrorParagraph errorText={errors.email} />
               <div className="flex flex-col pt-6">
                 <Label>Salasana</Label>
-                <div className="flex justify-between rounded-md border-lines bg-bgForms outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
+                <div className="border-lines bg-bg-forms flex justify-between rounded-md outline-1 has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                   <Input
                     value={password}
                     onChange={(e) => setPassword(e.currentTarget.value)}
-                    className={`w-full border-0 outline-none ${!showPassword && password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
+                    className={`w-full border-0 outline-hidden ${!showPassword && password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
                     name="password"
                   />
-                  <div className="flex items-center rounded-md bg-bgForms has-[input:focus]:rounded has-[input:focus]:outline-2">
+                  <div className="bg-bg-forms flex items-center rounded-md has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                     <button
                       type="button"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
                     >
-                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines" />
+                      <SvgEye className="text-lines h-8 w-8 cursor-pointer p-0" />
                     </button>
                   </div>
                 </div>
@@ -159,7 +159,7 @@ export default function Login() {
                 <Label className={`flex cursor-pointer select-none`}>
                   <input
                     type="checkbox"
-                    className={`mr-2 h-6 w-6 cursor-pointer accent-lines`}
+                    className={`accent-lines mr-2 h-6 w-6 cursor-pointer`}
                     onClick={() => setRememberMe((prevValue) => !prevValue)}
                   />
                   Muista minut

@@ -15,7 +15,7 @@ Major Potentially breaking API changes
 
 **Testaa näitä päivittämisen yhteydessä**
 
-- [] poista oma testaustietokanta ja lisää tietokanta uudelleen `npm run prisma db push`
+- [] poista oma testaustietokanta ja lisää tietokanta uudelleen `npm run prisma migrate deploy`
 
 - [] kokeile ESLint ettei heitä virheitä
 

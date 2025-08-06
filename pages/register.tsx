@@ -88,7 +88,7 @@ export default function Register() {
           <div className="mt-14 flex w-full max-w-72 flex-col">
             <form onSubmit={(e) => void handleSubmit(e)}>
               <TitleText>Luo käyttäjätunnus</TitleText>
-              <div className="ml-4 mr-4 mt-5 flex w-full flex-col">
+              <div className="mt-5 mr-4 ml-4 flex w-full flex-col">
                 <Label>Etunimi</Label>
                 <Input
                   value={formData.firstName}
@@ -138,7 +138,7 @@ export default function Register() {
                 <ErrorParagraph errorText={errors.email} />
 
                 <Label className="mt-5">Salasana</Label>
-                <div className="flex rounded-md border-lines outline outline-1 has-[input:focus]:rounded has-[input:focus]:outline-2">
+                <div className="border-lines flex rounded-md outline-1 has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
                   <Input
                     value={formData.password}
                     onChange={(e) => {
@@ -147,7 +147,7 @@ export default function Register() {
                         password: e.currentTarget.value,
                       });
                     }}
-                    className={`w-full border-0 outline-none ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
+                    className={`w-full border-0 outline-hidden ${!showPassword && formData.password.length > 0 ? 'input-enlarge-password-mask-character-size' : ''}`}
                     autoComplete="off"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="************"
@@ -160,7 +160,7 @@ export default function Register() {
                         setShowPassword((prevValue) => !prevValue);
                       }}
                     >
-                      <SvgEye className="h-8 w-8 cursor-pointer p-0 text-lines" />
+                      <SvgEye className="text-lines h-8 w-8 cursor-pointer p-0" />
                     </button>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ export default function Register() {
                   Luo käyttäjätunnus
                   {isPending && <Spinner />}
                 </Button>
-                <p className="mt-3 select-none text-center text-xs text-gray-500">
+                <p className="mt-3 text-center text-xs text-gray-500 select-none">
                   Onko sinulla jo tunnus?{' '}
                   <Link
                     href={'/login'}
@@ -184,11 +184,11 @@ export default function Register() {
           </div>
           {isUserCreated ? (
             <>
-              <div className="fixed left-0 top-0 z-[98] h-full w-full bg-black opacity-20" />
-              <div className="absolute left-[50%] top-[50%] z-[99] translate-x-[-50%] translate-y-[-50%]">
+              <div className="fixed top-0 left-0 z-98 h-full w-full bg-black opacity-20" />
+              <div className="absolute top-[50%] left-[50%] z-99 translate-x-[-50%] translate-y-[-50%]">
                 <div
                   className={
-                    'grid w-96 rounded-md border border-lines bg-bgForms'
+                    'border-lines bg-bg-forms grid w-96 rounded-md border'
                   }
                 >
                   <SvgCheckMarkIcon
