@@ -13,7 +13,7 @@ import SvgPencilEdit from '~/icons/pencil_edit';
 import SvgTrashCan from '~/icons/trash_can';
 import { handleErrorToast } from '~/utils/handleToasts';
 import { TitleBar } from '~/components/TitleBar';
-import SvgSpinner from '~/icons/spinner';
+import { Spinner } from '~/components/Spinner';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 
 export { getServerSideProps };
@@ -127,15 +127,7 @@ export default function Home({
                 disabled={createGiftQuery.isPending}
               >
                 Lisää
-                {createGiftQuery.isPending ? (
-                  <span className="absolute p-1">
-                    <SvgSpinner
-                      width={18}
-                      height={18}
-                      className="animate-spin text-black"
-                    />
-                  </span>
-                ) : null}
+                {createGiftQuery.isPending ? <Spinner /> : null}
               </Button>
             </form>
           </div>
@@ -160,10 +152,7 @@ function GiftList() {
   if (isFetching)
     return (
       <p className="mt-4 text-lg font-bold">
-        Noudetaan lahjoja{' '}
-        <span className="absolute mt-1.5 ml-2">
-          <SvgSpinner width={18} height={18} className="animate-spin" />
-        </span>
+        Noudetaan lahjoja <Spinner />
       </p>
     );
 

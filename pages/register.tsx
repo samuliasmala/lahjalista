@@ -17,6 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 import { QueryKeys } from '~/shared/types';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
 import { z } from 'zod';
+import { Spinner } from '~/components/Spinner';
 
 type ErrorFieldNames = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -152,20 +153,22 @@ export default function Register() {
                     placeholder="************"
                     name="password"
                   />
-                  <div className="flex items-center rounded-md has-[input:focus]:rounded-sm has-[input:focus]:outline-2">
-                    <SvgEye
-                      className="text-lines hover:stroke-primary h-8 w-8 cursor-pointer p-0"
+                  <div className="flex items-center rounded-md has-[input:focus]:rounded has-[input:focus]:outline-2">
+                    <button
+                      type="button"
                       onClick={() => {
                         setShowPassword((prevValue) => !prevValue);
                       }}
-                    />
+                    >
+                      <SvgEye className="text-lines h-8 w-8 cursor-pointer p-0" />
+                    </button>
                   </div>
                 </div>
                 <ErrorParagraph errorText={errors.password} />
 
                 <Button className="mt-8 select-none" disabled={isPending}>
                   Luo käyttäjätunnus
-                  {isPending && <span className="loading-dots absolute" />}
+                  {isPending && <Spinner />}
                 </Button>
                 <p className="mt-3 text-center text-xs text-gray-500 select-none">
                   Onko sinulla jo tunnus?{' '}

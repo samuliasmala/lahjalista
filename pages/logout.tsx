@@ -7,9 +7,9 @@ import { FormEvent, useState } from 'react';
 import { validateRequest } from '~/backend/auth';
 import { Button } from '~/components/Button';
 import { Logo } from '~/components/Logo';
+import { Spinner } from '~/components/Spinner';
 import { TitleText } from '~/components/TitleText';
 import { useShowErrorToast } from '~/hooks/useShowErrorToast';
-import SvgSpinner from '~/icons/spinner';
 import { CreateFeedback, QueryKeys } from '~/shared/types';
 import { handleError } from '~/utils/handleError';
 import { handleErrorToast } from '~/utils/handleToasts';
@@ -105,15 +105,7 @@ export default function Logout() {
                   }}
                 />
                 <Button className="p-2" type="submit" disabled={isPending}>
-                  {isPending ? (
-                    <SvgSpinner
-                      width={28}
-                      height={28}
-                      className="animate-spin justify-self-center"
-                    />
-                  ) : (
-                    'Lähetä'
-                  )}
+                  Lähetä {isPending && <Spinner />}
                 </Button>
                 <p className="pt-6 text-xs text-gray-600 select-none">
                   Saitko uuden idean?{' '}
